@@ -30,22 +30,23 @@ class _StudentUsersScreenState extends State<StudentUsersScreen> {
       body: AnimatedCrossFade(
         duration: Duration(milliseconds: 500),
         firstChild: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
+          constraints: BoxConstraints(maxHeight: Get.height),
           child: StudentViewScreen(),
         ),
         secondChild: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
+          constraints: BoxConstraints(maxHeight: Get.height),
           child: StudentInputForm(),
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor:primaryColor,
         onPressed: () {
           setState(() {
             isAdd = !isAdd;
           });
         },
-        child: Icon(Icons.swap_horiz),
+        child: Icon(!isAdd? Icons.add:Icons.grid_view),
       ),
     );
   }
@@ -119,43 +120,5 @@ class _StudentUsersScreenState extends State<StudentUsersScreen> {
       ),
     );
   }
-
-
-
-  List<PieChartSectionData> paiChartSelectionData = [
-    PieChartSectionData(
-      color: Colors.teal.withOpacity(0.5),
-      value: 50,
-      showTitle: false,
-      radius: 20,
-    ),
-    PieChartSectionData(
-      color: Colors.cyan,
-      value: 1262,
-      showTitle: false,
-      radius: 20,
-    ),
-    PieChartSectionData(
-      color: Colors.green.withOpacity(0.5),
-      value: 188,
-      showTitle: false,
-      radius: 20,
-    ),
-  ];
-
-  List<PieChartSectionData> sexChartSelectionData = [
-    PieChartSectionData(
-      color: primaryColor,
-      value: 330,
-      showTitle: false,
-      radius: 20,
-    ),
-    PieChartSectionData(
-      color: Colors.pink.withOpacity(0.5),
-      value: 270,
-      showTitle: false,
-      radius: 20,
-    ),
-  ];
 
 

@@ -74,10 +74,10 @@ class _StudentViewScreenState extends State<StudentViewScreen> {
                   ],
                 ),
                 SizedBox(height: defaultPadding),
-                Container(
+          /*      Container(
                   width: Get.width,
                   alignment: Alignment.topRight,
-                  child: /* Wrap(
+                  child: *//* Wrap(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8),
@@ -188,7 +188,7 @@ class _StudentViewScreenState extends State<StudentViewScreen> {
 
 
                       ],
-                    )*/
+                    )*//*
 
                   ElevatedButton(
                     onPressed: () {
@@ -204,7 +204,7 @@ class _StudentViewScreenState extends State<StudentViewScreen> {
                       style: Styles.headLineStyle2,
                     ),
                   ),
-                ),
+                ),*/
                 SizedBox(
                   height: 25,
                 ),

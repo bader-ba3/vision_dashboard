@@ -4,6 +4,7 @@ import '../../constants.dart';
 import '../../models/Employee_Model.dart';
 import '../../models/Student_Model.dart';
 import '../Employee/Employee_user_details.dart';
+import '../Widgets/Custom_Text_Filed.dart';
 
 class StudentInputForm extends StatefulWidget {
   @override
@@ -63,9 +64,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: AppBar(
-        title: Text('نموذج إدخال الطلاب'),
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
