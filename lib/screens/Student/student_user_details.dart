@@ -11,13 +11,13 @@ class StudentInputForm extends StatefulWidget {
 }
 
 class _StudentInputFormState extends State<StudentInputForm> {
-  List<String> _exams = []; // قائمة الطلاب المُحددين
+  String _payWay = ""; // قائمة الطلاب المُحددين
 
   // قائمة بكل الطلاب المتاحين
-  final List<String> _allExams = [
-    'الامتحات 1',
-    'الامتحات 2',
-    'الامتحات 3',
+  final List<String> _payWays = [
+    'كاش',
+    'اقساط',
+    'كريدت',
     // أضف المزيد من الطلاب إذا لزم الأمر
   ];
   final studentNameController = TextEditingController();
@@ -55,6 +55,9 @@ class _StudentInputFormState extends State<StudentInputForm> {
     guardianController.dispose();
     super.dispose();
   }
+
+  String? selectedValue;
+  List<String> items = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
   @override
   Widget build(BuildContext context) {
@@ -99,59 +102,88 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomTextField(controller: gradeController, title: 'الصف'),
                   CustomTextField(
                       controller: teachersController, title: 'المعلمين'),
-               /*   CustomTextField(
+                  /*   CustomTextField(
                       controller: examsController, title: 'الامتحانات'),*/
-                  CustomTextField(
-                      controller: startDateController,
-                      title: 'تاريخ البداية',
-                      keyboardType: TextInputType.datetime),
-                /*  CustomTextField(
+
+                  /*  CustomTextField(
                       controller: gradesController, title: 'الدرجات'),*/
                   CustomTextField(
                       controller: eventRecordsController, title: 'سجل الأحداث'),
                   CustomTextField(controller: busController, title: 'الحافلة'),
                   CustomTextField(
                       controller: guardianController, title: 'ولي الأمر'),
-           /*       DropdownButtonFormField<String>(
-                    value: null,
-                    hint: Text('اختر الاختبارات'),
-                    onChanged: (selectedStudent) {
-                      if (selectedStudent != null) {
-                        setState(() {
-                          _exams.addIf(!_exams.contains(selectedStudent),selectedStudent);
-                        });
-                      }
-                    },
-                    items: _allExams.map((student) {
-                      return DropdownMenuItem(
-                        value: student,
-                        child: Text(student),
-                      );
-                    }).toList(),
-                  ),*/
-/*
-                  SizedBox(height: 16.0),
+                  SizedBox(
+                    width: Get.width/3.5,
+                    child: SizedBox(
+                      width: Get.width / 3.5,
+                      child: DropdownButtonFormField<String>(
+                        value: null,
+                        hint: Text('طريقة الدفع'),
+                        onChanged: (selectedWay) {
+                          if (selectedWay != null) {
+                            setState(() {
+                              _payWay = selectedWay;
+                            });
+                          }
+                        },
+                        items: _payWays.map((student) {
+                          return DropdownMenuItem(
+                            value: student,
+                            child: Text(student),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      CustomTextField(
+                          controller: startDateController,
+                          title: 'تاريخ البداية',
+                          enable: false,
+                          keyboardType: TextInputType.datetime),
+                      IconButton(
+                          onPressed: () {
+                            showDatePicker(
+                                    context: context,
+                                    firstDate: DateTime(2010),
+                                    lastDate: DateTime(2100))
+                                .then((date) {
+                              if (date != null) {
+                                startDateController.text =
+                                    date.toString().split(" ")[0];
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            Icons.date_range_outlined,
+                            color: primaryColor,
+                          ))
+                    ],
+                  ),
 
-                  // عرض الطلاب المحددين
-                  Text(
-                    'الاختبارات المحددين:',
-                    style: TextStyle(fontSize: 16),
-                  ),*/
-                  SizedBox(height: 8.0),
-                  Wrap(
-                    spacing: 8.0,
-                    children: _exams.map((student) {
-                      return Chip(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'المبلغ',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(width: 8,),
+                   Text(_payWay=="اقساط"?"١٠٠٠ لمدة ٥ اشهر ":"٧٠٠٠ حسم ٢٥٪",style: Styles.headLineStyle2,)
+                   /*   _payWay==""?SizedBox():  Chip(
                         backgroundColor: Colors.white,
-
-                        label: Text(student,style: Styles.headLineStyle2,),
+                        label: Text(
+                          _payWay,
+                          style: Styles.headLineStyle2,
+                        ),
                         onDeleted: () {
                           setState(() {
-                            _exams.remove(student);
+                            _payWay = "";
                           });
                         },
-                      );
-                    }).toList(),
+                      ),*/
+                    ],
                   ),
                   Row(
                     children: [
@@ -189,10 +221,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             StudentBirthDay: ageController.text,
                             grade: gradeController.text,
                             startDate: DateTime.parse(startDateController.text),
-
-                            eventRecords: [EventRecordModel(event: "event", date: DateTime.now())],
+                            eventRecords: [
+                              EventRecordModel(
+                                  event: "event", date: DateTime.now())
+                            ],
                             bus: busController.text,
-
                           );
                           print('بيانات الطالب: $student');
                         },
