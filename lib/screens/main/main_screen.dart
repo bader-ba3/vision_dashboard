@@ -5,6 +5,7 @@ import 'package:vision_dashboard/screens/Activity/Activity_screen.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
 import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 import 'package:vision_dashboard/screens/buses/buses_screen.dart';
+import 'package:vision_dashboard/screens/classes/classes_view.dart';
 import 'package:vision_dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_users_screen.dart';
 import 'package:vision_dashboard/screens/notification/notification_screen.dart';
@@ -23,11 +24,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
-  final text = ["لوحة التحكم", "أولياء الامور", "الطلاب", "الموظفين","الرواتب","الاشعارات", "الحافلات", "الرسوم الدراسية", "المصروف", "اراء المستفيدين", "ادارة الحسابات", "الاعدادات"];
+  final text = ["لوحة التحكم", "أولياء الامور", "الطلاب", "الصفوف", "الموظفين","الرواتب","الاشعارات", "الحافلات", "الرسوم الدراسية", "المصروف", "اراء المستفيدين", "ادارة الحسابات", "الاعدادات"];
   final image = [
     "assets/icons/menu_dashboard.svg",
     "assets/icons/menu_profile.svg",
     "assets/icons/menu_profile.svg",
+    "assets/icons/menu_tran.svg",
     "assets/icons/menu_task.svg",
     "assets/icons/trip.svg",
     "assets/icons/menu_notification.svg",
@@ -39,10 +41,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     "assets/icons/menu_setting.svg",
   ];
   late TabController tabController ;
+  late PageController pageController ;
   @override
   void initState() {
    tabController =  TabController(length: text.length, vsync: this);
+   pageController = PageController();
    tabController.addListener(() {
+     pageController.jumpToPage(tabController.index);
      setState(() {});
    });
     super.initState();
@@ -99,12 +104,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           );
                             },
                       ),
-                      child: IndexedStack(
-                        index: tabController.index,
+                      child: PageView(
+                        physics: NeverScrollableScrollPhysics(),
+                        controller: pageController,
                         children: [
                           DashboardScreen(),
                           ParentUsersScreen(),
                           StudentUsersScreen(),
+                          ClassesView(),
                           EmployeeUsersScreen(),
                           SizedBox(),
                           NotificationScreen(),
@@ -117,15 +124,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                         ],
                       ),
                     ),
-                  /*  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-                        height: 100,
-                        width: 265,
-                        child: Image.asset("assets/RAKTA-LOGO.png"),
-                      ),
-                    )*/
                   ],
                 ),
               ),
