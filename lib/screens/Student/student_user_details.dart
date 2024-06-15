@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import '../../constants.dart';
 import '../../models/Employee_Model.dart';
 import '../../models/Student_Model.dart';
@@ -110,29 +111,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomTextField(controller: busController, title: 'الحافلة'),
                   CustomTextField(
                       controller: guardianController, title: 'ولي الأمر'),
-                  SizedBox(
-                    width: Get.width/3.5,
-                    child: SizedBox(
-                      width: Get.width / 3.5,
-                      child: DropdownButtonFormField<String>(
-                        value: null,
-                        hint: Text('طريقة الدفع'),
-                        onChanged: (selectedWay) {
-                          if (selectedWay != null) {
-                            setState(() {
-                              _payWay = selectedWay;
-                            });
-                          }
-                        },
-                        items: _payWays.map((student) {
-                          return DropdownMenuItem(
-                            value: student,
-                            child: Text(student),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
+                  CustomDropDown(value: _payWay, listValue: _payWays,label: "طرق الدفع",),
                   Row(
                     children: [
                       CustomTextField(
@@ -159,7 +138,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           ))
                     ],
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -167,9 +145,16 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         'المبلغ',
                         style: TextStyle(fontSize: 16),
                       ),
-                      SizedBox(width: 8,),
-                   Text(_payWay=="اقساط"?"١٠٠٠ لمدة ٥ اشهر ":"٧٠٠٠ حسم ٢٥٪",style: Styles.headLineStyle2,)
-                   /*   _payWay==""?SizedBox():  Chip(
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        _payWay == "اقساط"
+                            ? "١٠٠٠ لمدة ٥ اشهر "
+                            : "٧٠٠٠ حسم ٢٥٪",
+                        style: Styles.headLineStyle2,
+                      )
+                      /*   _payWay==""?SizedBox():  Chip(
                         backgroundColor: Colors.white,
                         label: Text(
                           _payWay,
