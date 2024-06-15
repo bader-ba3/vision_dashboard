@@ -17,6 +17,7 @@ import 'package:tab_container/tab_container.dart';
 
 import '../Parents/parent_users_screen.dart';
 import '../Student/student_users_screen.dart';
+import '../delete_management/delete_management_view.dart';
 import '../event/event_screen.dart';
 
 
@@ -26,7 +27,23 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
-  final text = ["لوحة التحكم", "أولياء الامور", "الطلاب", "الصفوف", "الموظفين","الرواتب","الاشعارات", "الحافلات", "الرسوم الدراسية","اللأحداث", "المصروف", "اراء المستفيدين", "ادارة الحسابات", "الاعدادات"];
+  final text = [
+    "لوحة التحكم",
+    "أولياء الامور",
+    "الطلاب",
+    "الصفوف",
+    "الموظفين",
+    "الرواتب",
+    "الاشعارات",
+    "الحافلات",
+    "الرسوم الدراسية",
+    "اللأحداث",
+    "المصروف",
+    "اراء المستفيدين",
+    "منصة الحذف",
+    "ادارة الحسابات",
+    "الاعدادات"
+  ];
   final image = [
     "assets/icons/menu_dashboard.svg",
     "assets/icons/menu_profile.svg",
@@ -40,6 +57,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     "assets/icons/garage.svg",
     "assets/icons/menu_tran.svg",
     "assets/icons/menu_profile.svg",
+    "assets/icons/menu_setting.svg",
     "assets/icons/menu_setting.svg",
     "assets/icons/menu_setting.svg",
   ];
@@ -124,6 +142,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           EventScreen(),
                           ExpensesScreen(),
                           SizedBox(),
+                          DeleteManagementView(),
                           AccountManagementScreen(),
                           SettingsScreen(),
                         ],

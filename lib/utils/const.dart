@@ -2,6 +2,7 @@ abstract class Const {
   static const accountManagementCollection = "AccountManagement";
   static const expensesCollection = "Expenses";
   static const eventCollection = "Events";
+  static const deleteManagementCollection = "deleteManagement";
 
 
   static const eventTypeStudent = 'eventTypeStudent';

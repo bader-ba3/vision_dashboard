@@ -1,4 +1,5 @@
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/event_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
@@ -11,6 +12,7 @@ class GetBinding extends Bindings {
     Get.put(AccountManagementViewModel());
     Get.put(ExpensesViewModel());
     Get.put(EventViewModel());
+    Get.put(DeleteManagementViewModel());
   }
 
 }

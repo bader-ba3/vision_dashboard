@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
 import '../utils/const.dart';
 
@@ -26,6 +27,6 @@ class ExpensesViewModel extends GetxController{
   }
 
   deleteExpenses(ExpensesModel expensesModel){
-    expensesFireStore.doc(expensesModel.id).delete();
+    addDeleteOperation(collectionName: Const.expensesCollection, affectedId: expensesModel.id);
   }
 }
