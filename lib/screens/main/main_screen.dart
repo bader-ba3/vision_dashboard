@@ -95,10 +95,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                             title: text[index],
                             svgSrc: image[index],
                             press: () {
-                              // controller.changeIndex(index);
-                              setState(() {
-
-                              });
+                              setState(() {});
                             },
                           );
                             },
@@ -113,6 +110,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           SizedBox(),
                           ExpensesScreen(),
                           BusesScreen(),
+                          SizedBox(),
+                          ExpensesScreen(),
+                          SizedBox(),
                           AccountManagementScreen(),
                           SettingsScreen(),
                         ],
