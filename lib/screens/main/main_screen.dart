@@ -3,6 +3,7 @@ import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Activity/Activity_screen.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
+import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
 import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 import 'package:vision_dashboard/screens/buses/buses_screen.dart';
 import 'package:vision_dashboard/screens/classes/classes_view.dart';
@@ -85,7 +86,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                         color: Color(0xff00308F),
                         fontSize: 15.0,
                       ),
-                      unselectedTextStyle: const TextStyle(
+                      unselectedTextStyle: Styles.headLineStyle1.copyWith(
                         color: Colors.black,
                         fontSize: 13.0,
                       ),
@@ -107,11 +108,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                             },
                       ),
                       child: PageView(
+
                         physics: NeverScrollableScrollPhysics(),
                         controller: pageController,
                         children: [
                           DashboardScreen(),
-                          ParentUsersScreen(),
+                          ParentsView(),
                           StudentUsersScreen(),
                           ClassesView(),
                           EmployeeUsersScreen(),

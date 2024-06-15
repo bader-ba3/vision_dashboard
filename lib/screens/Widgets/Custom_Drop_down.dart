@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import '../../constants.dart';
 
 class CustomDropDown extends StatefulWidget {
-   CustomDropDown({super.key,required this.value,required this.listValue,required this.label});
+   CustomDropDown({super.key,required this.value,required this.listValue,required this.label,required this.onChange});
 
   @override
   State<CustomDropDown> createState() => _CustomDropDownState();
  String value,label ;
 
 final List<String> listValue ;
+
+final Function(String? value) onChange;
 }
 
 
@@ -38,13 +40,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
         ),
         value: null,
         hint: Text('طريقة الدفع'),
-        onChanged: (selectedWay) {
-          if (selectedWay != null) {
-            setState(() {
-             widget. value = selectedWay;
-            });
-          }
-        },
+        onChanged: widget.onChange,
         items: widget.listValue.map((student) {
           return DropdownMenuItem(
             value: student,

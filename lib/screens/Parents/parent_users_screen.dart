@@ -93,142 +93,7 @@ class ParentUsersScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: defaultPadding),
-                Container(
-                    padding: EdgeInsets.all(defaultPadding),
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    width: double.infinity,
-                    alignment: Alignment.topRight,
-                    child: /* Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          height: 200,
-                          width: 450,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: secondaryColor),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 200,
-                                width: 200,
-                                child: Stack(
-                                  children: [
-                                    PieChart(
-                                      PieChartData(
-                                        sectionsSpace: 0,
-                                        centerSpaceRadius: 70,
-                                        startDegreeOffset: -90,
-                                        sections: sexChartSelectionData,
-                                      ),
-                                    ),
-                                    Positioned.fill(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(height: defaultPadding),
-                                          Text(
-                                            "600",
-                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                              color: Color(0xff00308F),
-                                              fontWeight: FontWeight.w600,
-                                              height: 0.5,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text("User")
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                                child: Text(
-                                              "Male",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                          ),
-                                        ),
-                                        Text(
-                                          "270",
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                                child: Text(
-                                              "Female",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                          ),
-                                        ),
-                                        Text(
-                                          "330",
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      squrWidget("Total Request", "15000"),
-                      squrWidget("Customer Happiness Rate", "95%"),
-                      SizedBox(
 
-                          width:900,child: DateTables()),
-
-
-                    ],
-                  )*/
-
-                        ParentInputForm()
-/*
-                      ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(secondaryColor),
-                        padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 30))),
-                    child: Text(
-                      "اضافة ولي امر جديد",
-                      style: Styles.headLineStyle2,
-                    ),
-                  ),*/
-                    ),
                 SizedBox(
                   height: 25,
                 ),
@@ -242,38 +107,35 @@ class ParentUsersScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "كل المستخدمين",
+                        "كل اولياء الامور",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(
                         width: Get.width,
-                        child:Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text("الاسم NAME:",style: Styles.headLineStyle2.copyWith(color: Colors.black),),
-                                SizedBox(width: 15,),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: CustomPaint(
-                                      painter: DottedUnderlinePainter(),
-                                      child: TextField(
-                                        style: TextStyle(color: Colors.black, fontSize: 18), // تعديل النمط هنا
-                                        enabled: true,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),],
-                            )
-
-                          ],
-                        ) ,
+                        child:Scrollbar(
+                          controller: _scrollController,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            controller: _scrollController,
+                            child: DataTable(
+                              columns: [
+                                DataColumn(label: Text("الاسم الكامل")),
+                                DataColumn(label: Text("رقم")),
+                                DataColumn(label: Text("العنوان")),
+                                DataColumn(label: Text("الجنسية")),
+                                DataColumn(label: Text("الجنس")),
+                                DataColumn(label: Text("العمر")),
+                                // DataColumn(label: Text("الأبناء")),
+                                DataColumn(label: Text("تاريخ البداية")),
+                                DataColumn(label: Text("سجل الأحداث")),
+                                DataColumn(label: Text("الامتحانات")),
+                              ],
+                              rows: parents
+                                  .map((parent) => parentDataRow(parent))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
