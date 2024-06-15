@@ -25,7 +25,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
-  final text = ["لوحة التحكم", "أولياء الامور", "الطلاب", "الصفوف", "الموظفين","الرواتب","الاشعارات", "الحافلات", "الرسوم الدراسية", "المصروف", "اراء المستفيدين", "ادارة الحسابات", "الاعدادات"];
+  final text = ["لوحة التحكم", "أولياء الامور", "الطلاب", "الصفوف", "الموظفين","الرواتب","الاشعارات", "الحافلات", "الرسوم الدراسية","اللأحداث", "المصروف", "اراء المستفيدين", "ادارة الحسابات", "الاعدادات"];
   final image = [
     "assets/icons/menu_dashboard.svg",
     "assets/icons/menu_profile.svg",
@@ -35,6 +35,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     "assets/icons/trip.svg",
     "assets/icons/menu_notification.svg",
     "assets/icons/menu_doc.svg",
+    "assets/icons/garage.svg",
     "assets/icons/garage.svg",
     "assets/icons/menu_tran.svg",
     "assets/icons/menu_profile.svg",
@@ -109,7 +110,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                         physics: NeverScrollableScrollPhysics(),
                         controller: pageController,
                         children: [
-                          EventScreen(),
                           DashboardScreen(),
                           ParentUsersScreen(),
                           StudentUsersScreen(),
@@ -119,6 +119,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           NotificationScreen(),
                           BusesScreen(),
                           SizedBox(),
+                          EventScreen(),
                           ExpensesScreen(),
                           SizedBox(),
                           AccountManagementScreen(),
@@ -131,7 +132,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               ),
             ),
           );
-
         }
       ),
     );

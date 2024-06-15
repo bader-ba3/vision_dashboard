@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
+import 'package:vision_dashboard/controller/event_view_model.dart';
 import '../../constants.dart';
 import '../../models/Employee_Model.dart';
 import '../../models/Student_Model.dart';
+import '../../utils/const.dart';
 import '../Employee/Employee_user_details.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -14,6 +15,8 @@ class StudentInputForm extends StatefulWidget {
 
 class _StudentInputFormState extends State<StudentInputForm> {
   String _payWay = ""; // قائمة الطلاب المُحددين
+  String? _selectedEvent; // قائمة الطلاب المُحددين
+  TextEditingController _bodyEvent = TextEditingController(); // قائمة الطلاب المُحددين
 
   // قائمة بكل الطلاب المتاحين
   final List<String> _payWays = [
@@ -22,6 +25,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     'كريدت',
     // أضف المزيد من الطلاب إذا لزم الأمر
   ];
+
   final studentNameController = TextEditingController();
   final studentNumberController = TextEditingController();
   final addressController = TextEditingController();
@@ -33,7 +37,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final examsController = TextEditingController();
   final startDateController = TextEditingController();
   final gradesController = TextEditingController();
-  final eventRecordsController = TextEditingController();
+  // final eventRecordsController = TextEditingController();
   final busController = TextEditingController();
   final guardianController = TextEditingController();
 
@@ -52,7 +56,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     examsController.dispose();
     startDateController.dispose();
     gradesController.dispose();
-    eventRecordsController.dispose();
+    // eventRecordsController.dispose();
     busController.dispose();
     guardianController.dispose();
     super.dispose();
@@ -63,6 +67,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
 
   @override
   Widget build(BuildContext context) {
+    EventViewModel eventViewModel = Get.find<EventViewModel>();
     return Scaffold(
       backgroundColor: bgColor,
       body: SingleChildScrollView(
@@ -106,12 +111,35 @@ class _StudentInputFormState extends State<StudentInputForm> {
 
                   /*  CustomTextField(
                       controller: gradesController, title: 'الدرجات'),*/
-                  CustomTextField(
-                      controller: eventRecordsController, title: 'سجل الأحداث'),
+                  // CustomTextField(
+                  //     controller: eventRecordsController, title: 'سجل الأحداث'),
                   CustomTextField(controller: busController, title: 'الحافلة'),
                   CustomTextField(
                       controller: guardianController, title: 'ولي الأمر'),
-                  CustomDropDown(value: _payWay, listValue: _payWays,label: "طرق الدفع",),
+
+                  SizedBox(
+                    width: Get.width / 3.5,
+                    child: SizedBox(
+                      width: Get.width / 3.5,
+                      child: DropdownButtonFormField<String>(
+                        value: null,
+                        hint: Text('طريقة الدفع'),
+                        onChanged: (selectedWay) {
+                          if (selectedWay != null) {
+                            setState(() {
+                              _payWay = selectedWay;
+                            });
+                          }
+                        },
+                        items: _payWays.map((student) {
+                          return DropdownMenuItem(
+                            value: student,
+                            child: Text(student),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
                   Row(
                     children: [
                       CustomTextField(
@@ -122,13 +150,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(2010),
-                                    lastDate: DateTime(2100))
+                                context: context,
+                                firstDate: DateTime(2010),
+                                lastDate: DateTime(2100))
                                 .then((date) {
                               if (date != null) {
                                 startDateController.text =
-                                    date.toString().split(" ")[0];
+                                date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -138,6 +166,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           ))
                     ],
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -145,15 +174,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         'المبلغ',
                         style: TextStyle(fontSize: 16),
                       ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        _payWay == "اقساط"
-                            ? "١٠٠٠ لمدة ٥ اشهر "
-                            : "٧٠٠٠ حسم ٢٥٪",
-                        style: Styles.headLineStyle2,
-                      )
+                      SizedBox(width: 8,),
+                      Text(_payWay == "اقساط" ? "١٠٠٠ لمدة ٥ اشهر " : "٧٠٠٠ حسم ٢٥٪", style: Styles.headLineStyle2,)
                       /*   _payWay==""?SizedBox():  Chip(
                         backgroundColor: Colors.white,
                         label: Text(
@@ -168,33 +190,67 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ),*/
                     ],
                   ),
+                  GetBuilder<EventViewModel>(builder: (eventController) {
+                    return Row(
+                      children: [
+                        SizedBox(
+                          width: Get.width / 3.5,
+                          child: SizedBox(
+                            width: Get.width / 3.5,
+                            child: DropdownButtonFormField<String>(
+                              value: _selectedEvent,
+                              hint: Text('نوع الحدث'),
+                              onChanged: (selectedWay) {
+                                if (selectedWay != null) {
+                                  setState(() {
+                                    _selectedEvent = selectedWay;
+                                  });
+                                }
+                              },
+                              items: eventController.allEvents.values.toList().where((element) => element.role == Const.eventTypeStudent,).map((student) {
+                                return DropdownMenuItem(
+                                  value: student.name,
+                                  child: Text(student.name),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        CustomTextField(
+                            controller: _bodyEvent,
+                            title: 'الوصف',
+                            enable: true,
+                            keyboardType: TextInputType.text),
+                        SizedBox(width: 16.0),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all(Colors.white),
+                            backgroundColor: MaterialStateProperty.all(primaryColor),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              eventRecords.add({
+                                'event': _selectedEvent! + _bodyEvent.text,
+                                'date': DateTime.now().toString(),
+                              });
+                              _selectedEvent = null;
+                              _bodyEvent.clear();
+                            });
+                          },
+                          child: Text('إضافة سجل حدث'),
+                        ),
+                      ],
+                    );
+                  }),
                   Row(
                     children: [
                       ElevatedButton(
                         style: ButtonStyle(
                           foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
+                          MaterialStateProperty.all(Colors.white),
                           backgroundColor:
-                              MaterialStateProperty.all(primaryColor),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            eventRecords.add({
-                              'event': eventRecordsController.text,
-                              'date': DateTime.now().toString(),
-                            });
-                            eventRecordsController.clear();
-                          });
-                        },
-                        child: Text('إضافة سجل حدث'),
-                      ),
-                      SizedBox(width: 16.0),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          backgroundColor:
-                              MaterialStateProperty.all(primaryColor),
+                          MaterialStateProperty.all(primaryColor),
                         ),
                         onPressed: () {
                           final student = StudentModel(
