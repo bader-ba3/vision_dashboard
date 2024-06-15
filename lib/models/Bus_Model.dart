@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:vision_dashboard/models/Employee_Model.dart';
 import 'package:faker/faker.dart';
+
+import 'Employee_Model.dart';
 
 class BusModel {
   String name;

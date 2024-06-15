@@ -2,7 +2,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Activity/Activity_screen.dart';
+import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
 import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
+import 'package:vision_dashboard/screens/buses/buses_screen.dart';
 import 'package:vision_dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_users_screen.dart';
 import 'package:vision_dashboard/screens/reports/reports_screen.dart';
@@ -69,7 +71,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       tabsEnd: 0.95,
                       tabsStart: 0.125,
                       tabMaxLength: 60,
-                      tabExtent: 400,
+                      tabExtent: 250,
                       borderRadius: BorderRadius.circular(10),
                       tabBorderRadius: BorderRadius.circular(20),
                       childPadding: const EdgeInsets.all(10.0),
@@ -107,10 +109,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           DashboardScreen(),
                           ParentUsersScreen(),
                           StudentUsersScreen(),
-                          ActivityScreen(),
-                          NotificationScreen(),
-                          ReportsScreen(),
+                          EmployeeUsersScreen(),
+                          SizedBox(),
                           ExpensesScreen(),
+                          BusesScreen(),
                           AccountManagementScreen(),
                           SettingsScreen(),
                         ],

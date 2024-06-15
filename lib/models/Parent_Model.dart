@@ -1,76 +1,76 @@
 import 'dart:math';
 
-import 'package:vision_dashboard/models/Employee_Model.dart';
-import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:faker/faker.dart';
 
+import 'Employee_Model.dart';
+
+
 class ParentModel {
-  String fullName;
-  String number;
-  String address;
-  String nationality;
-  String gender;
-  int age;
-  List<String> children;
-  DateTime startDate;
-  List<ExamModel> exams;
-  List<EventRecordModel> eventRecords;
+  String? fullName,
+      parentID,
+      number,
+      address,
+      phoneNumber,
+      motherPhoneNumber,
+      emergencyPhone,
+      work;
+
+  // List<ExamModel> exams;
+  List<EventRecordModel>? eventRecords;
 
   ParentModel({
-    required this.fullName,
-    required this.number,
-    required this.address,
-    required this.nationality,
-    required this.gender,
-    required this.age,
-    required this.children,
-    required this.startDate,
-    required this.exams,
-    required this.eventRecords,
+    this.fullName,
+    this.number,
+    this.address,
+    this.phoneNumber,
+    this.motherPhoneNumber,
+    this.emergencyPhone,
+    this.work,
+    this.parentID,
+    this.eventRecords,
   });
 
-  Map<String, dynamic> toJson() => {
-    'fullName': fullName,
-    'number': number,
-    'address': address,
-    'nationality': nationality,
-    'gender': gender,
-    'age': age,
-    'children': children,
-    'startDate': startDate.toIso8601String(),
-    'exams': exams.map((exam) => exam.toJson()).toList(),
-    'eventRecords': eventRecords.map((event) => event.toJson()).toList(),
-  };
+  // Method to convert ParentModel instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'fullName': fullName,
+      'parentID': parentID,
+      'number': number,
+      'address': address,
+      'phoneNumber': phoneNumber,
+      'mPhoneNumber': motherPhoneNumber,
+      'emergencyPhone': emergencyPhone,
+      'work': work,
+      'eventRecords': eventRecords?.map((event) => event.toJson()).toList(),
+    };
+  }
 
+  // Method to create ParentModel instance from JSON
   factory ParentModel.fromJson(Map<String, dynamic> json) {
     return ParentModel(
       fullName: json['fullName'],
+      parentID: json['parentID'],
       number: json['number'],
       address: json['address'],
-      nationality: json['nationality'],
-      gender: json['gender'],
-      age: json['age'],
-      children: List<String>.from(json['children']),
-      startDate: DateTime.parse(json['startDate']),
-      exams: (json['exams'] as List)
-          .map((exam) => ExamModel.fromJson(exam))
-          .toList(),
-      eventRecords: (json['eventRecords'] as List)
-          .map((event) => EventRecordModel.fromJson(event))
+      phoneNumber: json['phoneNumber'],
+      motherPhoneNumber: json['mPhoneNumber'],
+      emergencyPhone: json['emergencyPhone'],
+      work: json['work'],
+      eventRecords: (json['eventRecords'] as List<dynamic>?)
+          ?.map((event) => EventRecordModel.fromJson(event))
           .toList(),
     );
   }
 
   @override
   String toString() {
-    return 'Parent(fullName: $fullName, number: $number, address: $address, nationality: $nationality, gender: $gender, age: $age, children: $children, startDate: $startDate, exams: $exams, eventRecords: $eventRecords)';
+    return 'ParentModel{fullName: $fullName, parentID: $parentID, number: $number, address: $address, phoneNumber: $phoneNumber, mPhoneNumber: $motherPhoneNumber, emergencyPhone: $emergencyPhone, work: $work, eventRecords: $eventRecords}';
   }
 }
 
 // Generate random parents
 List<ParentModel> generateRandomParents(int count) {
   var faker = Faker();
-  var random = Random();
   List<ParentModel> parents = [];
 
   for (int i = 0; i < count; i++) {
@@ -78,12 +78,14 @@ List<ParentModel> generateRandomParents(int count) {
       fullName: faker.person.name(),
       number: faker.randomGenerator.integer(100000).toString(),
       address: faker.address.streetAddress(),
-      nationality: faker.address.country(),
-      gender: random.nextBool() ? 'Male' : 'Female',
-      age: random.nextInt(30) + 30,
-      children: List<String>.generate(3, (_) => faker.person.name()), // 3 random children per parent
-      startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023),
-      exams: generateRandomExams(3),
+      work: faker.address.country(),
+      emergencyPhone:
+          "971-5${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
+      phoneNumber:
+          "971-5${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
+      motherPhoneNumber:
+          "971-5${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
+      parentID: faker.randomGenerator.integer(1000000).toString(),
       eventRecords: generateRandomEvents(5),
     ));
   }

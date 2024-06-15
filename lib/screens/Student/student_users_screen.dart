@@ -1,16 +1,14 @@
 import 'dart:math';
-
-import 'package:vision_dashboard/models/Student_Model.dart';
-import 'package:vision_dashboard/models/RecentFile.dart' hide demoRecentFiles;
-import 'package:vision_dashboard/responsive.dart';
-import 'package:vision_dashboard/screens/Student/student_user_details.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
+import 'package:vision_dashboard/screens/Student/student_user_details.dart';
+import '../../constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../models/Student_Model.dart';
+import '../../responsive.dart';
 import '../dashboard/components/date_table.dart';
 
 class StudentUsersScreen extends StatelessWidget {
@@ -230,14 +228,11 @@ class StudentUsersScreen extends StatelessWidget {
                                 DataColumn(label: Text("اسم الطالب")),
                                 DataColumn(label: Text("رقم الطالب")),
                                 DataColumn(label: Text("العنوان")),
-                                DataColumn(label: Text("الجنسية")),
                                 DataColumn(label: Text("الجنس")),
                                 DataColumn(label: Text("العمر")),
                                 DataColumn(label: Text("الصف")),
                                 DataColumn(label: Text("المعلمين")),
-                                DataColumn(label: Text("الامتحانات")),
                                 DataColumn(label: Text("تاريخ البداية")),
-                                DataColumn(label: Text("الدرجات")),
                                 DataColumn(label: Text("سجل الاحداث")),
                                 DataColumn(label: Text("الحافلة")),
                                 DataColumn(label: Text("ولي الأمر")),
@@ -263,22 +258,17 @@ class StudentUsersScreen extends StatelessWidget {
       cells: [
         DataCell(Text(student.studentName!)),
         DataCell(Text(student.studentNumber!)),
-        DataCell(Text(student.address!)),
-        DataCell(Text(student.nationality!)),
+        DataCell(Text(student.studentID!)),
+        DataCell(Text(student.StudentBirthDay!)),
         DataCell(Text(student.gender!)),
-        DataCell(Text(student.age.toString())),
+        DataCell(Text(student.StudentBirthDay.toString())),
         DataCell(Text(student.grade!)),
-        DataCell(Text(student.teachers!.join(', '))),
-        DataCell(Text(student.exams!.map((exam) => exam.subject).join(', '))),
         DataCell(Text(student.startDate!.toIso8601String())),
-        DataCell(Text(student.grades!.entries
-            .map((e) => '${e.key}: ${e.value.toStringAsFixed(2)}')
-            .join(', '))),
         DataCell(Text(student.eventRecords!
             .map((event) => event.event)
             .join(', '))),
         DataCell(Text(student.bus!)),
-        DataCell(Text(student.guardian!)),
+        DataCell(Text(student.parentModel!.parentID!)),
       ],
     );
   }
@@ -425,198 +415,6 @@ class StudentUsersScreen extends StatelessWidget {
       ],
     );
   }
-
-  List<
-      ({
-        String name,
-        String lastName,
-        String pName,
-        String mName,
-        String sex,
-        String Date,
-        String pDate,
-      })> listWorkingDriver = [
-    (
-      name: "أحمد",
-      lastName: "الزهراني",
-      pName: "محمد",
-      mName: "ليلى",
-      sex: "ذكر",
-      Date: "٢٠٢١-٢-٢",
-      pDate: "١٩٩٢"
-    ),
-    (
-      name: "فاطمة",
-      lastName: "الشريف",
-      pName: "علي",
-      mName: "نورا",
-      sex: "أنثى",
-      Date: "٢٠٢٢-٣-٣",
-      pDate: "١٩٩٣"
-    ),
-    (
-      name: "يوسف",
-      lastName: "الحمادي",
-      pName: "سعيد",
-      mName: "مريم",
-      sex: "ذكر",
-      Date: "٢٠٢٣-٤-٤",
-      pDate: "١٩٩١"
-    ),
-    (
-      name: "خديجة",
-      lastName: "الكتبي",
-      pName: "حسن",
-      mName: "فاطمة",
-      sex: "أنثى",
-      Date: "٢٠٢٤-٥-٥",
-      pDate: "١٩٩٠"
-    ),
-    (
-      name: "علي",
-      lastName: "العنزي",
-      pName: "عبدالله",
-      mName: "زينة",
-      sex: "ذكر",
-      Date: "٢٠٢٥-٦-٦",
-      pDate: "١٩٨٩"
-    ),
-    (
-      name: "ليلى",
-      lastName: "السالم",
-      pName: "إبراهيم",
-      mName: "ريم",
-      sex: "أنثى",
-      Date: "٢٠٢٦-٧-٧",
-      pDate: "١٩٩٥"
-    ),
-    (
-      name: "سعيد",
-      lastName: "العبدالله",
-      pName: "ناصر",
-      mName: "أمل",
-      sex: "ذكر",
-      Date: "٢٠٢٧-٨-٨",
-      pDate: "١٩٩٦"
-    ),
-    (
-      name: "نورة",
-      lastName: "الغانم",
-      pName: "جاسم",
-      mName: "خلود",
-      sex: "أنثى",
-      Date: "٢٠٢٨-٩-٩",
-      pDate: "١٩٩٧"
-    ),
-    (
-      name: "محمد",
-      lastName: "العلي",
-      pName: "يوسف",
-      mName: "منى",
-      sex: "ذكر",
-      Date: "٢٠٢٩-١٠-١٠",
-      pDate: "١٩٩٨"
-    ),
-    (
-      name: "أمل",
-      lastName: "المهيري",
-      pName: "خالد",
-      mName: "سارة",
-      sex: "أنثى",
-      Date: "٢٠٣٠-١١-١١",
-      pDate: "١٩٩٩"
-    ),
-    (
-      name: "حسن",
-      lastName: "البدر",
-      pName: "فيصل",
-      mName: "شيماء",
-      sex: "ذكر",
-      Date: "٢٠٣١-١٢-١٢",
-      pDate: "١٩٩٠"
-    ),
-    (
-      name: "منى",
-      lastName: "الحمد",
-      pName: "أحمد",
-      mName: "مها",
-      sex: "أنثى",
-      Date: "٢٠٣٢-١-١",
-      pDate: "١٩٨٩"
-    ),
-    (
-      name: "عبدالله",
-      lastName: "الناصر",
-      pName: "راشد",
-      mName: "سعاد",
-      sex: "ذكر",
-      Date: "٢٠٣٣-٢-٢",
-      pDate: "١٩٩١"
-    ),
-    (
-      name: "هدى",
-      lastName: "الظاهري",
-      pName: "طارق",
-      mName: "نجلاء",
-      sex: "أنثى",
-      Date: "٢٠٣٤-٣-٣",
-      pDate: "١٩٩٣"
-    ),
-    (
-      name: "فيصل",
-      lastName: "الجابري",
-      pName: "سعود",
-      mName: "سمية",
-      sex: "ذكر",
-      Date: "٢٠٣٥-٤-٤",
-      pDate: "١٩٩٥"
-    ),
-    (
-      name: "مها",
-      lastName: "المنصوري",
-      pName: "فهد",
-      mName: "هالة",
-      sex: "أنثى",
-      Date: "٢٠٣٦-٥-٥",
-      pDate: "١٩٩٧"
-    ),
-    (
-      name: "سلمان",
-      lastName: "البلوشي",
-      pName: "ماجد",
-      mName: "خلود",
-      sex: "ذكر",
-      Date: "٢٠٣٧-٦-٦",
-      pDate: "١٩٩٨"
-    ),
-    (
-      name: "ريم",
-      lastName: "الهاشمي",
-      pName: "خليل",
-      mName: "نورة",
-      sex: "أنثى",
-      Date: "٢٠٣٨-٧-٧",
-      pDate: "١٩٩٩"
-    ),
-    (
-      name: "ناصر",
-      lastName: "المالكي",
-      pName: "عبدالعزيز",
-      mName: "سلوى",
-      sex: "ذكر",
-      Date: "٢٠٣٩-٨-٨",
-      pDate: "١٩٩٤"
-    ),
-    (
-      name: "سارة",
-      lastName: "البحيري",
-      pName: "يحيى",
-      mName: "ريم",
-      sex: "أنثى",
-      Date: "٢٠٤٠-٩-٩",
-      pDate: "١٩٩٢"
-    )
-  ];
 
   List<PieChartSectionData> paiChartSelectionData = [
     PieChartSectionData(

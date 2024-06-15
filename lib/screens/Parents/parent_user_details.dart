@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
 import '../../models/Employee_Model.dart';
+import '../../models/Exam_model.dart';
 import '../../models/Parent_Model.dart';
 import '../Employee/Employee_user_details.dart';
 
@@ -106,12 +106,12 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   fullName: fullNameController.text,
                   number: numberController.text,
                   address: addressController.text,
-                  nationality: nationalityController.text,
-                  gender: genderController.text,
-                  age: int.tryParse(ageController.text) ?? 0,
-                  children: selectedChildren,
-                  startDate: DateTime.parse(startDateController.text),
-                  exams: exams,
+                  work: nationalityController.text,
+                  // gender: genderController.text,
+                  // age: int.tryParse(ageController.text) ?? 0,
+                  // children: selectedChildren,
+                  // parentID: DateTime.parse(startDateController.text),
+                  // exams: exams,
                   eventRecords: eventRecords,
                 );
                 // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات

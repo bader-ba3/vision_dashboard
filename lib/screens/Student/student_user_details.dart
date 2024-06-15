@@ -1,10 +1,8 @@
-import 'package:vision_dashboard/models/Employee_Model.dart';
-import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/constants.dart';
-import 'package:vision_dashboard/models/Student_Model.dart';
-
+import '../../constants.dart';
+import '../../models/Employee_Model.dart';
+import '../../models/Student_Model.dart';
 import '../Employee/Employee_user_details.dart';
 
 class StudentInputForm extends StatefulWidget {
@@ -187,20 +185,14 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           final student = StudentModel(
                             studentName: studentNameController.text,
                             studentNumber: studentNumberController.text,
-                            address: addressController.text,
-                            nationality: nationalityController.text,
                             gender: genderController.text,
-                            age: ageController.text,
+                            StudentBirthDay: ageController.text,
                             grade: gradeController.text,
-                            teachers: [teachersController.text],
-                            exams: [ExamModel(date: DateTime.now(),image: "",passRate: "",professor: "",students: [""],subject: "")],
                             startDate: DateTime.parse(startDateController.text),
-                            grades: {
-                              'subject1': double.parse(gradesController.text)
-                            },
+
                             eventRecords: [EventRecordModel(event: "event", date: DateTime.now())],
                             bus: busController.text,
-                            guardian: guardianController.text,
+
                           );
                           print('بيانات الطالب: $student');
                         },
