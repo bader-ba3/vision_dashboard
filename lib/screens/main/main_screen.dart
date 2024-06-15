@@ -16,6 +16,7 @@ import 'package:tab_container/tab_container.dart';
 
 import '../Parents/parent_users_screen.dart';
 import '../Student/student_users_screen.dart';
+import '../event/event_screen.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -108,6 +109,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                         physics: NeverScrollableScrollPhysics(),
                         controller: pageController,
                         children: [
+                          EventScreen(),
                           DashboardScreen(),
                           ParentUsersScreen(),
                           StudentUsersScreen(),

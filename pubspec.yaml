@@ -44,6 +44,7 @@ dependencies:
   tab_container:
   flutter_rating_stars:
   faker: ^2.1.0
+  flutter_material_color_picker:
   file_picker:
   fluttertoast:
   universal_html:
