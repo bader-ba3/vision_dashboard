@@ -3,6 +3,8 @@ import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Activity/Activity_screen.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
+import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
+import 'package:vision_dashboard/screens/Exams/Exam_screen.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
 import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 import 'package:vision_dashboard/screens/buses/buses_screen.dart';
@@ -33,6 +35,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     "الطلاب",
     "الصفوف",
     "الموظفين",
+    "الامتحانات",
     "الرواتب",
     "الاشعارات",
     "الحافلات",
@@ -49,6 +52,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     "assets/icons/menu_profile.svg",
     "assets/icons/menu_profile.svg",
     "assets/icons/menu_tran.svg",
+    "assets/icons/menu_task.svg",
     "assets/icons/menu_task.svg",
     "assets/icons/trip.svg",
     "assets/icons/menu_notification.svg",
@@ -135,6 +139,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           StudentUsersScreen(),
                           ClassesView(),
                           EmployeeUsersScreen(),
+                          ExamView(),
                           SizedBox(),
                           NotificationScreen(),
                           BusesScreen(),

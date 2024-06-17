@@ -1,3 +1,4 @@
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/models/Employee_Model.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/responsive.dart';
@@ -72,7 +73,9 @@ class ExamScreen extends StatelessWidget {
                               const BorderRadius.all(Radius.circular(10)),
                         ),
                         suffixIcon: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            
+                          },
                           child: Container(
                             padding: EdgeInsets.all(defaultPadding * 0.75),
                             margin: EdgeInsets.symmetric(
@@ -90,11 +93,6 @@ class ExamScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: defaultPadding),
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.topRight,
-                  child: ExamInputForm(),
-                ),
                 SizedBox(
                   height: 25,
                 ),
@@ -108,7 +106,7 @@ class ExamScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "كل الموظفين",
+                        "كل الامتحانات",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(

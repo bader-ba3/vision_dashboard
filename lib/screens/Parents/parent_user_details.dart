@@ -62,7 +62,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
               CustomTextField(controller: ageController, title: 'العمر', keyboardType: TextInputType.number),
               CustomTextField(controller: startDateController, title: 'تاريخ البداية', keyboardType: TextInputType.datetime),
               SizedBox(
-                width: Get.width/3.5,
+                width: Get.width/4.5,
                 child: DropdownButtonFormField<String>(
                   value: null,
                   hint: Text('اختر الأطفال',style: Styles.headLineStyle3,),
