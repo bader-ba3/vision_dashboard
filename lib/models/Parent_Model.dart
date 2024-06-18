@@ -9,12 +9,12 @@ import 'event_record_model.dart';
 class ParentModel {
   String? fullName,
       parentID,
-      number,
       address,
       phoneNumber,
-      motherPhoneNumber,
-      emergencyPhone,
+      motherPhone,
+      emergencyPhone,age,
   id,
+  nationality,startDate,
       work;
 
   // List<ExamModel> exams;
@@ -22,29 +22,33 @@ class ParentModel {
 
   ParentModel({
     this.id,
+    this.age,
     this.fullName,
-    this.number,
     this.address,
     this.phoneNumber,
-    this.motherPhoneNumber,
+    this.motherPhone,
+    this.startDate,
     this.emergencyPhone,
     this.work,
     this.parentID,
     this.eventRecords,
+    this.nationality
   });
 
   // Method to convert ParentModel instance to JSON
   Map<String, dynamic> toJson() {
     return {
+      'startDate':startDate,
       'fullName': fullName,
       'parentID': parentID,
-      'number': number,
       'address': address,
+      'nationality':nationality,
       'phoneNumber': phoneNumber,
-      'mPhoneNumber': motherPhoneNumber,
+      'mPhoneNumber': motherPhone,
       'emergencyPhone': emergencyPhone,
       'work': work,
       'id':id,
+      'age':age,
       'eventRecords': eventRecords?.map((event) => event.toJson()).toList(),
     };
   }
@@ -54,10 +58,12 @@ class ParentModel {
     return ParentModel(
       fullName: json['fullName'],
       parentID: json['parentID'],
-      number: json['number'],
       address: json['address'],
+      age:json['age'],
+      startDate:json['startDate'],
+      nationality: json['nationality'],
       phoneNumber: json['phoneNumber'],
-      motherPhoneNumber: json['mPhoneNumber'],
+      motherPhone: json['motherPhone'],
       emergencyPhone: json['emergencyPhone'],
       work: json['work'],
       id: json['id'],
@@ -69,7 +75,7 @@ class ParentModel {
 
   @override
   String toString() {
-    return 'ParentModel{fullName: $fullName, parentID: $parentID, number: $number, address: $address, phoneNumber: $phoneNumber, mPhoneNumber: $motherPhoneNumber, emergencyPhone: $emergencyPhone, work: $work, eventRecords: $eventRecords}';
+    return 'ParentModel{fullName: $fullName, parentID: $parentID, address: $address, phoneNumber: $phoneNumber, mPhoneNumber: $motherPhone, emergencyPhone: $emergencyPhone, work: $work, eventRecords: $eventRecords}';
   }
 }
 
@@ -81,15 +87,17 @@ List<ParentModel> generateRandomParents(int count) {
   for (int i = 0; i < count; i++) {
     parents.add(ParentModel(
       fullName: faker.person.name(),
-      number: faker.randomGenerator.integer(100000).toString(),
       address: faker.address.streetAddress(),
-      work: faker.address.country(),
+      work: faker.conference.name(),
+      age: Random().nextInt(99).toString(),
+      nationality: faker.address.country(),
+      startDate: faker.date.dateTimeBetween(DateTime(2010), DateTime.now()).toString(),
       emergencyPhone:
-          "971-5${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
+          "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
       phoneNumber:
-          "971-5${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
-      motherPhoneNumber:
-          "971-5${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
+          "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
+      motherPhone:
+          "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
       parentID: faker.randomGenerator.integer(1000000).toString(),
       eventRecords: generateRandomEvents(5),
     ));

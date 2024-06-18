@@ -9,11 +9,11 @@ class ParentsViewModel{
 
   addParent(ParentModel parentModel){
 
-    parentCollectionRef.add(parentModel.toJson());
+    parentCollectionRef.doc(parentModel.id).set(parentModel.toJson());
   }
   updateParent(ParentModel parentModel){
 
-    parentCollectionRef.doc(parentModel.id);
+    parentCollectionRef.doc(parentModel.id).set(parentModel.toJson(),SetOptions(merge: true));
   }
 
 

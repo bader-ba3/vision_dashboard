@@ -4,6 +4,7 @@ import 'package:vision_dashboard/controller/event_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
 class GetBinding extends Bindings {
 
   @override
@@ -13,6 +14,7 @@ class GetBinding extends Bindings {
     Get.put(ExpensesViewModel());
     Get.put(EventViewModel());
     Get.put(DeleteManagementViewModel());
+    Get.put(ParentsViewModel());
   }
 
 }

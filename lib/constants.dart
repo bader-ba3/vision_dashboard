@@ -14,7 +14,7 @@ String generateId(String type) {
   var _ = DateTime.now().microsecondsSinceEpoch.toString();
   return "$type$_";
 }
-const String parentsCollection='ParentsCollection';
+const String parentsCollection='Parents';
 class Styles {
 
 

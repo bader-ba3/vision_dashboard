@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
 
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
@@ -74,7 +75,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextField(controller: fullNameController, title: 'الاسم الكامل'),
-                  CustomTextField(controller: numberController, title: 'رقم الهاتف'),
+                  CustomTextField(controller: numberController, title: 'رقم الهاتف',keyboardType: TextInputType.number),
                   CustomTextField(controller: addressController, title: 'العنوان'),
                   CustomTextField(controller: nationalityController, title: 'الجنسية'),
                   CustomTextField(controller: genderController, title: 'الجنس'),
@@ -229,18 +230,18 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   backgroundColor: WidgetStateProperty.all(primaryColor)
               ),
               onPressed: () {
-                // يمكنك هنا استخدام البيانات المدخلة لإنشاء كائن ParentModel
                 ParentModel parent = ParentModel(
                   id: generateId("PARENT"),
                   fullName: fullNameController.text,
-                  number: numberController.text,
                   address: addressController.text,
-                  work: nationalityController.text,
-                  // children: selectedChildren,
-                  // parentID: DateTime.parse(startDateController.text),
-                  // exams: exams,
+                  work: workController.text,
+                  emergencyPhone: emergencyPhoneController.text,
+                  motherPhone: motherPhoneNumberController.text,
+                  phoneNumber: numberController.text,
                   eventRecords: eventRecords,
                 );
+
+                Get.find<ParentsViewModel>().addParent(parent);
                 // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
                 print('Parent Model: $parent');
               },
