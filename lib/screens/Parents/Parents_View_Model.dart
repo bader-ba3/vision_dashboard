@@ -17,14 +17,14 @@ class ParentsViewModel extends GetxController {
   Map<String, ParentModel> get parentMap => _parentMap;
 
   getAllParent()async {
-    await   parentCollectionRef.get().then((value) {
+    await   parentCollectionRef.snapshots().listen((value) {
+      _parentMap.clear();
       for (var element in value.docs) {
         _parentMap[element.id] = ParentModel.fromJson(element.data());
       }
       print("Parents :${_parentMap.keys.length}");
-
+      update();
     });
-    update();
   }
 
   addParent(ParentModel parentModel) {

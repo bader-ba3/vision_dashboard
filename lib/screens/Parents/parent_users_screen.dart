@@ -41,7 +41,10 @@ class ParentUsersScreen extends StatelessWidget {
         DataCell(isDelete?Container():Row(
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+
+                  Get.to(ParentInputForm(parent: parent));
+                },
                 icon: Icon(
                   Icons.remove_red_eye_outlined,
                   color: Colors.white,

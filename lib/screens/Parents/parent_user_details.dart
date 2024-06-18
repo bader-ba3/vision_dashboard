@@ -17,6 +17,11 @@ import '../Employee/Employee_user_details.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ParentInputForm extends StatefulWidget {
+  ParentInputForm({this.parent});
+
+
+
+  ParentModel? parent;
   @override
   _ParentInputFormState createState() => _ParentInputFormState();
 }
@@ -35,6 +40,28 @@ class _ParentInputFormState extends State<ParentInputForm> {
   final workController = TextEditingController();
   List<EventRecordModel> eventRecords = [];
   EventModel? selectedEvent;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.parent!=null){
+      fullNameController.text=widget.parent!.fullName.toString();
+      numberController.text=widget.parent!.phoneNumber.toString();
+      addressController.text=widget.parent!.address.toString();
+      nationalityController.text=widget.parent!.nationality.toString();
+      genderController.text=widget.parent!.parentID.toString();
+      ageController.text=widget.parent!.age.toString();
+      startDateController.text=widget.parent!.startDate.toString();
+      motherPhoneNumberController.text=widget.parent!.motherPhone.toString();
+
+      emergencyPhoneController.text=widget.parent!.emergencyPhone.toString();
+      workController.text=widget.parent!.work.toString();
+      eventRecords=widget.parent!.eventRecords??[];
+    }
+  }
+
   @override
   void dispose() {
 
