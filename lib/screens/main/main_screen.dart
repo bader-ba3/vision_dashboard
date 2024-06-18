@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Activity/Activity_screen.dart';
+import 'package:vision_dashboard/screens/Buses/Buses_View.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_View.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
 import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
@@ -144,7 +145,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           ExamView(),
                           SizedBox(),
                           NotificationScreen(),
-                          BusesScreen(),
+                          BusesView(),
                           SizedBox(),
                           EventScreen(),
                           ExpensesScreen(),

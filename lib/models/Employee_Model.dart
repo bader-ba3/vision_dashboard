@@ -32,7 +32,7 @@ class EmployeeModel {
   String? fullName, mobileNumber, address, nationality, gender, age, jobTitle,
       salary, contract, bus;
   DateTime? startDate;
-
+bool? available=true;
   List<EventRecordModel>? eventRecords;
 
   EmployeeModel({
@@ -48,6 +48,7 @@ class EmployeeModel {
     this.bus,
     this.startDate,
     this.eventRecords,
+    this.available
   });
 
   // Convert an Employee to a Map
@@ -120,6 +121,7 @@ class EmployeeModel {
     for (int i = 0; i < count; i++) {
       employees.add(EmployeeModel(
         fullName: faker.person.name(),
+          available:true,
         mobileNumber: faker.phoneNumber.us(),
         address: faker.address.streetAddress(),
         nationality: faker.address.country(),
