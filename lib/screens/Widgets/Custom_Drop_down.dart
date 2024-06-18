@@ -29,10 +29,10 @@ class CustomDropDown extends StatelessWidget {
         value: null,
         hint: Text(label),
         onChanged: onChange,
-        items: listValue.map((student) {
+        items: listValue.map((e) {
           return DropdownMenuItem(
-            value: student,
-            child: Text(student),
+            value: e,
+            child: Text(e),
           );
         }).toList(),
       ),

@@ -9,6 +9,7 @@ import 'Parent_Model.dart';
 class StudentModel {
   String? studentName,studentID,gender,StudentBirthDay,grade;
   String? studentNumber;
+  bool? available=true;
   // String? address;
   // String? nationality;
   // List<String>? teachers;
@@ -36,6 +37,7 @@ class StudentModel {
      this.eventRecords,
      this.bus,
      this.parentModel,
+    this.available
   });
 
   Map<String, dynamic> toJson() => {
@@ -103,6 +105,7 @@ List<StudentModel> generateRandomStudents(int count) {
       parentModel: generateRandomParents(1).first,
       StudentBirthDay: (random.nextInt(10) + 10).toString(),
       grade: 'Grade ${random.nextInt(12) + 1}',
+      available: true,
       // teachers: List<String>.generate(5, (_) => faker.person.name()),
       // exams: generateRandomExams(3),
       startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023),
