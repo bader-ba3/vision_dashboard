@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/models/employee_time_model.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
 import '../models/account_management_model.dart';
 import '../screens/main/main_screen.dart';
@@ -50,8 +51,8 @@ class AccountManagementViewModel extends GetxController{
 
   bool isSupportNfc = false;
 
-  initNFC() async {
-    initNFCWorker().then((value) {
+  initNFC(bool isLogin) async {
+    initNFCWorker(isLogin).then((value) {
       if(value){
         isSupportNfc= value;
         update();
@@ -131,6 +132,38 @@ class AccountManagementViewModel extends GetxController{
   void signInUsingNFC(String cardId) {
     print(cardId);
     Get.offAll(()=>MainScreen());
+  }
+ String? loginUserPage;
+  Future<void> addTime(String cardId) async {
+    print(cardId);
+    print("add Time");
+    AccountManagementModel? user  = allAccountManagement.values.where((element) => element.serialNFC == cardId,).firstOrNull;
+    if(user!=null){
+      String date = DateTime.now().toString().split(" ")[0];
+      if(user.employeeTime[date] == null){
+        user.employeeTime[date] = EmployeeTimeModel(dayName: date, startDate: DateTime.now(), endDate: null, totalDate: null, isDayEnd: false);
+      }else if( user.employeeTime[date]!.isDayEnd!){
+        print("You close the day already");
+      }else{
+          user.employeeTime[date]!.endDate = DateTime.now();
+          user.employeeTime[date]!.isDayEnd = true;
+          user.employeeTime[date]!.totalDate = DateTime.now().difference(user.employeeTime[date]!.startDate!).inMinutes;
+      }
+      accountManagementFireStore.doc(user.id).update({
+        "employeeTime":Map.fromEntries(user.employeeTime.entries.map((e) => MapEntry(e.key, e.value.toJson())).toList())
+      });
+      loginUserPage = user.userName;
+      update();
+     await Future.delayed(Duration(seconds: 4));
+      loginUserPage=null;
+      update();
+    }else{
+      print("Not found");
+    }
+  }
+
+  void disposeNFC() {
+
   }
 }
 

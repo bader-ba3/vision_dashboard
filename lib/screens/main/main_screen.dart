@@ -24,6 +24,7 @@ import 'package:tab_container/tab_container.dart';
 import '../Parents/parent_users_screen.dart';
 import '../Student/student_users_screen.dart';
 import '../delete_management/delete_management_view.dart';
+import '../employee_time/employee_time.dart';
 import '../event/event_screen.dart';
 import '../event/event_view_screen.dart';
 
@@ -58,6 +59,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       name: "الموظفين",
       img: "assets/icons/menu_task.svg",
       widget: EmployeeView(),
+    ),
+    (
+    name: "الدوام",
+    img: "assets/icons/menu_task.svg",
+    widget: EmployeeTimeView(),
     ),
     (
       name: "الامتحانات",

@@ -6,7 +6,7 @@ import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/models/account_management_model.dart';
 
-Future<bool> initNFCWorker() async {
+Future<bool> initNFCWorker(bool isLogin) async {
   bool isNfcAvailable = false;
   if(!Platform.isAndroid &&!Platform.isIOS){
     return false;
@@ -25,7 +25,11 @@ Future<bool> initNFCWorker() async {
       }
       var cardId=id.toUpperCase();
       AccountManagementViewModel accountManagementViewModel = Get.find<AccountManagementViewModel>();
-      accountManagementViewModel.signInUsingNFC(cardId);
+      if(isLogin){
+        accountManagementViewModel.signInUsingNFC(cardId);
+      }else{
+        accountManagementViewModel.addTime(cardId);
+      }
     });
   }
   return isNfcAvailable;

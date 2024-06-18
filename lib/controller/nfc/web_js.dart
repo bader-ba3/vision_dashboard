@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../screens/main/main_screen.dart';
 import '../account_management_view_model.dart';
 
-Future<bool> initNFCWorker() async {
+Future<bool> initNFCWorker(bool isLogin) async {
   bool isSupportNfc = false;
   var a = await js.context.callMethod(
     'initNFC',
@@ -20,7 +20,11 @@ Future<bool> initNFCWorker() async {
     print(state['data']);
     String serialCode = state['data'].toString();
     AccountManagementViewModel accountManagementViewModel = Get.find<AccountManagementViewModel>();
-    accountManagementViewModel.signInUsingNFC(serialCode);
+    if(isLogin){
+      accountManagementViewModel.signInUsingNFC(serialCode);
+    }else{
+      accountManagementViewModel.addTime(serialCode);
+    }
   });
   return isSupportNfc;
 }
