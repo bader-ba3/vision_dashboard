@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
-
 import '../models/account_management_model.dart';
 import '../screens/main/main_screen.dart';
-import '../utils/const.dart';
-
+import '../utils/const.dart' ;
+import 'nfc/conditional_import.dart';
 enum UserManagementStatus {
   first,
   login,
@@ -51,28 +51,15 @@ class AccountManagementViewModel extends GetxController{
   bool isSupportNfc = false;
 
   initNFC() async {
-
-    // var a = await js.context.callMethod(
-    //   'initNFC',
-    // );
-    // if (a == "ok") {
-    //   isSupportNfc = true;
-    // } else {
-    //   isSupportNfc = false;
-    // }
-    // update();
-    // window.addEventListener("message", (event) {
-    //   var state = js.JsObject.fromBrowserObject(js.context['state']);
-    //   print(state['data']);
-    //   String serialCode = state['data'].toString();
-    //   signInUsingNFC(serialCode);
-    // });
-
+    initNFCWorker().then((value) {
+      if(value){
+        isSupportNfc= value;
+        update();
+      }
+    },);
   }
 
-  void signInUsingNFC(String serialCode) {
-    Get.offAll(() => MainScreen());
-  }
+
 
   String? userName;
   String? password;
@@ -139,6 +126,11 @@ class AccountManagementViewModel extends GetxController{
         Get.offAll(() => LoginScreen());
       });
     }
+  }
+
+  void signInUsingNFC(String cardId) {
+    print(cardId);
+    Get.offAll(()=>MainScreen());
   }
 }
 

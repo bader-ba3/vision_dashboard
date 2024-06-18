@@ -44,6 +44,7 @@ dependencies:
   tab_container:
   flutter_rating_stars:
   faker: ^2.1.0
+  nfc_manager:
   flutter_material_color_picker:
   file_picker:
   fluttertoast:
