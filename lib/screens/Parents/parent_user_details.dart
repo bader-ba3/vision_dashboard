@@ -25,20 +25,31 @@ class _ParentInputFormState extends State<ParentInputForm> {
   final genderController = TextEditingController();
   final ageController = TextEditingController();
   final startDateController = TextEditingController();
-  List<String> children = [];
-  List<String> selectedChildren = [];
-  List<ExamModel> exams = [];
+  final motherPhoneNumberController = TextEditingController();
+  final bodyEventController = TextEditingController();
+  final emergencyPhoneController = TextEditingController();
+  final workController = TextEditingController();
   List<EventRecordModel> eventRecords = [];
-  List<String> _children = []; // قائمة الأطفال المُحددين
   EventModel? selectedEvent;
-  TextEditingController bodyEvent = TextEditingController();
-  // قائمة بكل الأطفال المتاحين
-  final List<String> _allChildren = [
-    'طفل 1',
-    'طفل 2',
-    'طفل 3',
-    // أضف المزيد من الأطفال إذا لزم الأمر
-  ];
+  @override
+  void dispose() {
+
+     fullNameController.dispose();
+     numberController.dispose();
+     addressController.dispose();
+     nationalityController.dispose();
+     genderController.dispose();
+     ageController.dispose();
+     startDateController.dispose();
+     motherPhoneNumberController.dispose();
+    bodyEventController.dispose();
+     emergencyPhoneController.dispose();
+     workController.dispose();
+    eventRecords.clear();
+     super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,56 +79,44 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   CustomTextField(controller: nationalityController, title: 'الجنسية'),
                   CustomTextField(controller: genderController, title: 'الجنس'),
                   CustomTextField(controller: ageController, title: 'العمر', keyboardType: TextInputType.number),
-                  CustomTextField(controller: startDateController, title: 'تاريخ البداية', keyboardType: TextInputType.datetime),
-                  SizedBox(
-                    width: Get.width/4.5,
-                    child: DropdownButtonFormField<String>(
-                      value: null,
-                      hint: Text('اختر الأطفال',style: Styles.headLineStyle3,),
-                      onChanged: (selectedChild) {
-                        if (selectedChild != null) {
-                          setState(() {
-                            _children.addIf(!_children.contains(selectedChild), selectedChild);
-                          });
-                        }
-                      },
-                      items: _allChildren.map((child) {
-                        return DropdownMenuItem(
-                          value: child,
-                          child: Text(child),
-                        );
-                      }).toList(),
-                    ),
+                  CustomTextField(controller:motherPhoneNumberController , title: 'رقم هاتف الام', keyboardType: TextInputType.number),
+                  CustomTextField(controller:emergencyPhoneController , title: 'رقم الطوارئ', keyboardType: TextInputType.number),
+                  CustomTextField(controller:workController , title: 'العمل', keyboardType: TextInputType.number),
+                  Row(
+                    children: [
+                      CustomTextField(
+                          controller: startDateController,
+                          title: 'تاريخ البداية',
+                          enable: false,
+                          keyboardType: TextInputType.datetime),
+                      IconButton(
+                          onPressed: () {
+                            showDatePicker(
+                                context: context,
+                                firstDate: DateTime(2010),
+                                lastDate: DateTime(2100))
+                                .then((date) {
+                              if (date != null) {
+                                startDateController.text =
+                                date.toString().split(" ")[0];
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            Icons.date_range_outlined,
+                            color: primaryColor,
+                          ))
+                    ],
                   ),
-                  SizedBox(height: 16.0),
 
-                  // عرض الأطفال المحددين
-                  Text(
-                    'الأطفال المحددين:',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 8.0),
-                  Wrap(
-                    spacing: 8.0,
-                    children: _children.map((child) {
-                      return Chip(
-                        backgroundColor: Colors.white,
-                        label: Text(child, style: Styles.headLineStyle2),
-                        onDeleted: () {
-                          setState(() {
-                            _children.remove(child);
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 16.0),
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
                       children: [
+
                         SizedBox(
                           width: Get.width / 4.5,
                           child: DropdownButtonFormField<EventModel>(
+
                             decoration: InputDecoration(
                               labelText: "نوع الحدث",
                               labelStyle: TextStyle(color: primaryColor),
@@ -153,7 +152,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                           ),
                         ),
                         SizedBox(width: 16.0),
-                        CustomTextField(controller: bodyEvent, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
+                        CustomTextField(controller: bodyEventController, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
                         ElevatedButton(
                           style: ButtonStyle(
@@ -162,8 +161,8 @@ class _ParentInputFormState extends State<ParentInputForm> {
                           ),
                           onPressed: () {
                             setState(() {
-                              eventRecords.add(EventRecordModel(body: bodyEvent.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
-                              bodyEvent.clear();
+                              eventRecords.add(EventRecordModel(body: bodyEventController.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
+                              bodyEventController.clear();
                             });
                           },
                           child: Text('إضافة سجل حدث'),
@@ -171,30 +170,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                       ],
                     );
                   }),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(primaryColor)
-                    ),
-                    onPressed: () {
-                      // يمكنك هنا استخدام البيانات المدخلة لإنشاء كائن ParentModel
-                      ParentModel parent = ParentModel(
-                        fullName: fullNameController.text,
-                        number: numberController.text,
-                        address: addressController.text,
-                        work: nationalityController.text,
-                        // gender: genderController.text,
-                        // age: int.tryParse(ageController.text) ?? 0,
-                        // children: selectedChildren,
-                        // parentID: DateTime.parse(startDateController.text),
-                        // exams: exams,
-                        eventRecords: eventRecords,
-                      );
-                      // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                      print('Parent Model: $parent');
-                    },
 
-                    child: Text('إرسال',style:TextStyle(color: Colors.white),),
-                  ),
                 ],
               ),
             ),
@@ -206,10 +182,6 @@ class _ParentInputFormState extends State<ParentInputForm> {
             Container(
               padding: EdgeInsets.all(0.0),
               alignment: Alignment.center,
-              // decoration: BoxDecoration(
-              //     color: secondaryColor,
-              //     borderRadius: BorderRadius.circular(15)
-              // ),
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
@@ -250,6 +222,30 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   );
                 },
               ),
+            ),
+            SizedBox(height: defaultPadding * 2),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(primaryColor)
+              ),
+              onPressed: () {
+                // يمكنك هنا استخدام البيانات المدخلة لإنشاء كائن ParentModel
+                ParentModel parent = ParentModel(
+                  id: generateId("PARENT"),
+                  fullName: fullNameController.text,
+                  number: numberController.text,
+                  address: addressController.text,
+                  work: nationalityController.text,
+                  // children: selectedChildren,
+                  // parentID: DateTime.parse(startDateController.text),
+                  // exams: exams,
+                  eventRecords: eventRecords,
+                );
+                // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+                print('Parent Model: $parent');
+              },
+
+              child: Text('حفظ',style:TextStyle(color: Colors.white),),
             ),
           ],
         ),

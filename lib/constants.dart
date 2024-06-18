@@ -10,7 +10,10 @@ const bgColor = Color(0xffF6F6F4);  // تخفيف لون الخلفية
 //Color(0xffc89665)
 const defaultPadding = 16.0;
 
-
+String generateId(String type) {
+  var _ = DateTime.now().microsecondsSinceEpoch.toString();
+  return "$type$_";
+}
 const String parentsCollection='ParentsCollection';
 class Styles {
 
