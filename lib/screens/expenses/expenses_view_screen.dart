@@ -18,7 +18,6 @@ class _ExpensesViewScreenState extends State<ExpensesViewScreen> {
   bool isAdd=false;
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedCrossFade(

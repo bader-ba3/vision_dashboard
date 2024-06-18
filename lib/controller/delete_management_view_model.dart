@@ -29,10 +29,17 @@ class DeleteManagementViewModel extends GetxController{
   doTheDelete(DeleteManagementModel deleteModel){
     FirebaseFirestore.instance.collection(deleteModel.collectionName).doc(deleteModel.affectedId).delete();
     deleteDeleteOperation(deleteModel);
+    update();
+  }
+
+  undoTheDelete(DeleteManagementModel deleteModel){
+    deleteDeleteOperation(deleteModel);
+    update();
   }
 
   addDeleteOperation(DeleteManagementModel deleteModel){
     deleteManagementFireStore.doc(deleteModel.id).set(deleteModel);
+    update();
   }
 
   updateDeleteOperation(DeleteManagementModel deleteModel){
@@ -46,5 +53,9 @@ class DeleteManagementViewModel extends GetxController{
 
 addDeleteOperation({required String collectionName, required String affectedId , String? details}){
   Get.find<DeleteManagementViewModel>().addDeleteOperation(DeleteManagementModel(id: DateTime.now().millisecondsSinceEpoch.toString(), affectedId: affectedId, collectionName: collectionName,details: details));
+}
+
+bool checkIfPendingDelete({ required String affectedId}){
+ return Get.find<DeleteManagementViewModel>().allDelete.values.where((element) => element.affectedId == affectedId,).length >0;
 }
 

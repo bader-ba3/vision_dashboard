@@ -18,7 +18,6 @@ class _BusesViewState extends State<BusesView>{
   bool isAdd=false;
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
 

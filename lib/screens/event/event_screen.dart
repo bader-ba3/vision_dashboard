@@ -1,5 +1,6 @@
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/event_view_model.dart';
 import 'package:vision_dashboard/models/event_model.dart';
 import 'package:vision_dashboard/responsive.dart';
@@ -19,7 +20,6 @@ class EventScreen extends StatefulWidget {
   @override
   State<EventScreen> createState() => _EventScreenState();
 }
-
 
 
 class _EventScreenState extends State<EventScreen> {
@@ -46,7 +46,10 @@ class _EventScreenState extends State<EventScreen> {
                       if (!Responsive.isMobile(context))
                         Text(
                           "ادارة الاحداث",
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleLarge,
                         ),
                     ],
                   ),
@@ -62,35 +65,40 @@ class _EventScreenState extends State<EventScreen> {
                       children: [
                         Text(
                           "جميع الاحداث",
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
                         ),
                         SizedBox(
                           width: double.infinity,
-                          child: DataTable(
-                            columnSpacing: defaultPadding,
-                            // minWidth: 600,
-                            columns: [
-                              DataColumn(
-                                label: Text("الرمز التسلسلي"),
+                          child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                            return DataTable(
+                              columnSpacing: defaultPadding,
+                              // minWidth: 600,
+                              columns: [
+                                DataColumn(
+                                  label: Text("الرمز التسلسلي"),
+                                ),
+                                DataColumn(
+                                  label: Text("الاسم"),
+                                ),
+                                DataColumn(
+                                  label: Text("المستهدف"),
+                                ),
+                                DataColumn(
+                                  label: Text("اللون"),
+                                ),
+                                DataColumn(
+                                  label: Text("العمليات"),
+                                ),
+                              ],
+                              rows: List.generate(
+                                controller.allEvents.keys.length,
+                                    (index) => workingDriverDataRow(controller.allEvents.values.toList()[index]),
                               ),
-                              DataColumn(
-                                label: Text("الاسم"),
-                              ),
-                              DataColumn(
-                                label: Text("المستهدف"),
-                              ),
-                              DataColumn(
-                                label: Text("اللون"),
-                              ),
-                              DataColumn(
-                                label: Text("العمليات"),
-                              ),
-                            ],
-                            rows: List.generate(
-                              controller.allEvents.keys.length,
-                              (index) => workingDriverDataRow(controller.allEvents.values.toList()[index]),
-                            ),
-                          ),
+                            );
+                          }),
                         ),
                       ],
                     ),
@@ -104,6 +112,7 @@ class _EventScreenState extends State<EventScreen> {
 
   DataRow workingDriverDataRow(EventModel event) {
     return DataRow(
+      color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: event.id) ? Colors.red : Colors.transparent),
       cells: [
         DataCell(
           Text(event.id),
@@ -111,16 +120,20 @@ class _EventScreenState extends State<EventScreen> {
         DataCell(Text(event.name)),
         DataCell(Text(getEventTypeFromEnum(event.role))),
         DataCell(Container(height: 40, width: 40, decoration: BoxDecoration(color: Color(event.color), borderRadius: BorderRadius.circular(15)))),
-        DataCell(ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.red.shade600),
-            foregroundColor: MaterialStatePropertyAll(Colors.white),
-          ),
-          onPressed: () {
-            EventViewModel eventViewModel = Get.find<EventViewModel>();
-            eventViewModel.deleteEvent(event);
-          },
-          child: Text("حذف الحدث"),
+        DataCell(Row(
+          children: [
+            if(!checkIfPendingDelete(affectedId: event.id))
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.red.shade600),
+                foregroundColor: MaterialStatePropertyAll(Colors.white),
+              ),
+              onPressed: () {
+                addDeleteOperation(collectionName: Const.eventCollection, affectedId: event.id);
+              },
+              child: Text("حذف الحدث"),
+            ),
+          ],
         )),
       ],
     );

@@ -132,7 +132,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "All User",
+                          "كل الحسابات",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         SizedBox(

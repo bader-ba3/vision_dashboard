@@ -25,8 +25,4 @@ class ExpensesViewModel extends GetxController{
   updateExpenses(ExpensesModel expensesModel){
     expensesFireStore.doc(expensesModel.id).update(expensesModel.toJson());
   }
-
-  deleteExpenses(ExpensesModel expensesModel){
-    addDeleteOperation(collectionName: Const.expensesCollection, affectedId: expensesModel.id);
-  }
 }

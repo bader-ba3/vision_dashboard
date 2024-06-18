@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/models/RecentFile.dart' hide demoRecentFiles;
@@ -12,6 +13,7 @@ import '../../constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../utils/const.dart';
 import '../dashboard/components/date_table.dart';
 import 'expenses_input_form.dart';
 
@@ -39,7 +41,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           primary: false,
           padding: EdgeInsets.all(defaultPadding),
           child: GetBuilder<ExpensesViewModel>(builder: (controller) {
-            total = controller.allExpenses.values.map((e) => e.total,).reduce((value, element) => value+element,);
+            total = controller.allExpenses.values.map((e) => e.total,).reduce((value, element) => value + element,);
             return Column(
               children: [
                 Row(
@@ -50,36 +52,39 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                         onPressed: homeViewModel.controlMenu,
                       ),
                     if (!Responsive.isMobile(context))
-                      Text("المصاريف", style: Theme.of(context).textTheme.titleLarge,),
+                      Text("المصاريف", style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleLarge,),
                     if (!Responsive.isMobile(context))
                       Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                     Expanded(
                         child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "بحث",
-                        fillColor: secondaryColor,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.all(defaultPadding * 0.75),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: defaultPadding / 2),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
+                          decoration: InputDecoration(
+                            hintText: "بحث",
+                            fillColor: secondaryColor,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
+                              const BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: SvgPicture.asset("assets/icons/Search.svg"),
+                            suffixIcon: InkWell(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.all(defaultPadding * 0.75),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: defaultPadding / 2),
+                                decoration: BoxDecoration(
+                                  color: primaryColor,
+                                  borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                                ),
+                                child: SvgPicture.asset("assets/icons/Search.svg"),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )),
+                        )),
                   ],
                 ),
                 SizedBox(
@@ -98,21 +103,28 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                     children: [
                       Text(
                         " مصروف الشهري",
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleMedium,
                       ),
                       Spacer(),
                       Center(
                         child: Container(
-                         decoration: BoxDecoration( color: Colors.grey.shade300,borderRadius: BorderRadius.circular(8)),
+                          decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
                           height: 30,
-                          width: MediaQuery.sizeOf(context).width*0.8,
+                          width: MediaQuery
+                              .sizeOf(context)
+                              .width * 0.8,
                           child: Stack(
-                            alignment: Alignment.topLeft,
+                            alignment: Alignment.centerLeft,
                             children: [
                               AnimatedContainer(
                                 duration: Duration(microseconds: 500),
-                                decoration: BoxDecoration( color:  Colors.blueAccent.shade700,borderRadius: BorderRadius.circular(8)),
-                                width: MediaQuery.sizeOf(context).width*0.8*total/5000,
+                                decoration: BoxDecoration(color: Colors.blueAccent.shade700, borderRadius: BorderRadius.circular(8)),
+                                width: MediaQuery
+                                    .sizeOf(context)
+                                    .width * 0.8 * total / 5000,
                                 height: 30,
                               ),
                             ],
@@ -120,18 +132,36 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                         ),
                       ),
                       Center(
-                        child: Container(
-                          height: 30,
-                          width: MediaQuery.sizeOf(context).width*0.8,
-                          child: Row(
-                            children: [
-                              Text("5000"),
-                              Spacer(),
-                              Text("2500"),
-                              Spacer(),
-                              Text("1"),
-                            ],
-                          ),
+                        child: Stack(
+                          alignment: Alignment.centerLeft,
+
+                          children: [
+                            Container(
+                              height: 30,
+                              width: MediaQuery
+                                  .sizeOf(context)
+                                  .width * 0.8,
+                              child: Row(
+                                children: [
+                                  Text("5000"),
+                                  Spacer(),
+                                  Text("1"),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 30,
+                              width: MediaQuery
+                                  .sizeOf(context)
+                                  .width * 0.8 * total / 5000,
+                              child: Row(
+                                children: [
+                                  Text(total.toString()),
+                                  Spacer(),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Spacer(),
@@ -150,31 +180,36 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                     children: [
                       Text(
                         "كل المصاريف",
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleMedium,
                       ),
                       SizedBox(
                         width: double.infinity,
-                        child:Scrollbar(
+                        child: Scrollbar(
                           controller: _scrollController,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             controller: _scrollController,
-                            child: DataTable(
-                              columns: [
-                                DataColumn(label: Text("الرقم التسلسلي")),
-                                DataColumn(label: Text("العنوان")),
-                                DataColumn(label: Text("المبلغ")),
-                                DataColumn(label: Text("اسم الموظف")),
-                                DataColumn(label: Text("عدد الفواتير المدخلة")),
-                                DataColumn(label: Text("الوصف")),
-                                DataColumn(label: Text("العمليات")),
-                              ],
-                              rows: List.generate(
-                                controller.allExpenses.keys.length,
-                                    (index) => expenseDataRow(controller.allExpenses.values.toList()[index]),
-                              ),
-                              // rows: expenses.map((expense) => expenseDataRow(expense)).toList(),
-                            ),
+                            child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                              return DataTable(
+                                columns: [
+                                  DataColumn(label: Text("الرقم التسلسلي")),
+                                  DataColumn(label: Text("العنوان")),
+                                  DataColumn(label: Text("المبلغ")),
+                                  DataColumn(label: Text("اسم الموظف")),
+                                  DataColumn(label: Text("عدد الفواتير المدخلة")),
+                                  DataColumn(label: Text("الوصف")),
+                                  DataColumn(label: Text("العمليات")),
+                                ],
+                                rows: List.generate(
+                                  controller.allExpenses.keys.length,
+                                      (index) => expenseDataRow(controller.allExpenses.values.toList()[index]),
+                                ),
+                                // rows: expenses.map((expense) => expenseDataRow(expense)).toList(),
+                              );
+                            }),
                           ),
                         ),
                       ),
@@ -191,66 +226,66 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   DataRow expenseDataRow(ExpensesModel expense) {
     return DataRow(
+      color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: expense.id) ? Colors.red : Colors.transparent),
       cells: [
         DataCell(Text(expense.id)),
         DataCell(Text(expense.title)),
         DataCell(Text(expense.total.toString())),
         DataCell(Text(expense.userId)),
         DataCell(Text(expense.images.length.toString())),
-        DataCell(SizedBox(width:300,child: Text(expense.body.toString(),maxLines: 1,overflow: TextOverflow.ellipsis,))),
+        DataCell(SizedBox(width: 300, child: Text(expense.body.toString(), maxLines: 1, overflow: TextOverflow.ellipsis,))),
         DataCell(
-          Row(
-            children: [
-              ElevatedButton(
+            Row(
+              children: [
+                ElevatedButton(
 
-                  style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(primaryColor)
-                  ),onPressed: (){
-               Get.defaultDialog(
-
-                   backgroundColor: Colors.white,
-                   title: "التفاصيل",content: SizedBox(
-                   width: Get.height/2,
-                   height: Get.height/2,
-                   child: Text(expense.body.toString(),style: TextStyle(fontSize: 20),)));
-              }, child: Text("التفاصيل",style: TextStyle(color: Colors.white),)),
-              SizedBox(width: 20,),
-              if(expense.images.isEmpty)
-                SizedBox(
-                  width: 80,
-                )
-              else
-              ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(primaryColor)
-                  ),
-                  onPressed:
-              expense.images.isEmpty?null:
-                  (){
-                Get.defaultDialog(
-                    backgroundColor: Colors.white,
-                    title: "الصور",content: Container(
-                  color: Colors.white,
-                    width: Get.height/1.5,
-                    height: Get.height/1.5,
-                    child:PageView.builder(
-                      itemCount: expense.images.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                      return SizedBox(
-                          width: Get.height/1.5,
-                          child: Image.network(expense.images[index],fit: BoxFit.fitWidth,));
-                    },)));
-              }, child: Text("الصور",style: TextStyle(color: Colors.white),)),
-              SizedBox(width: 20,),
-              InkWell(
-                  onTap: (){
-                    ExpensesViewModel expensesViewModel = Get.find<ExpensesViewModel>();
-                    expensesViewModel.deleteExpenses(expense);
-                  },
-                  child: Icon(Icons.close,color: Colors.red,)),
-            ],
-          )
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(primaryColor)
+                    ), onPressed: () {
+                  Get.defaultDialog(
+                      backgroundColor: Colors.white,
+                      title: "التفاصيل", content: SizedBox(
+                      width: Get.height / 2,
+                      height: Get.height / 2,
+                      child: Text(expense.body.toString(), style: TextStyle(fontSize: 20),)));
+                }, child: Text("التفاصيل", style: TextStyle(color: Colors.white),)),
+                SizedBox(width: 20,),
+                if(expense.images.isEmpty)
+                  SizedBox(
+                    width: 80,
+                  )
+                else
+                  ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(primaryColor)
+                      ),
+                      onPressed:
+                      expense.images.isEmpty ? null :
+                          () {
+                        Get.defaultDialog(
+                            backgroundColor: Colors.white,
+                            title: "الصور", content: Container(
+                            color: Colors.white,
+                            width: Get.height / 1.5,
+                            height: Get.height / 1.5,
+                            child: PageView.builder(
+                              itemCount: expense.images.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                    width: Get.height / 1.5,
+                                    child: Image.network(expense.images[index], fit: BoxFit.fitWidth,));
+                              },)));
+                      }, child: Text("الصور", style: TextStyle(color: Colors.white),)),
+                SizedBox(width: 20,),
+                if(!checkIfPendingDelete(affectedId: expense.id))
+                  InkWell(
+                      onTap: () {
+                        addDeleteOperation(collectionName: Const.expensesCollection, affectedId: expense.id);
+                      },
+                      child: Icon(Icons.close, color: Colors.red,)),
+              ],
+            )
         )
       ],
     );
