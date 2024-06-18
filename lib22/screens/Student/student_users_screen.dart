@@ -273,7 +273,7 @@ class _StudentScreenState extends State<StudentScreen> {
         DataCell(Text(student.grade.toString())),
         DataCell(Text(student.startDate!.toIso8601String())),
         DataCell(Text(student.eventRecords!
-            .map((event) => event.body)
+            .map((event) => event.event)
             .join(', '))),
         DataCell(Text(student.bus!)),
         DataCell(Text(student.parentModel!.parentID!)),

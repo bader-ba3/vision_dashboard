@@ -1,19 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Student/student_user_details.dart';
-import 'package:vision_dashboard/screens/Student/student_users_screen.dart';
+import 'package:vision_dashboard/screens/Exams/Exam_details.dart';
+import 'package:vision_dashboard/screens/Exams/Exam_screen.dart';
+
 import '../../constants.dart';
 
-
-class StudentView extends StatefulWidget {
-  StudentView({super.key});
+class ExamView extends StatefulWidget {
+  const ExamView({super.key});
 
   @override
-  State<StudentView> createState() => _StudentViewState();
+  State<ExamView> createState() => _ExamViewState();
 }
 
-class _StudentViewState extends State<StudentView> {
+class _ExamViewState extends State<ExamView>{
   bool isAdd=false;
 
   @override
@@ -25,11 +24,11 @@ class _StudentViewState extends State<StudentView> {
         duration: Duration(milliseconds: 500),
         firstChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
-          child: StudentScreen(),
+          child: ExamScreen(),
         ),
         secondChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
-          child: StudentInputForm(),
+          child: ExamInputForm(),
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
@@ -45,7 +44,3 @@ class _StudentViewState extends State<StudentView> {
     );
   }
 }
-
-
-
-
