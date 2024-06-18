@@ -13,8 +13,8 @@ class StudentInputForm extends StatefulWidget {
 
 class _StudentInputFormState extends State<StudentInputForm> {
   String _payWay = ""; // قائمة الطلاب المُحددين
-  String? _selectedEvent; // قائمة الطلاب المُحددين
-  TextEditingController _bodyEvent = TextEditingController(); // قائمة الطلاب المُحددين
+  String? _selectedEvent;
+  TextEditingController _bodyEvent = TextEditingController();
 
   // قائمة بكل الطلاب المتاحين
   final List<String> _payWays = [
@@ -196,8 +196,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ],
                     );
                   }),
-
-                  SizedBox(height: 16.0),
+                  SizedBox(height: 8.0),
                 ],
               ),
             ),
@@ -231,6 +230,30 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   );
                 },
               ),
+            ),
+            SizedBox(
+              height: defaultPadding,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all(Colors.white),
+                backgroundColor: WidgetStateProperty.all(primaryColor),
+              ),
+              onPressed: () {
+         /*       final exam = ExamModel(
+                  image: _imageFile?.path ?? "",
+                  subject: subjectController.text,
+                  professor: professorController.text,
+                  date: DateTime.parse(dateController.text),
+                  students: studentsController.text
+                      .split(',')
+                      .map((student) => student.trim())
+                      .toList(),
+                  passRate: passRateController.text,
+                );
+                print('بيانات الامتحان: $exam');*/
+              },
+              child: Text('حفظ'),
             ),
           ],
         ),

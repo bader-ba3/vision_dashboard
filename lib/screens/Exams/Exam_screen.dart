@@ -115,22 +115,25 @@ class ExamScreen extends StatelessWidget {
                           trackVisibility: true,
                           controller: _scrollController,
                           child: SingleChildScrollView(
+                            physics: ClampingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             controller: _scrollController,
-                            child: DataTable(
-                              clipBehavior: Clip.hardEdge,
-
-                              columns: [
-                                DataColumn(label: Text("صورة")),
-                                DataColumn(label: Text("المقرر")),
-                                DataColumn(label: Text("الأستاذ")),
-                                DataColumn(label: Text("التاريخ")),
-                                DataColumn(label: Text("الطلاب")),
-                                DataColumn(label: Text("نسبة النجاح")),
-                              ],
-                              rows: exams
-                                  .map((exam) => examDataRow(exam))
-                                  .toList(),
+                            child: SizedBox(
+                              width: Get.width,
+                              child: DataTable(
+                                clipBehavior: Clip.hardEdge,
+                                columns: [
+                                  DataColumn(label: Text("صورة")),
+                                  DataColumn(label: Text("المقرر")),
+                                  DataColumn(label: Text("الأستاذ")),
+                                  DataColumn(label: Text("التاريخ")),
+                                  DataColumn(label: Text("الطلاب")),
+                                  DataColumn(label: Text("نسبة النجاح")),
+                                ],
+                                rows: exams
+                                    .map((exam) => examDataRow(exam))
+                                    .toList(),
+                              ),
                             ),
                           ),
                         ),

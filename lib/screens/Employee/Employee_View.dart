@@ -1,19 +1,20 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Employee/Employee_user_details.dart';
+import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
+import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
 import 'package:vision_dashboard/screens/Student/student_user_details.dart';
-import 'package:vision_dashboard/screens/Student/student_users_screen.dart';
 import '../../constants.dart';
 
 
-class StudentView extends StatefulWidget {
-  StudentView({super.key});
+class EmployeeView extends StatefulWidget {
+  EmployeeView({super.key});
 
   @override
-  State<StudentView> createState() => _StudentViewState();
+  State<EmployeeView> createState() => _EmployeeViewState();
 }
 
-class _StudentViewState extends State<StudentView> {
+class _EmployeeViewState extends State<EmployeeView> {
   bool isAdd=false;
 
   @override
@@ -25,11 +26,11 @@ class _StudentViewState extends State<StudentView> {
         duration: Duration(milliseconds: 500),
         firstChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
-          child: StudentScreen(),
+          child: EmployeeUsersScreen(),
         ),
         secondChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
-          child: StudentInputForm(),
+          child: EmployeeInputForm(),
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
