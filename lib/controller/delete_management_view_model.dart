@@ -53,6 +53,7 @@ class DeleteManagementViewModel extends GetxController{
 
 addDeleteOperation({required String collectionName, required String affectedId , String? details}){
   Get.find<DeleteManagementViewModel>().addDeleteOperation(DeleteManagementModel(id: DateTime.now().millisecondsSinceEpoch.toString(), affectedId: affectedId, collectionName: collectionName,details: details));
+  Get.find<DeleteManagementViewModel>().update();
 }
 
 bool checkIfPendingDelete({ required String affectedId}){

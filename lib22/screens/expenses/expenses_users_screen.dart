@@ -198,7 +198,7 @@ class ExpensesScreen extends StatelessWidget {
               InkWell(
                   onTap: (){
                     ExpensesViewModel expensesViewModel = Get.find<ExpensesViewModel>();
-                    expensesViewModel.deleteExpenses(expense);
+                    // expensesViewModel.deleteExpenses(expense);
                   },
                   child: Icon(Icons.close,color: Colors.red,)),
             ],

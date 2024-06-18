@@ -44,7 +44,7 @@ class ParentModel {
       'address': address,
       'nationality':nationality,
       'phoneNumber': phoneNumber,
-      'mPhoneNumber': motherPhone,
+      'motherPhone': motherPhone,
       'emergencyPhone': emergencyPhone,
       'work': work,
       'id':id,

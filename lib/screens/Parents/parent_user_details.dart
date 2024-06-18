@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
@@ -230,7 +233,11 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   backgroundColor: WidgetStateProperty.all(primaryColor)
               ),
               onPressed: () {
+
                 ParentModel parent = ParentModel(
+                age: ageController.text,
+                nationality: nationalityController.text,
+                parentID: faker.randomGenerator.integer(1000000).toString(),
                   id: generateId("PARENT"),
                   fullName: fullNameController.text,
                   address: addressController.text,
@@ -239,6 +246,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   motherPhone: motherPhoneNumberController.text,
                   phoneNumber: numberController.text,
                   eventRecords: eventRecords,
+                  startDate: startDateController.text
                 );
 
                 Get.find<ParentsViewModel>().addParent(parent);

@@ -2,7 +2,10 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
+import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
+import 'package:vision_dashboard/screens/delete_management/delete_management_view.dart';
 import '../../constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -14,28 +17,50 @@ import 'parent_user_details.dart';
 class ParentUsersScreen extends StatelessWidget {
   ParentUsersScreen({super.key});
 
-  final List<ParentModel> parents = generateRandomParents(10);
   final ScrollController _scrollController = ScrollController();
 
-  DataRow parentDataRow(ParentModel parent) {
+  DataRow parentDataRow(
+      ParentModel parent, bool isDelete, ParentsViewModel controller) {
     return DataRow(
+      color: isDelete ? WidgetStatePropertyAll(Colors.redAccent) : null,
       cells: [
-
         DataCell(Text(parent.fullName!)),
         DataCell(Text(parent.address!)),
         DataCell(Text(parent.nationality!)),
         DataCell(Text(parent.age!)),
         DataCell(Text(parent.work!)),
-        DataCell(Text(parent.startDate!.split(" ")[0])),
+        DataCell(Text(parent.startDate.toString().split(" ")[0])),
         DataCell(Text(parent.motherPhone.toString())),
         DataCell(Text(parent.emergencyPhone.toString())),
-        DataCell(IconButton(onPressed: (){}, icon: Icon(Icons.remove_red_eye_outlined,color: Colors.white,))),
-        DataCell(Row(
+        DataCell(IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.remove_red_eye_outlined,
+              color: Colors.white,
+            ))),
+        DataCell(isDelete?Container():Row(
           children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.remove_red_eye_outlined,color: Colors.white,)),
-
-            IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Colors.white,)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.delete_outline_outlined,color: Colors.redAccent,)),
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: Colors.white,
+                )),
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                )),
+            IconButton(
+                onPressed: () {
+                  controller.deleteParent(parent.id.toString());
+                  print('delete');
+                },
+                icon: Icon(
+                  Icons.delete_outline_outlined,
+                  color: Colors.redAccent,
+                )),
           ],
         )),
       ],
@@ -57,7 +82,10 @@ class ParentUsersScreen extends StatelessWidget {
                   children: [
                     if (!Responsive.isDesktop(context))
                       IconButton(
-                        icon: Icon(Icons.menu),
+                        icon: Icon(
+                          Icons.menu,
+                          color: primaryColor,
+                        ),
                         onPressed: controller.controlMenu,
                       ),
                     if (!Responsive.isMobile(context))
@@ -113,34 +141,44 @@ class ParentUsersScreen extends StatelessWidget {
                         "كل اولياء الامور",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      SizedBox(
-                        width: Get.width,
-                        child: Scrollbar(
-                          controller: _scrollController,
-                          child: SingleChildScrollView(
-                            physics: ClampingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
+                      GetBuilder<ParentsViewModel>(builder: (controller) {
+                        return SizedBox(
+                          width: Get.width,
+                          child: Scrollbar(
                             controller: _scrollController,
-                            child: DataTable(
-                              columns: [
-                                DataColumn(label: Text("الاسم الكامل")),
-                                DataColumn(label: Text("العنوان")),
-                                DataColumn(label: Text("الجنسية")),
-                                DataColumn(label: Text("العمر")),
-                                DataColumn(label: Text("العمل")),
-                                DataColumn(label: Text("تاريخ البداية")),
-                                DataColumn(label: Text("رقم الام")),
-                                DataColumn(label: Text("رقم الطوارئ")),
-                                DataColumn(label: Text("سجل الأحداث")),
-                                DataColumn(label: Text("الخيارات")),
-                              ],
-                              rows: parents
-                                  .map((parent) => parentDataRow(parent))
-                                  .toList(),
+                            child: SingleChildScrollView(
+                              physics: ClampingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              controller: _scrollController,
+                              child: GetBuilder<DeleteManagementViewModel>(
+                                builder: (_) {
+                                  return DataTable(
+                                    columns: [
+                                      DataColumn(label: Text("الاسم الكامل")),
+                                      DataColumn(label: Text("العنوان")),
+                                      DataColumn(label: Text("الجنسية")),
+                                      DataColumn(label: Text("العمر")),
+                                      DataColumn(label: Text("العمل")),
+                                      DataColumn(label: Text("تاريخ البداية")),
+                                      DataColumn(label: Text("رقم الام")),
+                                      DataColumn(label: Text("رقم الطوارئ")),
+                                      DataColumn(label: Text("سجل الأحداث")),
+                                      DataColumn(label: Text("الخيارات")),
+                                    ],
+                                    rows: controller.parentMap.values
+                                        .map((parent) => parentDataRow(
+                                            parent,
+                                            checkIfPendingDelete(
+                                                affectedId: parent.id.toString()),
+                                            controller))
+                                        .toList(),
+                                  );
+                                }
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     ],
                   ),
                 ),
