@@ -92,7 +92,6 @@ class ExamScreen extends StatelessWidget {
                     )),
                   ],
                 ),
-                SizedBox(height: defaultPadding),
                 SizedBox(
                   height: 25,
                 ),

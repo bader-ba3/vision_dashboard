@@ -26,7 +26,7 @@ class BusesScreen extends StatelessWidget {
         DataCell(Text(bus.students.join(', '))),
         DataCell(Text(bus.startDate.toIso8601String())),
         DataCell(Text(bus.expense.toStringAsFixed(2))),
-        DataCell(Text(bus.eventRecords.map((event) => event.event).join(', '))),
+        DataCell(Text(bus.eventRecords.map((event) => event.body).join(', '))),
       ],
     );
   }

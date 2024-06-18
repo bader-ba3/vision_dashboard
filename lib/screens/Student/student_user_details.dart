@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/models/event_record_model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
+import '../../models/event_model.dart';
 import '../../utils/const.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -12,9 +14,9 @@ class StudentInputForm extends StatefulWidget {
 }
 
 class _StudentInputFormState extends State<StudentInputForm> {
-  String _payWay = ""; // قائمة الطلاب المُحددين
-  String? _selectedEvent;
-  TextEditingController _bodyEvent = TextEditingController();
+  String _payWay = "";
+  EventModel? selectedEvent;
+  TextEditingController bodyEvent = TextEditingController();
 
   // قائمة بكل الطلاب المتاحين
   final List<String> _payWays = [
@@ -34,11 +36,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final examsController = TextEditingController();
   final startDateController = TextEditingController();
   final gradesController = TextEditingController();
-  // final eventRecordsController = TextEditingController();
   final busController = TextEditingController();
   final guardianController = TextEditingController();
 
-  List<Map<String, dynamic>> eventRecords = [];
+  List<EventRecordModel> eventRecords = [];
 
   @override
   void dispose() {
@@ -54,14 +55,12 @@ class _StudentInputFormState extends State<StudentInputForm> {
     examsController.dispose();
     startDateController.dispose();
     gradesController.dispose();
-    // eventRecordsController.dispose();
     busController.dispose();
     guardianController.dispose();
     super.dispose();
   }
 
   String? selectedValue;
-  List<String> items = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
   @override
   Widget build(BuildContext context) {
@@ -162,19 +161,45 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
                       children: [
-                       CustomDropDown(value: _selectedEvent.toString(), listValue: eventController.allEvents.values.toList().where((element) => element.role == Const.eventTypeStudent,).map((e) => e.name,).toList(), label: "نوع الحدث",onChange: (selectedWay) {
-                         if (selectedWay != null) {
-                           setState(() {
-                           });
-                           _selectedEvent = selectedWay;
-                         }
-                       },),
+                        SizedBox(
+                          width: Get.width / 4.5,
+                          child: DropdownButtonFormField<EventModel>(
+                            decoration: InputDecoration(
+                              labelText: "نوع الحدث",
+                              labelStyle: TextStyle(color: primaryColor),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: primaryColor),
+                              ),
+                              disabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: primaryColor),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: primaryColor, width: 2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            value: selectedEvent,
+                            hint: Text("نوع الحدث"),
+                            onChanged: (selectedWay) {
+                              if (selectedWay != null) {
+                                setState(() {});
+                                selectedEvent = selectedWay;
+                              }
+                            },
+                            items: eventController.allEvents.values
+                                .toList()
+                                .where(
+                                  (element) => element.role == Const.eventTypeEmployee,
+                            )
+                                .map((e) => DropdownMenuItem(
+                              child: Text(e.name),
+                              value: e,
+                            ))
+                                .toList(),
+                          ),
+                        ),
                         SizedBox(width: 16.0),
-                        CustomTextField(
-                            controller: _bodyEvent,
-                            title: 'الوصف',
-                            enable: true,
-                            keyboardType: TextInputType.text),
+                        CustomTextField(controller: bodyEvent, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
                         ElevatedButton(
                           style: ButtonStyle(
@@ -183,12 +208,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           ),
                           onPressed: () {
                             setState(() {
-
-                              eventRecords.add({
-                                'event': _selectedEvent.toString() +" "+ _bodyEvent.text,
-                                'date': DateTime.now().toString().split(" ")[0].toString(),
-                              });
-                              _bodyEvent.clear();
+                              eventRecords.add(EventRecordModel(body: bodyEvent.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
+                              bodyEvent.clear();
                             });
                           },
                           child: Text('إضافة سجل حدث'),
@@ -196,7 +217,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ],
                     );
                   }),
-                  SizedBox(height: 8.0),
+
+                  SizedBox(height: 16.0),
                 ],
               ),
             ),
@@ -206,54 +228,52 @@ class _StudentInputFormState extends State<StudentInputForm> {
               height: defaultPadding,
             ),
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(0.0),
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: secondaryColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
+              // decoration: BoxDecoration(
+              //     color: secondaryColor,
+              //     borderRadius: BorderRadius.circular(15)
+              // ),
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 itemCount: eventRecords.length,
                 itemBuilder: (context, index) {
                   final record = eventRecords[index];
-                  return ListTile(
-                    title: Text(
-                      record['event'],
-                      style: Styles.headLineStyle1,
-                    ),
-                    subtitle: Text(
-                      record['date'],
-                      style: Styles.headLineStyle3,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(color:Color(int.parse(record.color)).withOpacity(0.2), borderRadius: BorderRadius.circular(15)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              record.type,
+                              style: Styles.headLineStyle1.copyWith(color: Colors.black),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              record.body,
+                              style: Styles.headLineStyle1.copyWith(color: Colors.black),
+                            ),
+                            SizedBox(
+                              width: 50,
+                            ),
+                            Text(
+                              record.date,
+                              style: Styles.headLineStyle3,
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
               ),
-            ),
-            SizedBox(
-              height: defaultPadding,
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                foregroundColor: WidgetStateProperty.all(Colors.white),
-                backgroundColor: WidgetStateProperty.all(primaryColor),
-              ),
-              onPressed: () {
-         /*       final exam = ExamModel(
-                  image: _imageFile?.path ?? "",
-                  subject: subjectController.text,
-                  professor: professorController.text,
-                  date: DateTime.parse(dateController.text),
-                  students: studentsController.text
-                      .split(',')
-                      .map((student) => student.trim())
-                      .toList(),
-                  passRate: passRateController.text,
-                );
-                print('بيانات الامتحان: $exam');*/
-              },
-              child: Text('حفظ'),
             ),
           ],
         ),

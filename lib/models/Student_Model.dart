@@ -5,6 +5,7 @@ import 'package:faker/faker.dart';
 
 import 'Employee_Model.dart';
 import 'Parent_Model.dart';
+import 'event_record_model.dart';
 
 class StudentModel {
   String? studentName,studentID,gender,StudentBirthDay,grade;

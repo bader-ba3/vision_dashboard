@@ -15,12 +15,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../dashboard/components/date_table.dart';
 import 'expenses_input_form.dart';
 
-class ExpensesScreen extends StatelessWidget {
+class ExpensesScreen extends StatefulWidget {
   ExpensesScreen({super.key});
+
+  @override
+  State<ExpensesScreen> createState() => _ExpensesScreenState();
+}
+
+class _ExpensesScreenState extends State<ExpensesScreen> {
   final List<ExpensesModel> expenses = [];
+
   final ScrollController _scrollController = ScrollController();
 
-
+  int total = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +39,7 @@ class ExpensesScreen extends StatelessWidget {
           primary: false,
           padding: EdgeInsets.all(defaultPadding),
           child: GetBuilder<ExpensesViewModel>(builder: (controller) {
+            total = controller.allExpenses.values.map((e) => e.total,).reduce((value, element) => value+element,);
             return Column(
               children: [
                 Row(
@@ -42,10 +50,7 @@ class ExpensesScreen extends StatelessWidget {
                         onPressed: homeViewModel.controlMenu,
                       ),
                     if (!Responsive.isMobile(context))
-                      Text(
-                        "المصاريف",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
+                      Text("المصاريف", style: Theme.of(context).textTheme.titleLarge,),
                     if (!Responsive.isMobile(context))
                       Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                     Expanded(
@@ -77,20 +82,63 @@ class ExpensesScreen extends StatelessWidget {
                     )),
                   ],
                 ),
-                SizedBox(height: defaultPadding),
-                Container(
-                    padding: EdgeInsets.all(defaultPadding),
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                  width: double.infinity,
-                  alignment: Alignment.topRight,
-                  child: ExpensesInputForm()
-                ),
                 SizedBox(
                   height: 25,
                 ),
+                Container(
+                  width: double.infinity,
+                  height: 150,
+                  padding: EdgeInsets.all(defaultPadding),
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        " مصروف الشهري",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Spacer(),
+                      Center(
+                        child: Container(
+                         decoration: BoxDecoration( color: Colors.grey.shade300,borderRadius: BorderRadius.circular(8)),
+                          height: 30,
+                          width: MediaQuery.sizeOf(context).width*0.8,
+                          child: Stack(
+                            alignment: Alignment.topLeft,
+                            children: [
+                              AnimatedContainer(
+                                duration: Duration(microseconds: 500),
+                                decoration: BoxDecoration( color:  Colors.blueAccent.shade700,borderRadius: BorderRadius.circular(8)),
+                                width: MediaQuery.sizeOf(context).width*0.8*total/5000,
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          height: 30,
+                          width: MediaQuery.sizeOf(context).width*0.8,
+                          child: Row(
+                            children: [
+                              Text("5000"),
+                              Spacer(),
+                              Text("2500"),
+                              Spacer(),
+                              Text("1"),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                ),
+                SizedBox(height: defaultPadding),
                 Container(
                   padding: EdgeInsets.all(defaultPadding),
                   decoration: BoxDecoration(
@@ -191,7 +239,7 @@ class ExpensesScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                       return SizedBox(
                           width: Get.height/1.5,
-                          child: Image.network(expense.images[0],fit: BoxFit.fitWidth,));
+                          child: Image.network(expense.images[index],fit: BoxFit.fitWidth,));
                     },)));
               }, child: Text("الصور",style: TextStyle(color: Colors.white),)),
               SizedBox(width: 20,),

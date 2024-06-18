@@ -46,23 +46,36 @@ class _ClassesViewState extends State<ClassesView> {
         children: [
           SizedBox(
             width: 200,
-            child: ListView.builder(
-              itemCount: className.length,
-              itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: (){
-                    SelectedClass = index;
-                    setState(() {});
-                  },
-                  child: Container(
-                      padding: EdgeInsets.all(20),
-                     decoration: BoxDecoration( color: SelectedClass==index ? primaryColor:Colors.transparent,borderRadius: BorderRadius.circular(15)),
-                      child: Center(child: Text(className[index],style: SelectedClass==index ? TextStyle(color: Colors.white):null,))),
+            child: Column(
+              children: [
+                Container(
+                    height: 75,
+                    child: Center(child: Text("الصفوف"))),
+                Container(
+                  height: 6,
+                  color: secondaryColor,
                 ),
-              );
-            },),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: className.length,
+                    itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: (){
+                          SelectedClass = index;
+                          setState(() {});
+                        },
+                        child: Container(
+                            padding: EdgeInsets.all(20),
+                           decoration: BoxDecoration( color: SelectedClass==index ? primaryColor:Colors.transparent,borderRadius: BorderRadius.circular(15)),
+                            child: Center(child: Text(className[index],style: SelectedClass==index ? TextStyle(color: Colors.white):null,))),
+                      ),
+                    );
+                  },),
+                ),
+              ],
+            ),
           ),
           Container(
             width: 5,

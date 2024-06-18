@@ -67,122 +67,10 @@ class EmployeeUsersScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: defaultPadding),
-     /*           Container(
+                Container(
                   width: double.infinity,
                   alignment: Alignment.topRight,
-                  child: *//* Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          height: 200,
-                          width: 450,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: secondaryColor),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 200,
-                                width: 200,
-                                child: Stack(
-                                  children: [
-                                    PieChart(
-                                      PieChartData(
-                                        sectionsSpace: 0,
-                                        centerSpaceRadius: 70,
-                                        startDegreeOffset: -90,
-                                        sections: sexChartSelectionData,
-                                      ),
-                                    ),
-                                    Positioned.fill(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(height: defaultPadding),
-                                          Text(
-                                            "600",
-                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                              color: Color(0xff00308F),
-                                              fontWeight: FontWeight.w600,
-                                              height: 0.5,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text("User")
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                                child: Text(
-                                              "Male",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                          ),
-                                        ),
-                                        Text(
-                                          "270",
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                                child: Text(
-                                              "Female",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(fontSize: 16),
-                                            )),
-                                          ),
-                                        ),
-                                        Text(
-                                          "330",
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      squrWidget("Total Request", "15000"),
-                      squrWidget("Customer Happiness Rate", "95%"),
-                      SizedBox(
-
-                          width:900,child: DateTables()),
-
-
-                    ],
-                  )*//*
-
+                  child:
                       ElevatedButton(
                     onPressed: () {
                       Get.to(EmployeeInputForm());
@@ -200,7 +88,7 @@ class EmployeeUsersScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 25,
-                ),*/
+                ),
                 Container(
                   padding: EdgeInsets.all(defaultPadding),
                   decoration: BoxDecoration(
@@ -277,40 +165,6 @@ class EmployeeUsersScreen extends StatelessWidget {
     );
   }
 
-  Widget squrWidget(title, body) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        height: 200,
-        width: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: secondaryColor),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                    child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )),
-              ),
-            ),
-            Text(
-              body,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
   DataRow workingDriverDataRow(EmployeeModel employeeModel) {
     return DataRow(
@@ -369,42 +223,7 @@ class EmployeeUsersScreen extends StatelessWidget {
     );
   }
 
-  List<
-      EmployeeModel > listWorkingDriver = generateRandomEmployees(20);
+  List<EmployeeModel > listWorkingDriver = generateRandomEmployees(20);
 
-  List<PieChartSectionData> paiChartSelectionData = [
-    PieChartSectionData(
-      color: Colors.teal.withOpacity(0.5),
-      value: 50,
-      showTitle: false,
-      radius: 20,
-    ),
-    PieChartSectionData(
-      color: Colors.cyan,
-      value: 1262,
-      showTitle: false,
-      radius: 20,
-    ),
-    PieChartSectionData(
-      color: Colors.green.withOpacity(0.5),
-      value: 188,
-      showTitle: false,
-      radius: 20,
-    ),
-  ];
 
-  List<PieChartSectionData> sexChartSelectionData = [
-    PieChartSectionData(
-      color: primaryColor,
-      value: 330,
-      showTitle: false,
-      radius: 20,
-    ),
-    PieChartSectionData(
-      color: Colors.pink.withOpacity(0.5),
-      value: 270,
-      showTitle: false,
-      radius: 20,
-    ),
-  ];
 }

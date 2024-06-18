@@ -2,31 +2,7 @@ import 'dart:math';
 
 import 'package:faker/faker.dart';
 
-class EventRecordModel {
-  String event;
-  DateTime date;
-
-  EventRecordModel({required this.event, required this.date});
-
-  // Convert an EventRecord to a Map
-  Map<String, dynamic> toJson() => {
-    'event': event,
-    'date': date.toIso8601String(),
-  };
-
-  // Create an EventRecord from a Map
-  factory EventRecordModel.fromJson(Map<String, dynamic> json) {
-    return EventRecordModel(
-      event: json['event'],
-      date: DateTime.parse(json['date']),
-    );
-  }
-
-  @override
-  String toString() {
-    return '$event on ${date.toLocal()}';
-  }
-}
+import 'event_record_model.dart';
 
 class EmployeeModel {
   String? fullName, mobileNumber, address, nationality, gender, age, jobTitle,
@@ -101,12 +77,12 @@ bool? available=true;
     List<String> eventTypes = ['Leave', 'Absent', 'Salary Payment', 'Meeting', 'Training'];
     List<EventRecordModel> events = [];
 
-    for (int i = 0; i < count; i++) {
-      events.add(EventRecordModel(
-        event: eventTypes[random.nextInt(eventTypes.length)],
-        date: faker.date.dateTime(minYear: 2020, maxYear: 2023),
-      ));
-    }
+    // for (int i = 0; i < count; i++) {
+    //   events.add(EventRecordModel(
+    //     event: eventTypes[random.nextInt(eventTypes.length)],
+    //     date: faker.date.dateTime(minYear: 2020, maxYear: 2023), name: '',
+    //   ));
+    // }
 
     return events;
   }

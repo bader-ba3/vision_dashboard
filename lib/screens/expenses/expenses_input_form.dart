@@ -13,6 +13,7 @@ import '../../constants.dart';
 import '../../controller/account_management_view_model.dart';
 import '../../models/Employee_Model.dart';
 import '../../models/Parent_Model.dart';
+import '../../models/event_record_model.dart';
 import '../Employee/Employee_user_details.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -25,11 +26,6 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
   final titleController = TextEditingController();
   final totalController = TextEditingController();
   final bodyController = TextEditingController();
-  List<String> children = [];
-  List<String> selectedChildren = [];
-  List<ExamModel> exams = [];
-  List<EventRecordModel> eventRecords = [];
-  List<String> _children = []; // قائمة الأطفال المُحددين
   List<String> ImagesTempData = [];
 
   @override

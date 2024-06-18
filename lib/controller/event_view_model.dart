@@ -22,7 +22,7 @@ import '../utils/const.dart';
 class EventViewModel extends GetxController{
   RxMap<String,EventModel> allEvents = <String,EventModel>{}.obs;
   final eventFireStore = FirebaseFirestore.instance.collection(Const.eventCollection).withConverter<EventModel>(
-    fromFirestore: (snapshot, _) => EventModel.fromJson(snapshot.data()!),
+    fromFirestore: (snapshot, _) =>EventModel.fromJson(snapshot.data()!),
     toFirestore: (account, _) => account.toJson(),
   );
 

@@ -14,6 +14,7 @@ import 'package:vision_dashboard/screens/buses/buses_screen.dart';
 import 'package:vision_dashboard/screens/classes/classes_view.dart';
 import 'package:vision_dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_users_screen.dart';
+import 'package:vision_dashboard/screens/expenses/expenses_view_screen.dart';
 import 'package:vision_dashboard/screens/notification/notification_screen.dart';
 import 'package:vision_dashboard/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ import '../Parents/parent_users_screen.dart';
 import '../Student/student_users_screen.dart';
 import '../delete_management/delete_management_view.dart';
 import '../event/event_screen.dart';
+import '../event/event_view_screen.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -147,8 +149,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                           NotificationScreen(),
                           BusesView(),
                           SizedBox(),
-                          EventScreen(),
-                          ExpensesScreen(),
+                          EventViewScreen(),
+                          ExpensesViewScreen(),
                           SizedBox(),
                           DeleteManagementView(),
                           AccountManagementScreen(),

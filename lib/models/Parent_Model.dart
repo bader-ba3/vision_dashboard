@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 
 import 'Employee_Model.dart';
+import 'event_record_model.dart';
 
 
 class ParentModel {

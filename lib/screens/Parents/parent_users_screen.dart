@@ -34,7 +34,7 @@ class ParentUsersScreen extends StatelessWidget {
 
         // DataCell(Text(parent.exams.map((exam) => exam.subject).join(', '))),
         DataCell(
-            Text(parent.eventRecords!.map((event) => event.event).join(', '))),
+            Text(parent.eventRecords!.map((event) => event.body).join(', '))),
       ],
     );
   }
