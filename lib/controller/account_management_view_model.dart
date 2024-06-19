@@ -159,16 +159,20 @@ class AccountManagementViewModel extends GetxController{
               second: 0
           )).inMinutes;
           print(totalLate);
-         await Get.defaultDialog(
+          int AllTotalLate  = (user.employeeTime.values.map((e) => e.totalLate??0,).reduce((value, element) => value + element,) + totalLate).toInt();
+          await Get.defaultDialog(
            barrierDismissible: false,
              backgroundColor: Colors.white,
-            title: "أنت متأخر "+DateFun.minutesToTime(totalLate),
+            title: "أنت متأخر ",
                 content: Container(
                   height: Get.width/4,
                   width: Get.width/3,
                   child: StatefulBuilder(builder: (context, setstate) {
                     return Column(
                       children: [
+                        Text("تأخرت اليوم "+DateFun.minutesToTime(totalLate)),
+                        SizedBox(height: 10,),
+                        Text("مجموع التأخر "+DateFun.minutesToTime(AllTotalLate)),
                         Row(
                           children: [
                             Checkbox(value: !isLateWithReason!, onChanged: (_){
@@ -218,16 +222,20 @@ class AccountManagementViewModel extends GetxController{
               second: 0
           ).difference(DateTime.now()).inMinutes;
           print(totalEarlier);
-          await Get.defaultDialog(
+    int AllTotalEarlier  = (user.employeeTime.values.map((e) => e.totalEarlier??0,).reduce((value, element) => value + element,) + totalEarlier).toInt();
+
+    await Get.defaultDialog(
               barrierDismissible: false,
               backgroundColor: Colors.white,
-              title: "لقد خرجت مبكرا "+DateFun.minutesToTime(totalEarlier),
+              title: "لقد خرجت مبكرا ",
               content: Container(
                 height: Get.width/4,
                 width: Get.width/3,
                 child: StatefulBuilder(builder: (context, setstate) {
                   return Column(
                     children: [
+                      Text("خرجبت مبكرا اليوم "+DateFun.minutesToTime(totalEarlier)),
+                      Text("مجموع الخروج المبكر "+DateFun.minutesToTime(AllTotalEarlier)),
                       Row(
                         children: [
                           Checkbox(value: !isEarlierWithReason!, onChanged: (_){

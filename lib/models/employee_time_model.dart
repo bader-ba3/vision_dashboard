@@ -3,6 +3,7 @@ class EmployeeTimeModel{
   DateTime? startDate , endDate ;
   int? totalDate , totalLate,totalEarlier;
   bool? isDayEnd,isLateWithReason,isEarlierWithReason;
+
   EmployeeTimeModel({
     required this.dayName,
     required this.startDate,
@@ -16,6 +17,7 @@ class EmployeeTimeModel{
     required this.reasonOfEarlier,
     required this.totalEarlier,
   });
+
   EmployeeTimeModel.fromJson(json){
     dayName = json['dayName'];
     isLateWithReason = json['isLateWithReason'];
@@ -24,11 +26,12 @@ class EmployeeTimeModel{
     endDate = json['endDate']==null ?null :json['endDate'].toDate();
     totalDate = json['totalDate'];
     isDayEnd = json['isDayEnd'];
-    totalLate = json['totalLate'];
+    totalLate = int.tryParse(json['totalLate'].toString());
     isEarlierWithReason = json['isEarlierWithReason'];
     reasonOfEarlier = json['reasonOfEarlier'];
-    totalEarlier = json['totalEarlier'];
+    totalEarlier = int.tryParse(json['totalEarlier'].toString());
   }
+
   toJson(){
     return {
       "dayName":dayName,
@@ -44,4 +47,5 @@ class EmployeeTimeModel{
       'totalEarlier':totalEarlier,
     };
   }
+
 }

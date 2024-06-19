@@ -101,7 +101,15 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       InkWell(
                         onTap: () {
                           role ??=accountType.keys.first;
-                          AccountManagementModel model = AccountManagementModel(id: DateTime.now().millisecondsSinceEpoch.toString(), userName: name.text, password: pass.text, type: role!, serialNFC: null, isActive: true);
+                          AccountManagementModel model = AccountManagementModel(
+                              id: DateTime.now().millisecondsSinceEpoch.toString(),
+                              userName: name.text,
+                              password: pass.text,
+                              type: role!,
+                              serialNFC: null,
+                              isActive: true,
+                            salary: 2000, dayOfWork: 20
+                          );
                           name.clear();
                           pass.clear();
                           role = null;
