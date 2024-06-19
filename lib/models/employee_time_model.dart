@@ -1,15 +1,33 @@
 class EmployeeTimeModel{
-  String? dayName ;
+  String? dayName,reasonOfLate ,reasonOfEarlier;
   DateTime? startDate , endDate ;
-  int? totalDate;
-  bool? isDayEnd;
-  EmployeeTimeModel({required this.dayName,required this.startDate,required this.endDate,required this.totalDate,required this.isDayEnd,});
+  int? totalDate , totalLate,totalEarlier;
+  bool? isDayEnd,isLateWithReason,isEarlierWithReason;
+  EmployeeTimeModel({
+    required this.dayName,
+    required this.startDate,
+    required this.endDate,
+    required this.totalDate,
+    required this.isDayEnd,
+    required this.isLateWithReason,
+    required this.reasonOfLate,
+    required this.totalLate,
+    required this.isEarlierWithReason,
+    required this.reasonOfEarlier,
+    required this.totalEarlier,
+  });
   EmployeeTimeModel.fromJson(json){
     dayName = json['dayName'];
+    isLateWithReason = json['isLateWithReason'];
+    reasonOfLate = json['reasonOfLate'];
     startDate = json['startDate']==null ?null :json['startDate'].toDate();
     endDate = json['endDate']==null ?null :json['endDate'].toDate();
     totalDate = json['totalDate'];
     isDayEnd = json['isDayEnd'];
+    totalLate = json['totalLate'];
+    isEarlierWithReason = json['isEarlierWithReason'];
+    reasonOfEarlier = json['reasonOfEarlier'];
+    totalEarlier = json['totalEarlier'];
   }
   toJson(){
     return {
@@ -18,6 +36,12 @@ class EmployeeTimeModel{
       'endDate':endDate,
       "totalDate":totalDate,
       'isDayEnd':isDayEnd,
+      'isLateWithReason':isLateWithReason,
+      'reasonOfLate':reasonOfLate,
+      'totalLate':totalLate,
+      'isEarlierWithReason':isEarlierWithReason,
+      'reasonOfEarlier':reasonOfEarlier,
+      'totalEarlier':totalEarlier,
     };
   }
 }

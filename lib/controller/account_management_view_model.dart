@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:duration/duration.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
+import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../models/account_management_model.dart';
 import '../screens/main/main_screen.dart';
 import '../utils/const.dart' ;
@@ -135,16 +137,138 @@ class AccountManagementViewModel extends GetxController{
   }
  String? loginUserPage;
   Future<void> addTime(String cardId) async {
+   bool?  isLateWithReason ;
+   bool?  isEarlierWithReason ;
+   int totalLate =0 ;
+   int totalEarlier =0 ;
+   TextEditingController lateReasonController = TextEditingController();
+   TextEditingController earlierReasonController = TextEditingController();
     print(cardId);
     print("add Time");
     AccountManagementModel? user  = allAccountManagement.values.where((element) => element.serialNFC == cardId,).firstOrNull;
     if(user!=null){
       String date = DateTime.now().toString().split(" ")[0];
+      print(DateTime.now().hour);
+      print(DateTime.now().minute);
       if(user.employeeTime[date] == null){
-        user.employeeTime[date] = EmployeeTimeModel(dayName: date, startDate: DateTime.now(), endDate: null, totalDate: null, isDayEnd: false);
+        if(DateTime.now().hour>7 ||( DateTime.now().hour==7 &&DateTime.now().minute>30)){
+          isLateWithReason = false;
+          totalLate = DateTime.now().difference(DateTime.now().copyWith(
+              hour: 7,
+              minute: 30,
+              second: 0
+          )).inMinutes;
+          print(totalLate);
+         await Get.defaultDialog(
+           barrierDismissible: false,
+             backgroundColor: Colors.white,
+            title: "أنت متأخر "+DateFun.minutesToTime(totalLate),
+                content: Container(
+                  height: Get.width/4,
+                  width: Get.width/3,
+                  child: StatefulBuilder(builder: (context, setstate) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(value: !isLateWithReason!, onChanged: (_){
+                              isLateWithReason = !_!;
+                              setstate((){});
+                            }),
+                            Text("تأخر غير مبرر")
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(value: isLateWithReason, onChanged: (_){
+                              isLateWithReason = _!;
+                              setstate((){});
+                            }),
+                            Text("تأخر مبرر"),
+                          ],
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            enabled: isLateWithReason,
+                            decoration: InputDecoration(hintText: "سبب التأخر"),
+                            controller: lateReasonController,
+                          ),
+                        )
+                      ],
+                    );
+                  },),
+                ),actions: [
+                  ElevatedButton(onPressed: (){
+                    Get.back();
+                  }, child: Text("موافق"))
+         ]
+          );
+        }
+        user.employeeTime[date] = EmployeeTimeModel(dayName: date, startDate: DateTime.now(), endDate: null, totalDate: null, isDayEnd: false,isLateWithReason: isLateWithReason, reasonOfLate: lateReasonController.text, totalLate: totalLate, isEarlierWithReason: null, reasonOfEarlier: null, totalEarlier: null);
+        loginUserPage = "اهلا بك "+user.userName;
       }else if( user.employeeTime[date]!.isDayEnd!){
+        loginUserPage = "لقد قمت بالخروج بالفعل "+user.userName;
         print("You close the day already");
       }else{
+        if(DateTime.now().hour<14 ||( DateTime.now().hour==14 &&DateTime.now().minute<30)){
+          isEarlierWithReason = false;
+          totalEarlier = DateTime.now().copyWith(
+              hour: 14,
+              minute: 30,
+              second: 0
+          ).difference(DateTime.now()).inMinutes;
+          print(totalEarlier);
+          await Get.defaultDialog(
+              barrierDismissible: false,
+              backgroundColor: Colors.white,
+              title: "لقد خرجت مبكرا "+DateFun.minutesToTime(totalEarlier),
+              content: Container(
+                height: Get.width/4,
+                width: Get.width/3,
+                child: StatefulBuilder(builder: (context, setstate) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(value: !isEarlierWithReason!, onChanged: (_){
+                            isEarlierWithReason = !_!;
+                            setstate((){});
+                          }),
+                          Text("خروج مبكر غير مبرر")
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(value: isEarlierWithReason, onChanged: (_){
+                            isEarlierWithReason = _!;
+                            setstate((){});
+                          }),
+                          Text("خروج مبكر مبرر"),
+                        ],
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          enabled: isEarlierWithReason,
+                          decoration: InputDecoration(hintText: "سبب الخروج المبكر"),
+                          controller: earlierReasonController,
+                        ),
+                      )
+                    ],
+                  );
+                },),
+              ),actions: [
+            ElevatedButton(onPressed: (){
+              Get.back();
+            }, child: Text("موافق"))
+          ]
+          );
+        }
+        if(isEarlierWithReason!=null){
+          user.employeeTime[date]!.isEarlierWithReason = isEarlierWithReason;
+          user.employeeTime[date]!.totalEarlier = totalEarlier;
+          user.employeeTime[date]!.reasonOfEarlier = earlierReasonController.text;
+        }
+        loginUserPage = "وداعا "+user.userName;
           user.employeeTime[date]!.endDate = DateTime.now();
           user.employeeTime[date]!.isDayEnd = true;
           user.employeeTime[date]!.totalDate = DateTime.now().difference(user.employeeTime[date]!.startDate!).inMinutes;
@@ -152,7 +276,7 @@ class AccountManagementViewModel extends GetxController{
       accountManagementFireStore.doc(user.id).update({
         "employeeTime":Map.fromEntries(user.employeeTime.entries.map((e) => MapEntry(e.key, e.value.toJson())).toList())
       });
-      loginUserPage = user.userName;
+
       update();
      await Future.delayed(Duration(seconds: 4));
       loginUserPage=null;

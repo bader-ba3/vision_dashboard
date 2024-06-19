@@ -50,6 +50,7 @@ dependencies:
   fluttertoast:
   universal_html:
   firebase_storage: 11.6.0
+  duration:
 
 dev_dependencies:
   flutter_test:
