@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../constants.dart';
-import 'chart.dart';
+
 import 'info_card.dart';
 
 class DateTables extends StatefulWidget {

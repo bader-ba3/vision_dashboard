@@ -147,6 +147,8 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
         ),
         SingleChildScrollView(
           physics: ClampingScrollPhysics(),
+
+          reverse: true,
           scrollDirection: Axis.horizontal,
           child: Container(
             padding: EdgeInsets.all(15),

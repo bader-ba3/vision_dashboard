@@ -1,8 +1,7 @@
 import 'package:vision_dashboard/models/Employee_Model.dart';
 import 'package:vision_dashboard/responsive.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_user_details.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';
@@ -67,28 +66,8 @@ class EmployeeUsersScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: defaultPadding),
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.topRight,
-                  child:
-                      ElevatedButton(
-                    onPressed: () {
-                      Get.to(EmployeeInputForm());
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(secondaryColor),
-                        padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 30))),
-                    child: Text(
-                      "اضافة موظف جديد",
-                      style: Styles.headLineStyle2.copyWith(),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
+
+
                 Container(
                   padding: EdgeInsets.all(defaultPadding),
                   decoration: BoxDecoration(

@@ -1,6 +1,5 @@
 import 'package:vision_dashboard/responsive.dart';
 import 'package:vision_dashboard/screens/dashboard/components/date_table.dart';
-import 'package:vision_dashboard/screens/dashboard/components/my_fields.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -27,7 +26,7 @@ class DashboardScreen extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      MyFiles(),
+
                       SizedBox(height: defaultPadding),
 
                       RecentFiles(),

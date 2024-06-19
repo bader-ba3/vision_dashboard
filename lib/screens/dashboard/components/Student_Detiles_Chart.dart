@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
-import 'chart.dart';
+import 'InfoBarchart.dart';
 import 'info_card.dart';
 
 class StudentsDetailsChart extends StatefulWidget {
@@ -36,7 +36,7 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
             ),
           ),
           SizedBox(height: defaultPadding),
-          Chart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title:"طالب",subtitle:"1925"),
+          InfoBarChart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title:"طالب",subtitle:"1925"),
           InfoCard(
             onTap: (){
               touchedIndex==0?touchedIndex=-1:touchedIndex=0;

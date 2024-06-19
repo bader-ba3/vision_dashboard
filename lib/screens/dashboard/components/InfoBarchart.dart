@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 
-class Chart extends StatefulWidget {
-   Chart({
+class InfoBarChart extends StatefulWidget {
+   InfoBarChart({
     Key? key,
      required this.touchedIndex, required,required this.paiChartSelectionData, required this.title,required this.subtitle
   }) : super(key: key);
 
   @override
-  State<Chart> createState() => _ChartState();
+  State<InfoBarChart> createState() => _InfoBarChartState();
   int touchedIndex = -1;
 final String title,subtitle;
 List<PieChartSectionData> paiChartSelectionData;
 }
 
-class _ChartState extends State<Chart> {
+class _InfoBarChartState extends State<InfoBarChart> {
 
 
   @override

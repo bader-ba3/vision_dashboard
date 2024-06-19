@@ -52,6 +52,7 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      reverse: true,
       physics: ClampingScrollPhysics(),
       child: SizedBox(
         // aspectRatio: 1.66,

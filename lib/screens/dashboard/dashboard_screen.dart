@@ -87,7 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       SizedBox(height: defaultPadding),
                       EmployeeTimeBox(),
                       SizedBox(height: defaultPadding),
-                      EmployeeSalaryChartBox(index: 1),
+                      EmployeeSalaryChartBox(),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
                       if (Responsive.isMobile(context))
