@@ -12,7 +12,7 @@ class MyFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FileInfoCard(info: demoMyFiles[0],index: 0,);
+    return BarChartWidget(index: 0,);
   }
 }
 

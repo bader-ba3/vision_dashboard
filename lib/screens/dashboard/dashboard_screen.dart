@@ -11,17 +11,16 @@ import '../../constants.dart';
 import 'components/header.dart';
 
 import 'components/recent_files.dart';
-import 'components/storage_details.dart';
+import 'components/Employee_Details_Chart.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
-
-
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int index=2;
+  int index = 2;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,6 +31,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Header(),
             SizedBox(height: defaultPadding),
+            SizedBox(
+              width: Get.width,
+              child: Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.spaceBetween,
+                runSpacing: 25,
+                spacing: 0,
+                children: [
+                  InkWell(
+                      onHover: (value) {
+                        print(value);
+                      },
+                      onTap: () {
+                        index = 2;
+                        setState(() {});
+                      },
+                      child: SquareWidget("الاجمالي", "155,684.00",
+                          primaryColor, "assets/budget.png")),
+                  InkWell(
+                      onTap: () {
+                        index = 0;
+                        setState(() {});
+                      },
+                      child: SquareWidget("المصروف", "55,684.00",
+                          blueColor, "assets/poor.png")),
+                  InkWell(
+                      onTap: () {
+                        index = 1;
+                        setState(() {});
+                      },
+                      child: SquareWidget("الايرادات", "100,000.00",
+                          Colors.cyan, "assets/profit.png")),
+                  InkWell(
+                      onTap: () {
+                        index = 1;
+                        setState(() {});
+                      },
+                      child: SquareWidget("العام الدراسي", "2023/2024",
+                          Colors.black, "assets/books.png")),
+                ],
+              ),
+            ),
+            SizedBox(height: defaultPadding),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -40,58 +82,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: Get.width,
-                        child: Wrap(
-                          direction: Axis.horizontal,
-alignment: WrapAlignment.spaceBetween,
-                          runSpacing: 25,
-                          spacing: 0,
-                          children: [
-                            InkWell(
-                                onHover: (value) {
-                                  print(value);
-                                },
-                                onTap: (){
-                                  index=2;
-                                  setState(() {
-
-                                  });
-                                },
-                                child: SquareWidget("الاجمالي", "155,684.00",primaryColor,"assets/budget.png")),
-                            InkWell(
-                                onTap: (){
-                                  index=0;
-                                  setState(() {
-
-                                  });
-                                },
-                                child: SquareWidget("المصروف", "55,684.00",blueColor,"assets/poor.png")),
-                            InkWell(
-                                onTap: (){
-                                  index=1;
-                                  setState(() {
-
-                                  });
-                                },
-                                child: SquareWidget("الايرادات", "100,000.00",Colors.cyan,"assets/profit.png")),
-
-                          ],
-                        ),
+                      BarChartWidget(
+                        index: index,
                       ),
-                      SizedBox(height: defaultPadding),
-                      FileInfoCard(info:CloudStorageInfo(color: Colors.red,numOfFiles: 465,percentage: 54,title: "sd",totalStorage: "sad",svgSrc: ""),index: index, ),
                       SizedBox(height: defaultPadding),
                       RecentFiles(),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context))  Column(
-                        children: [
-                          PieChartWidget(),
-                          SizedBox(height: 10,),
-                          StorageDetails(),
-                        ],
-                      ),
+                      if (Responsive.isMobile(context))
+                        Column(
+                          children: [
+
+                            EmployeeDetails(),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -103,10 +107,9 @@ alignment: WrapAlignment.spaceBetween,
                     flex: 2,
                     child: Column(
                       children: [
-                        // DateTables(),
-                        PieChartWidget(),
-                        SizedBox(height: 10,),
-                        StorageDetails(),
+
+
+                        EmployeeDetails(),
                       ],
                     ),
                   ),
@@ -118,10 +121,9 @@ alignment: WrapAlignment.spaceBetween,
     );
   }
 
-  Widget SquareWidget(title, body,color,png) {
+  Widget SquareWidget(title, body, color, png) {
     return Padding(
       padding: const EdgeInsets.all(8),
-
       child: Container(
         height: 250,
         width: 250,
@@ -135,20 +137,29 @@ alignment: WrapAlignment.spaceBetween,
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                     child: Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style:Styles.headLineStyle2.copyWith(color: color),
-                    )),
+                  title,
+                  textAlign: TextAlign.center,
+                  style: Styles.headLineStyle2.copyWith(color:color==false?Colors.black: color),
+                )),
               ),
             ),
             Text(
               body,
-              style:Styles.headLineStyle1.copyWith(color: color,fontSize: 40),
+              style: Styles.headLineStyle1.copyWith(color: color==false?Colors.black: color, fontSize: 40),
             ),
             SizedBox(
               height: 20,
             ),
-            Image.asset(png,height: 70,color: color,),
+            color==false?
+            Image.asset(
+              png,
+              height: 100,
+              // color: color==false?Colors.transparent: color,
+            ):Image.asset(
+              png,
+              height: 70,
+              color: color,
+            ),
             SizedBox(
               height: 20,
             ),

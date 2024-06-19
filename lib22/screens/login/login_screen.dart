@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    accountManagementViewModel.initNFC();
+    // accountManagementViewModel.initNFC();
     super.initState();
   }
 

@@ -8,22 +8,22 @@ import 'package:vision_dashboard/screens/dashboard/components/Total_Chart.dart';
 
 import '../../../constants.dart';
 
-class FileInfoCard extends StatefulWidget {
-   FileInfoCard({
+class BarChartWidget extends StatefulWidget {
+   BarChartWidget({
     Key? key,
-    required this.info,
+
      required this.index,
 
    }) : super(key: key);
 
-  final CloudStorageInfo info;
+
 
   @override
-  State<FileInfoCard> createState() => _FileInfoCardState();
+  State<BarChartWidget> createState() => _BarChartWidgetState();
    int index=2;
 }
 
-class _FileInfoCardState extends State<FileInfoCard> {
+class _BarChartWidgetState extends State<BarChartWidget> {
 
 
   @override
