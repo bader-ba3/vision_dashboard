@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vision_dashboard/screens/Widgets/Filled_Container_Color.dart';
 
 import '../../../constants.dart';
 
-class EmployeeInfoCard extends StatelessWidget {
-  const EmployeeInfoCard({
+class InfoCard extends StatelessWidget {
+  const InfoCard({
     Key? key,
     required this.title,
     required this.amountOfEmployee,

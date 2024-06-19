@@ -1,4 +1,5 @@
 
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,7 +11,13 @@ const bgColor = Color(0xffF6F6F4);  // تخفيف لون الخلفية
 //Color(0xff7e0303)
 //Color(0xffc89665)
 const defaultPadding = 16.0;
-
+List<String>  employeeName =
+["",
+  'أحمد الأيوبي', 'محمد الأسدي', 'علي البغدادي', 'حسين الكرمي', 'عمر النجار', 'يوسف الراوي',
+  'إبراهيم الحسيني', 'خالد الزبيدي', 'عبدالله العطار', 'سعيد الحداد', 'طارق البصري', 'ياسر الزهراني',
+  'سامي الشمري', 'ماجد القيسي', 'عماد السعدي', 'فهد العتيبي', 'سليمان الجبوري', 'أنس الفارسي',
+  'بسام الزهيري', 'جمال التميمي', 'هيثم الهاشمي', 'رامي الشميري', 'نادر العدني', ''
+];
 String generateId(String type) {
   var _ = DateTime.now().microsecondsSinceEpoch.toString();
   return "$type$_";

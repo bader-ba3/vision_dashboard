@@ -3,7 +3,7 @@ import 'package:vision_dashboard/responsive.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
-import 'file_info_card.dart';
+import 'Total_info_Widget.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
@@ -12,7 +12,7 @@ class MyFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BarChartWidget(index: 0,);
+    return TotalBarChartWidget(index: 0,);
   }
 }
 

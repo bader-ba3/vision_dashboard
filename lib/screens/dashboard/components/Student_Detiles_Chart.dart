@@ -5,16 +5,16 @@ import '../../../constants.dart';
 import 'chart.dart';
 import 'info_card.dart';
 
-class EmployeeDetailsChart extends StatefulWidget {
-  const EmployeeDetailsChart({
+class StudentsDetailsChart extends StatefulWidget {
+  const StudentsDetailsChart({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<EmployeeDetailsChart> createState() => _EmployeeDetailsChartState();
+  State<StudentsDetailsChart> createState() => _StudentsDetailsChartState();
 }
 
-class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
+class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
   int touchedIndex = -1;
 
   @override
@@ -29,14 +29,14 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "الموظفين",
+            "الطلاب",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: defaultPadding),
-          Chart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title: "موظف",subtitle: "60",),
+          Chart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title:"طالب",subtitle:"1925"),
           InfoCard(
             onTap: (){
               touchedIndex==0?touchedIndex=-1:touchedIndex=0;
@@ -45,9 +45,9 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
 
               });
             },
-            title: "اداري",
-            amountOfEmployee: "١٠",
-            color: Colors.redAccent,
+            title: "ذكر",
+            amountOfEmployee: "1195",
+            color: Colors.blue,
           ),
           InfoCard(
             onTap: (){
@@ -57,9 +57,9 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
 
               });
             },
-            title: "استاذ",
-            amountOfEmployee: "30",
-            color: primaryColor,
+            title: "انثى",
+            amountOfEmployee: "700",
+            color: Colors.pink,
           ),
           InfoCard(
             onTap: (){
@@ -69,28 +69,18 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
 
               });
             },
-            title: "موظف مكتبي",
-            amountOfEmployee: "15",
-            color: blueColor,
+            title: "ذوي الهمم",
+            amountOfEmployee: "30",
+            color: Colors.blueGrey,
           ),
-          InfoCard(
-            onTap: (){
-              touchedIndex==3?touchedIndex=-1:touchedIndex=3;
 
-              setState(() {
 
-              });
-            },
-            title: "سائق",
-            amountOfEmployee: "5",
-            color: Colors.cyan,
-          ),
         ],
       ),
     );
   }
   List<PieChartSectionData> paiChartSelectionData() {
-    return List.generate(4, (i) {
+    return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
@@ -98,9 +88,9 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: Colors.redAccent,
-            value: 10,
-            title: '${((10 / 60)*100).round()}%',
+            color: Colors.blue,
+            value: 1195,
+            title: '${((1195 / 1925)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -111,9 +101,9 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
           );
         case 1:
           return PieChartSectionData(
-            color: primaryColor,
-            value: 30,
-            title: '${((30 / 60)*100).round()}%',
+            color: Colors.pink,
+            value: 700,
+            title: '${((700 / 1925)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -124,22 +114,9 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
           );
         case 2:
           return PieChartSectionData(
-            color: blueColor,
-            value: 15,
-            title: '${((15 / 60)*100).round()}%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: Colors.cyan,
-            value: 5,
-            title: '${((5 / 60)*100).round()}%',
+            color: Colors.blueGrey,
+            value: 30,
+            title: '${((30 / 1925)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

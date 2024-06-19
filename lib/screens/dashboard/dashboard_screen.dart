@@ -2,15 +2,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/MyFiles.dart';
 import 'package:vision_dashboard/responsive.dart';
+import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Chart.dart';
+import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/date_table.dart';
-import 'package:vision_dashboard/screens/dashboard/components/file_info_card.dart';
+import 'package:vision_dashboard/screens/dashboard/components/Total_info_Widget.dart';
 import 'package:flutter/material.dart';
 import 'package:vision_dashboard/screens/dashboard/components/pie_Chart.dart';
 
 import '../../constants.dart';
 import 'components/header.dart';
 
-import 'components/recent_files.dart';
+import 'components/Employee_Time_Box.dart';
 import 'components/Employee_Details_Chart.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -48,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         index = 2;
                         setState(() {});
                       },
-                      child: SquareWidget("الاجمالي", "155,684.00",
+                      child: SquareWidget("الاجمالي", "45,426.0",
                           primaryColor, "assets/budget.png")),
 
                   InkWell(
@@ -56,17 +58,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         index = 1;
                         setState(() {});
                       },
-                      child: SquareWidget("الايرادات", "100,000.00",
+                      child: SquareWidget("الايرادات", "101,110.0",
                           Colors.cyan, "assets/profit.png")),
                   InkWell(
                       onTap: () {
                         index = 0;
                         setState(() {});
                       },
-                      child: SquareWidget("المصروف", "55,684.00",
+                      child: SquareWidget("المصروف", "55,684.0",
                           blueColor, "assets/poor.png")),
-                  SquareWidget("العام الدراسي", "2023/2024",
-                      Colors.black, "assets/books.png"),
+                  SquareWidget("الرواتب المستحقة", "57,920.0",
+                      Colors.black, "assets/money-bag.png"),
                 ],
               ),
             ),
@@ -79,18 +81,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BarChartWidget(
+                      TotalBarChartWidget(
                         index: index,
                       ),
                       SizedBox(height: defaultPadding),
-                      RecentFiles(),
+                      EmployeeTimeBox(),
+                      SizedBox(height: defaultPadding),
+                      EmployeeSalaryChartBox(index: 1),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
                       if (Responsive.isMobile(context))
                         Column(
                           children: [
-
-                            EmployeeDetails(),
+                            EmployeeDetailsChart(),
+                            SizedBox(height: defaultPadding,),
+                            StudentsDetailsChart(),
                           ],
                         ),
                     ],
@@ -105,8 +110,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       children: [
 
-
-                        EmployeeDetails(),
+                        EmployeeDetailsChart(),
+                        SizedBox(height: defaultPadding,),
+                        StudentsDetailsChart(),
                       ],
                     ),
                   ),

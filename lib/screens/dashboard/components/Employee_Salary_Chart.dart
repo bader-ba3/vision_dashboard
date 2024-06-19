@@ -1,24 +1,22 @@
-import 'dart:math';
 
-import 'package:vision_dashboard/chart/Liner_Chart.dart';
-import 'package:vision_dashboard/models/MyFiles.dart';
 import 'package:flutter/material.dart';
+import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_BarChar.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_Chart.dart';
 
 import '../../../constants.dart';
 
-class BarChartWidget extends StatefulWidget {
-  BarChartWidget({
+class EmployeeSalaryChartBox extends StatefulWidget {
+  EmployeeSalaryChartBox({
     Key? key,
     required this.index,
   }) : super(key: key);
 
   @override
-  State<BarChartWidget> createState() => _BarChartWidgetState();
+  State<EmployeeSalaryChartBox> createState() => _EmployeeSalaryChartBoxState();
   int index = 2;
 }
 
-class _BarChartWidgetState extends State<BarChartWidget> {
+class _EmployeeSalaryChartBoxState extends State<EmployeeSalaryChartBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,8 +35,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           SizedBox(
               height: 400,
               width: double.infinity,
-              child: TotalBarChart(
-                index: widget.index,
+              child: EmployeeSalaryBarChart(
+
               )),
           Row(
             children: [
@@ -55,7 +53,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                       width: 20,
                       decoration: BoxDecoration(
                           border:
-                              Border.all(color: Colors.black.withOpacity(0.2)),
+                          Border.all(color: Colors.black.withOpacity(0.2)),
                           color: primaryColor,
                           borderRadius: BorderRadius.circular(5)),
                     ),
@@ -63,40 +61,14 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                       width: 5,
                     ),
                     Text(
-                      "الاجمالي",
+                      "المستحق",
                       // style: Styles.headLineStyle3,
                     )
                   ],
                 ),
               ),
               const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  widget.index = 1;
-                  setState(() {});
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.black.withOpacity(0.2)),
-                          color: Colors.cyan,
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "الايرادات",
-                      // style: Styles.headLineStyle3,
-                    )
-                  ],
-                ),
-              ),
-              const Spacer(),
+
               GestureDetector(
                 onTap: () {
                   widget.index = 0;
@@ -109,7 +81,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                       width: 20,
                       decoration: BoxDecoration(
                           border:
-                              Border.all(color: Colors.black.withOpacity(0.2)),
+                          Border.all(color: Colors.black.withOpacity(0.2)),
                           color: Colors.black.withBlue(100),
                           borderRadius: BorderRadius.circular(5)),
                     ),
@@ -117,7 +89,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                       width: 5,
                     ),
                     Text(
-                      "المصروف",
+                      "المدفوع",
                       // style: Styles.headLineStyle3,
                     )
                   ],
@@ -132,39 +104,3 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   }
 }
 
-class ProgressLine extends StatelessWidget {
-  const ProgressLine({
-    Key? key,
-    this.color = primaryColor,
-    required this.percentage,
-  }) : super(key: key);
-
-  final Color? color;
-  final int? percentage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 5,
-          decoration: BoxDecoration(
-            color: color!.withOpacity(0.1),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-        ),
-        LayoutBuilder(
-          builder: (context, constraints) => Container(
-            width: constraints.maxWidth * (percentage! / 100),
-            height: 5,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
