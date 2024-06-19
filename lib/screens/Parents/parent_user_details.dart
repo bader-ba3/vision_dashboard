@@ -7,13 +7,11 @@ import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
 
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
-import '../../models/Employee_Model.dart';
-import '../../models/Exam_model.dart';
+
 import '../../models/Parent_Model.dart';
 import '../../models/event_model.dart';
 import '../../models/event_record_model.dart';
 import '../../utils/const.dart';
-import '../Employee/Employee_user_details.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ParentInputForm extends StatefulWidget {
@@ -85,6 +83,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(

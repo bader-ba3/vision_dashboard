@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 const primaryColor = Color(0xff3E96F4);
 const secondaryColor = Color(0xffCCC7BF);
+const blueColor = Color(0xff00308F);
 const bgColor = Color(0xffF6F6F4);  // تخفيف لون الخلفية
 //Color(0xff3d0312)
 //Color(0xff7e0303)

@@ -18,9 +18,28 @@ class ParentUsersScreen extends StatelessWidget {
   ParentUsersScreen({super.key});
 
   final ScrollController _scrollController = ScrollController();
-
+  void showParentInputDialog(BuildContext context, dynamic parent) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height/2,
+            width: Get.width,
+            child: ParentInputForm(parent: parent),
+          ),
+        );
+      },
+    );
+  }
   DataRow parentDataRow(
-      ParentModel parent, bool isDelete, ParentsViewModel controller) {
+      ParentModel parent, bool isDelete, ParentsViewModel controller,BuildContext context) {
     return DataRow(
       color: isDelete ? WidgetStatePropertyAll(Colors.redAccent) : null,
       cells: [
@@ -42,8 +61,8 @@ class ParentUsersScreen extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () {
-
-                  Get.to(ParentInputForm(parent: parent));
+                  showParentInputDialog(context, parent);
+                  // Get.to(ParentInputForm(parent: parent));
                 },
                 icon: Icon(
                   Icons.remove_red_eye_outlined,
@@ -173,7 +192,7 @@ class ParentUsersScreen extends StatelessWidget {
                                             parent,
                                             checkIfPendingDelete(
                                                 affectedId: parent.id.toString()),
-                                            controller))
+                                            controller,context))
                                         .toList(),
                                   );
                                 }

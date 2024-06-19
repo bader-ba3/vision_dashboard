@@ -148,41 +148,7 @@ class ExamScreen extends StatelessWidget {
     );
   }
 
-  Widget squrWidget(title, body) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
 
-      child: Container(
-        height: 200,
-        width: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: secondaryColor),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                    child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )),
-              ),
-            ),
-            Text(
-              body,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
   DataRow workingDriverDataRow(EmployeeModel employeeModel) {
     return DataRow(

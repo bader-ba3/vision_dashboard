@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Buses/buses_screen.dart';
-import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
-import 'package:vision_dashboard/screens/Parents/parent_users_screen.dart';
+
 
 import '../../constants.dart';
 import 'Buses_Detailes.dart';

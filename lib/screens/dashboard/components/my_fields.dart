@@ -12,7 +12,7 @@ class MyFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FileInfoCard(info: demoMyFiles[0]);
+    return FileInfoCard(info: demoMyFiles[0],index: 0,);
   }
 }
 
