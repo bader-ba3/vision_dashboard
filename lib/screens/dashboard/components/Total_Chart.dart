@@ -3,18 +3,18 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:vision_dashboard/constants.dart';
 
-class BarChartSample4 extends StatefulWidget {
-  BarChartSample4({super.key,required this.index});
+class TotalBarChart extends StatefulWidget {
+  TotalBarChart({super.key,required this.index});
 
   final Color dark = Colors.black.withBlue(100);
   final Color normal = primaryColor.withAlpha(1);
   final Color light = primaryColor;
 final int index;
   @override
-  State<StatefulWidget> createState() => BarChartSample4State();
+  State<StatefulWidget> createState() => TotalBarChartState();
 }
 
-class BarChartSample4State extends State<BarChartSample4> {
+class TotalBarChartState extends State<TotalBarChart> {
   Widget bottomTitles(double value, TitleMeta meta) {
    final  style = Styles.headLineStyle4;
     String text;
@@ -146,10 +146,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?5568400000:widget.index==1?10000000000:15564800000,
+            toY: widget.index==0?5568400:widget.index==1?10000:15564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 5568400000:widget.index==1?10000000000:15564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 5568400:widget.index==1?10000:15564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -163,10 +163,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?4568400000:widget.index==1?12000000000:16564800000,
+            toY: widget.index==0?4568400:widget.index==1?12000:16564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 4568400000:widget.index==1?12000000000:16564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 4568400:widget.index==1?12000:16564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -180,10 +180,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?1568400000:widget.index==1?14000000000:19564800000,
+            toY: widget.index==0?1568400:widget.index==1?14000:19564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 1568400000:widget.index==1?14000000000:19564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 1568400:widget.index==1?14000:19564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -197,10 +197,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?1568400000:widget.index==1?10000000000:18564800000,
+            toY: widget.index==0?1568400:widget.index==1?10000:18564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 1568400000:widget.index==1?10000000000:18564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 1568400:widget.index==1?10000:18564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -214,10 +214,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?5568400000:widget.index==1?5568400000:13564800000,
+            toY: widget.index==0?556840:widget.index==1?65684:2356480,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 5568400000:widget.index==1?5568400000:13564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 556840:widget.index==1?65684:2356480,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -231,10 +231,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?2568400000:widget.index==1?7000000000:13000000000,
+            toY: widget.index==0?256840:widget.index==1?70000:1300000,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 5568400000:widget.index==1?10000000000:13000000000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 256840:widget.index==1?70000:1300000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -248,10 +248,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?1522740000:widget.index==1?2000000000:5564800000,
+            toY: widget.index==0?152270:widget.index==1?20000:5564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 1522740000:widget.index==1?2000000000:5564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 152270:widget.index==1?20000:5564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -265,10 +265,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?7568400000:widget.index==1?14000000000:19564800000,
+            toY: widget.index==0?7568400:widget.index==1?14000:1956480,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 7568400000:widget.index==1?14000000000:19564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 7568400:widget.index==1?14000:1956480,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -282,10 +282,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?568400000:widget.index==1?19000000000:19564800000,
+            toY: widget.index==0?568400:widget.index==1?19000:19564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 568400000:widget.index==1?19000000000:19564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 568400:widget.index==1?19000:19564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -299,10 +299,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?5010000000:widget.index==1?11000000000:18564800000,
+            toY: widget.index==0?5010000:widget.index==1?11000:18564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 5010000000:widget.index==1?11000000000:18564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 5010000:widget.index==1?11000:18564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -316,10 +316,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?568400000:widget.index==1?4000000000:9564800000,
+            toY: widget.index==0?568400:widget.index==1?4000:9564800,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 568400000:widget.index==1?4000000000:9564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 568400:widget.index==1?4000:9564800,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),
@@ -333,10 +333,10 @@ class BarChartSample4State extends State<BarChartSample4> {
         barsSpace: barsSpace,
         barRods: [
           BarChartRodData(
-            toY: widget.index==0?168400000:widget.index==1?9564800000:11564800000,
+            toY: widget.index==0?168400:widget.index==1?55648:1156480,
             rodStackItems: [
 
-              BarChartRodStackItem(0,widget.index==0? 168400000:widget.index==1?9564800000:11564800000,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
+              BarChartRodStackItem(0,widget.index==0? 168400:widget.index==1?55648:1156480,widget.index==0? widget.dark:widget.index==1?widget.normal:widget.light),
 
             ],
             borderRadius: BorderRadius.circular(4),

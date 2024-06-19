@@ -3,29 +3,22 @@ import 'dart:math';
 import 'package:vision_dashboard/chart/Liner_Chart.dart';
 import 'package:vision_dashboard/models/MyFiles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_Chart.dart';
 
 import '../../../constants.dart';
 
 class BarChartWidget extends StatefulWidget {
-   BarChartWidget({
+  BarChartWidget({
     Key? key,
-
-     required this.index,
-
-   }) : super(key: key);
-
-
+    required this.index,
+  }) : super(key: key);
 
   @override
   State<BarChartWidget> createState() => _BarChartWidgetState();
-   int index=2;
+  int index = 2;
 }
 
 class _BarChartWidgetState extends State<BarChartWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,24 +31,22 @@ class _BarChartWidgetState extends State<BarChartWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-        SizedBox(height: defaultPadding,),
-
+          SizedBox(
+            height: defaultPadding,
+          ),
           SizedBox(
               height: 400,
-width: double.infinity,
-              child: BarChartSample4(index: widget.index,)),
-
+              width: double.infinity,
+              child: TotalBarChart(
+                index: widget.index,
+              )),
           Row(
             children: [
               const Spacer(),
-
-
               GestureDetector(
-                onTap:(){
-                  widget.index=2;
-                  setState(() {
-
-                  });
+                onTap: () {
+                  widget.index = 2;
+                  setState(() {});
                 },
                 child: Row(
                   children: [
@@ -64,7 +55,7 @@ width: double.infinity,
                       width: 20,
                       decoration: BoxDecoration(
                           border:
-                          Border.all(color: Colors.black.withOpacity(0.2)),
+                              Border.all(color: Colors.black.withOpacity(0.2)),
                           color: primaryColor,
                           borderRadius: BorderRadius.circular(5)),
                     ),
@@ -80,11 +71,9 @@ width: double.infinity,
               ),
               const Spacer(),
               GestureDetector(
-                onTap:(){
-                  widget.index=1;
-                  setState(() {
-
-                  });
+                onTap: () {
+                  widget.index = 1;
+                  setState(() {});
                 },
                 child: Row(
                   children: [
@@ -93,7 +82,7 @@ width: double.infinity,
                       width: 20,
                       decoration: BoxDecoration(
                           border:
-                          Border.all(color: Colors.black.withOpacity(0.2)),
+                              Border.all(color: Colors.black.withOpacity(0.2)),
                           color: Colors.cyan,
                           borderRadius: BorderRadius.circular(5)),
                     ),
@@ -109,11 +98,9 @@ width: double.infinity,
               ),
               const Spacer(),
               GestureDetector(
-                onTap:(){
-                  widget.index=0;
-                  setState(() {
-
-                  });
+                onTap: () {
+                  widget.index = 0;
+                  setState(() {});
                 },
                 child: Row(
                   children: [
@@ -122,8 +109,8 @@ width: double.infinity,
                       width: 20,
                       decoration: BoxDecoration(
                           border:
-                          Border.all(color: Colors.black.withOpacity(0.2)),
-                          color:Colors.black.withBlue(100),
+                              Border.all(color: Colors.black.withOpacity(0.2)),
+                          color: Colors.black.withBlue(100),
                           borderRadius: BorderRadius.circular(5)),
                     ),
                     const SizedBox(
@@ -136,7 +123,6 @@ width: double.infinity,
                   ],
                 ),
               ),
-
               const Spacer(),
             ],
           ),

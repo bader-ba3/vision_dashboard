@@ -39,6 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 runSpacing: 25,
                 spacing: 0,
                 children: [
+
                   InkWell(
                       onHover: (value) {
                         print(value);
@@ -49,13 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       },
                       child: SquareWidget("الاجمالي", "155,684.00",
                           primaryColor, "assets/budget.png")),
-                  InkWell(
-                      onTap: () {
-                        index = 0;
-                        setState(() {});
-                      },
-                      child: SquareWidget("المصروف", "55,684.00",
-                          blueColor, "assets/poor.png")),
+
                   InkWell(
                       onTap: () {
                         index = 1;
@@ -65,11 +60,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Colors.cyan, "assets/profit.png")),
                   InkWell(
                       onTap: () {
-                        index = 1;
+                        index = 0;
                         setState(() {});
                       },
-                      child: SquareWidget("العام الدراسي", "2023/2024",
-                          Colors.black, "assets/books.png")),
+                      child: SquareWidget("المصروف", "55,684.00",
+                          blueColor, "assets/poor.png")),
+                  SquareWidget("العام الدراسي", "2023/2024",
+                      Colors.black, "assets/books.png"),
                 ],
               ),
             ),
