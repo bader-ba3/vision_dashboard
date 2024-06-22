@@ -26,15 +26,13 @@ class StudentModel {
      this.studentName,
      this.studentNumber,
      this.studentID,
-    // required this.address,
-    // required this.nationality,
+
      this.gender,
      this.StudentBirthDay,
      this.grade,
-    // required this.teachers,
-    // required this.exams,
+
      this.startDate,
-    // required this.grades,
+
      this.eventRecords,
      this.bus,
      this.parentModel,
@@ -45,19 +43,13 @@ class StudentModel {
     'studentName': studentName,
     'studentNumber': studentNumber,
     'studentID': studentID,
-    // 'address': address,
-    // 'nationality': nationality,
     'gender': gender,
     'age': StudentBirthDay,
     'grade': grade,
-    // 'teachers': teachers,
-    // 'exams': exams!.map((exam) => exam.toJson()).toList(),
     'startDate': startDate!.toIso8601String(),
-    // 'grades': grades,
     'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
     'parentModel': parentModel!.toJson(),
     'bus': bus,
-    // 'guardian': guardian,
   };
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -66,17 +58,10 @@ class StudentModel {
       studentNumber: json['studentNumber'],
       studentID: json['studentID'],
       parentModel: ParentModel.fromJson(json['parentModel']),
-      // address: json['address'],
-      // nationality: json['nationality'],
       gender: json['gender'],
       StudentBirthDay: json['age'],
       grade: json['grade'],
-      // teachers: List<String>.from(json['teachers']),
-      // exams: (json['exams'] as List)
-      //     .map((exam) => ExamModel.fromJson(exam))
-      //     .toList(),
       startDate: DateTime.parse(json['startDate']),
-      // grades: Map<String, double>.from(json['grades']),
       eventRecords: (json['eventRecords'] as List)
           .map((event) => EventRecordModel.fromJson(event))
           .toList(),

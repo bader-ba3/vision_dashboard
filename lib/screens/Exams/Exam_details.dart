@@ -17,30 +17,6 @@ class ExamInputForm extends StatefulWidget {
 }
 
 class _ExamInputFormState extends State<ExamInputForm> {
-/*  void _openImagePicker() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: [
-        'jpg',
-        'jpeg',
-        'png'
-      ], // تحديد امتدادات الصور المسموح بها
-    );
-
-    if (result != null) {
-      setState(() {
-        _questionImageFile = File(result.files.single.path!);
-      });
-    } else {
-      Fluttertoast.showToast(
-        msg: "لم يتم اختيار أي ملف!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-    }
-  }*/
 
   List<String> _selectedSection = []; // قائمة الطلاب المُحددين
 
