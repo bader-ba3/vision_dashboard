@@ -4,19 +4,13 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 
 import 'Employee_Model.dart';
-import 'Parent_Model.dart';
 import 'event_record_model.dart';
 
 class StudentModel {
   String? studentName,studentID,gender,StudentBirthDay,grade,parentId,section,startDate;
   String? studentNumber;
   bool? available=true;
-  // String? address;
-  // String? nationality;
-  // List<String>? teachers;
-  // List<ExamModel>? exams;
-  // ParentModel? parentModel;
-  // Map<String, double>? grades;
+
   List<EventRecordModel>? eventRecords;
   String? bus;
   // String? guardian;

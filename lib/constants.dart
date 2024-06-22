@@ -23,6 +23,7 @@ String generateId(String type) {
 }
 const String parentsCollection='Parents';
 const String studentCollection='Students';
+const String storeCollection='Store';
 const String examsCollection='Exams';
 class Styles {
 

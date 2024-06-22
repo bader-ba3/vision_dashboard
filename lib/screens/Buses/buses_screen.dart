@@ -5,12 +5,9 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../models/Bus_Model.dart';
 import '../../models/RecentFile.dart';
-import '../../responsive.dart';
-import 'Buses_Detailes.dart';
 import 'line_chart_bus.dart';
 
 class BusesScreen extends StatelessWidget {
@@ -175,8 +172,8 @@ class BusesScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      squrWidget("Bus waiting on station", "100"),
-                      squrWidget("current Trip", "150"),
+                      squareWidget("Bus waiting on station", "100"),
+                      squareWidget("current Trip", "150"),
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: Container(
@@ -278,10 +275,10 @@ class BusesScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      squrWidget("available Bus working", "50"),
-                      squrWidget("stopped Bus", "300"),
-                      squrWidget("Maintenance Bus", "300"),
-                      squrWidget("Total Ticket Today", "2000"),
+                      squareWidget("available Bus working", "50"),
+                      squareWidget("stopped Bus", "300"),
+                      squareWidget("Maintenance Bus", "300"),
+                      squareWidget("Total Ticket Today", "2000"),
                     ],
                   ),
                 ),
@@ -397,7 +394,7 @@ class BusesScreen extends StatelessWidget {
     );
   }
 
-  Widget squrWidget(title, body) {
+  Widget squareWidget(title, body) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
@@ -465,7 +462,7 @@ class BusesScreen extends StatelessWidget {
     );
   }
 
-  List listRecentTrip = [
+final  List listRecentTrip = [
     RecentFile(
       recId: "assets/bus_icon.png",
       provider: "Rak -> Ajman",
@@ -538,7 +535,7 @@ class BusesScreen extends StatelessWidget {
         )),
         DataCell(ElevatedButton(
           style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(Colors.blue),
+            foregroundColor: WidgetStatePropertyAll(Colors.blue),
           ),
           onPressed: () {
 
@@ -549,7 +546,7 @@ class BusesScreen extends StatelessWidget {
     );
   }
 
-  List<({String driverName, String a, String b, String status})> listWorkingDriver = [
+final  List<({String driverName, String a, String b, String status})> listWorkingDriver = [
     (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Stopped"),
     (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Working"),
     (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Working"),
@@ -557,7 +554,7 @@ class BusesScreen extends StatelessWidget {
     (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Working"),
   ];
 
-  List<PieChartSectionData> paiChartSelectionData = [
+ final List<PieChartSectionData> paiChartSelectionData = [
     PieChartSectionData(
       color: Colors.teal.withOpacity(0.5),
       value: 50,
@@ -578,7 +575,7 @@ class BusesScreen extends StatelessWidget {
     ),
   ];
 
-  List<PieChartSectionData> BusTicketChartSelectionData = [
+ final List<PieChartSectionData> BusTicketChartSelectionData = [
     PieChartSectionData(
       color: Colors.green,
       value: 85,

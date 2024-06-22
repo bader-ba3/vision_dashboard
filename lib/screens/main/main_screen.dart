@@ -5,6 +5,7 @@ import 'package:vision_dashboard/screens/Buses/Buses_View.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_View.dart';
 import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
+import 'package:vision_dashboard/screens/Store/Store_View.dart';
 import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
 import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 import 'package:vision_dashboard/screens/classes/classes_view.dart';
@@ -94,6 +95,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     name: "ادارة الحسابات",
     img: "assets/icons/menu_setting.svg",
     widget: AccountManagementScreen(),
+    ),
+    (
+    name: "المستودع",
+    img: "assets/icons/garage.svg",
+    widget: StoreView(),
     ),
   ];
 
