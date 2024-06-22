@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/models/event_record_model.dart';
+import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
@@ -80,8 +82,9 @@ class _StudentInputFormState extends State<StudentInputForm> {
               child: Wrap(
                 clipBehavior: Clip.hardEdge,
                 direction: Axis.horizontal,
+                alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 50,
-                spacing: 25,
+                // spacing: 25,
                 children: <Widget>[
                   CustomTextField(
                       controller: studentNameController, title: "اسم الطالب"),
@@ -102,18 +105,20 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomTextField(
                       controller: teachersController, title: 'المعلمين'),
                   CustomTextField(controller: busController, title: 'الحافلة'),
-                  CustomTextField(
-                      controller: guardianController, title: 'ولي الأمر'),
+
+                  CustomDropDown(value: "_payWay", listValue: Get.find<ParentsViewModel>().parentMap.values.map((e) => e.fullName!,).toList(),label: 'ولي الأمر',onChange: (value) {
+                    // guardianController.text=value.toString();
+                    if (value != null) {
+                    guardianController.text=  Get.find<ParentsViewModel>().parentMap.values.where((element) => element.fullName==value,).first.fullName!;}
+                  },),
                   CustomDropDown(value: _payWay, listValue: _payWays,label: "طرق الدفع",onChange: (selectedWay) {
 
                     if (selectedWay != null) {
-                      setState(() {
-
-                      });
                       _payWay = selectedWay;
                     }
                   },),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomTextField(
                           controller: startDateController,
@@ -140,7 +145,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         'المبلغ',
@@ -160,6 +165,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   ),
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         SizedBox(
                           width: Get.width / 4.5,
@@ -189,7 +195,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             items: eventController.allEvents.values
                                 .toList()
                                 .where(
-                                  (element) => element.role == Const.eventTypeEmployee,
+                                  (element) => element.role == Const.eventTypeStudent,
                             )
                                 .map((e) => DropdownMenuItem(
                               child: Text(e.name),
@@ -217,7 +223,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ],
                     );
                   }),
-
                   SizedBox(height: 16.0),
                 ],
               ),
@@ -228,12 +233,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
               height: defaultPadding,
             ),
             Container(
-              padding: EdgeInsets.all(0.0),
               alignment: Alignment.center,
-              // decoration: BoxDecoration(
-              //     color: secondaryColor,
-              //     borderRadius: BorderRadius.circular(15)
-              // ),
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
@@ -274,6 +274,28 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   );
                 },
               ),
+            ),
+            SizedBox(
+              height: defaultPadding,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
+              onPressed: () {
+                final student = StudentModel(
+                  studentID: generateId("STD"),
+                  parentId: guardianController.text,
+                  grade: "",
+                  studentNumber: studentNumberController.text,
+                  StudentBirthDay: ageController.text,
+                  studentName: studentNameController.text,
+                  gender: genderController.text,
+                  bus: busController.text,
+                  startDate: DateTime.parse(startDateController.text),
+                  eventRecords: eventRecords,
+                );
+                print('بيانات الموظف: $student');
+              },
+              child: Text('إرسال'),
             ),
           ],
         ),

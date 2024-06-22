@@ -63,7 +63,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                   dataRowItem(size / data.length, j.grade.toString()),
                                   dataRowItem(size / data.length, j.startDate.toString().split(" ")[0]),
                                   dataRowItem(size / data.length, j.bus.toString()),
-                                  dataRowItem(size / data.length, j.parentModel!.parentID.toString()),
+                                  dataRowItem(size / data.length, j.parentId.toString()),
                                 ]),
                             ]),
                       ),

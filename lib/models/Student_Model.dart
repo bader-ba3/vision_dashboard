@@ -8,14 +8,14 @@ import 'Parent_Model.dart';
 import 'event_record_model.dart';
 
 class StudentModel {
-  String? studentName,studentID,gender,StudentBirthDay,grade;
+  String? studentName,studentID,gender,StudentBirthDay,grade,parentId;
   String? studentNumber;
   bool? available=true;
   // String? address;
   // String? nationality;
   // List<String>? teachers;
   // List<ExamModel>? exams;
-  ParentModel? parentModel;
+  // ParentModel? parentModel;
   DateTime? startDate;
   // Map<String, double>? grades;
   List<EventRecordModel>? eventRecords;
@@ -35,7 +35,7 @@ class StudentModel {
 
      this.eventRecords,
      this.bus,
-     this.parentModel,
+     this.parentId,
     this.available
   });
 
@@ -48,7 +48,7 @@ class StudentModel {
     'grade': grade,
     'startDate': startDate!.toIso8601String(),
     'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
-    'parentModel': parentModel!.toJson(),
+    'parentId': parentId!,
     'bus': bus,
   };
 
@@ -57,7 +57,7 @@ class StudentModel {
       studentName: json['studentName'],
       studentNumber: json['studentNumber'],
       studentID: json['studentID'],
-      parentModel: ParentModel.fromJson(json['parentModel']),
+      parentId:json['parentId'],
       gender: json['gender'],
       StudentBirthDay: json['age'],
       grade: json['grade'],
@@ -88,7 +88,7 @@ List<StudentModel> generateRandomStudents(int count) {
       // address: faker.address.streetAddress(),
       // nationality: faker.address.country(),
       gender: random.nextBool() ? 'Male' : 'Female',
-      parentModel: generateRandomParents(1).first,
+      parentId: faker.person.name(),
       StudentBirthDay: (random.nextInt(10) + 10).toString(),
       grade: 'Grade ${random.nextInt(12) + 1}',
       available: true,

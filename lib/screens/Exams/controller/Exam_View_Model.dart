@@ -15,6 +15,20 @@ class ExamViewModel extends GetxController{
   Map<String, ExamModel> _examMap = {};
 
   Map<String, ExamModel> get examMap => _examMap;
+  bool addMarks=false;
+
+
+  changeExamScreen(){
+    addMarks=!addMarks;
+    update();
+  }
+
+  addMarkExam(Map marks,String examId)async{
+    await  examCollectionRef
+        .doc(examId)
+        .set({"marks":marks}, SetOptions(merge: true));
+    update();
+  }
 
   getAllExam()async {
     await   examCollectionRef.snapshots().listen((value) {

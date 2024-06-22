@@ -7,24 +7,29 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.controller,
-    required this.title,  this. keyboardType,this.enable
+    required this.title,  this. keyboardType,this.enable,this.hint,this.onChange
   });
 
   final TextEditingController controller;
   final String title;
+  final String? hint;
   final TextInputType? keyboardType;
   final bool? enable;
-
+  final Function(String? value)? onChange;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: Get.width/4.5,
       child:TextFormField(
+        onChanged: onChange,
         keyboardType: keyboardType,
         controller: controller,
         enabled: enable,
+
         decoration: InputDecoration(
           labelText: title,
+          hintText: hint,
+
           labelStyle: TextStyle(color: primaryColor),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: primaryColor),

@@ -144,30 +144,26 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       ],
                     );
                   }),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
-                        onPressed: () {
-                          final employee = EmployeeModel(
-                            fullName: fullNameController.text,
-                            mobileNumber: mobileNumberController.text,
-                            address: addressController.text,
-                            nationality: nationalityController.text,
-                            gender: genderController.text,
-                            age: ageController.text,
-                            jobTitle: jobTitleController.text,
-                            salary: salaryController.text,
-                            contract: contractController.text,
-                            bus: busController.text,
-                            startDate: DateTime.parse(startDateController.text),
-                            eventRecords: eventRecords,
-                          );
-                          print('بيانات الموظف: $employee');
-                        },
-                        child: Text('إرسال'),
-                      ),
-                    ],
+                  ElevatedButton(
+                    style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
+                    onPressed: () {
+                      final employee = EmployeeModel(
+                        fullName: fullNameController.text,
+                        mobileNumber: mobileNumberController.text,
+                        address: addressController.text,
+                        nationality: nationalityController.text,
+                        gender: genderController.text,
+                        age: ageController.text,
+                        jobTitle: jobTitleController.text,
+                        salary: salaryController.text,
+                        contract: contractController.text,
+                        bus: busController.text,
+                        startDate: DateTime.parse(startDateController.text),
+                        eventRecords: eventRecords,
+                      );
+                      print('بيانات الموظف: $employee');
+                    },
+                    child: Text('إرسال'),
                   ),
                   SizedBox(height: 16.0),
                 ],

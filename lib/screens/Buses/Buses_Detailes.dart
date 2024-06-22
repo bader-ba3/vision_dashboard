@@ -323,7 +323,7 @@ generateRandomEmployees(1).first,
         DataCell(Text(student.studentName.toString())),
         DataCell(Text(student.studentNumber.toString())),
         DataCell(Text(student.startDate!.toIso8601String())),
-        DataCell(Text(student.parentModel!.fullName!)),
+        DataCell(Text(student.parentId!)),
         DataCell(Checkbox(
           fillColor: WidgetStateProperty.all(primaryColor),
           checkColor: Colors.white,
