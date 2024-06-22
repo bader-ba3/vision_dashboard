@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
@@ -18,7 +19,7 @@ class StudentScreen extends StatefulWidget {
 class _StudentScreenState extends State<StudentScreen> {
   final List<StudentModel> students = generateRandomStudents(10);
   final ScrollController _scrollController = ScrollController();
-  List data =   ["اسم الطالب","رقم الطالب","العنوان","الجنس","العمر","الصف","المعلمين","تاريخ البداية","الحافلة","ولي الأمر"] ;
+  List data =   ["اسم الطالب","رقم الطالب","الجنس","التولد","الصف","تاريخ البداية","الحافلة","ولي الأمر"] ;
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +36,9 @@ class _StudentScreenState extends State<StudentScreen> {
                 color: secondaryColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "كل الطلاب",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  SizedBox(
+              child: GetBuilder<StudentViewModel>(
+                builder: (controller) {
+                  return SizedBox(
                     width: size+60,
                     child: Scrollbar(
                       controller: _scrollController,
@@ -52,24 +48,23 @@ class _StudentScreenState extends State<StudentScreen> {
                         child: DataTable(columnSpacing: 0, columns:
                         List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
                             rows: [
-                              for (var j in students)
+                              for (var student in controller.studentMap.values)
                                 DataRow(cells: [
-                                  dataRowItem(size / data.length, j.studentName.toString()),
-                                  dataRowItem(size / data.length, j.studentNumber.toString()),
-                                  dataRowItem(size / data.length, j.studentID.toString()),
-                                  dataRowItem(size / data.length, j.gender.toString()),
-                                  dataRowItem(size / data.length, j.StudentBirthDay.toString()),
-                                  dataRowItem(size / data.length, j.grade.toString()),
-                                  dataRowItem(size / data.length, j.grade.toString()),
-                                  dataRowItem(size / data.length, j.startDate.toString().split(" ")[0]),
-                                  dataRowItem(size / data.length, j.bus.toString()),
-                                  dataRowItem(size / data.length, j.parentId.toString()),
+                                  dataRowItem(size / data.length, student.studentName.toString()),
+                                  dataRowItem(size / data.length, student.studentNumber.toString()),
+                                  dataRowItem(size / data.length, student.gender.toString()),
+                                  dataRowItem(size / data.length, student.StudentBirthDay.toString()),
+                                  dataRowItem(size / data.length, student.grade.toString()),
+
+                                  dataRowItem(size / data.length, student.startDate.toString().split(" ")[0]),
+                                  dataRowItem(size / data.length, student.bus.toString()),
+                                  dataRowItem(size / data.length, student.parentId.toString()),
                                 ]),
                             ]),
                       ),
                     ),
-                  ),
-                ],
+                  );
+                }
               ),
             ),
           );

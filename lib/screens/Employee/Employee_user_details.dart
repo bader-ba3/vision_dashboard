@@ -158,7 +158,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                         salary: salaryController.text,
                         contract: contractController.text,
                         bus: busController.text,
-                        startDate: DateTime.parse(startDateController.text),
+                        startDate: startDateController.text,
                         eventRecords: eventRecords,
                       );
                       print('بيانات الموظف: $employee');
@@ -179,10 +179,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
             Container(
               padding: EdgeInsets.all(0.0),
               alignment: Alignment.center,
-              // decoration: BoxDecoration(
-              //     color: secondaryColor,
-              //     borderRadius: BorderRadius.circular(15)
-              // ),
+
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,

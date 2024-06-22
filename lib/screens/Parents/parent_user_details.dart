@@ -99,8 +99,8 @@ class _ParentInputFormState extends State<ParentInputForm> {
               child: Wrap(
                 clipBehavior: Clip.hardEdge,
                 direction: Axis.horizontal,
+                alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 25,
-                spacing: 25,
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextField(controller: fullNameController, title: 'الاسم الكامل'),
@@ -113,6 +113,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   CustomTextField(controller:emergencyPhoneController , title: 'رقم الطوارئ', keyboardType: TextInputType.number),
                   CustomTextField(controller:workController , title: 'العمل', keyboardType: TextInputType.number),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomTextField(
                           controller: startDateController,
@@ -141,6 +142,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
 
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
 
                         SizedBox(

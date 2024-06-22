@@ -8,7 +8,7 @@ import 'Parent_Model.dart';
 import 'event_record_model.dart';
 
 class StudentModel {
-  String? studentName,studentID,gender,StudentBirthDay,grade,parentId;
+  String? studentName,studentID,gender,StudentBirthDay,grade,parentId,section,startDate;
   String? studentNumber;
   bool? available=true;
   // String? address;
@@ -16,7 +16,6 @@ class StudentModel {
   // List<String>? teachers;
   // List<ExamModel>? exams;
   // ParentModel? parentModel;
-  DateTime? startDate;
   // Map<String, double>? grades;
   List<EventRecordModel>? eventRecords;
   String? bus;
@@ -36,7 +35,8 @@ class StudentModel {
      this.eventRecords,
      this.bus,
      this.parentId,
-    this.available
+    this.available,
+    this.section
   });
 
   Map<String, dynamic> toJson() => {
@@ -46,7 +46,8 @@ class StudentModel {
     'gender': gender,
     'age': StudentBirthDay,
     'grade': grade,
-    'startDate': startDate!.toIso8601String(),
+    'section': section,
+    'startDate': startDate!,
     'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
     'parentId': parentId!,
     'bus': bus,
@@ -58,10 +59,11 @@ class StudentModel {
       studentNumber: json['studentNumber'],
       studentID: json['studentID'],
       parentId:json['parentId'],
+      section:json['section'],
       gender: json['gender'],
       StudentBirthDay: json['age'],
       grade: json['grade'],
-      startDate: DateTime.parse(json['startDate']),
+      startDate:json['startDate'],
       eventRecords: (json['eventRecords'] as List)
           .map((event) => EventRecordModel.fromJson(event))
           .toList(),
@@ -72,7 +74,7 @@ class StudentModel {
 
   @override
   String toString() {
-    return 'Student(studentName: $studentName, studentNumber: $studentNumber, address: address, nationality: nationality, gender: $gender, age: $StudentBirthDay, grade: $grade, teachers: teachers, exams: exams, startDate: $startDate,, eventRecords: $eventRecords, bus: $bus, )';
+    return 'Student(studentName: $studentName, studentNumber: $studentNumber, address: address, section: $section, gender: $gender, age: $StudentBirthDay, grade: $grade, teachers: teachers, exams: exams, startDate: $startDate,, eventRecords: $eventRecords, bus: $bus, )';
   }
 }
 List<StudentModel> generateRandomStudents(int count) {
@@ -85,21 +87,13 @@ List<StudentModel> generateRandomStudents(int count) {
       studentName: faker.person.name(),
       studentNumber: faker.randomGenerator.integer(100000).toString(),
       studentID: faker.randomGenerator.integer(100000).toString(),
-      // address: faker.address.streetAddress(),
-      // nationality: faker.address.country(),
+        section:"الشعبة${random.nextInt(5)}",
       gender: random.nextBool() ? 'Male' : 'Female',
       parentId: faker.person.name(),
       StudentBirthDay: (random.nextInt(10) + 10).toString(),
       grade: 'Grade ${random.nextInt(12) + 1}',
       available: true,
-      // teachers: List<String>.generate(5, (_) => faker.person.name()),
-      // exams: generateRandomExams(3),
-      startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023),
-      // grades: {
-      //   'Math': random.nextDouble() * 100,
-      //   'Science': random.nextDouble() * 100,
-      //   'English': random.nextDouble() * 100,
-      // },
+      startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023).toString(),
       eventRecords: generateRandomEvents(5),
       bus: 'Bus ${random.nextInt(10)>5? 'Yes':'NO'}',
       // guardian: faker.person.name(),

@@ -35,10 +35,7 @@ class _EmployeeUsersScreenState extends State<EmployeeUsersScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "كل الموظفون",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+
                   SizedBox(
                     width: size+60,
                     child: Scrollbar(
@@ -46,7 +43,7 @@ class _EmployeeUsersScreenState extends State<EmployeeUsersScreen> {
                       child: SingleChildScrollView(
                         controller: _scrollController,
                         scrollDirection: Axis.horizontal,
-                        child: DataTable(columnSpacing: 0, columns:
+                        child: DataTable( columns:
                         List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
                             rows: [
                               for (var employees in generateRandomEmployees(20))

@@ -6,8 +6,8 @@ import 'event_record_model.dart';
 
 class EmployeeModel {
   String? fullName, mobileNumber, address, nationality, gender, age, jobTitle,
-      salary, contract, bus;
-  DateTime? startDate;
+      salary, contract, bus,startDate;
+
 bool? available=true;
   List<EventRecordModel>? eventRecords;
 
@@ -41,7 +41,7 @@ bool? available=true;
         'contract': contract,
         'bus': bus,
         if(startDate != null)
-          'startDate': startDate!.toIso8601String(),
+          'startDate': startDate!,
         if(eventRecords!.isNotEmpty)
           'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
       };
@@ -59,7 +59,7 @@ bool? available=true;
       salary: json['salary'],
       contract: json['contract'],
       bus: json['bus'],
-      startDate: DateTime.parse(json['startDate']),
+      startDate:json['startDate'],
       eventRecords: (json['eventRecords'] as List)
           .map((event) => EventRecordModel.fromJson(event))
           .toList(),
@@ -100,7 +100,7 @@ bool? available=true;
         salary: ((random.nextInt(9000) + 1000).toDouble()).toString(),
         contract: contracts[random.nextInt(contracts.length)],
         bus: buses[random.nextInt(buses.length)],
-        startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023),
+        startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023).toString(),
         eventRecords: generateRandomEvents(5),
       ));
     }

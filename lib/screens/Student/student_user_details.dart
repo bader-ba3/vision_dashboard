@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/models/event_record_model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
@@ -30,7 +31,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final studentNameController = TextEditingController();
   final studentNumberController = TextEditingController();
   final addressController = TextEditingController();
-  final nationalityController = TextEditingController();
+  final sectionController = TextEditingController();
   final genderController = TextEditingController();
   final ageController = TextEditingController();
   final gradeController = TextEditingController();
@@ -49,7 +50,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     studentNameController.dispose();
     studentNumberController.dispose();
     addressController.dispose();
-    nationalityController.dispose();
+    sectionController.dispose();
     genderController.dispose();
     ageController.dispose();
     gradeController.dispose();
@@ -93,23 +94,15 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       title: 'رقم الطالب',
                       keyboardType: TextInputType.phone),
                   CustomTextField(
-                      controller: addressController, title: 'العنوان'),
-                  CustomTextField(
-                      controller: nationalityController, title: 'الجنسية'),
+                      controller: sectionController, title: 'الشعبة'),
                   CustomTextField(controller: genderController, title: 'الجنس'),
-                  CustomTextField(
-                      controller: ageController,
-                      title: 'العمر',
-                      keyboardType: TextInputType.number),
-                  CustomTextField(controller: gradeController, title: 'الصف'),
-                  CustomTextField(
-                      controller: teachersController, title: 'المعلمين'),
-                  CustomTextField(controller: busController, title: 'الحافلة'),
 
+                  CustomTextField(controller: gradeController, title: 'الصف'),
+                  CustomTextField(controller: busController, title: 'الحافلة'),
                   CustomDropDown(value: "_payWay", listValue: Get.find<ParentsViewModel>().parentMap.values.map((e) => e.fullName!,).toList(),label: 'ولي الأمر',onChange: (value) {
                     // guardianController.text=value.toString();
                     if (value != null) {
-                    guardianController.text=  Get.find<ParentsViewModel>().parentMap.values.where((element) => element.fullName==value,).first.fullName!;}
+                    guardianController.text=  Get.find<ParentsViewModel>().parentMap.values.where((element) => element.fullName==value,).first.id!;}
                   },),
                   CustomDropDown(value: _payWay, listValue: _payWays,label: "طرق الدفع",onChange: (selectedWay) {
 
@@ -134,6 +127,33 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                 .then((date) {
                               if (date != null) {
                                 startDateController.text =
+                                    date.toString().split(" ")[0];
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            Icons.date_range_outlined,
+                            color: primaryColor,
+                          ))
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextField(
+                          controller: ageController,
+                          title: 'التولد',
+                          enable: false,
+                          keyboardType: TextInputType.datetime),
+                      IconButton(
+                          onPressed: () {
+                            showDatePicker(
+                                    context: context,
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2024))
+                                .then((date) {
+                              if (date != null) {
+                                ageController.text =
                                     date.toString().split(" ")[0];
                               }
                             });
@@ -278,24 +298,30 @@ class _StudentInputFormState extends State<StudentInputForm> {
             SizedBox(
               height: defaultPadding,
             ),
-            ElevatedButton(
-              style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
-              onPressed: () {
-                final student = StudentModel(
-                  studentID: generateId("STD"),
-                  parentId: guardianController.text,
-                  grade: "",
-                  studentNumber: studentNumberController.text,
-                  StudentBirthDay: ageController.text,
-                  studentName: studentNameController.text,
-                  gender: genderController.text,
-                  bus: busController.text,
-                  startDate: DateTime.parse(startDateController.text),
-                  eventRecords: eventRecords,
+            GetBuilder<StudentViewModel>(
+              builder: (controller) {
+                return ElevatedButton(
+                  style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
+                  onPressed: () {
+                    final student = StudentModel(
+                      studentID: generateId("STD"),
+                      parentId: guardianController.text,
+                      grade: "",
+                      section: sectionController.text,
+                      studentNumber: studentNumberController.text,
+                      StudentBirthDay: ageController.text,
+                      studentName: studentNameController.text,
+                      gender: genderController.text,
+                      bus: busController.text,
+                      startDate: startDateController.text,
+                      eventRecords: eventRecords,
+                    );
+                    controller.addStudent(student);
+                    print('بيانات الموظف: $student');
+                  },
+                  child: Text('إرسال'),
                 );
-                print('بيانات الموظف: $student');
-              },
-              child: Text('إرسال'),
+              }
             ),
           ],
         ),

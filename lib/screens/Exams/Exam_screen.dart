@@ -149,42 +149,33 @@ class _ExamScreenState extends State<ExamScreen> {
                       color: secondaryColor,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "كل الامتحانات",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        SizedBox(
-                          width: size+60,
-                          child: Scrollbar(
-                            controller: _scrollController,
-                            child: SingleChildScrollView(
-                              controller: _scrollController,
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(columnSpacing: 0, columns:
-                              List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
-                                  rows: [
-                                    for (var exam in examController.examMap.values)
-                                      DataRow(cells: [
-                                        dataRowItem(size / data.length, exam.subject.toString()),
-                                        dataRowItem(size / data.length, exam.professor.toString()),
-                                        dataRowItem(size / data.length, exam.date!.toString().split(" ")[0]),
-                                        dataRowItem(size / data.length, 10.toString()),
-                                        dataRowItem(size / data.length, '0'),
-                                        dataRowItem(size / data.length, "عرض",color: Colors.blue,onTap: (){}),
-                                        dataRowItem(size / data.length, "اضافة",color: Colors.teal,onTap: (){
-                                         examModel=exam;
-                                          examController.changeExamScreen();
-                                        }),
+                    child: SizedBox(
+                      width: size+60,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(columnSpacing: 0, columns:
+                          List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                              rows: [
+                                for (var exam in examController.examMap.values)
+                                  DataRow(cells: [
+                                    dataRowItem(size / data.length, exam.subject.toString()),
+                                    dataRowItem(size / data.length, exam.professor.toString()),
+                                    dataRowItem(size / data.length, exam.date!.toString().split(" ")[0]),
+                                    dataRowItem(size / data.length, exam.marks!.keys.length.toString()),
+                                    dataRowItem(size / data.length, 'لم يصحح بعد'),
+                                    dataRowItem(size / data.length, "عرض",color: Colors.blue,onTap: (){}),
+                                    dataRowItem(size / data.length, "اضافة",color: Colors.teal,onTap: (){
+                                     examModel=exam;
+                                      examController.changeExamScreen();
+                                    }),
 
-                                      ]),
                                   ]),
-                            ),
-                          ),
+                              ]),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 );
