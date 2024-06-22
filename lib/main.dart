@@ -17,7 +17,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitUp,
   ]);
   runApp(MyApp());
 }
@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
         ),
         canvasColor: secondaryColor,
       ),
-
       home: MainScreen(),
       // home: LoginScreen(),
       // home: LoginScreen(),

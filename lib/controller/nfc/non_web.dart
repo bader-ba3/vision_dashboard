@@ -28,7 +28,7 @@ Future<bool> initNFCWorker(bool isLogin) async {
       if(isLogin){
         accountManagementViewModel.signInUsingNFC(cardId);
       }else{
-        accountManagementViewModel.addTime(cardId);
+        accountManagementViewModel.addTime(cardId: cardId);
       }
     });
   }

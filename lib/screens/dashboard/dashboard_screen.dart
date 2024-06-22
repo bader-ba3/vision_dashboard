@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:vision_dashboard/screens/dashboard/components/pie_Chart.dart';
 
 import '../../constants.dart';
-import 'components/header.dart';
+import '../Widgets/header.dart';
 
 import 'components/Employee_Time_Box.dart';
 import 'components/Employee_Details_Chart.dart';
@@ -25,26 +25,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar:  Header(title: 'الصفحة الرئيسية',),
+      body: SingleChildScrollView(
         primary: false,
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
-            Header(),
-            SizedBox(height: defaultPadding),
             SizedBox(
               width: Get.width,
               child: Wrap(
                 direction: Axis.horizontal,
-                alignment: WrapAlignment.spaceBetween,
+                alignment: MediaQuery.sizeOf(context).width < 800 ?WrapAlignment.center:WrapAlignment.spaceBetween,
                 runSpacing: 25,
                 spacing: 0,
                 children: [
-
                   InkWell(
                       onHover: (value) {
-                        print(value);
                       },
                       onTap: () {
                         index = 2;
@@ -52,7 +49,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       },
                       child: SquareWidget("الاجمالي", "45,426.0",
                           primaryColor, "assets/budget.png")),
-
                   InkWell(
                       onTap: () {
                         index = 1;
@@ -109,7 +105,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     flex: 2,
                     child: Column(
                       children: [
-
                         EmployeeDetailsChart(),
                         SizedBox(height: defaultPadding,),
                         StudentsDetailsChart(),

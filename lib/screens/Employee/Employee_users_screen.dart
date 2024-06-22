@@ -1,208 +1,97 @@
-import 'package:vision_dashboard/models/Employee_Model.dart';
-import 'package:vision_dashboard/responsive.dart';
-import 'package:vision_dashboard/screens/Employee/Employee_user_details.dart';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vision_dashboard/models/Employee_Model.dart';
+import '../../constants.dart';
+import '../Widgets/header.dart';
 
-class EmployeeUsersScreen extends StatelessWidget {
-  EmployeeUsersScreen({super.key});
-  ScrollController _scrollController = ScrollController();
+class EmployeeUsersScreen extends StatefulWidget {
+  const EmployeeUsersScreen({super.key});
+
+  @override
+  State<EmployeeUsersScreen> createState() => _EmployeeUsersScreenState();
+}
+
+class _EmployeeUsersScreenState extends State<EmployeeUsersScreen> {
+  final ScrollController _scrollController = ScrollController();
+  List data =    ["الاسم الكامل","رقم الموبايل","العنوان","الجنسية","الجنس","العمر","الوظيفة","الراتب","العقد","الصفوف","تاريخ البداية","سجل الاحداث","خيارات"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          primary: false,
-          padding: EdgeInsets.all(defaultPadding),
-          child: GetBuilder<HomeViewModel>(builder: (controller) {
-            return Column(
-              children: [
-                Row(
-                  children: [
-                    if (!Responsive.isDesktop(context))
-                      IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: controller.controlMenu,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Text(
-                        "الموظيفين",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                    Expanded(
-                        child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "بحث",
-                        fillColor: secondaryColor,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.all(defaultPadding * 0.75),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: defaultPadding / 2),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: SvgPicture.asset("assets/icons/Search.svg"),
-                          ),
-                        ),
-                      ),
-                    )),
-                  ],
-                ),
-                SizedBox(height: defaultPadding),
-
-
-                Container(
-                  padding: EdgeInsets.all(defaultPadding),
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+      appBar:   Header(title:  'الموظفون',),
+      body: SingleChildScrollView(
+        child: GetBuilder<HomeViewModel>(builder: (controller) {
+          double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen?240:120), 1000)-60;
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              padding: EdgeInsets.all(defaultPadding),
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "كل الموظفون",
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "كل الموظفين",
-                        style: Theme.of(context).textTheme.titleMedium,
+                  SizedBox(
+                    width: size+60,
+                    child: Scrollbar(
+                      controller: _scrollController,
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(columnSpacing: 0, columns:
+                        List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                            rows: [
+                              for (var employees in generateRandomEmployees(20))
+                                DataRow(cells: [
+                                  dataRowItem(size / data.length, employees.fullName.toString()),
+                                  dataRowItem(size / data.length, employees.mobileNumber.toString()),
+                                  dataRowItem(size / data.length, employees.address.toString()),
+                                  dataRowItem(size / data.length, employees.nationality.toString()),
+                                  dataRowItem(size / data.length, employees.gender.toString()),
+                                  dataRowItem(size / data.length, employees.age.toString()),
+                                  dataRowItem(size / data.length, employees.jobTitle.toString()),
+                                  dataRowItem(size / data.length, employees.salary.toString()),
+                                  dataRowItem(size / data.length, employees.contract.toString()),
+                                  dataRowItem(size / data.length, employees.bus.toString()),
+                                  dataRowItem(size / data.length, employees.startDate.toString().split(" ")[0]),
+                                  dataRowItem(size / data.length, "عرض",color: Colors.purpleAccent,onTap: (){}),
+                                  dataRowItem(size / data.length, "حذف",color: Colors.red,onTap: (){
+                                  }),
+                                ]),
+                            ]),
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Scrollbar(
-                          thumbVisibility: true,
-                          controller: _scrollController,
-                          child: SingleChildScrollView(
-                            controller: _scrollController,
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(),
-
-                              showCheckboxColumn: true,
-                              showBottomBorder: true,
-                              // columnSpacing: defaultPadding,
-                              // minWidth: 600,
-                              columns: [
-                                DataColumn(
-                                  label: Text("الاسم الكامل"),
-                                ),
-                                DataColumn(
-                                  label: Text("رقم الموبايل"),
-                                ),
-                                DataColumn(
-                                  label: Text("العنوان"),
-                                ),
-                                DataColumn(
-                                  label: Text("الجنسية "),
-                                ),
-                                DataColumn(
-                                  label: Text("الجنس"),
-                                ),
-                                DataColumn(label: Text("العمر")),
-                                DataColumn(label: Text("الوظيفة")),
-                                DataColumn(label: Text("الراتب")),
-                                DataColumn(label: Text("العقد")),
-                                DataColumn(label: Text("الصفوف")),
-                                DataColumn(label: Text("تاريخ البداية")),
-                                DataColumn(label: Text("سجل الاحداث")),
-                                DataColumn(
-                                  label: Text("خيارات"),
-                                ),
-                              ],
-                              rows: List.generate(
-                                listWorkingDriver.length,
-                                (index) => workingDriverDataRow(
-                                   generateRandomEmployees(20)[index]),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          }),
-        ),
+                ],
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
 
-
-  DataRow workingDriverDataRow(EmployeeModel employeeModel) {
-    return DataRow(
-      cells: [
-        DataCell(Text(employeeModel.fullName.toString())),
-        DataCell(Text(employeeModel.mobileNumber.toString())),
-        DataCell(Text(employeeModel.address.toString())),
-        DataCell(Text(employeeModel.nationality.toString())),
-        DataCell(Text(employeeModel.gender.toString())),
-        DataCell(Text(employeeModel.age.toString())),
-        DataCell(Text(employeeModel.jobTitle.toString())),
-        DataCell(Text(employeeModel.salary.toString())),
-        DataCell(Text(employeeModel.contract.toString())),
-        DataCell(Text(employeeModel.bus.toString())),
-        DataCell(Text(employeeModel.startDate.toString())),
-        DataCell(Text(employeeModel.eventRecords.toString())),
-        DataCell(Row(
-          children: [
-            IconButton(
-              style: ButtonStyle(
-                  // foregroundColor: MaterialStatePropertyAll(primaryColor),
-                  ),
-              onPressed: () {
-                // Get.to(()=>UserDetailsScreen(record:record));
-              },
-              icon: Icon(
-                Icons.remove_red_eye_outlined,
-                color: primaryColor,
-              ),
-            ),
-            IconButton(
-              style: ButtonStyle(
-                  // foregroundColor: MaterialStatePropertyAll(primaryColor),
-                  ),
-              onPressed: () {
-                // Get.to(()=>UserDetailsScreen(record:record));
-              },
-              icon: Icon(
-                Icons.mode_edit_outlined,
-                color: primaryColor,
-              ),
-            ),
-            IconButton(
-              style: ButtonStyle(
-                  // foregroundColor: MaterialStatePropertyAll(primaryColor),
-                  ),
-              onPressed: () {},
-              icon: Icon(
-                Icons.delete_outline_outlined,
-                color: primaryColor,
-              ),
-            ),
-          ],
-        )),
-      ],
+  dataRowItem(size, text, {onTap, color}) {
+    return DataCell(
+      Container(
+        width: size ,
+        child: InkWell(
+            onTap: onTap,
+            child: Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: color == null ? null : TextStyle(color: color),
+                ))),
+      ),
     );
   }
-
-  List<EmployeeModel > listWorkingDriver = generateRandomEmployees(20);
-
-
 }

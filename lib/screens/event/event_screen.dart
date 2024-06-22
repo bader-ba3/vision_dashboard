@@ -7,6 +7,7 @@ import 'package:vision_dashboard/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,6 +30,7 @@ class _EventScreenState extends State<EventScreen> {
     HomeViewModel homeViewModel = Get.find<HomeViewModel>();
 
     return Scaffold(
+      appBar: Header(title: "الأحداث"),
       body: GetBuilder<EventViewModel>(builder: (controller) {
         return SafeArea(
           child: SingleChildScrollView(
@@ -36,23 +38,7 @@ class _EventScreenState extends State<EventScreen> {
               padding: EdgeInsets.all(defaultPadding),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      if (!Responsive.isDesktop(context))
-                        IconButton(
-                          icon: Icon(Icons.menu),
-                          onPressed: homeViewModel.controlMenu,
-                        ),
-                      if (!Responsive.isMobile(context))
-                        Text(
-                          "ادارة الاحداث",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleLarge,
-                        ),
-                    ],
-                  ),
+
                   SizedBox(height: defaultPadding),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),

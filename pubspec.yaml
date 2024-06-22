@@ -52,6 +52,7 @@ dependencies:
   firebase_storage: 11.6.0
   duration:
   accordion:
+  syncfusion_flutter_datagrid:
 
 dev_dependencies:
   flutter_test:

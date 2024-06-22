@@ -1,23 +1,93 @@
 import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
-import 'package:vision_dashboard/screens/delete_management/delete_management_view.dart';
+import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import '../../constants.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../Widgets/header.dart';
+import 'Parents_View_Model.dart';
 
-import '../../models/Parent_Model.dart';
-import '../../responsive.dart';
-import '../dashboard/components/date_table.dart';
-import 'parent_user_details.dart';
+class ParentUsersScreen extends StatefulWidget {
+  const ParentUsersScreen({super.key});
 
-class ParentUsersScreen extends StatelessWidget {
-  ParentUsersScreen({super.key});
+  @override
+  State<ParentUsersScreen> createState() => _ParentUsersScreenState();
+}
 
+class _ParentUsersScreenState extends State<ParentUsersScreen> {
   final ScrollController _scrollController = ScrollController();
+  List data = ["الاسم الكامل", "العنوان", "الجنسية", "العمر", "العمل", "تاريخ البداية", "رقم الام", "رقم الطوارئ", "سجل الأحداث", "الخيارات", "الحذف"];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: Header(title: 'اولياء الامور',),
+      body: SingleChildScrollView(
+        child: GetBuilder<HomeViewModel>(builder: (controller) {
+          double size = max(MediaQuery
+              .sizeOf(context)
+              .width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              padding: EdgeInsets.all(defaultPadding),
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "كل اولياء الامور",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleMedium,
+                  ),
+                  GetBuilder<ParentsViewModel>(builder: (controller) {
+                    return SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(columnSpacing: 0, columns:
+                          List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                              rows: [
+                                for (var parent in controller.parentMap.values.toList())
+                                  DataRow(cells: [
+                                    dataRowItem(size / data.length, parent.fullName.toString()),
+                                    dataRowItem(size / data.length, parent.address.toString()),
+                                    dataRowItem(size / data.length, parent.nationality.toString()),
+                                    dataRowItem(size / data.length, parent.age.toString()),
+                                    dataRowItem(size / data.length, parent.work.toString()),
+                                    dataRowItem(size / data.length, parent.startDate.toString()),
+                                    dataRowItem(size / data.length, parent.motherPhone.toString()),
+                                    dataRowItem(size / data.length, parent.emergencyPhone.toString()),
+                                    dataRowItem(size / data.length, "عرض"),
+                                    dataRowItem(size / data.length, "عرض", color: Colors.purpleAccent, onTap: () {
+                                      showParentInputDialog(context, parent);
+                                    }),
+                                    dataRowItem(size / data.length, "حذف", color: Colors.red, onTap: () {
+                                      controller.deleteParent(parent.id.toString());
+                                    }),
+                                  ]),
+                              ]),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   void showParentInputDialog(BuildContext context, dynamic parent) {
     showDialog(
       context: context,
@@ -30,7 +100,7 @@ class ParentUsersScreen extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25.0),
             ),
-            height: Get.height/2,
+            height: Get.height / 2,
             width: Get.width,
             child: ParentInputForm(parent: parent),
           ),
@@ -38,176 +108,19 @@ class ParentUsersScreen extends StatelessWidget {
       },
     );
   }
-  DataRow parentDataRow(
-      ParentModel parent, bool isDelete, ParentsViewModel controller,BuildContext context) {
-    return DataRow(
-      color: isDelete ? WidgetStatePropertyAll(Colors.redAccent) : null,
-      cells: [
-        DataCell(Text(parent.fullName!)),
-        DataCell(Text(parent.address!)),
-        DataCell(Text(parent.nationality!)),
-        DataCell(Text(parent.age!)),
-        DataCell(Text(parent.work!)),
-        DataCell(Text(parent.startDate.toString().split(" ")[0])),
-        DataCell(Text(parent.motherPhone.toString())),
-        DataCell(Text(parent.emergencyPhone.toString())),
-        DataCell(IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.remove_red_eye_outlined,
-              color: Colors.white,
-            ))),
-        DataCell(isDelete?Container():Row(
-          children: [
-            IconButton(
-                onPressed: () {
-                  showParentInputDialog(context, parent);
-                  // Get.to(ParentInputForm(parent: parent));
-                },
-                icon: Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Colors.white,
-                )),
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                )),
-            IconButton(
-                onPressed: () {
-                  controller.deleteParent(parent.id.toString());
-                  print('delete');
-                },
-                icon: Icon(
-                  Icons.delete_outline_outlined,
-                  color: Colors.redAccent,
-                )),
-          ],
-        )),
-      ],
-    );
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          primary: false,
-          padding: EdgeInsets.all(defaultPadding),
-          child: GetBuilder<HomeViewModel>(builder: (controller) {
-            return Column(
-              children: [
-                Row(
-                  children: [
-                    if (!Responsive.isDesktop(context))
-                      IconButton(
-                        icon: Icon(
-                          Icons.menu,
-                          color: primaryColor,
-                        ),
-                        onPressed: controller.controlMenu,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Text(
-                        "اولياء الامور",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                    Expanded(
-                        child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "بحث",
-                        fillColor: secondaryColor,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.all(defaultPadding * 0.75),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: defaultPadding / 2),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: SvgPicture.asset("assets/icons/Search.svg"),
-                          ),
-                        ),
-                      ),
-                    )),
-                  ],
-                ),
-                SizedBox(height: defaultPadding),
-                SizedBox(
-                  height: 25,
-                ),
-                Container(
-                  padding: EdgeInsets.all(defaultPadding),
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "كل اولياء الامور",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      GetBuilder<ParentsViewModel>(builder: (controller) {
-                        return SizedBox(
-                          width: Get.width,
-                          child: Scrollbar(
-                            controller: _scrollController,
-                            child: SingleChildScrollView(
-                              physics: ClampingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              controller: _scrollController,
-                              child: GetBuilder<DeleteManagementViewModel>(
-                                builder: (_) {
-                                  return DataTable(
-                                    columns: [
-                                      DataColumn(label: Text("الاسم الكامل")),
-                                      DataColumn(label: Text("العنوان")),
-                                      DataColumn(label: Text("الجنسية")),
-                                      DataColumn(label: Text("العمر")),
-                                      DataColumn(label: Text("العمل")),
-                                      DataColumn(label: Text("تاريخ البداية")),
-                                      DataColumn(label: Text("رقم الام")),
-                                      DataColumn(label: Text("رقم الطوارئ")),
-                                      DataColumn(label: Text("سجل الأحداث")),
-                                      DataColumn(label: Text("الخيارات")),
-                                    ],
-                                    rows: controller.parentMap.values
-                                        .map((parent) => parentDataRow(
-                                            parent,
-                                            checkIfPendingDelete(
-                                                affectedId: parent.id.toString()),
-                                            controller,context))
-                                        .toList(),
-                                  );
-                                }
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }),
-        ),
+  dataRowItem(size, text, {onTap, color}) {
+    return DataCell(
+      Container(
+        width: size,
+        child: InkWell(
+            onTap: onTap,
+            child: Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: color == null ? null : TextStyle(color: color),
+                ))),
       ),
     );
   }

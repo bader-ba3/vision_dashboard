@@ -36,29 +36,29 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   List<({String name, String img, Widget widget})> allData = [
     (
-      name: "لوحة التحكم",
-      img: "assets/icons/menu_dashboard.svg",
-      widget: DashboardScreen(),
+    name: "لوحة التحكم",
+    img: "assets/icons/menu_dashboard.svg",
+    widget: DashboardScreen(),
     ),
     (
-      name: "أولياء الامور",
-      img: "assets/icons/menu_profile.svg",
-      widget: ParentsView(),
+    name: "أولياء الامور",
+    img: "assets/icons/menu_profile.svg",
+    widget: ParentsView(),
     ),
     (
-      name: "الطلاب",
-      img: "assets/icons/menu_profile.svg",
-      widget: StudentView(),
+    name: "الطلاب",
+    img: "assets/icons/menu_profile.svg",
+    widget: StudentView(),
     ),
     (
-      name: "الصفوف",
-      img: "assets/icons/menu_tran.svg",
-      widget: ClassesView(),
+    name: "الصفوف",
+    img: "assets/icons/menu_tran.svg",
+    widget: ClassesView(),
     ),
     (
-      name: "الموظفين",
-      img: "assets/icons/menu_task.svg",
-      widget: EmployeeView(),
+    name: "الموظفين",
+    img: "assets/icons/menu_task.svg",
+    widget: EmployeeView(),
     ),
     (
     name: "الدوام",
@@ -66,64 +66,50 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     widget: EmployeeTimeView(),
     ),
     (
-      name: "الامتحانات",
-      img: "assets/icons/menu_task.svg",
-      widget: ExamView(),
+    name: "الامتحانات",
+    img: "assets/icons/menu_task.svg",
+    widget: ExamView(),
     ),
     (
-      name: "الرواتب",
-      img: "assets/icons/trip.svg",
-      widget: SizedBox(),
+    name: "الرواتب",
+    img: "assets/icons/trip.svg",
+    widget: SizedBox(),
     ),
     (
-      name: "الاشعارات",
-      img: "assets/icons/menu_notification.svg",
-      widget: NotificationScreen(),
+    name: "الحافلات",
+    img: "assets/icons/menu_doc.svg",
+    widget: BusesView(),
     ),
     (
-      name: "الحافلات",
-      img: "assets/icons/menu_doc.svg",
-      widget: BusesView(),
+    name: "الرسوم الدراسية",
+    img: "assets/icons/garage.svg",
+    widget: SizedBox(),
     ),
     (
-      name: "الرسوم الدراسية",
-      img: "assets/icons/garage.svg",
-      widget: SizedBox(),
+    name: "اللأحداث",
+    img: "assets/icons/garage.svg",
+    widget: EventViewScreen(),
     ),
     (
-      name: "اللأحداث",
-      img: "assets/icons/garage.svg",
-      widget: EventViewScreen(),
+    name: "المصاريف",
+    img: "assets/icons/menu_tran.svg",
+    widget: ExpensesViewScreen(),
     ),
     (
-      name: "المصاريف",
-      img: "assets/icons/menu_tran.svg",
-      widget: ExpensesViewScreen(),
+    name: "منصة الحذف",
+    img: "assets/icons/menu_setting.svg",
+    widget: DeleteManagementView(),
     ),
     (
-      name: "اراء المستفيدين",
-      img: "assets/icons/menu_profile.svg",
-      widget: SizedBox(),
-    ),
-    (
-      name: "منصة الحذف",
-      img: "assets/icons/menu_setting.svg",
-      widget: DeleteManagementView(),
-    ),
-    (
-      name: "ادارة الحسابات",
-      img: "assets/icons/menu_setting.svg",
-      widget: AccountManagementScreen(),
-    ),
-    (
-      name: "الاعدادات",
-      img: "assets/icons/menu_setting.svg",
-      widget: SettingsScreen(),
+    name: "ادارة الحسابات",
+    img: "assets/icons/menu_setting.svg",
+    widget: AccountManagementScreen(),
     ),
   ];
 
   late TabController tabController;
   late PageController pageController;
+
   @override
   void initState() {
     tabController = TabController(length: allData.length, vsync: this);
@@ -144,51 +130,43 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
           backgroundColor: secondaryColor,
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height,
-              width: MediaQuery.sizeOf(context).width,
-              child: Stack(
-                children: [
-                  TabContainer(
-                    textDirection: TextDirection.rtl,
-                    controller: tabController,
-                    tabEdge: TabEdge.right,
-                    tabsEnd: 0.95,
-                    tabsStart: 0.125,
-                    tabMaxLength: 60,
-                    tabExtent: 250,
-                    borderRadius: BorderRadius.circular(10),
-                    tabBorderRadius: BorderRadius.circular(20),
-                    childPadding: const EdgeInsets.all(10.0),
-                    selectedTextStyle: const TextStyle(
-                      color: Color(0xff00308F),
-                      fontSize: 15.0,
-                    ),
-                    unselectedTextStyle: Styles.headLineStyle1.copyWith(
-                      color: Colors.black,
-                      fontSize: 13.0,
-                    ),
-                    colors: List.generate(allData.length, (index) => bgColor),
-                    tabs: List.generate(
-                      allData.length,
-                      (index) {
-                        return DrawerListTile(
-                          index: index,
-                          title: allData[index].name,
-                          svgSrc: allData[index].img,
-                          press: () {
-                            setState(() {});
-                          },
-                        );
-                      },
-                    ),
-                    child: PageView(
-                      physics: NeverScrollableScrollPhysics(),
-                      controller: pageController,
-                      children: List.generate(allData.length, (index) => allData[index].widget),
-                    ),
-                  ),
-                ],
+            child: TabContainer(
+              textDirection: TextDirection.rtl,
+              controller: tabController,
+              tabEdge: TabEdge.right,
+              tabsEnd: 1,
+              tabsStart: 0,
+              tabMaxLength: controller.isDrawerOpen ? 60 : 60,
+              tabExtent: controller.isDrawerOpen ? 180 : 60,
+              borderRadius: BorderRadius.circular(10),
+              tabBorderRadius: BorderRadius.circular(20),
+              childPadding: const EdgeInsets.all(0.0),
+              selectedTextStyle: const TextStyle(
+                color: Color(0xff00308F),
+                fontSize: 15.0,
+              ),
+              unselectedTextStyle: Styles.headLineStyle1.copyWith(
+                color: Colors.black,
+                fontSize: 13.0,
+              ),
+              colors: List.generate(allData.length, (index) => bgColor),
+              tabs: List.generate(
+                allData.length,
+                    (index) {
+                  return DrawerListTile(
+                    index: index,
+                    title: allData[index].name,
+                    svgSrc: allData[index].img,
+                    press: () {
+                      setState(() {});
+                    },
+                  );
+                },
+              ),
+              child: PageView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: pageController,
+                children: List.generate(allData.length, (index) => allData[index].widget),
               ),
             ),
           ),
@@ -213,38 +191,34 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-        child: ClipRect(
-          clipBehavior: Clip.hardEdge,
-          child: ListTile(
-            // onTap: press,
-            horizontalTitleGap: 0.0,
-            leading: SizedBox(
-              width: 30,
-              child: SvgPicture.asset(
-                svgSrc,
-                colorFilter: ColorFilter.mode(Color(0xff00308F), BlendMode.srcIn),
-                height: 24,
-              ),
+    return GetBuilder<HomeViewModel>(builder: (controller) {
+      return Directionality(
+        textDirection: TextDirection.rtl,
+        child: controller.isDrawerOpen
+            ? Center(child: Row(
+          children: [
+            SizedBox(width: 30,),
+            SvgPicture.asset(
+              svgSrc,
+              colorFilter: ColorFilter.mode(Color(0xff00308F), BlendMode.srcIn),
+              height: 20,
             ),
-            title: Row(
-              children: [
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  title,
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(color: Color(0xff00308F)),
-                ),
-              ],
+            SizedBox(width: 10,),
+
+            Text(title, style: TextStyle(color: Color(0xff00308F)),),
+          ],
+        ))
+            : Center(child: Row(
+          children: [
+            SizedBox(width: 20,),
+            SvgPicture.asset(
+              svgSrc,
+              colorFilter: ColorFilter.mode(Color(0xff00308F), BlendMode.srcIn),
+              height: 20,
             ),
-          ),
-        ),
-      ),
-    );
+          ],
+        ),),
+      );
+    });
   }
 }

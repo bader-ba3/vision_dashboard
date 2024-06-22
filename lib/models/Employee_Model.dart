@@ -98,7 +98,7 @@ bool? available=true;
       employees.add(EmployeeModel(
         fullName: faker.person.name(),
           available:true,
-        mobileNumber: faker.phoneNumber.us(),
+        mobileNumber: faker.phoneNumber.random.numberOfLength(8),
         address: faker.address.streetAddress(),
         nationality: faker.address.country(),
         gender: genders[random.nextInt(genders.length)],

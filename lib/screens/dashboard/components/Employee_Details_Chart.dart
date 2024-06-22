@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -40,10 +42,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
           InfoCard(
             onTap: (){
               touchedIndex==0?touchedIndex=-1:touchedIndex=0;
-
-              setState(() {
-
-              });
+              setState(() {});
             },
             title: "اداري",
             amountOfEmployee: "١٠",
@@ -52,10 +51,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
           InfoCard(
             onTap: (){
               touchedIndex==1?touchedIndex=-1:touchedIndex=1;
-
-              setState(() {
-
-              });
+              setState(() {});
             },
             title: "استاذ",
             amountOfEmployee: "30",
@@ -64,10 +60,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
           InfoCard(
             onTap: (){
               touchedIndex==2?touchedIndex=-1:touchedIndex=2;
-
-              setState(() {
-
-              });
+              setState(() {});
             },
             title: "موظف مكتبي",
             amountOfEmployee: "15",
@@ -76,10 +69,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
           InfoCard(
             onTap: (){
               touchedIndex==3?touchedIndex=-1:touchedIndex=3;
-
-              setState(() {
-
-              });
+              setState(() {});
             },
             title: "سائق",
             amountOfEmployee: "5",
@@ -93,7 +83,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
+      double radius =  isTouched ? 60.0 :30;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       switch (i) {
         case 0:

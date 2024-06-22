@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/models/delete_management_model.dart';
+import 'package:vision_dashboard/screens/Widgets/header.dart';
 
 class DeleteManagementView extends StatefulWidget {
   const DeleteManagementView({super.key});
@@ -28,6 +29,7 @@ class _DeleteManagementViewState extends State<DeleteManagementView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Header(title: "منصة الحذف"),
                   Text("كل طلبات الحذف",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                   SizedBox(
                     width: double.infinity,

@@ -10,15 +10,18 @@ class HomeViewModel extends GetxController {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   int menuIndex = 0;
+  bool isDrawerOpen= true;
   void changeIndex(_) {
     menuIndex = _;
     update();
   }
 
   void controlMenu() {
-    if (!_scaffoldKey.currentState!.isDrawerOpen) {
-      _scaffoldKey.currentState!.openDrawer();
-    }
+    // if (!_scaffoldKey.currentState!.isDrawerOpen) {
+    //   _scaffoldKey.currentState!.openDrawer();
+    // }
+    isDrawerOpen=!isDrawerOpen;
+    update();
   }
 
 }

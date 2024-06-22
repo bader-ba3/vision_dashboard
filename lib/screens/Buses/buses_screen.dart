@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
+import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -40,45 +41,7 @@ class BusesScreen extends StatelessWidget {
           child: GetBuilder<HomeViewModel>(builder: (controller) {
             return Column(
               children: [
-                Row(
-                  children: [
-                    if (!Responsive.isDesktop(context))
-                      IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: controller.controlMenu,
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Text(
-                        "Bus",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    if (!Responsive.isMobile(context)) Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                    Expanded(
-                        child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        fillColor: secondaryColor,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.all(defaultPadding * 0.75),
-                            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: SvgPicture.asset("assets/icons/Search.svg"),
-                          ),
-                        ),
-                      ),
-                    )),
-                  ],
-                ),
+                Header(title: "الحافلات"),
                 SizedBox(height: defaultPadding),
                 LineBusChart(
                   isShowingMainData: true,

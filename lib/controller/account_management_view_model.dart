@@ -136,7 +136,8 @@ class AccountManagementViewModel extends GetxController{
     Get.offAll(()=>MainScreen());
   }
  String? loginUserPage;
-  Future<void> addTime(String cardId) async {
+
+  Future<void> addTime({String? cardId ,String? userName, String?password}) async {
    bool?  isLateWithReason ;
    bool?  isEarlierWithReason ;
    int totalLate =0 ;
@@ -145,7 +146,12 @@ class AccountManagementViewModel extends GetxController{
    TextEditingController earlierReasonController = TextEditingController();
     print(cardId);
     print("add Time");
-    AccountManagementModel? user  = allAccountManagement.values.where((element) => element.serialNFC == cardId,).firstOrNull;
+    AccountManagementModel? user  ;
+    if(cardId!=null){
+       user  = allAccountManagement.values.where((element) => element.serialNFC == cardId,).firstOrNull;
+    }else {
+       user = allAccountManagement.values.where((element) => element.userName == userName &&element.password == password,).firstOrNull;
+    }
     if(user!=null){
       String date = DateTime.now().toString().split(" ")[0];
       print(DateTime.now().hour);

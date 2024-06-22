@@ -29,16 +29,9 @@ class _ClassesViewState extends State<ClassesView> {
     "Grade 10",
     "Grade 11",
   ];
-  @override
-  void initState() {
-    super.initState();
-  }
 
-  @override
-  void dispose() {
-    SelectedClass = null;
-    super.dispose();
-  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,8 +76,9 @@ class _ClassesViewState extends State<ClassesView> {
           ),
           if(SelectedClass == null)
             Expanded(
-              child: SizedBox(
-                child: Center(child: Text("يرجى إختيار احد الصفوف لمشاهدة تفاصيله",style: TextStyle(fontSize: 20),)),
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(child: Text("يرجى إختيار احد الصفوف لمشاهدة تفاصيله",style: TextStyle(fontSize: 20),textAlign: TextAlign.center,)),
               ),
             )
           else
