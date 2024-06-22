@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
+import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 
 import '../../models/Exam_model.dart';
@@ -17,8 +18,8 @@ class ExamInputForm extends StatefulWidget {
 }
 
 class _ExamInputFormState extends State<ExamInputForm> {
-
-  List<String> _selectedSection = []; // قائمة الطلاب المُحددين
+  List<String> _selectedSection = [];
+  Map<String, String> _selectedStudent = {}; // قائمة الطلاب المُحددين
 
   // قائمة بكل الطلاب المتاحين
   final Map<String, List<StudentModel>> _allSection = {
@@ -39,13 +40,12 @@ class _ExamInputFormState extends State<ExamInputForm> {
     ]
   };
 
-  List<String>? _questionImageFile=[],_answerImageFile=[];
+  List<String>? _questionImageFile = [], _answerImageFile = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
   final passRateController = TextEditingController();
   final dateController = TextEditingController();
   final studentsController = TextEditingController();
-
 
   @override
   void dispose() {
@@ -75,7 +75,6 @@ class _ExamInputFormState extends State<ExamInputForm> {
               ),
               child: Wrap(
                 clipBehavior: Clip.hardEdge,
-                // crossAxisAlignment: WrapCrossAlignment.center,
                 alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 25,
                 spacing: 25,
@@ -96,13 +95,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                context: context,
-                                firstDate: DateTime(2010),
-                                lastDate: DateTime(2100))
+                                    context: context,
+                                    firstDate: DateTime(2010),
+                                    lastDate: DateTime(2100))
                                 .then((date) {
                               if (date != null) {
                                 dateController.text =
-                                date.toString().split(" ")[0];
+                                    date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -133,7 +132,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 if (_ != null) {
                                   _.xFiles.forEach(
                                     (element) async {
-                                      _questionImageFile!.add(await element.path);
+                                      _questionImageFile!
+                                          .add(await element.path);
                                     },
                                   );
                                   setState(() {});
@@ -196,11 +196,11 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               onTap: () async {
                                 FilePickerResult? _ = await FilePicker.platform
                                     .pickFiles(
-                                    type: FileType.image,
-                                    allowMultiple: true);
+                                        type: FileType.image,
+                                        allowMultiple: true);
                                 if (_ != null) {
                                   _.xFiles.forEach(
-                                        (element) async {
+                                    (element) async {
                                       _answerImageFile!.add(await element.path);
                                     },
                                   );
@@ -209,7 +209,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               },
                               child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -222,7 +222,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                             ),
                             ...List.generate(
                               _answerImageFile!.length,
-                                  (index) {
+                              (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -231,7 +231,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                       decoration: BoxDecoration(
                                           color: Colors.grey,
                                           borderRadius:
-                                          BorderRadius.circular(15)),
+                                              BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.file(
@@ -261,7 +261,6 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   ),
                   SizedBox(height: 16.0),
                   SizedBox(height: 16.0),
-
                 ],
               ),
             ),
@@ -304,14 +303,16 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               DataColumn(label: Text("ولي الأمر")),
                               DataColumn(label: Text("موجود")),
                             ],
-                            rows: _allSection[_selectedSection[parentIndex]]!
-                                .map(
-                                  (e) => studentDataRow(e),
-                                )
-                                .toList(),
+                            rows:
+                                _allSection[_selectedSection[parentIndex]]!.map(
+                              (e) {
+                                if(e.available==true)
+                                _selectedStudent[e.studentID!] = "0";
+                                return studentDataRow(e);
+                              },
+                            ).toList(),
                           ),
                         ),
-
                       ],
                     ),
                   );
@@ -319,35 +320,38 @@ class _ExamInputFormState extends State<ExamInputForm> {
             SizedBox(
               height: defaultPadding,
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                foregroundColor: WidgetStateProperty.all(Colors.white),
-                backgroundColor: WidgetStateProperty.all(primaryColor),
-              ),
-              onPressed: () {
-                final exam = ExamModel(
-                  questionImage: _questionImageFile ?? [],
-                  answerImage: _answerImageFile,
-                  subject: subjectController.text,
-                  professor: professorController.text,
-                  date: DateTime.parse(dateController.text),
-                  students: studentsController.text
-                      .split(',')
-                      .map((student) => student.trim())
-                      .toList(),
-                  passRate: passRateController.text,
+            GetBuilder<ExamViewModel>(
+              builder: (examController) {
+                return ElevatedButton(
+                  style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                    backgroundColor: WidgetStateProperty.all(primaryColor),
+                  ),
+                  onPressed: () {
+                    final exam = ExamModel(
+                      id: generateId("Exam"),
+                      questionImage: _questionImageFile ?? [],
+                      answerImage: _answerImageFile,
+                      subject: subjectController.text,
+                      professor: professorController.text,
+                      date: DateTime.parse(dateController.text),
+                      passRate: passRateController.text,
+                      marks: _selectedStudent
+                    );
+                    examController.addExam(exam);
+                    print('بيانات الامتحان: $exam');
+                  },
+                  child: Text('حفظ'),
                 );
-                print('بيانات الامتحان: $exam');
-              },
-              child: Text('حفظ'),
+              }
             ),
           ],
         ),
       ),
     );
   }
-  DataRow studentDataRow(StudentModel student) {
 
+  DataRow studentDataRow(StudentModel student) {
     return DataRow(
       cells: [
         DataCell(Text(student.studentName.toString())),
@@ -357,19 +361,19 @@ class _ExamInputFormState extends State<ExamInputForm> {
         DataCell(Checkbox(
           fillColor: WidgetStateProperty.all(primaryColor),
           checkColor: Colors.white,
-
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           onChanged: (v) {
             print(v);
-            student.available = v??false;
-setState(() {
-});
+            student.available = v ?? false;
+            if (v == false) {
+              _selectedStudent.remove(student.studentID);
+              print(_selectedStudent.length);
+            }
+            setState(() {});
           },
           value: student.available,
         )),
       ],
     );
   }
-
 }
-

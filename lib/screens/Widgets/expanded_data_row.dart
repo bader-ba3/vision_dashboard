@@ -52,7 +52,7 @@ class _ExpandedDataRowState<T> extends State<ExpandedDataRow> {
       //               width: Get.height / 2,
       //               child: Text(j.reasonOfLate.toString()),
       //             ));
-      //       }, color: Colors.purpleAccent),
+      //       }, color: Colors.teal),
       //       dataRowItem( (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر" : "بدون مبرر"))),
       //       dataRowItem( j.totalEarlier == null || j.totalEarlier == 0 ? "" : DateFun.minutesToTime(j.totalEarlier!)),
       //       dataRowItem(j.reasonOfEarlier != null && j.reasonOfEarlier != "" ? "عرض" : "", onTap: () {
@@ -64,7 +64,7 @@ class _ExpandedDataRowState<T> extends State<ExpandedDataRow> {
       //               width: Get.height / 2,
       //               child: Text(j.reasonOfEarlier.toString()),
       //             ));
-      //       }, color: Colors.purpleAccent),
+      //       }, color: Colors.teal),
       //     ]),
       // ]
       ),

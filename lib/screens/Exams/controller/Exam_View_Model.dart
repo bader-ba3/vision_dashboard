@@ -9,7 +9,7 @@ class ExamViewModel extends GetxController{
 
   final examCollectionRef =
   FirebaseFirestore.instance.collection(examsCollection);
-  ParentsViewModel(){
+  ExamViewModel(){
     getAllExam();
   }
   Map<String, ExamModel> _examMap = {};
@@ -22,24 +22,24 @@ class ExamViewModel extends GetxController{
       for (var element in value.docs) {
         _examMap[element.id] = ExamModel.fromJson(element.data());
       }
-      print("Parents :${_examMap.keys.length}");
+      print("Exams :${_examMap.keys.length}");
       update();
     });
   }
 
-  addParent(ExamModel examModel) {
+  addExam(ExamModel examModel) {
     examCollectionRef.doc(examModel.id).set(examModel.toJson());
     update();
   }
 
-  updateParent(ExamModel examModel) async{
+  updateExam(ExamModel examModel) async{
     await  examCollectionRef
         .doc(examModel.id)
         .set(examModel.toJson(), SetOptions(merge: true));
     update();
   }
 
-  deleteParent(String examId)async {
+  deleteExam(String examId)async {
     await addDeleteOperation(
         collectionName: examsCollection,
         affectedId: examId);

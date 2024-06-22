@@ -68,7 +68,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                     dataRowItem(size / data.length, parent.motherPhone.toString()),
                                     dataRowItem(size / data.length, parent.emergencyPhone.toString()),
                                     dataRowItem(size / data.length, "عرض"),
-                                    dataRowItem(size / data.length, "عرض", color: Colors.purpleAccent, onTap: () {
+                                    dataRowItem(size / data.length, "عرض", color: Colors.teal, onTap: () {
                                       showParentInputDialog(context, parent);
                                     }),
                                     dataRowItem(size / data.length, "حذف", color: Colors.red, onTap: () {

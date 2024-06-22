@@ -69,7 +69,7 @@ class _DeleteManagementViewState extends State<DeleteManagementView> {
                                    dataRowItem(size / data.length, deleteModel.details??"لا يوجد"),
                                    dataRowItem(size / data.length, deleteModel.affectedId.toString()),
                                    dataRowItem(size / data.length, deleteModel.collectionName.toString()),
-                                   dataRowItem(size / data.length, "استرجاع",color: Colors.purpleAccent,onTap: (){
+                                   dataRowItem(size / data.length, "استرجاع",color: Colors.teal,onTap: (){
                                      controller.undoTheDelete(deleteModel);
                                    }),
                                    dataRowItem(size / data.length, "حذف نهائي",color: Colors.red.shade700,onTap: (){

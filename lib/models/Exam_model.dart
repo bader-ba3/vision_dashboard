@@ -5,15 +5,15 @@ import 'package:faker/faker.dart';
 class ExamModel {
   String? subject,professor,passRate,id;
   DateTime? date;
-  List<String>? students,questionImage,answerImage;
-
+  List<String>? questionImage,answerImage;
+Map<String,dynamic>? marks;
 
   ExamModel({
      this.questionImage,
      this.subject,
      this.professor,
      this.date,
-     this.students,
+     this.marks,
      this.passRate,
     this.id,
     this.answerImage,
@@ -26,7 +26,7 @@ class ExamModel {
     'subject': subject,
     'professor': professor,
     'date': date!.toIso8601String(),
-    'students': students,
+    'marks': marks,
     'passRate': passRate,
     'answerImage':answerImage!.toList(),
   };
@@ -40,14 +40,14 @@ class ExamModel {
       subject: json['subject']??'',
       professor: json['professor']??'',
       date: DateTime.parse(json['date']??DateTime.now()),
-      students: List<String>.from(json['students']??[]),
+      marks: json['marks']??{},
       passRate: json['passRate']??'',
     );
   }
 
   @override
   String toString() {
-    return 'Exam(image: $questionImage, subject: $subject, professor: $professor, date: $date, students: $students, passRate: $passRate)';
+    return 'Exam(image: $questionImage, subject: $subject, professor: $professor, date: $date, marks: ${marks!.values.toList()}, passRate: $passRate)';
   }
 }
    List<ExamModel> generateRandomExams(int count) {
@@ -62,8 +62,7 @@ class ExamModel {
       subject: faker.sport.name(),
       professor: faker.person.name(),
       date: faker.date.dateTime(minYear: 2020, maxYear: 2023),
-      students: List<String>.generate(
-          10, (_) => faker.person.name()), // 10 طلاب عشوائيين لكل امتحان
+      marks: {"56456465465":"0"},
       passRate: (random.nextDouble() * 100).toDouble().toString(),
     ));
   }

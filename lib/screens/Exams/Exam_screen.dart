@@ -106,11 +106,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Exam_model.dart';
-import '../../models/Student_Model.dart';
 
 import '../Widgets/header.dart';
 
@@ -123,7 +123,7 @@ class ExamScreen extends StatefulWidget {
 
 class _ExamScreenState extends State<ExamScreen> {
   final ScrollController _scrollController = ScrollController();
-  List data =   ["المقرر","الأستاذ","التاريخ","الطلاب","نسبة النجاح","صورة"] ;
+  List data =   ["المقرر","الأستاذ","التاريخ","الطلاب","نسبة النجاح","صورة","اضافة علامات"] ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,23 +150,28 @@ class _ExamScreenState extends State<ExamScreen> {
                     width: size+60,
                     child: Scrollbar(
                       controller: _scrollController,
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(columnSpacing: 0, columns:
-                        List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
-                            rows: [
-                              for (var exam in generateRandomExams(6))
-                                DataRow(cells: [
-                                  dataRowItem(size / data.length, exam.subject!.toString()),
-                                  dataRowItem(size / data.length, exam.professor.toString()),
-                                  dataRowItem(size / data.length, exam.date!.toIso8601String().toString()),
-                                  dataRowItem(size / data.length, exam.students!.length.toString()),
-                                  dataRowItem(size / data.length, '${exam.passRate!.substring(0,5)[0]}%'),
-                                  dataRowItem(size / data.length, "عرض",color: Colors.purpleAccent),
+                      child: GetBuilder<ExamViewModel>(
+                        builder: (examController) {
+                          return SingleChildScrollView(
+                            controller: _scrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(columnSpacing: 0, columns:
+                            List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                                rows: [
+                                  for (var exam in examController.examMap.values)
+                                    DataRow(cells: [
+                                      dataRowItem(size / data.length, exam.subject.toString()),
+                                      dataRowItem(size / data.length, exam.professor.toString()),
+                                      dataRowItem(size / data.length, exam.date!.toString().split(" ")[0]),
+                                      dataRowItem(size / data.length, 10.toString()),
+                                      dataRowItem(size / data.length, '0'),
+                                      dataRowItem(size / data.length, "عرض",color: Colors.blue,onTap: (){}),
+                                      dataRowItem(size / data.length, "اضافة",color: Colors.teal,onTap: (){}),
 
+                                    ]),
                                 ]),
-                            ]),
+                          );
+                        }
                       ),
                     ),
                   ),

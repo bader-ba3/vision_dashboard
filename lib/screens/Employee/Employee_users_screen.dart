@@ -62,7 +62,7 @@ class _EmployeeUsersScreenState extends State<EmployeeUsersScreen> {
                                   dataRowItem(size / data.length, employees.contract.toString()),
                                   dataRowItem(size / data.length, employees.bus.toString()),
                                   dataRowItem(size / data.length, employees.startDate.toString().split(" ")[0]),
-                                  dataRowItem(size / data.length, "عرض",color: Colors.purpleAccent,onTap: (){}),
+                                  dataRowItem(size / data.length, "عرض",color: Colors.teal,onTap: (){}),
                                   dataRowItem(size / data.length, "حذف",color: Colors.red,onTap: (){
                                   }),
                                 ]),

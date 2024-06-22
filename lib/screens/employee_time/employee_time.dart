@@ -328,7 +328,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                                     width: Get.height / 2,
                                                     child: Text(j.reasonOfLate.toString()),
                                                   ));
-                                            }, color: Colors.purpleAccent),
+                                            }, color: Colors.teal),
                                             dataRowItem(size / data.length, (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر" : "بدون مبرر"))),
                                             dataRowItem(size / data.length, j.totalEarlier == null || j.totalEarlier == 0 ? "" : DateFun.minutesToTime(j.totalEarlier!)),
                                             dataRowItem(size / data.length, j.reasonOfEarlier != null && j.reasonOfEarlier != "" ? "عرض" : "", onTap: () {
@@ -340,7 +340,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                                     width: Get.height / 2,
                                                     child: Text(j.reasonOfEarlier.toString()),
                                                   ));
-                                            }, color: Colors.purpleAccent),
+                                            }, color: Colors.teal),
                                           ]),
                                       ]),
                                     ),
