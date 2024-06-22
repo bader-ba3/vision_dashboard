@@ -122,7 +122,6 @@ class ExamScreen extends StatefulWidget {
 }
 
 class _ExamScreenState extends State<ExamScreen> {
-  final List<StudentModel> students = generateRandomStudents(10);
   final ScrollController _scrollController = ScrollController();
   List data =   ["المقرر","الأستاذ","التاريخ","الطلاب","نسبة النجاح","صورة"] ;
   @override

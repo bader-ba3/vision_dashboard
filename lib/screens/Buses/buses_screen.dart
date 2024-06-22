@@ -5,13 +5,15 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../models/Bus_Model.dart';
-
+import '../../models/RecentFile.dart';
+import '../../responsive.dart';
+import 'Buses_Detailes.dart';
 import 'line_chart_bus.dart';
 
 class BusesScreen extends StatelessWidget {
-
   final List<BusModel> buses = generateRandomBuses(10);
   final ScrollController _scrollController = ScrollController();
 
@@ -429,15 +431,133 @@ class BusesScreen extends StatelessWidget {
     );
   }
 
+  DataRow recentTripDataRow(RecentFile fileInfo) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              Container(
+                // decoration: BoxDecoration(color: Color(0xff00308F),borderRadius: BorderRadius.circular(10)),
+                // padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  fileInfo.recId!,
+                  height: 30,
+                  width: 30,
+                  // color: fileInfo.title == "Taxi"
+                  //     ? primaryColor.withOpacity(0.5)
+                  //     : fileInfo.title == "Bus"
+                  //         ? Colors.cyan
+                  //         : Colors.green,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Text(fileInfo.provider!),
+              ),
+            ],
+          ),
+        ),
+        DataCell(Text(fileInfo.date!)),
+        DataCell(Text(fileInfo.location!)),
+        // DataCell(Text(fileInfo.totalTicket!)),
+      ],
+    );
+  }
 
+  List listRecentTrip = [
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Ajman",
+      date: "01-03-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Dubai",
+      date: "27-02-2021",
+      location: "19.0KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Oman",
+      date: "25-02-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Dubai",
+      date: "25-02-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> AlAeen",
+      date: "25-02-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Sharja",
+      date: "25-02-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Dubai",
+      date: "25-02-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+    RecentFile(
+      recId: "assets/bus_icon.png",
+      provider: "Rak -> Sharja",
+      date: "25-02-2021",
+      location: "3.5KM",
+      // totalTicket: "30 Ticket",
+    ),
+  ];
 
+  DataRow workingDriverDataRow(({String driverName, String a, String b, String status}) record) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Text(record.driverName),
+        ),
+        DataCell(Text(record.a)),
+        DataCell(Text(record.b)),
+        DataCell(Text(
+          record.status,
+          style: TextStyle(color: record.status == "Stopped" ? Colors.red : Colors.green),
+        )),
+        DataCell(ElevatedButton(
+          style: ButtonStyle(
+            foregroundColor: MaterialStatePropertyAll(Colors.blue),
+          ),
+          onPressed: () {
 
+          },
+          child: Text("Details"),
+        )),
+      ],
+    );
+  }
 
+  List<({String driverName, String a, String b, String status})> listWorkingDriver = [
+    (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Stopped"),
+    (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Working"),
+    (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Working"),
+    (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Stopped"),
+    (driverName: "Driver Name", a: "12", b: "3.5KM", status: "Working"),
+  ];
 
-
-
-
- final List<PieChartSectionData> paiChartSelectionData = [
+  List<PieChartSectionData> paiChartSelectionData = [
     PieChartSectionData(
       color: Colors.teal.withOpacity(0.5),
       value: 50,
@@ -458,7 +578,7 @@ class BusesScreen extends StatelessWidget {
     ),
   ];
 
- final List<PieChartSectionData> BusTicketChartSelectionData = [
+  List<PieChartSectionData> BusTicketChartSelectionData = [
     PieChartSectionData(
       color: Colors.green,
       value: 85,

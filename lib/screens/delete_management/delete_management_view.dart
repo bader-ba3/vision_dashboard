@@ -1,9 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/constants.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
-import 'package:vision_dashboard/models/delete_management_model.dart';
-import 'package:vision_dashboard/screens/Widgets/header.dart';
+import 'package:vision_dashboard/controller/event_view_model.dart';
+
+import '../../constants.dart';
+import '../../controller/delete_management_view_model.dart';
+import '../../controller/home_controller.dart';
+import '../../models/Student_Model.dart';
+import '../../responsive.dart';
+import '../../utils/const.dart';
+import '../Widgets/filtering_data_grid.dart';
+import '../Widgets/header.dart';
 
 class DeleteManagementView extends StatefulWidget {
   const DeleteManagementView({super.key});
@@ -13,71 +22,87 @@ class DeleteManagementView extends StatefulWidget {
 }
 
 class _DeleteManagementViewState extends State<DeleteManagementView> {
-
+  final ScrollController _scrollController = ScrollController();
+  List data = ["الرمز التسلسلي", "التفاصيل", "الرمز التسلسلي المتأثر", "التصنيف المتأثر", "العمليات","الحذف"];
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DeleteManagementViewModel>(builder: (controller) {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+    return Scaffold(
+      appBar: Header(
+        title: 'منصة الحذف',
+      ),
+      body: SingleChildScrollView(
+        child: GetBuilder<HomeViewModel>(builder: (controller) {
+          double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+          return Padding(
+            padding: const EdgeInsets.all(8),
             child: Container(
-              padding: const EdgeInsets.all(8.0),
-              width: double.infinity,
-              decoration: BoxDecoration(color: secondaryColor,borderRadius: BorderRadius.circular(15)),
+              padding: EdgeInsets.all(defaultPadding),
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(title: "منصة الحذف"),
-                  Text("كل طلبات الحذف",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                  SizedBox(
-                    width: double.infinity,
-                    child: DataTable(
-                      clipBehavior: Clip.hardEdge,
-                      columns: [
-                        DataColumn(label: Text("الرمز التسلسلي")),
-                        DataColumn(label: Text("التفاصيل")),
-                        DataColumn(label: Text("الرمز التسلسلي المتأثر")),
-                        DataColumn(label: Text("التصنيف المتأثر")),
-                        DataColumn(label: Text("العمليات")),
-                      ],
-                      rows: controller.allDelete.values.toList().map((deleteModel) => deleteModelDataRow(deleteModel)).toList(),
-                    ),
+                  Text(
+                    "كل طلبات الحذف",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleMedium,
                   ),
+                  GetBuilder<DeleteManagementViewModel>(builder: (controller) {
+                    return SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                         child: DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
+                           for (var deleteModel in controller.allDelete.values)
+                             DataRow(
+                                 color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: deleteModel.id) ? Colors.red : Colors.transparent),
+                                 cells: [
+                                   dataRowItem(size / data.length, deleteModel.id.toString()),
+                                   dataRowItem(size / data.length, deleteModel.details??"لا يوجد"),
+                                   dataRowItem(size / data.length, deleteModel.affectedId.toString()),
+                                   dataRowItem(size / data.length, deleteModel.collectionName.toString()),
+                                   dataRowItem(size / data.length, "استرجاع",color: Colors.purpleAccent,onTap: (){
+                                     controller.undoTheDelete(deleteModel);
+                                   }),
+                                   dataRowItem(size / data.length, "حذف نهائي",color: Colors.red.shade700,onTap: (){
+                                     controller.doTheDelete(deleteModel);
+                                   }),
+                                 ]),
+                         ]),
+                        ),
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),
-          ),
-        ],
-      );
-    });
+          );
+        }),
+      ),
+    );
   }
 
-  DataRow deleteModelDataRow(DeleteManagementModel deleteModel) {
-    DeleteManagementViewModel deleteManagementViewModel = Get.find<DeleteManagementViewModel>();
-    return DataRow(
-      cells: [
-        DataCell(Text(deleteModel.id.toString())),
-        DataCell(Text(deleteModel.details??"لا يوجد")),
-        DataCell(Text(deleteModel.affectedId.toString())),
-        DataCell(Text(deleteModel.collectionName.toString())),
-        DataCell(Row(
-          children: [
-            ElevatedButton(
-                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red.shade700),foregroundColor: WidgetStatePropertyAll(Colors.white)),
-                onPressed: (){
-              deleteManagementViewModel.doTheDelete(deleteModel);
-            }, child: Text("حذف نهائي")),
-            SizedBox(width: 20,),
-            ElevatedButton(
-                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.blueAccent.shade700),foregroundColor: WidgetStatePropertyAll(Colors.white)),
-                onPressed: (){
-              deleteManagementViewModel.undoTheDelete(deleteModel);
-            }, child: Text("استرجاع")),
-          ],
-        )),
-      ],
+  dataRowItem(size, text, {onTap, color}) {
+    return DataCell(
+      Container(
+        width: size,
+        child: InkWell(
+            onTap: onTap,
+            child: Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: color == null ? null : TextStyle(color: color),
+                ))),
+      ),
     );
   }
 }

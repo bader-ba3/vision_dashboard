@@ -39,6 +39,7 @@ import '../../constants.dart';
 
 AppBar Header({title}) {
   return AppBar(
+    toolbarHeight: 60,
     backgroundColor: Colors.transparent,
     leading: IconButton(
       icon: Icon(Icons.menu),
@@ -56,7 +57,6 @@ AppBar Header({title}) {
       Padding(
         padding: const EdgeInsets.only(left: 8, top: 8),
         child: Builder(builder: (context) {
-          print(context);
           return SizedBox(width: MediaQuery.sizeOf(context).width / 3, child: SearchField());
         }),
       ),
@@ -73,7 +73,7 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: "Search",
+        hintText: "ابحث",
         fillColor: secondaryColor,
         filled: true,
         border: OutlineInputBorder(
