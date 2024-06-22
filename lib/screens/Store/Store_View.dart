@@ -17,7 +17,6 @@ class _StoreViewState extends State<StoreView>{
   bool isAdd=false;
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
 
