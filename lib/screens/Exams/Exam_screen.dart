@@ -130,7 +130,7 @@ class _ExamScreenState extends State<ExamScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:   Header(title: 'الطلاب',),
+      appBar:   Header(title: 'الامتحانات',),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
           double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen?240:120), 1000)-60;
@@ -163,8 +163,8 @@ class _ExamScreenState extends State<ExamScreen> {
                                 DataRow(cells: [
                                   dataRowItem(size / data.length, exam.subject!.toString()),
                                   dataRowItem(size / data.length, exam.professor.toString()),
-                                  dataRowItem(size / data.length, exam.date.toIso8601String().toString()),
-                                  dataRowItem(size / data.length, exam.students.length.toString()),
+                                  dataRowItem(size / data.length, exam.date!.toIso8601String().toString()),
+                                  dataRowItem(size / data.length, exam.students!.length.toString()),
                                   dataRowItem(size / data.length, '${exam.passRate!.substring(0,5)[0]}%'),
                                   dataRowItem(size / data.length, "عرض",color: Colors.purpleAccent),
 

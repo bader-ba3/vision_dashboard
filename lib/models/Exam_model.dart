@@ -3,43 +3,51 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 
 class ExamModel {
-  String? image,subject,professor,passRate;
-  DateTime date;
-  List<String> students;
+  String? subject,professor,passRate,id;
+  DateTime? date;
+  List<String>? students,questionImage,answerImage;
 
 
   ExamModel({
-    required this.image,
-    required this.subject,
-    required this.professor,
-    required this.date,
-    required this.students,
-    required this.passRate,
+     this.questionImage,
+     this.subject,
+     this.professor,
+     this.date,
+     this.students,
+     this.passRate,
+    this.id,
+    this.answerImage,
+
   });
 
   Map<String, dynamic> toJson() => {
-    'image': image,
+    'id':id,
+    'questionImage': questionImage!.toList(),
     'subject': subject,
     'professor': professor,
-    'date': date.toIso8601String(),
+    'date': date!.toIso8601String(),
     'students': students,
     'passRate': passRate,
+    'answerImage':answerImage!.toList(),
   };
 
   factory ExamModel.fromJson(Map<String, dynamic> json) {
     return ExamModel(
-      image: json['image'],
-      subject: json['subject'],
-      professor: json['professor'],
-      date: DateTime.parse(json['date']),
-      students: List<String>.from(json['students']),
-      passRate: json['passRate'].toDouble(),
+      id:json['id']??'',
+      questionImage:List<String>.from(json['questionImage']??[]),
+      answerImage:  List<String>.from(json['answerImage']??[]),
+
+      subject: json['subject']??'',
+      professor: json['professor']??'',
+      date: DateTime.parse(json['date']??DateTime.now()),
+      students: List<String>.from(json['students']??[]),
+      passRate: json['passRate']??'',
     );
   }
 
   @override
   String toString() {
-    return 'Exam(image: $image, subject: $subject, professor: $professor, date: $date, students: $students, passRate: $passRate)';
+    return 'Exam(image: $questionImage, subject: $subject, professor: $professor, date: $date, students: $students, passRate: $passRate)';
   }
 }
    List<ExamModel> generateRandomExams(int count) {
@@ -49,7 +57,8 @@ class ExamModel {
 
   for (int i = 0; i < count; i++) {
     exams.add(ExamModel(
-      image: faker.image.image(random: true),
+      id: faker.phoneNumber.us(),
+      questionImage: [faker.sport.name()],
       subject: faker.sport.name(),
       professor: faker.person.name(),
       date: faker.date.dateTime(minYear: 2020, maxYear: 2023),

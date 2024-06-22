@@ -121,10 +121,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget SquareWidget(title, body, color, png) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(0),
       child: Container(
-        height: 250,
-        width: 250,
+        height: 275,
+        width: 275,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: secondaryColor),
         child: Column(
@@ -132,7 +132,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Center(
                     child: Text(
                   title,

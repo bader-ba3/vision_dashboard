@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Parents/Parents_View_Model.dart';
+import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';

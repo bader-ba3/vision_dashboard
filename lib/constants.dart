@@ -23,6 +23,7 @@ String generateId(String type) {
   return "$type$_";
 }
 const String parentsCollection='Parents';
+const String examsCollection='Exams';
 class Styles {
 
 

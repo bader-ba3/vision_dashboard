@@ -23,8 +23,6 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
 
     if (value > 0 && value < employeeName.length-1) {
       text = employeeName[value.toInt()];
-      // تقليل طول النص إذا كان طويلاً
-
     } else {
       text = '';
     }
@@ -61,12 +59,32 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final barsSpace = 24.0 * constraints.maxWidth / 400;
-            final barsWidth = 8.0 * constraints.maxWidth / 1000;
+            final barsWidth = 8.0 * constraints.maxWidth / 400;
             return BarChart(
               BarChartData(
                 alignment: BarChartAlignment.center,
                 barTouchData: BarTouchData(
                   enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        '${employeeName[group.x.toInt()]}: ',
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: rod.rodStackItems[0].toY.toString(),
+                            style: const TextStyle(
+                              color: blueColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
                 titlesData: FlTitlesData(
 
@@ -135,6 +153,8 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
                   BarChartRodStackItem(0, i==24?3500:salary.toDouble(), widget.dark),
                   if(i!=24)
                   BarChartRodStackItem(i==24?3500:salary.toDouble(), i==24?3500:2500, widget.light),
+                  if(i==24)
+                    BarChartRodStackItem(0, 3500,secondaryColor,BorderSide(color: secondaryColor)),
                 ],
                 borderRadius: BorderRadius.circular(4),
                 width: barsWidth,

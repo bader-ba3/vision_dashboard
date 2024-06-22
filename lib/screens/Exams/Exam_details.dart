@@ -18,7 +18,7 @@ class ExamInputForm extends StatefulWidget {
 }
 
 class _ExamInputFormState extends State<ExamInputForm> {
-  void _openImagePicker() async {
+/*  void _openImagePicker() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: [
@@ -30,7 +30,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
 
     if (result != null) {
       setState(() {
-        _imageFile = File(result.files.single.path!);
+        _questionImageFile = File(result.files.single.path!);
       });
     } else {
       Fluttertoast.showToast(
@@ -41,7 +41,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
         textColor: Colors.white,
       );
     }
-  }
+  }*/
 
   List<String> _selectedSection = []; // قائمة الطلاب المُحددين
 
@@ -64,13 +64,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
     ]
   };
 
-  File? _imageFile;
+  List<String>? _questionImageFile=[],_answerImageFile=[];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
   final passRateController = TextEditingController();
   final dateController = TextEditingController();
   final studentsController = TextEditingController();
-  List<String> ImagesTempData = [];
+
 
   @override
   void dispose() {
@@ -100,7 +100,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
               ),
               child: Wrap(
                 clipBehavior: Clip.hardEdge,
-                direction: Axis.horizontal,
+                // crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 25,
                 spacing: 25,
                 children: <Widget>[
@@ -108,14 +109,38 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       controller: subjectController, title: 'المقرر'),
                   CustomTextField(
                       controller: professorController, title: 'الاستاذ'),
-                  CustomTextField(
-                      controller: dateController,
-                      title: 'التاريخ',
-                      keyboardType: TextInputType.datetime),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomTextField(
+                          controller: dateController,
+                          title: 'التاريخ',
+                          enable: false,
+                          keyboardType: TextInputType.datetime),
+                      IconButton(
+                          onPressed: () {
+                            showDatePicker(
+                                context: context,
+                                firstDate: DateTime(2010),
+                                lastDate: DateTime(2100))
+                                .then((date) {
+                              if (date != null) {
+                                dateController.text =
+                                date.toString().split(" ")[0];
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            Icons.date_range_outlined,
+                            color: primaryColor,
+                          ))
+                    ],
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("صورة الفاتورة"),
+                      Text("صورة ورقة الاسئلة"),
                       SizedBox(
                         height: 15,
                       ),
@@ -133,7 +158,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 if (_ != null) {
                                   _.xFiles.forEach(
                                     (element) async {
-                                      ImagesTempData.add(await element.path);
+                                      _questionImageFile!.add(await element.path);
                                     },
                                   );
                                   setState(() {});
@@ -153,7 +178,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               ),
                             ),
                             ...List.generate(
-                              ImagesTempData.length,
+                              _questionImageFile!.length,
                               (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -167,7 +192,75 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                       width: 200,
                                       height: 200,
                                       child: Image.file(
-                                        File(ImagesTempData[index]),
+                                        File(_questionImageFile![index]),
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("صورة ورقة الاجوبة"),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                FilePickerResult? _ = await FilePicker.platform
+                                    .pickFiles(
+                                    type: FileType.image,
+                                    allowMultiple: true);
+                                if (_ != null) {
+                                  _.xFiles.forEach(
+                                        (element) async {
+                                      _answerImageFile!.add(await element.path);
+                                    },
+                                  );
+                                  setState(() {});
+                                }
+                              },
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  height: 200,
+                                  width: 200,
+                                  child: Icon(Icons.add),
+                                ),
+                              ),
+                            ),
+                            ...List.generate(
+                              _answerImageFile!.length,
+                                  (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                          BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.file(
+                                        File(_answerImageFile![index]),
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,
@@ -258,7 +351,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
               ),
               onPressed: () {
                 final exam = ExamModel(
-                  image: _imageFile?.path ?? "",
+                  questionImage: _questionImageFile ?? [],
+                  answerImage: _answerImageFile,
                   subject: subjectController.text,
                   professor: professorController.text,
                   date: DateTime.parse(dateController.text),

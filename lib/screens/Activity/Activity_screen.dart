@@ -11,8 +11,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ActivityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return Scaffold();}}
+
+
+    /* SafeArea(
         child: SingleChildScrollView(
           primary: false,
           padding: EdgeInsets.all(defaultPadding),
@@ -231,18 +233,19 @@ String mode,
 
       })> listWorkingDriver = [
 
-    (activityId: "ACT473829", place: "Corniche Al Qawasim St", location: "25.78282284978807, 55.943409982611534", description: "A distinctive tourist destination characterized by its beauty, a place to sit, and a beautiful sea.", image: "",mode: ""),
-      (activityId: "ACT298372", place: "Jumeirah Beach", location: "25.193473, 55.247164", description: "A popular beach with stunning views, perfect for relaxation and swimming.", image: "https://example.com/image2.jpg",mode: ""),
-      (activityId: "ACT837492", place: "Al Majaz Waterfront", location: "25.336985, 55.391001", description: "A scenic waterfront with many attractions and entertainment options.", image: "https://example.com/image3.jpg",mode: ""),
-      (activityId: "ACT129384", place: "Yas Island", location: "24.495655, 54.615089", description: "An iconic island with numerous attractions and activities for all ages.", image: "https://example.com/image4.jpg",mode: ""),
-      (activityId: "ACT983274", place: "Dubai Marina", location: "25.080683, 55.141654", description: "A modern marina with a variety of restaurants, shops, and entertainment venues.", image: "https://example.com/image5.jpg",mode: ""),
-      (activityId: "ACT472910", place: "Sheikh Zayed Grand Mosque", location: "24.412207, 54.474844", description: "A majestic mosque with beautiful architecture and serene surroundings.", image: "https://example.com/image6.jpg",mode: ""),
-      (activityId: "ACT092817", place: "Al Ain Oasis", location: "24.207500, 55.744722", description: "A lush oasis offering a tranquil escape with its greenery and walking paths.", image: "https://example.com/image7.jpg",mode: ""),
-      (activityId: "ACT349827", place: "Fujairah Fort", location: "25.138996, 56.334431", description: "A historical fort with rich cultural heritage and impressive architecture.", image: "https://example.com/image8.jpg",mode: ""),
-      (activityId: "ACT120938", place: "Hatta Dam", location: "24.791891, 56.117150", description: "A beautiful dam with picturesque views and outdoor activities.", image: "https://example.com/image9.jpg",mode: ""),
-      (activityId: "ACT984731", place: "Global Village", location: "25.065700, 55.208678", description: "A vibrant cultural and entertainment destination with a variety of attractions.", image: "https://example.com/image10.jpg",mode: ""),
+    (activityId: "ACT473829", place: "Corniche Al Qawasim St", location: "25.78282284978807, 55.943409982611534", description: "A distinctive tourist destination characterized by its beauty, a place to sit, and a beautiful sea.", questionImage: "",mode: ""),
+      (activityId: "ACT298372", place: "Jumeirah Beach", location: "25.193473, 55.247164", description: "A popular beach with stunning views, perfect for relaxation and swimming.", questionImage: "https://example.com/image2.jpg",mode: ""),
+      (activityId: "ACT837492", place: "Al Majaz Waterfront", location: "25.336985, 55.391001", description: "A scenic waterfront with many attractions and entertainment options.", questionImage: "https://example.com/image3.jpg",mode: ""),
+      (activityId: "ACT129384", place: "Yas Island", location: "24.495655, 54.615089", description: "An iconic island with numerous attractions and activities for all ages.", questionImage: "https://example.com/image4.jpg",mode: ""),
+      (activityId: "ACT983274", place: "Dubai Marina", location: "25.080683, 55.141654", description: "A modern marina with a variety of restaurants, shops, and entertainment venues.", questionImage: "https://example.com/image5.jpg",mode: ""),
+      (activityId: "ACT472910", place: "Sheikh Zayed Grand Mosque", location: "24.412207, 54.474844", description: "A majestic mosque with beautiful architecture and serene surroundings.", questionImage: "https://example.com/image6.jpg",mode: ""),
+      (activityId: "ACT092817", place: "Al Ain Oasis", location: "24.207500, 55.744722", description: "A lush oasis offering a tranquil escape with its greenery and walking paths.", questionImage: "https://example.com/image7.jpg",mode: ""),
+      (activityId: "ACT349827", place: "Fujairah Fort", location: "25.138996, 56.334431", description: "A historical fort with rich cultural heritage and impressive architecture.", questionImage: "https://example.com/image8.jpg",mode: ""),
+      (activityId: "ACT120938", place: "Hatta Dam", location: "24.791891, 56.117150", description: "A beautiful dam with picturesque views and outdoor activities.", questionImage: "https://example.com/image9.jpg",mode: ""),
+      (activityId: "ACT984731", place: "Global Village", location: "25.065700, 55.208678", description: "A vibrant cultural and entertainment destination with a variety of attractions.", questionImage: "https://example.com/image10.jpg",mode: ""),
   ];
 
 
 }
 
+*/

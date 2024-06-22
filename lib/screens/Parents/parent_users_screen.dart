@@ -5,7 +5,8 @@ import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import '../../constants.dart';
 import '../Widgets/header.dart';
-import 'Parents_View_Model.dart';
+import 'Controller/Parents_View_Model.dart';
+
 
 class ParentUsersScreen extends StatefulWidget {
   const ParentUsersScreen({super.key});
