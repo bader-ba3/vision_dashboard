@@ -1,9 +1,7 @@
-import 'dart:math';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duration/duration.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
@@ -105,7 +103,7 @@ class AccountManagementViewModel extends GetxController{
           userStatus = UserManagementStatus.first;
           Get.offAll(() => LoginScreen());
         } else if (value.docs.isNotEmpty) {
-          myUserModel = AccountManagementModel.fromJson(value.docs.first.data()!);
+          myUserModel = AccountManagementModel.fromJson(value.docs.first.data());
           userStatus = UserManagementStatus.login;
           Get.offAll(() => MainScreen());
         } else if (value.docs.isEmpty) {

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../utils/minutesToTime.dart';
 
 class ExpandedDataRow<T> extends StatefulWidget {
   const ExpandedDataRow({super.key, required this.size, required this.numberOfRow, required this.listOfDataCell, required this.listOfData});

@@ -1,5 +1,4 @@
 import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:vision_dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,7 +24,7 @@ class SideMenu extends StatelessWidget {
     "assets/icons/menu_setting.svg",
     "assets/icons/menu_setting.svg",
   ];
-  ScrollController scrollController = ScrollController();
+ final ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Drawer(

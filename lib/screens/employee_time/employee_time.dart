@@ -1,12 +1,9 @@
 import 'dart:math';
 
 import 'package:accordion/accordion.dart';
-import 'package:duration/duration.dart';
-import 'package:duration/locale.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:vision_dashboard/screens/main/main_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';
@@ -20,7 +17,6 @@ class EmployeeTimeView extends StatefulWidget {
 class _EmployeeTimeViewState extends State<EmployeeTimeView> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  ScrollController _scrollController = ScrollController();
   bool isSecure = true;
   AccountManagementViewModel accountManagementViewModel = Get.find<AccountManagementViewModel>();
 

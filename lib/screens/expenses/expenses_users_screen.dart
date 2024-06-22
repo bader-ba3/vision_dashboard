@@ -2,22 +2,14 @@ import 'dart:math';
 
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
-import 'package:vision_dashboard/models/Parent_Model.dart';
-import 'package:vision_dashboard/models/RecentFile.dart' hide demoRecentFiles;
 import 'package:vision_dashboard/models/expenses_model.dart';
-import 'package:vision_dashboard/responsive.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/const.dart';
-import '../Widgets/filtering_data_grid.dart';
-import '../dashboard/components/date_table.dart';
-import 'expenses_input_form.dart';
+
 
 class ExpensesScreen extends StatefulWidget {
   ExpensesScreen({super.key});
@@ -35,12 +27,11 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   int limit = 6000;
   @override
   Widget build(BuildContext context) {
-    HomeViewModel homeViewModel = Get.find<HomeViewModel>();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: GetBuilder<ExpensesViewModel>(builder: (controller) {
-            total = controller.allExpenses.values.map((e) => e.total!,).reduce((value, element) => value + element,);
+            total = controller.allExpenses.values.map((e) => e.total,).reduce((value, element) => value + element,);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

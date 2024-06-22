@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
-import 'package:vision_dashboard/screens/Student/student_user_details.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_input_form.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_users_screen.dart';
 import '../../constants.dart';

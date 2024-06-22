@@ -39,7 +39,7 @@ class CustomDropDown extends StatelessWidget {
     );
   }
 
- String value,label ;
+final String value,label ;
 
 final List<String> listValue ;
 

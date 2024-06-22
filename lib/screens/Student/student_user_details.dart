@@ -203,8 +203,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         SizedBox(width: 16.0),
                         ElevatedButton(
                           style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            backgroundColor: MaterialStateProperty.all(primaryColor),
+                            foregroundColor: WidgetStateProperty.all(Colors.white),
+                            backgroundColor: WidgetStateProperty.all(primaryColor),
                           ),
                           onPressed: () {
                             setState(() {

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +14,12 @@ import '../../utils/const.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ParentInputForm extends StatefulWidget {
+
   ParentInputForm({this.parent});
 
 
 
-  ParentModel? parent;
+ final ParentModel? parent;
   @override
   _ParentInputFormState createState() => _ParentInputFormState();
 }
@@ -186,8 +186,8 @@ class _ParentInputFormState extends State<ParentInputForm> {
                         SizedBox(width: 16.0),
                         ElevatedButton(
                           style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            backgroundColor: MaterialStateProperty.all(primaryColor),
+                            foregroundColor: WidgetStateProperty.all(Colors.white),
+                            backgroundColor: WidgetStateProperty.all(primaryColor),
                           ),
                           onPressed: () {
                             setState(() {

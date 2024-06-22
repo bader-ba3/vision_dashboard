@@ -1,6 +1,4 @@
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:vision_dashboard/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';

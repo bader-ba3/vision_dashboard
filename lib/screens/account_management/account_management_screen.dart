@@ -1,12 +1,10 @@
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
-import 'package:vision_dashboard/responsive.dart';
-import 'package:fl_chart/fl_chart.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../models/account_management_model.dart';
 
@@ -183,7 +181,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         )),
         DataCell(ElevatedButton(
           style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(Colors.red),
+            foregroundColor: WidgetStatePropertyAll(Colors.red),
           ),
           onPressed: () {
           controller.deleteAccount(accountModel);

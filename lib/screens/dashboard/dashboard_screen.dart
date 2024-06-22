@@ -1,13 +1,9 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/models/MyFiles.dart';
 import 'package:vision_dashboard/responsive.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';
-import 'package:vision_dashboard/screens/dashboard/components/date_table.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_info_Widget.dart';
 import 'package:flutter/material.dart';
-import 'package:vision_dashboard/screens/dashboard/components/pie_Chart.dart';
 
 import '../../constants.dart';
 import '../Widgets/header.dart';

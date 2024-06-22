@@ -3,7 +3,6 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../constants.dart';
 
-import 'info_card.dart';
 
 class DateTables extends StatefulWidget {
   const DateTables({

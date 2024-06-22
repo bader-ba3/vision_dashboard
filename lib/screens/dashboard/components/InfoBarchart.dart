@@ -14,14 +14,19 @@ class InfoBarChart extends StatefulWidget {
 
   @override
   State<InfoBarChart> createState() => _InfoBarChartState();
-  int touchedIndex = -1;
+final  int touchedIndex ;
 final String title,subtitle;
-List<PieChartSectionData> paiChartSelectionData;
+final List<PieChartSectionData> paiChartSelectionData;
 }
 
 class _InfoBarChartState extends State<InfoBarChart> {
-
-
+int localTouch=-1;
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    localTouch=widget.touchedIndex;
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -36,11 +41,11 @@ class _InfoBarChartState extends State<InfoBarChart> {
                     if (!event.isInterestedForInteractions ||
                         pieTouchResponse == null ||
                         pieTouchResponse.touchedSection == null) {
-                      widget.touchedIndex = -1;
+                      localTouch = -1;
                       return;
                     }
 
-                   widget. touchedIndex = pieTouchResponse
+localTouch = pieTouchResponse
                         .touchedSection!.touchedSectionIndex;
                   });
 

@@ -1,18 +1,11 @@
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/event_view_model.dart';
 import 'package:vision_dashboard/models/event_model.dart';
-import 'package:vision_dashboard/responsive.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
 import '../../constants.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../models/account_management_model.dart';
 import '../../utils/const.dart';
 
 class EventScreen extends StatefulWidget {
@@ -27,7 +20,6 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    HomeViewModel homeViewModel = Get.find<HomeViewModel>();
 
     return Scaffold(
       appBar: Header(title: "الأحداث"),
@@ -112,7 +104,7 @@ class _EventScreenState extends State<EventScreen> {
             ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.red.shade600),
-                foregroundColor: MaterialStatePropertyAll(Colors.white),
+                foregroundColor: WidgetStatePropertyAll(Colors.white),
               ),
               onPressed: () {
                 addDeleteOperation(collectionName: Const.eventCollection, affectedId: event.id);

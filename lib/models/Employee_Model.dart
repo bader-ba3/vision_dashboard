@@ -72,17 +72,10 @@ bool? available=true;
   }
 }
   List<EventRecordModel> generateRandomEvents(int count) {
-    var faker = Faker();
-    var random = Random();
-    List<String> eventTypes = ['Leave', 'Absent', 'Salary Payment', 'Meeting', 'Training'];
+
     List<EventRecordModel> events = [];
 
-    // for (int i = 0; i < count; i++) {
-    //   events.add(EventRecordModel(
-    //     event: eventTypes[random.nextInt(eventTypes.length)],
-    //     date: faker.date.dateTime(minYear: 2020, maxYear: 2023), name: '',
-    //   ));
-    // }
+
 
     return events;
   }

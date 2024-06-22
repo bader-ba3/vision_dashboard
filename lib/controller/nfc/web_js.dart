@@ -2,7 +2,6 @@ import 'dart:js' as js;
 import 'package:universal_html/html.dart';
 import 'package:get/get.dart';
 
-import '../../screens/main/main_screen.dart';
 import '../account_management_view_model.dart';
 
 Future<bool> initNFCWorker(bool isLogin) async {

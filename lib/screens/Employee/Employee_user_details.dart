@@ -7,7 +7,6 @@ import 'package:vision_dashboard/models/event_model.dart';
 import '../../controller/event_view_model.dart';
 import '../../models/event_record_model.dart';
 import '../../utils/const.dart';
-import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class EmployeeInputForm extends StatefulWidget {
@@ -131,8 +130,8 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                         SizedBox(width: 16.0),
                         ElevatedButton(
                           style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            backgroundColor: MaterialStateProperty.all(primaryColor),
+                            foregroundColor: WidgetStateProperty.all(Colors.white),
+                            backgroundColor: WidgetStateProperty.all(primaryColor),
                           ),
                           onPressed: () {
                             setState(() {

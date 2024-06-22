@@ -1,26 +1,14 @@
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:vision_dashboard/controller/event_view_model.dart';
-import 'package:vision_dashboard/controller/expenses_view_model.dart';
-import 'package:vision_dashboard/models/Exam_model.dart';
+
 import 'package:get/get.dart';
-import 'package:vision_dashboard/models/expenses_model.dart';
 
 import '../../constants.dart';
-import '../../controller/account_management_view_model.dart';
 import '../../controller/home_controller.dart';
-import '../../models/Employee_Model.dart';
-import '../../models/Parent_Model.dart';
 import '../../models/event_model.dart';
-import '../../models/event_record_model.dart';
 import '../../utils/const.dart';
-import '../Employee/Employee_user_details.dart';
-import '../Widgets/Custom_Text_Filed.dart';
 
 class EventInputForm extends StatefulWidget {
   @override

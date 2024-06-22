@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_user_details.dart';
 import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
-import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
-import 'package:vision_dashboard/screens/Student/student_user_details.dart';
+
 import '../../constants.dart';
 
 

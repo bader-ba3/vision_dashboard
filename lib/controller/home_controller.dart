@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'dart:js' as js;
-//
-// import 'package:universal_html/html.dart';
 
-import '../screens/main/main_screen.dart';
 
 class HomeViewModel extends GetxController {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

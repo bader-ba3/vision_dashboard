@@ -295,7 +295,7 @@ generateRandomEmployees(1).first,
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(primaryColor),
+                      WidgetStateProperty.all(primaryColor),
                     ),
                     onPressed: () {
                       BusModel bus = BusModel(

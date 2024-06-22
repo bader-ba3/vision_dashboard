@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_Chart.dart';
 
 import '../../../constants.dart';

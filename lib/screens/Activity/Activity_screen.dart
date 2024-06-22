@@ -1,12 +1,5 @@
-import 'dart:math';
 
-import 'package:vision_dashboard/responsive.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../constants.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ActivityScreen extends StatelessWidget {
   @override
