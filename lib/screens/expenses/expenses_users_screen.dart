@@ -65,14 +65,14 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                             return DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
                               for (var expense in controller.allExpenses.values)
                                 DataRow(
-                                    color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: expense.id) ? Colors.red : Colors.transparent),
+                                    color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: expense.id) ? Colors.red.withOpacity(0.5) : Colors.transparent),
                                     cells: [
                                       dataRowItem(size / data.length, expense.id.toString()),
                                       dataRowItem(size / data.length, expense.title.toString()),
                                       dataRowItem(size / data.length, expense.total.toString()),
                                       dataRowItem(size / data.length, expense.userId.toString()),
                                       dataRowItem(size / data.length, expense.body.toString()),
-                                      dataRowItem(size / data.length, "عرض التفاصيل",color: Colors.purpleAccent,onTap: (){
+                                      dataRowItem(size / data.length, "عرض التفاصيل",color: Colors.teal,onTap: (){
                                         Get.defaultDialog(
                                             backgroundColor: Colors.white,
                                             title: "التفاصيل", content: SizedBox(
@@ -81,7 +81,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                             child: Text(expense.body.toString(), style: TextStyle(fontSize: 20),)));
                                       }),
                                       dataRowItem(size / data.length, expense.images.length.toString()),
-                                      dataRowItem(size / data.length,"عرض الصور",color: Colors.purpleAccent,onTap: (){
+                                      dataRowItem(size / data.length,"عرض الصور",color: Colors.teal,onTap: (){
                                         Get.defaultDialog(
                                             backgroundColor: Colors.white,
                                             title: "الصور", content: Container(

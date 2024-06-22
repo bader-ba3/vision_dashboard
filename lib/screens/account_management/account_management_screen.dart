@@ -1,121 +1,251 @@
-import 'package:vision_dashboard/controller/account_management_view_model.dart';
+// import 'package:vision_dashboard/controller/account_management_view_model.dart';
+//
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:vision_dashboard/screens/Widgets/header.dart';
+// import '../../constants.dart';
+// import 'package:vision_dashboard/controller/home_controller.dart';
+//
+// import '../../models/account_management_model.dart';
+//
+// class AccountManagementScreen extends StatefulWidget {
+//   AccountManagementScreen({super.key});
+//
+//   @override
+//   State<AccountManagementScreen> createState() => _AccountManagementScreenState();
+// }
+//
+// Map accountType = {
+//   "user": "مستخدم",
+//   "admin": "مدير",
+// };
+//
+// class _AccountManagementScreenState extends State<AccountManagementScreen> {
+//   String? role;
+//   TextEditingController name = TextEditingController();
+//   TextEditingController pass = TextEditingController();
+//   HomeViewModel homeViewModel = Get.find<HomeViewModel>();
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: GetBuilder<AccountManagementViewModel>(builder: (controller) {
+//         return SafeArea(
+//           child: SingleChildScrollView(
+//               primary: false,
+//               padding: EdgeInsets.all(defaultPadding),
+//               child: Column(
+//                 children: [
+//                  Header(title: "إدارة المستخدمين"),
+//                   SizedBox(height: defaultPadding),
+//                   Row(
+//                     children: [
+//                       Expanded(
+//                           child: TextField(
+//                         controller: name,
+//                         decoration: InputDecoration(
+//                           hintText: "اسم المستخدم",
+//                           fillColor: secondaryColor,
+//                           filled: true,
+//                           border: OutlineInputBorder(
+//                             borderSide: BorderSide.none,
+//                             borderRadius: const BorderRadius.all(Radius.circular(10)),
+//                           ),
+//                         ),
+//                       )),
+//                       SizedBox(
+//                         width: 20,
+//                       ),
+//                       Expanded(
+//                           child: TextField(
+//                         controller: pass,
+//                         decoration: InputDecoration(
+//                           hintText: "كلمة السر",
+//                           fillColor: secondaryColor,
+//                           filled: true,
+//                           border: OutlineInputBorder(
+//                             borderSide: BorderSide.none,
+//                             borderRadius: const BorderRadius.all(Radius.circular(10)),
+//                           ),
+//                         ),
+//                       )),
+//                       SizedBox(
+//                         width: 20,
+//                       ),
+//                       Expanded(
+//                           child: DropdownButton(
+//                         value: role??accountType.keys.first.toString(),
+//                         isExpanded: true,
+//                         onChanged: (_) {
+//                           role = _;
+//                           setState(() {});
+//                         },
+//                         items: accountType.entries.map((e) => DropdownMenuItem(value: e.key.toString(), child: Text(e.value.toString()))).toList(),
+//                       )),
+//                       SizedBox(
+//                         width: 20,
+//                       ),
+//                       InkWell(
+//                         onTap: () {
+//                           role ??=accountType.keys.first;
+//                           AccountManagementModel model = AccountManagementModel(
+//                               id: DateTime.now().millisecondsSinceEpoch.toString(),
+//                               userName: name.text,
+//                               password: pass.text,
+//                               type: role!,
+//                               serialNFC: null,
+//                               isActive: true,
+//                             salary: 2000, dayOfWork: 20
+//                           );
+//                           name.clear();
+//                           pass.clear();
+//                           role = null;
+//                           controller.addAccount(model);
+//                           setState(() {});
+//                         },
+//                         child: Container(
+//                           height: 55,
+//                           width: 200,
+//                           decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.circular(15)),
+//                           child: Center(
+//                               child: Text(
+//                             "Add",
+//                             style: TextStyle(color: Color(0xff00308F), fontSize: 22),
+//                           )),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(height: defaultPadding),
+//                   Container(
+//                     padding: EdgeInsets.all(defaultPadding),
+//                     decoration: BoxDecoration(
+//                       color: secondaryColor,
+//                       borderRadius: const BorderRadius.all(Radius.circular(10)),
+//                     ),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           "كل الحسابات",
+//                           style: Theme.of(context).textTheme.titleMedium,
+//                         ),
+//                         SizedBox(
+//                           width: double.infinity,
+//                           child: DataTable(
+//                             columnSpacing: defaultPadding,
+//                             // minWidth: 600,
+//                             columns: [
+
+//                               DataColumn(
+//                                 label: Text("الاسم"),
+//                               ),
+//                               DataColumn(
+//                                 label: Text("كامة السر"),
+//                               ),
+//                               DataColumn(
+//                                 label: Text("الدور"),
+//                               ),
+//                               DataColumn(
+//                                 label: Text("الحالة"),
+//                               ),
+//                               DataColumn(
+//                                 label: Text("العمليات"),
+//                               ),
+//                             ],
+//                             rows: List.generate(
+//                               controller.allAccountManagement.keys.length,
+//                               (index) => workingDriverDataRow(controller.allAccountManagement.values.toList()[index], index,controller),
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               )),
+//         );
+//       }),
+//     );
+//   }
+//
+//   DataRow workingDriverDataRow(AccountManagementModel accountModel, index,AccountManagementViewModel controller ){
+//     return DataRow(
+//       cells: [
+//         DataCell(
+//           Text(accountModel.userName),
+//         ),
+//         DataCell(Text(accountModel.password)),
+//         DataCell(Text(accountModel.type)),
+//         DataCell(Text(
+//           accountModel.isActive?"فعال":"ملغى",
+//           style: TextStyle(color:  accountModel.isActive? Colors.green : Colors.red),
+//         )),
+//         DataCell(ElevatedButton(
+//           style: ButtonStyle(
+//             foregroundColor: WidgetStatePropertyAll(Colors.red),
+//           ),
+//           onPressed: () {
+//           controller.deleteAccount(accountModel);
+//           },
+//           child: Text("حذف الحساب"),
+//         )),
+//       ],
+//     );
+//   }
+// }
+
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Widgets/header.dart';
-import '../../constants.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 
+import '../../constants.dart';
+import '../../controller/delete_management_view_model.dart';
+import '../../controller/home_controller.dart';
+import '../../models/Student_Model.dart';
 import '../../models/account_management_model.dart';
+import '../../responsive.dart';
+import '../../utils/const.dart';
+import '../Widgets/filtering_data_grid.dart';
+import '../Widgets/header.dart';
 
 class AccountManagementScreen extends StatefulWidget {
-  AccountManagementScreen({super.key});
+  const AccountManagementScreen({super.key});
 
   @override
   State<AccountManagementScreen> createState() => _AccountManagementScreenState();
 }
 
-Map accountType = {
-  "user": "مستخدم",
-  "admin": "مدير",
-};
-
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
+  final ScrollController _scrollController = ScrollController();
+  List data = ["الاسم", "كامة السر", "الدور", "الحالة", "العمليات"];
+  Map accountType = {
+    "user": "مستخدم",
+    "admin": "مدير",
+  };
   String? role;
   TextEditingController name = TextEditingController();
   TextEditingController pass = TextEditingController();
   HomeViewModel homeViewModel = Get.find<HomeViewModel>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GetBuilder<AccountManagementViewModel>(builder: (controller) {
-        return SafeArea(
-          child: SingleChildScrollView(
-              primary: false,
-              padding: EdgeInsets.all(defaultPadding),
-              child: Column(
+      appBar: Header(
+        title: 'ادارة المستخدمين',
+      ),
+      body: SingleChildScrollView(
+        child: GetBuilder<HomeViewModel>(builder: (controller) {
+          double size = max(MediaQuery
+              .sizeOf(context)
+              .width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: GetBuilder<AccountManagementViewModel>(builder: (controller) {
+              return Column(
                 children: [
-                 Header(title: "إدارة المستخدمين"),
-                  SizedBox(height: defaultPadding),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: TextField(
-                        controller: name,
-                        decoration: InputDecoration(
-                          hintText: "اسم المستخدم",
-                          fillColor: secondaryColor,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          ),
-                        ),
-                      )),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          child: TextField(
-                        controller: pass,
-                        decoration: InputDecoration(
-                          hintText: "كلمة السر",
-                          fillColor: secondaryColor,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          ),
-                        ),
-                      )),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          child: DropdownButton(
-                        value: role??accountType.keys.first.toString(),
-                        isExpanded: true,
-                        onChanged: (_) {
-                          role = _;
-                          setState(() {});
-                        },
-                        items: accountType.entries.map((e) => DropdownMenuItem(value: e.key.toString(), child: Text(e.value.toString()))).toList(),
-                      )),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          role ??=accountType.keys.first;
-                          AccountManagementModel model = AccountManagementModel(
-                              id: DateTime.now().millisecondsSinceEpoch.toString(),
-                              userName: name.text,
-                              password: pass.text,
-                              type: role!,
-                              serialNFC: null,
-                              isActive: true,
-                            salary: 2000, dayOfWork: 20
-                          );
-                          name.clear();
-                          pass.clear();
-                          role = null;
-                          controller.addAccount(model);
-                          setState(() {});
-                        },
-                        child: Container(
-                          height: 55,
-                          width: 200,
-                          decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.circular(15)),
-                          child: Center(
-                              child: Text(
-                            "Add",
-                            style: TextStyle(color: Color(0xff00308F), fontSize: 22),
-                          )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: defaultPadding),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(
@@ -126,69 +256,172 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "كل الحسابات",
-                          style: Theme.of(context).textTheme.titleMedium,
+                          "اضافة مستخدمين",
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
                         ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: DataTable(
-                            columnSpacing: defaultPadding,
-                            // minWidth: 600,
-                            columns: [
-                              DataColumn(
-                                label: Text("الاسم"),
-                              ),
-                              DataColumn(
-                                label: Text("كامة السر"),
-                              ),
-                              DataColumn(
-                                label: Text("الدور"),
-                              ),
-                              DataColumn(
-                                label: Text("الحالة"),
-                              ),
-                              DataColumn(
-                                label: Text("العمليات"),
-                              ),
-                            ],
-                            rows: List.generate(
-                              controller.allAccountManagement.keys.length,
-                              (index) => workingDriverDataRow(controller.allAccountManagement.values.toList()[index], index,controller),
+                        SizedBox(height: 10,),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.black,),borderRadius: BorderRadius.circular(8)),
+                                  child: TextField(
+                                    controller: name,
+                                    decoration: InputDecoration(
+                                      hintText: "اسم المستخدم",
+                                      fillColor: secondaryColor,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              width: 20,
                             ),
-                          ),
+                            Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.black,),borderRadius: BorderRadius.circular(8)),
+                                  child: TextField(
+                                    controller: pass,
+                                    decoration: InputDecoration(
+                                      hintText: "كلمة السر",
+                                      fillColor: secondaryColor,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                                child: DropdownButton(
+                                  value: role ?? accountType.keys.first.toString(),
+                                  isExpanded: true,
+                                  onChanged: (_) {
+                                    role = _;
+                                    setState(() {});
+                                  },
+                                  items: accountType.entries.map((e) => DropdownMenuItem(value: e.key.toString(), child: Text(e.value.toString()))).toList(),
+                                )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                role ??= accountType.keys.first;
+                                AccountManagementModel model = AccountManagementModel(
+                                    id: DateTime
+                                        .now()
+                                        .millisecondsSinceEpoch
+                                        .toString(),
+                                    userName: name.text,
+                                    password: pass.text,
+                                    type: role!,
+                                    serialNFC: null,
+                                    isActive: true,
+                                    salary: 2000,
+                                    dayOfWork: 20
+                                );
+                                name.clear();
+                                pass.clear();
+                                role = null;
+                                controller.addAccount(model);
+                                setState(() {});
+                              },
+                              child: Container(
+                                height: 55,
+                                width: 200,
+                                decoration: BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                    child: Text(
+                                      "إضافة",
+                                      style: TextStyle(color: Color(0xff00308F), fontSize: 22),
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(height: 10,),
+                  Container(
+                    padding: EdgeInsets.all(defaultPadding),
+                    decoration: BoxDecoration(
+                      color: secondaryColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "كل المستخدمين",
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
+                        ),
+                        SizedBox(
+                          width: size + 60,
+                          child: Scrollbar(
+                            controller: _scrollController,
+                            child: SingleChildScrollView(
+                              controller: _scrollController,
+                              scrollDirection: Axis.horizontal,
+                              child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                                return DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
+                                  for (var accountModel in controller.allAccountManagement.values)
+                                    DataRow(
+                                        cells: [
+                                          dataRowItem(size / data.length, accountModel.userName.toString()),
+                                          dataRowItem(size / data.length, accountModel.password.toString()),
+                                          dataRowItem(size / data.length, accountModel.type.toString()),
+                                          dataRowItem(size / data.length, accountModel.isActive ? "فعال" : "ملغى",),
+                                          dataRowItem(size / data.length, "حذف", color: Colors.red, onTap: () {
+                                            controller.deleteAccount(accountModel);
+                                          }),
+                                        ]),
+                                ]);
+                              }),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
-              )),
-        );
-      }),
+              );
+            }),
+          );
+        }),
+      ),
     );
   }
 
-  DataRow workingDriverDataRow(AccountManagementModel accountModel, index,AccountManagementViewModel controller ){
-    return DataRow(
-      cells: [
-        DataCell(
-          Text(accountModel.userName),
-        ),
-        DataCell(Text(accountModel.password)),
-        DataCell(Text(accountModel.type)),
-        DataCell(Text(
-          accountModel.isActive?"فعال":"ملغى",
-          style: TextStyle(color:  accountModel.isActive? Colors.green : Colors.red),
-        )),
-        DataCell(ElevatedButton(
-          style: ButtonStyle(
-            foregroundColor: WidgetStatePropertyAll(Colors.red),
-          ),
-          onPressed: () {
-          controller.deleteAccount(accountModel);
-          },
-          child: Text("حذف الحساب"),
-        )),
-      ],
+
+  dataRowItem(size, text, {onTap, color}) {
+    return DataCell(
+      Container(
+        width: size,
+        child: InkWell(
+            onTap: onTap,
+            child: Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: color == null ? null : TextStyle(color: color),
+                ))),
+      ),
     );
   }
 }
