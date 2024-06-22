@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../constants.dart';
 
@@ -46,7 +47,7 @@ class _InfoBarChartState extends State<InfoBarChart> {
                 },
               ),
               sectionsSpace: 1,
-              centerSpaceRadius: min(70, max(50, (MediaQuery.sizeOf(context).width/1000)*60)),
+              centerSpaceRadius: min(75, max(50, (Get.width/1000)*60)),
               startDegreeOffset: 0,
               sections: widget.paiChartSelectionData,
             ),

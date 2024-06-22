@@ -1,6 +1,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 
 class TotalBarChart extends StatefulWidget {
@@ -81,8 +82,12 @@ class TotalBarChartState extends State<TotalBarChart> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.66,
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: ClampingScrollPhysics(),
+    reverse: true,
+    child: SizedBox(
+    width: Get.width,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final barsSpace = 24.0 * constraints.maxWidth / 400;
@@ -136,7 +141,7 @@ class TotalBarChartState extends State<TotalBarChart> {
           );
         },
       ),
-    );
+    ));
   }
 
   List<BarChartGroupData> getData(double barsWidth, double barsSpace) {

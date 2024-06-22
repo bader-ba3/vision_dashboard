@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_Chart.dart';
 
 import '../../../constants.dart';
@@ -38,8 +39,8 @@ class _TotalBarChartWidgetState extends State<TotalBarChartWidget> {
                 index: widget.index,
               )),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Spacer(),
               GestureDetector(
                 onTap: () {
                   widget.index = 2;
@@ -66,7 +67,6 @@ class _TotalBarChartWidgetState extends State<TotalBarChartWidget> {
                   ],
                 ),
               ),
-              const Spacer(),
               GestureDetector(
                 onTap: () {
                   widget.index = 1;
@@ -93,7 +93,6 @@ class _TotalBarChartWidgetState extends State<TotalBarChartWidget> {
                   ],
                 ),
               ),
-              const Spacer(),
               GestureDetector(
                 onTap: () {
                   widget.index = 0;
@@ -120,7 +119,6 @@ class _TotalBarChartWidgetState extends State<TotalBarChartWidget> {
                   ],
                 ),
               ),
-              const Spacer(),
             ],
           ),
         ],
