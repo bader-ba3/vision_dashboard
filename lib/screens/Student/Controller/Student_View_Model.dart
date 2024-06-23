@@ -18,13 +18,13 @@ class StudentViewModel extends GetxController{
 
   Map<String, StudentModel> get studentMap => _studentMap;
 
-
+  ExamViewModel examViewModel=Get.find<ExamViewModel>();
 
   addExamToStudent(List<String> students,String examId){
     students.forEach((element)async {
       await  studentCollectionRef
           .doc(element)
-          .set({"exams":FieldValue.arrayUnion([examId])}, SetOptions(merge: true));
+          .set({"stdExam":FieldValue.arrayUnion([examId])}, SetOptions(merge: true));
 
     },);
 
@@ -39,23 +39,26 @@ class StudentViewModel extends GetxController{
 
       }
       print("Student :${_studentMap.keys.length}");
-      getGrade();
-      update();
+
+      examViewModel. getGrade( _studentMap);
     });
+    update();
   }
 
   getGrade(){
 
     _studentMap.forEach((key, value) {
-      List<String> marks =[];
       for(var exam in value.stdExam!)
       {
-        marks.add("value");
-        _studentMap[key]!.grade=(int.parse(_studentMap[key]!.grade!)+int.parse( Get.find<ExamViewModel>().examMap[exam]!.marks![key])).toString() ;
+        if(examViewModel.examMap[exam]!=null)
+        _studentMap[key]!.grade=_studentMap[key]!.grade!+double.parse( examViewModel.examMap[exam]?.marks![key]) ;
       }
-      _studentMap[key]!.grade=(int.parse(_studentMap[key]!.grade!)/marks.length).toString();
-    },);
+      _studentMap[key]!.grade=_studentMap[key]!.grade!/_studentMap[key]!.stdExam!.length;
+    },
 
+
+
+    );
   }
 
   addStudent(StudentModel studentModel) {

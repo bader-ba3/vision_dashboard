@@ -41,6 +41,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final gradesController = TextEditingController();
   final busController = TextEditingController();
   final guardianController = TextEditingController();
+  final languageController = TextEditingController();
 
   List<EventRecordModel> eventRecords = [];
 
@@ -93,42 +94,89 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       controller: studentNumberController,
                       title: 'رقم الطالب',
                       keyboardType: TextInputType.phone),
-                  CustomDropDown(value: 'الشعبة', listValue: sectionsList, label: 'الشعبة', onChange: (value) {
-                    if(value!=null)
-                    {
-                      sectionController.text=value;
-                    }
-                  },),
-                  CustomDropDown(value: 'الجنس', listValue: sexList, label: 'الجنس', onChange: (value) {
-                    if(value!=null)
-                      {
-                        genderController.text=value;
+                  CustomDropDown(
+                    value: 'الشعبة',
+                    listValue: sectionsList,
+                    label: 'الشعبة',
+                    onChange: (value) {
+                      if (value != null) {
+                        sectionController.text = value;
                       }
-                  },),
-
-
-                  CustomDropDown(value: 'الصف', listValue: classNameList, label: 'الصف', onChange: (value) {
-                    if(value!=null)
-                      {
-                        classController.text=value;
+                    },
+                  ),
+                  CustomDropDown(
+                    value: 'الجنس',
+                    listValue: sexList,
+                    label: 'الجنس',
+                    onChange: (value) {
+                      if (value != null) {
+                        genderController.text = value;
                       }
-                  },),
-                  CustomDropDown(value: 'الحافلة', listValue: busesList, label: 'الحافلة', onChange: (value) {
-                    if(value!=null)
-                    {
-                      busController.text=value;
-                    }
-                  },),
-                  CustomDropDown(value: "ولي الأمر", listValue: Get.find<ParentsViewModel>().parentMap.values.map((e) => e.fullName!,).toList(),label: 'ولي الأمر',onChange: (value) {
-                    if (value != null) {
-                    guardianController.text=  Get.find<ParentsViewModel>().parentMap.values.where((element) => element.fullName==value,).first.id!;}
-                  },),
-                  CustomDropDown(value: _payWay, listValue: _payWays,label: "طرق الدفع",onChange: (selectedWay) {
-
-                    if (selectedWay != null) {
-                      _payWay = selectedWay;
-                    }
-                  },),
+                    },
+                  ),
+                  CustomDropDown(
+                    value: 'الصف',
+                    listValue: classNameList,
+                    label: 'الصف',
+                    onChange: (value) {
+                      if (value != null) {
+                        classController.text = value;
+                      }
+                    },
+                  ),
+                  CustomDropDown(
+                    value: 'اللغة',
+                    listValue: languageList,
+                    label: 'اللغة',
+                    onChange: (value) {
+                      if (value != null) {
+                        languageController.text = value;
+                      }
+                    },
+                  ),
+                  CustomDropDown(
+                    value: 'الحافلة',
+                    listValue: busesList,
+                    label: 'الحافلة',
+                    onChange: (value) {
+                      if (value != null) {
+                        busController.text = value;
+                      }
+                    },
+                  ),
+                  CustomDropDown(
+                    value: "ولي الأمر",
+                    listValue: Get.find<ParentsViewModel>()
+                        .parentMap
+                        .values
+                        .map(
+                          (e) => e.fullName!,
+                        )
+                        .toList(),
+                    label: 'ولي الأمر',
+                    onChange: (value) {
+                      if (value != null) {
+                        guardianController.text = Get.find<ParentsViewModel>()
+                            .parentMap
+                            .values
+                            .where(
+                              (element) => element.fullName == value,
+                            )
+                            .first
+                            .id!;
+                      }
+                    },
+                  ),
+                  CustomDropDown(
+                    value: _payWay,
+                    listValue: _payWays,
+                    label: "طرق الدفع",
+                    onChange: (selectedWay) {
+                      if (selectedWay != null) {
+                        _payWay = selectedWay;
+                      }
+                    },
+                  ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -199,7 +247,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             : "٧٠٠٠ حسم ٢٥٪",
                         style: Styles.headLineStyle2,
                       )
-
                     ],
                   ),
                   GetBuilder<EventViewModel>(builder: (eventController) {
@@ -219,7 +266,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                 borderSide: BorderSide(color: primaryColor),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor, width: 2),
+                                borderSide:
+                                    BorderSide(color: primaryColor, width: 2),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
@@ -234,26 +282,40 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             items: eventController.allEvents.values
                                 .toList()
                                 .where(
-                                  (element) => element.role == Const.eventTypeStudent,
-                            )
+                                  (element) =>
+                                      element.role == Const.eventTypeStudent,
+                                )
                                 .map((e) => DropdownMenuItem(
-                              child: Text(e.name),
-                              value: e,
-                            ))
+                                      child: Text(e.name),
+                                      value: e,
+                                    ))
                                 .toList(),
                           ),
                         ),
                         SizedBox(width: 16.0),
-                        CustomTextField(controller: bodyEvent, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
+                        CustomTextField(
+                            controller: bodyEvent,
+                            title: 'الوصف',
+                            enable: true,
+                            keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
                         ElevatedButton(
                           style: ButtonStyle(
-                            foregroundColor: WidgetStateProperty.all(Colors.white),
-                            backgroundColor: WidgetStateProperty.all(primaryColor),
+                            foregroundColor:
+                                WidgetStateProperty.all(Colors.white),
+                            backgroundColor:
+                                WidgetStateProperty.all(primaryColor),
                           ),
                           onPressed: () {
                             setState(() {
-                              eventRecords.add(EventRecordModel(body: bodyEvent.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
+                              eventRecords.add(EventRecordModel(
+                                  body: bodyEvent.text,
+                                  type: selectedEvent!.name,
+                                  date: DateTime.now()
+                                      .toString()
+                                      .split(" ")[0]
+                                      .toString(),
+                                  color: selectedEvent!.color.toString()));
                               bodyEvent.clear();
                             });
                           },
@@ -282,21 +344,27 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Container(
-                      decoration: BoxDecoration(color:Color(int.parse(record.color)).withOpacity(0.2), borderRadius: BorderRadius.circular(15)),
+                      decoration: BoxDecoration(
+                          color:
+                              Color(int.parse(record.color)).withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(15)),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 14.0, horizontal: 10),
                         child: Row(
                           children: [
                             Text(
                               record.type,
-                              style: Styles.headLineStyle1.copyWith(color: Colors.black),
+                              style: Styles.headLineStyle1
+                                  .copyWith(color: Colors.black),
                             ),
                             SizedBox(
                               width: 10,
                             ),
                             Text(
                               record.body,
-                              style: Styles.headLineStyle1.copyWith(color: Colors.black),
+                              style: Styles.headLineStyle1
+                                  .copyWith(color: Colors.black),
                             ),
                             SizedBox(
                               width: 50,
@@ -317,32 +385,33 @@ class _StudentInputFormState extends State<StudentInputForm> {
             SizedBox(
               height: defaultPadding,
             ),
-            GetBuilder<StudentViewModel>(
-              builder: (controller) {
-                return ElevatedButton(
-                  style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
-                  onPressed: () {
-                    final student = StudentModel(
-                      studentID: generateId("STD"),
-                      parentId: guardianController.text,
-                      grade: "",
-                      section: sectionController.text,
-                      studentNumber: studentNumberController.text,
-                      StudentBirthDay: ageController.text,
-                      studentName: studentNameController.text,
-                      stdClass: classController.text,
-                      gender: genderController.text,
-                      bus: busController.text,
-                      startDate: startDateController.text,
-                      eventRecords: eventRecords,
-                    );
-                    controller.addStudent(student);
-                    print('بيانات الموظف: $student');
-                  },
-                  child: Text('إرسال'),
-                );
-              }
-            ),
+            GetBuilder<StudentViewModel>(builder: (controller) {
+              return ElevatedButton(
+                style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                    backgroundColor: WidgetStateProperty.all(primaryColor)),
+                onPressed: () {
+                  final student = StudentModel(
+                    studentID: generateId("STD"),
+                    parentId: guardianController.text,
+                    stdLanguage: languageController.text,
+                    stdExam: [],
+                    section: sectionController.text,
+                    studentNumber: studentNumberController.text,
+                    StudentBirthDay: ageController.text,
+                    studentName: studentNameController.text,
+                    stdClass: classController.text,
+                    gender: genderController.text,
+                    bus: busController.text,
+                    startDate: startDateController.text,
+                    eventRecords: eventRecords,
+                  );
+                  controller.addStudent(student);
+                  print('بيانات الموظف: $student');
+                },
+                child: Text('إرسال'),
+              );
+            }),
           ],
         ),
       ),

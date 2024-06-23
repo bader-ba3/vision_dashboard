@@ -10,12 +10,13 @@ class StudentModel {
       studentID,
       gender,
       StudentBirthDay,
-      grade,
+stdLanguage,
       parentId,
       section,
       startDate,
       stdClass;
   String? studentNumber;
+  double? grade;
   List<String>? stdExam;
   bool? available = true;
 
@@ -39,6 +40,7 @@ class StudentModel {
     this.available,
     this.section,
     this.stdClass,
+    this.stdLanguage,
   });
 
   Map<String, dynamic> toJson() => {
@@ -49,6 +51,7 @@ class StudentModel {
         'StudentBirthDay': StudentBirthDay,
         'stdClass': stdClass,
         'grade': grade,
+        'stdLanguage': stdLanguage,
         'stdExam': stdExam,
         'section': section,
         'startDate': startDate!,
@@ -59,25 +62,25 @@ class StudentModel {
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
+      grade: 0.0,
       studentName: json['studentName'],
       studentNumber: json['studentNumber'],
       studentID: json['studentID'],
       parentId: json['parentId'],
       section: json['section'],
+      stdLanguage: json['stdLanguage'],
       stdExam: (json['stdExam'] as List<dynamic>?)
           ?.map((item) => item as String)
-          .toList(),
+          .toList()??[],
       stdClass: json['stdClass'],
       gender: json['gender'],
       StudentBirthDay: json['StudentBirthDay'],
-      grade: json['grade']??"0",
       startDate: json['startDate'],
       eventRecords: (json['eventRecords'] as List)
           .map((event) => EventRecordModel.fromJson(event))
           .toList(),
       bus: json['bus'],
       available: true,
-      // guardian: json['guardian'],
     );
   }
 
@@ -101,7 +104,7 @@ List<StudentModel> generateRandomStudents(int count) {
       gender: random.nextBool() ? 'Male' : 'Female',
       parentId: faker.person.name(),
       StudentBirthDay: (random.nextInt(10) + 10).toString(),
-      grade: 'Grade ${random.nextInt(12) + 1}',
+      grade: random.nextDouble(),
       available: true,
       startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023).toString(),
       eventRecords: generateRandomEvents(5),

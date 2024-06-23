@@ -65,6 +65,10 @@ List<String> sexList = [
   "ذكر",
   "انثى",
 ];
+List<String> languageList = [
+  "عربي",
+  "لغالت",
+];
 List<String> busesList = [
   "الحافلة الاولى",
   "الحافلة الثانية",

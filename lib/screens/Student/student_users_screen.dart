@@ -319,7 +319,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                                             children: [
                                                               Spacer(),
                                                               Text(
-                                                                "المادة: ",
+                                                                "المادة: "
                                                               ),
                                                               Text(
                                                                 exam
@@ -381,7 +381,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                             student.studentID.toString());
                                       }),
                                       dataRowItem(
-                                          size / data.length, student.grade),
+                                          size / data.length, student.grade.toString()),
                                     ]),
                             ]),
                       ),

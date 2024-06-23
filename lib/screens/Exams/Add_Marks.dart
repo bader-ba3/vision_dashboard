@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 
 import '../../constants.dart';
@@ -69,7 +70,7 @@ class _AddMarksState extends State<AddMarks> {
                                       rows: [
                                         for (var exam in widget.examModel.marks?.keys??[])
                                           DataRow(cells: [
-                                            dataRowItem(size / data.length, exam.toString()),
+                                            dataRowItem(size / data.length, Get.find<StudentViewModel>().studentMap[exam]!.studentName.toString()),
                                             dataRowItemText(size / data.length, widget.examModel.marks![exam.toString()],onChange: (value){
                                               widget.examModel.marks![exam.toString()]=value;
                                             } ),

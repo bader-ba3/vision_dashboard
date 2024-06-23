@@ -20,17 +20,21 @@ class ExamInputForm extends StatefulWidget {
 
 class _ExamInputFormState extends State<ExamInputForm> {
   List<String> _selectedSection = [];
-  Map<String, String> _selectedStudent = {}; // قائمة الطلاب المُحددين
+  Map<String, String> _selectedStudent = {};
+  String _selectedClass ="";
 
-  // قائمة بكل الطلاب المتاحين
+
+
   final Map<String, List<StudentModel>> _allSection = {};
 StudentViewModel studentViewModel=Get.find<StudentViewModel>();
   getSectionStudent(){
     for (var a in sectionsList){
-      _allSection[a]=studentViewModel.studentMap.values.where((element) => element.section==a,).toList();
+      _allSection[a]=studentViewModel.studentMap.values.where((element) => element.section==a&&element.stdClass==_selectedClass,).toList();
+
       if(_allSection[a]!.isEmpty){
         _allSection.remove(a);
       }
+      print(_allSection.length);
     }
   }
 
@@ -39,7 +43,7 @@ StudentViewModel studentViewModel=Get.find<StudentViewModel>();
     // TODO: implement initState
     super.initState();
     examId=generateId("Exam");
-    getSectionStudent();
+
   }
   List<String>? _questionImageFile = [], _answerImageFile = [];
   final subjectController = TextEditingController();
@@ -110,6 +114,29 @@ String examId="";
                             color: primaryColor,
                           ))
                     ],
+                  ),
+                  CustomDropDown(
+                    value: 'اختر الصف',
+                    listValue: classNameList,
+                    label: 'اختر الصف',
+                    onChange: (value) {
+                      print(value);
+                      if(value!=null)
+                        _selectedClass=value;
+                      getSectionStudent();
+                      setState(() {});
+                    },
+                  ),
+                  CustomDropDown(
+                    value: _selectedSection.length.toString() + "شعبة مختارة",
+                    listValue: _allSection.keys.toList(),
+                    label: 'اختر الشعب للأضافة',
+                    onChange: (value) {
+                      print(value);
+                      _selectedSection.addIf(
+                          !_selectedSection.contains(value), value!);
+                      setState(() {});
+                    },
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,17 +275,8 @@ String examId="";
                       ),
                     ],
                   ),
-                  CustomDropDown(
-                    value: _selectedSection.length.toString() + "شعبة مختارة",
-                    listValue: _allSection.keys.toList(),
-                    label: 'اختر الشعب للأضافة',
-                    onChange: (value) {
-                      print(value);
-                      _selectedSection.addIf(
-                          !_selectedSection.contains(value), value!);
-                      setState(() {});
-                    },
-                  ),
+
+
 
                 ],
               ),
@@ -337,6 +355,7 @@ String examId="";
                       passRate: passRateController.text,
                       marks: _selectedStudent
                     );
+                    print(_selectedStudent.length);
                     studentViewModel.addExamToStudent(_selectedStudent.keys.toList(),examId);
                     examController.addExam(exam);
 
