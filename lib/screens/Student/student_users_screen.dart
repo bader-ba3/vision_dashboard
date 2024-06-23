@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 
 import '../../constants.dart';
@@ -19,7 +20,7 @@ class StudentScreen extends StatefulWidget {
 class _StudentScreenState extends State<StudentScreen> {
   final List<StudentModel> students = generateRandomStudents(10);
   final ScrollController _scrollController = ScrollController();
-  List data =   ["اسم الطالب","رقم الطالب","الجنس","التولد","الصف","تاريخ البداية","الحافلة","ولي الأمر"] ;
+  List data =   ["اسم الطالب","رقم الطالب","الجنس","التولد","الصف","الشعبة","تاريخ البداية","الحافلة","ولي الأمر","علامات الطالب","الخيارات"] ;
 
   @override
   Widget build(BuildContext context) {
@@ -40,28 +41,38 @@ class _StudentScreenState extends State<StudentScreen> {
                 builder: (controller) {
                   return SizedBox(
                     width: size+60,
-                    child: Scrollbar(
-                      controller: _scrollController,
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(columnSpacing: 0, columns:
-                        List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
-                            rows: [
-                              for (var student in controller.studentMap.values)
-                                DataRow(cells: [
-                                  dataRowItem(size / data.length, student.studentName.toString()),
-                                  dataRowItem(size / data.length, student.studentNumber.toString()),
-                                  dataRowItem(size / data.length, student.gender.toString()),
-                                  dataRowItem(size / data.length, student.StudentBirthDay.toString()),
-                                  dataRowItem(size / data.length, student.grade.toString()),
-
-                                  dataRowItem(size / data.length, student.startDate.toString().split(" ")[0]),
-                                  dataRowItem(size / data.length, student.bus.toString()),
-                                  dataRowItem(size / data.length, student.parentId.toString()),
+                    child: GetBuilder<DeleteManagementViewModel>(
+                      builder: (_) {
+                        return Scrollbar(
+                          controller: _scrollController,
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(columnSpacing: 0, columns:
+                            List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                                rows: [
+                                  for (var student in controller.studentMap.values)
+                                    DataRow(
+                                        color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: student.studentID.toString())?Colors.redAccent:Colors.transparent),
+                                        cells: [
+                                      dataRowItem(size / data.length, student.studentName.toString()),
+                                      dataRowItem(size / data.length, student.studentNumber.toString()),
+                                      dataRowItem(size / data.length, student.gender.toString()),
+                                      dataRowItem(size / data.length, student.StudentBirthDay.toString()),
+                                      dataRowItem(size / data.length, student.stdClass.toString()),
+                                      dataRowItem(size / data.length, student.section.toString()),
+                                      dataRowItem(size / data.length, student.startDate.toString().split(" ")[0]),
+                                      dataRowItem(size / data.length, student.bus.toString()),
+                                      dataRowItem(size / data.length, student.parentId.toString()),
+                                      dataRowItem(size / data.length, "عرض",color: Colors.teal),
+                                      dataRowItem(size / data.length, "حذف",color: Colors.red,onTap: (){
+                                        controller.deleteStudent(student.studentID.toString());
+                                      }),
+                                    ]),
                                 ]),
-                            ]),
-                      ),
+                          ),
+                        );
+                      }
                     ),
                   );
                 }

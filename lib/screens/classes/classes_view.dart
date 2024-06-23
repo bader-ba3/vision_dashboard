@@ -13,21 +13,7 @@ class _ClassesViewState extends State<ClassesView> {
   ScrollController scrollController = ScrollController();
   ScrollController secScrollController = ScrollController();
   int? SelectedClass;
-  List className = [
-    "KG 1",
-    "KG 2",
-    "Grade 1",
-    "Grade 2",
-    "Grade 3",
-    "Grade 4",
-    "Grade 5",
-    "Grade 6",
-    "Grade 7",
-    "Grade 8",
-    "Grade 9",
-    "Grade 10",
-    "Grade 11",
-  ];
+
 
 
 
@@ -49,7 +35,7 @@ class _ClassesViewState extends State<ClassesView> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: className.length,
+                    itemCount: classNameList.length,
                     itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -61,7 +47,7 @@ class _ClassesViewState extends State<ClassesView> {
                         child: Container(
                             padding: EdgeInsets.all(20),
                            decoration: BoxDecoration( color: SelectedClass==index ? primaryColor:Colors.transparent,borderRadius: BorderRadius.circular(15)),
-                            child: Center(child: Text(className[index],style: SelectedClass==index ? TextStyle(color: Colors.white):null,))),
+                            child: Center(child: Text(classNameList[index],style: SelectedClass==index ? TextStyle(color: Colors.white):null,))),
                       ),
                     );
                   },),

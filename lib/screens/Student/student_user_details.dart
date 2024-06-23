@@ -34,7 +34,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final sectionController = TextEditingController();
   final genderController = TextEditingController();
   final ageController = TextEditingController();
-  final gradeController = TextEditingController();
+  final classController = TextEditingController();
   final teachersController = TextEditingController();
   final examsController = TextEditingController();
   final startDateController = TextEditingController();
@@ -53,7 +53,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     sectionController.dispose();
     genderController.dispose();
     ageController.dispose();
-    gradeController.dispose();
+    classController.dispose();
     teachersController.dispose();
     examsController.dispose();
     startDateController.dispose();
@@ -93,14 +93,33 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       controller: studentNumberController,
                       title: 'رقم الطالب',
                       keyboardType: TextInputType.phone),
-                  CustomTextField(
-                      controller: sectionController, title: 'الشعبة'),
-                  CustomTextField(controller: genderController, title: 'الجنس'),
+                  CustomDropDown(value: 'الشعبة', listValue: sectionsList, label: 'الشعبة', onChange: (value) {
+                    if(value!=null)
+                    {
+                      sectionController.text=value;
+                    }
+                  },),
+                  CustomDropDown(value: 'الجنس', listValue: sexList, label: 'الجنس', onChange: (value) {
+                    if(value!=null)
+                      {
+                        genderController.text=value;
+                      }
+                  },),
 
-                  CustomTextField(controller: gradeController, title: 'الصف'),
-                  CustomTextField(controller: busController, title: 'الحافلة'),
-                  CustomDropDown(value: "_payWay", listValue: Get.find<ParentsViewModel>().parentMap.values.map((e) => e.fullName!,).toList(),label: 'ولي الأمر',onChange: (value) {
-                    // guardianController.text=value.toString();
+
+                  CustomDropDown(value: 'الصف', listValue: classNameList, label: 'الصف', onChange: (value) {
+                    if(value!=null)
+                      {
+                        classController.text=value;
+                      }
+                  },),
+                  CustomDropDown(value: 'الحافلة', listValue: busesList, label: 'الحافلة', onChange: (value) {
+                    if(value!=null)
+                    {
+                      busController.text=value;
+                    }
+                  },),
+                  CustomDropDown(value: "ولي الأمر", listValue: Get.find<ParentsViewModel>().parentMap.values.map((e) => e.fullName!,).toList(),label: 'ولي الأمر',onChange: (value) {
                     if (value != null) {
                     guardianController.text=  Get.find<ParentsViewModel>().parentMap.values.where((element) => element.fullName==value,).first.id!;}
                   },),
@@ -311,6 +330,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       studentNumber: studentNumberController.text,
                       StudentBirthDay: ageController.text,
                       studentName: studentNameController.text,
+                      stdClass: classController.text,
                       gender: genderController.text,
                       bus: busController.text,
                       startDate: startDateController.text,

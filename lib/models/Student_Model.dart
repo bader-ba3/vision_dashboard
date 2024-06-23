@@ -7,7 +7,7 @@ import 'Employee_Model.dart';
 import 'event_record_model.dart';
 
 class StudentModel {
-  String? studentName,studentID,gender,StudentBirthDay,grade,parentId,section,startDate;
+  String? studentName,studentID,gender,StudentBirthDay,grade,parentId,section,startDate,stdClass;
   String? studentNumber;
   bool? available=true;
 
@@ -30,7 +30,8 @@ class StudentModel {
      this.bus,
      this.parentId,
     this.available,
-    this.section
+    this.section,
+    this.stdClass,
   });
 
   Map<String, dynamic> toJson() => {
@@ -38,7 +39,8 @@ class StudentModel {
     'studentNumber': studentNumber,
     'studentID': studentID,
     'gender': gender,
-    'age': StudentBirthDay,
+    'StudentBirthDay': StudentBirthDay,
+    'stdClass': stdClass,
     'grade': grade,
     'section': section,
     'startDate': startDate!,
@@ -54,8 +56,9 @@ class StudentModel {
       studentID: json['studentID'],
       parentId:json['parentId'],
       section:json['section'],
+      stdClass:json['stdClass'],
       gender: json['gender'],
-      StudentBirthDay: json['age'],
+      StudentBirthDay: json['StudentBirthDay'],
       grade: json['grade'],
       startDate:json['startDate'],
       eventRecords: (json['eventRecords'] as List)

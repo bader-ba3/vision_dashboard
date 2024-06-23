@@ -10,7 +10,7 @@ class StoreViewModel extends GetxController{
   FirebaseFirestore.instance.collection(storeCollection);
 
 
-  ParentsViewModel(){
+  StoreViewModel(){
     getAllStore();
   }
   Map<String, StoreModel> _storeMap = {};

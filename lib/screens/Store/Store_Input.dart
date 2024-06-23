@@ -57,11 +57,13 @@ class _StoreInputFormState extends State<StoreInputForm> {
                 color: secondaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Wrap(
-                clipBehavior: Clip.hardEdge,
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.spaceEvenly,
-                runSpacing: 25,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // clipBehavior: Clip.hardEdge,
+                // direction: Axis.horizontal,
+                // runSpacing: 80,
+                // alignment: WrapAlignment.spaceAround,
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextField(controller: subNameController, title: 'اسم المادة'),
