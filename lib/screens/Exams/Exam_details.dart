@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 
 import '../../models/Exam_model.dart';
@@ -22,34 +23,33 @@ class _ExamInputFormState extends State<ExamInputForm> {
   Map<String, String> _selectedStudent = {}; // قائمة الطلاب المُحددين
 
   // قائمة بكل الطلاب المتاحين
-  final Map<String, List<StudentModel>> _allSection = {
-    "الشعبة الاولى": [
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-    ],
-    "الشعبة الثانية": [
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-    ],
-    "الشعبة الثالثة": [
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-    ]
-  };
+  final Map<String, List<StudentModel>> _allSection = {};
+StudentViewModel studentViewModel=Get.find<StudentViewModel>();
+  getSectionStudent(){
+    for (var a in sectionsList){
+      _allSection[a]=studentViewModel.studentMap.values.where((element) => element.section==a,).toList();
+      if(_allSection[a]!.isEmpty){
+        _allSection.remove(a);
+      }
+    }
+  }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    examId=generateId("Exam");
+    getSectionStudent();
+  }
   List<String>? _questionImageFile = [], _answerImageFile = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
   final passRateController = TextEditingController();
   final dateController = TextEditingController();
   final studentsController = TextEditingController();
-
+String examId="";
   @override
   void dispose() {
-    // imageController.dispose();
     subjectController.dispose();
     professorController.dispose();
     passRateController.dispose();
@@ -183,7 +183,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("صورة ورقة الاجوبة"),
+                      Text("صورة ورقة الاجابة"),
                       SizedBox(
                         height: 15,
                       ),
@@ -259,8 +259,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       setState(() {});
                     },
                   ),
-                  SizedBox(height: 16.0),
-                  SizedBox(height: 16.0),
+
                 ],
               ),
             ),
@@ -329,7 +328,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   ),
                   onPressed: () {
                     final exam = ExamModel(
-                      id: generateId("Exam"),
+                      id: examId,
                       questionImage: _questionImageFile ?? [],
                       answerImage: _answerImageFile,
                       subject: subjectController.text,
@@ -338,8 +337,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       passRate: passRateController.text,
                       marks: _selectedStudent
                     );
+                    studentViewModel.addExamToStudent(_selectedStudent.keys.toList(),examId);
                     examController.addExam(exam);
-                    print('بيانات الامتحان: $exam');
+
                   },
                   child: Text('حفظ'),
                 );

@@ -15,7 +15,8 @@ class StudentModel {
       section,
       startDate,
       stdClass;
-  String? studentNumber, stdExam;
+  String? studentNumber;
+  List<String>? stdExam;
   bool? available = true;
 
   List<EventRecordModel>? eventRecords;
@@ -63,16 +64,19 @@ class StudentModel {
       studentID: json['studentID'],
       parentId: json['parentId'],
       section: json['section'],
-      stdExam: json['stdExam'],
+      stdExam: (json['stdExam'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
       stdClass: json['stdClass'],
       gender: json['gender'],
       StudentBirthDay: json['StudentBirthDay'],
-      grade: json['grade'],
+      grade: json['grade']??"0",
       startDate: json['startDate'],
       eventRecords: (json['eventRecords'] as List)
           .map((event) => EventRecordModel.fromJson(event))
           .toList(),
       bus: json['bus'],
+      available: true,
       // guardian: json['guardian'],
     );
   }
