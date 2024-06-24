@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 
 import '../../models/Exam_model.dart';
@@ -48,15 +49,15 @@ StudentViewModel studentViewModel=Get.find<StudentViewModel>();
   List<String>? _questionImageFile = [], _answerImageFile = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
-  final passRateController = TextEditingController();
   final dateController = TextEditingController();
+  final examPassMarkController = TextEditingController();
+  final examMaxMarkController = TextEditingController();
   final studentsController = TextEditingController();
 String examId="";
   @override
   void dispose() {
     subjectController.dispose();
     professorController.dispose();
-    passRateController.dispose();
     dateController.dispose();
     studentsController.dispose();
     super.dispose();
@@ -87,6 +88,10 @@ String examId="";
                       controller: subjectController, title: 'المقرر'),
                   CustomTextField(
                       controller: professorController, title: 'الاستاذ'),
+                  CustomTextField(
+                      controller: examPassMarkController, title: 'علامة النجاح'),
+                  CustomTextField(
+                      controller: examMaxMarkController, title: 'العلامة الكاملة'),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -324,7 +329,7 @@ String examId="";
                                 _allSection[_selectedSection[parentIndex]]!.map(
                               (e) {
                                 if(e.available==true)
-                                _selectedStudent[e.studentID!] = "0";
+                                _selectedStudent[e.studentID!] = "0.0";
                                 return studentDataRow(e);
                               },
                             ).toList(),
@@ -339,29 +344,27 @@ String examId="";
             ),
             GetBuilder<ExamViewModel>(
               builder: (examController) {
-                return ElevatedButton(
-                  style: ButtonStyle(
-                    foregroundColor: WidgetStateProperty.all(Colors.white),
-                    backgroundColor: WidgetStateProperty.all(primaryColor),
-                  ),
-                  onPressed: () {
-                    final exam = ExamModel(
+                return
+                  AppButton(text: 'حفظ',   onPressed: () {
+                  final exam = ExamModel(
                       id: examId,
                       questionImage: _questionImageFile ?? [],
                       answerImage: _answerImageFile,
                       subject: subjectController.text,
                       professor: professorController.text,
+                      examPassMark: examPassMarkController.text,
+                      examMaxMark: examMaxMarkController.text,
                       date: DateTime.parse(dateController.text),
-                      passRate: passRateController.text,
-                      marks: _selectedStudent
-                    );
-                    print(_selectedStudent.length);
-                    studentViewModel.addExamToStudent(_selectedStudent.keys.toList(),examId);
-                    examController.addExam(exam);
 
-                  },
-                  child: Text('حفظ'),
-                );
+                      marks: _selectedStudent
+                  );
+                  print(_selectedStudent.length);
+                  studentViewModel.addExamToStudent(_selectedStudent.keys.toList(),examId);
+                  examController.addExam(exam);
+
+                },);
+
+
               }
             ),
           ],

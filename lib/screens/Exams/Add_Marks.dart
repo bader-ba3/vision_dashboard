@@ -6,43 +6,45 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
+import 'package:vision_dashboard/utils/Dialogs.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
+import '../Widgets/AppButton.dart';
 import '../Widgets/header.dart';
 import 'controller/Exam_View_Model.dart';
 
 class AddMarks extends StatefulWidget {
-  const AddMarks({super.key,required this.examModel});
+  const AddMarks({super.key, required this.examModel});
 
   @override
   State<AddMarks> createState() => _AddMarksState();
 
- final ExamModel examModel;
+  final ExamModel examModel;
 }
 
 class _AddMarksState extends State<AddMarks> {
   final ScrollController _scrollController = ScrollController();
-  List data =   ["اسم الطالب","العلامة"] ;
+  List data = ["اسم الطالب", "العلامة"];
+  int maxMark = 0;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
+    maxMark = int.parse(widget.examModel.examMaxMark ?? "0");
     return Scaffold(
-      appBar:   Header(title: 'اضافة علامات للطلاب',),
+      appBar: Header(title: 'اضافة علامات للطلاب'),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
-          double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen?240:120), 1000)-60;
+          double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
           return Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-
                 Container(
                   padding: EdgeInsets.all(defaultPadding),
                   decoration: BoxDecoration(
@@ -57,48 +59,56 @@ class _AddMarksState extends State<AddMarks> {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(
-                        width: size+60,
+                        width: size + 60,
                         child: Scrollbar(
                           controller: _scrollController,
-                          child: GetBuilder<ExamViewModel>(
-                              builder: (examController) {
-                                return SingleChildScrollView(
-                                  controller: _scrollController,
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(columnSpacing: 0, columns:
-                                  List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
-                                      rows: [
-                                        for (var exam in widget.examModel.marks?.keys??[])
-                                          DataRow(cells: [
-                                            dataRowItem(size / data.length, Get.find<StudentViewModel>().studentMap[exam]!.studentName.toString()),
-                                            dataRowItemText(size / data.length, widget.examModel.marks![exam.toString()],onChange: (value){
-                                              widget.examModel.marks![exam.toString()]=value;
-                                            } ),
-                                          ]),
-                                      ]),
-                                );
-                              }
-                          ),
+                          child: GetBuilder<ExamViewModel>(builder: (examController) {
+                            return SingleChildScrollView(
+                              controller: _scrollController,
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                columnSpacing: 0,
+                                columns: List.generate(
+                                  data.length,
+                                      (index) => DataColumn(
+                                    label: Container(
+                                      width: size / data.length,
+                                      child: Center(child: Text(data[index])),
+                                    ),
+                                  ),
+                                ),
+                                rows: [
+                                  for (var exam in widget.examModel.marks?.keys ?? [])
+                                    DataRow(
+                                      cells: [
+                                        dataRowItem(size / data.length, Get.find<StudentViewModel>().studentMap[exam]!.studentName.toString()),
+                                        dataRowItemText(
+                                          size / data.length,
+                                          _calculateMark(exam.toString()),
+                                          onChange: (value) {
+                                            _updateMark(exam.toString(), value);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            );
+                          }),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: defaultPadding,),
+                SizedBox(height: defaultPadding),
                 GetBuilder<ExamViewModel>(
                   builder: (controller) {
-                    return ElevatedButton(
-                      style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
-                      onPressed: () {
-                        widget.examModel.marks!.forEach((key, value) {
-                          print("key $key---------------vl $value");
-                        },);
-                        controller.addMarkExam(widget.examModel.marks!, widget.examModel.id!);
-                        controller.changeExamScreen();
-                      },
-                      child: Text('حفظ'),
-                    );
-                  }
+                    return AppButton(text:'حفظ' ,   onPressed: () async {
+                      await controller.addMarkExam(widget.examModel.marks!, widget.examModel.id!);
+                      controller.changeExamScreen();
+                      Get.find<StudentViewModel>().getAllStudentWithOutListen();
+                    },);
+                  },
                 ),
               ],
             ),
@@ -108,30 +118,70 @@ class _AddMarksState extends State<AddMarks> {
     );
   }
 
+  String _calculateMark(String exam) {
+    double examMark = double.parse(widget.examModel.marks?[exam] ?? '0');
+    double maxExamMark = double.parse(widget.examModel.examMaxMark ?? '100');
+    return ((examMark * maxExamMark) / 100).toString();
+  }
+
+  void _updateMark(String exam, String value) {
+    double updatedMark = (double.parse(value) / double.parse(widget.examModel.examMaxMark.toString())) * 100;
+    widget.examModel.marks?[exam] = updatedMark.toString();
+  }
+
+  bool isNumeric(String str) {
+    final number = num.tryParse(str);
+    return number != null;
+  }
+
   dataRowItem(size, text, {onTap, color}) {
     return DataCell(
       Container(
-        width: size ,
+        width: size,
         child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: color == null ? null : TextStyle(color: color),
-                ))),
+          onTap: onTap,
+          child: Center(
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: color == null ? null : TextStyle(color: color),
+            ),
+          ),
+        ),
       ),
     );
   }
-  dataRowItemText(size, text, { color,onChange}) {
-TextEditingController controller =TextEditingController();
-controller.text=text;
+
+  dataRowItemText(size, text, {color, onChange}) {
+    TextEditingController controller = TextEditingController();
+    controller.text = text;
+
     return DataCell(
       Container(
-        width: size ,
-        padding: EdgeInsets.symmetric(horizontal: size/4,vertical: 5),
-        child:CustomTextField(title: "",controller: controller,hint:text ,onChange:onChange,),
+        width: size,
+        padding: EdgeInsets.symmetric(horizontal: size / 4, vertical: 5),
+        child: CustomTextField(
+          title: "",
+          controller: controller,
+          hint: text,
+          onChange: (value) {
+            if (value!.isEmpty) {
+              showErrorDialog("خطأ", "لا يمكن أن تكون القيمة فارغة");
+              // Get.snackbar("خطأ", "لا يمكن أن تكون القيمة فارغة");
+              controller.clear();
+            } else if (!isNumeric(value)) {
+              showErrorDialog("خطأ", "يجب أن تكون القيمة رقمية");
+              // Get.snackbar("خطأ", "يجب أن تكون القيمة رقمية");
+              controller.clear();
+
+            } else {
+              onChange(value);
+            }
+          },
+        ),
       ),
     );
   }
 }
+
+

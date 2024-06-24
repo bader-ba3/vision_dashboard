@@ -4,6 +4,7 @@ import 'package:flutter_material_color_picker/flutter_material_color_picker.dart
 import 'package:vision_dashboard/controller/event_view_model.dart';
 
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
@@ -84,28 +85,17 @@ class _EventInputFormState extends State<EventInputForm> {
                   selectedColor: Color(selectedColor)),
             ),
             SizedBox(height: 50,),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.blue.shade600),
-                foregroundColor: WidgetStatePropertyAll(Colors.white),
-              ),
-              onPressed: () {
-                role ??= Const.eventTypeStudent;
-                EventModel model = EventModel(name: name.text, id: DateTime.now().millisecondsSinceEpoch.toString(), role: role!, color: selectedColor);
-                name.clear();
-                pass.clear();
-                role = null;
-                EventViewModel eventViewModel = Get.find<EventViewModel>();
-                eventViewModel.addEvent(model);
-                setState(() {});
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "إضافة",
-                ),
-              ),
-            )
+            AppButton(text: "حفظ",   onPressed: () {
+              role ??= Const.eventTypeStudent;
+              EventModel model = EventModel(name: name.text, id: DateTime.now().millisecondsSinceEpoch.toString(), role: role!, color: selectedColor);
+              name.clear();
+              pass.clear();
+              role = null;
+              EventViewModel eventViewModel = Get.find<EventViewModel>();
+              eventViewModel.addEvent(model);
+              setState(() {});
+            },)
+
           ],
         ),
       ),

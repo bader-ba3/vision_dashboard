@@ -35,31 +35,33 @@ class StudentViewModel extends GetxController{
 
       for (var element in value.docs) {
         _studentMap[element.id] = StudentModel.fromJson(element.data());
-        // _studentMap[element.id]!.grade=
+
 
       }
       print("Student :${_studentMap.keys.length}");
 
       examViewModel. getGrade( _studentMap);
+      update();
     });
-    update();
+
   }
+  getAllStudentWithOutListen()async {
+    await   studentCollectionRef.get().then((value) {
+      _studentMap.clear();
 
-  getGrade(){
+      for (var element in value.docs) {
+        _studentMap[element.id] = StudentModel.fromJson(element.data());
 
-    _studentMap.forEach((key, value) {
-      for(var exam in value.stdExam!)
-      {
-        if(examViewModel.examMap[exam]!=null)
-        _studentMap[key]!.grade=_studentMap[key]!.grade!+double.parse( examViewModel.examMap[exam]?.marks![key]) ;
+
       }
-      _studentMap[key]!.grade=_studentMap[key]!.grade!/_studentMap[key]!.stdExam!.length;
-    },
+      print("Student :${_studentMap.keys.length}");
 
+      examViewModel. getGrade( _studentMap);
+      update();
+    });
 
-
-    );
   }
+
 
   addStudent(StudentModel studentModel) {
     studentCollectionRef.doc(studentModel.studentID).set(studentModel.toJson());

@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 
 class ExamModel {
-  String? subject,professor,passRate,id;
+  String? subject,professor,id,examPassMark,examMaxMark;
   DateTime? date;
+  double? passRate;
   List<String>? questionImage,answerImage;
 Map<String,dynamic>? marks;
 
@@ -17,17 +18,20 @@ Map<String,dynamic>? marks;
      this.passRate,
     this.id,
     this.answerImage,
+    this.examPassMark,
+    this.examMaxMark,
 
   });
 
   Map<String, dynamic> toJson() => {
     'id':id,
+    'examPassMark':examPassMark,
     'questionImage': questionImage!.toList(),
     'subject': subject,
     'professor': professor,
     'date': date!.toIso8601String(),
     'marks': marks,
-    'passRate': passRate,
+    'examMaxMark': examMaxMark,
     'answerImage':answerImage!.toList(),
   };
 
@@ -36,12 +40,14 @@ Map<String,dynamic>? marks;
       id:json['id']??'',
       questionImage:List<String>.from(json['questionImage']??[]),
       answerImage:  List<String>.from(json['answerImage']??[]),
-
+      passRate:0.0,
       subject: json['subject']??'',
+      examPassMark: json['examPassMark']??'0',
+      examMaxMark: json['examMaxMark']??'0',
       professor: json['professor']??'',
       date: DateTime.parse(json['date']??DateTime.now()),
-      marks: json['marks']??{},
-      passRate: json['passRate']??'',
+      marks: json['marks']??{"":"0"},
+
     );
   }
 
@@ -63,7 +69,7 @@ Map<String,dynamic>? marks;
       professor: faker.person.name(),
       date: faker.date.dateTime(minYear: 2020, maxYear: 2023),
       marks: {"56456465465":"0"},
-      passRate: (random.nextDouble() * 100).toDouble().toString(),
+      passRate: (random.nextDouble() * 100).toDouble(),
     ));
   }
 

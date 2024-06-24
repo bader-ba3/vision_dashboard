@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 import '../../controller/account_management_view_model.dart';
@@ -83,38 +84,33 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                 ),
               ],
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(primaryColor)
-              ),
-              onPressed: () async {
-               List imageLinkList = [];
-                for(var i in ImagesTempData){
-                  final storageRef = FirebaseStorage.instance.ref().child('images/expenses/${DateTime.now().millisecondsSinceEpoch}.png');
-                  await storageRef.putFile(File(i));
-                  final imageLink = await storageRef.getDownloadURL();
-                  imageLinkList.add(imageLink);
-                }
-                ExpensesModel model = ExpensesModel(
-                  id: DateTime
-                      .now()
-                      .millisecondsSinceEpoch
-                      .toString(),
-                  title: titleController.text,
-                  body: bodyController.text,
-                  total: int.parse(totalController.text),
-                  userId: getMyUserId(),
-                  images: imageLinkList,
-                );
-                controller.addExpenses(model);
-                bodyController.clear();
-                titleController.clear();
-                totalController.clear();
-                ImagesTempData.clear();
-                setState(() {});
-              },
-              child: Text('إرسال', style: TextStyle(color: Colors.white),),
-            ),
+            AppButton(text: "حفظ",    onPressed: () async {
+              List imageLinkList = [];
+              for(var i in ImagesTempData){
+                final storageRef = FirebaseStorage.instance.ref().child('images/expenses/${DateTime.now().millisecondsSinceEpoch}.png');
+                await storageRef.putFile(File(i));
+                final imageLink = await storageRef.getDownloadURL();
+                imageLinkList.add(imageLink);
+              }
+              ExpensesModel model = ExpensesModel(
+                id: DateTime
+                    .now()
+                    .millisecondsSinceEpoch
+                    .toString(),
+                title: titleController.text,
+                body: bodyController.text,
+                total: int.parse(totalController.text),
+                userId: getMyUserId(),
+                images: imageLinkList,
+              );
+              controller.addExpenses(model);
+              bodyController.clear();
+              titleController.clear();
+              totalController.clear();
+              ImagesTempData.clear();
+              setState(() {});
+            },)
+
           ],
         ),
       );

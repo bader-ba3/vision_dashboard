@@ -4,6 +4,7 @@ import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/models/event_record_model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
@@ -299,28 +300,21 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             enable: true,
                             keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            foregroundColor:
-                                WidgetStateProperty.all(Colors.white),
-                            backgroundColor:
-                                WidgetStateProperty.all(primaryColor),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              eventRecords.add(EventRecordModel(
-                                  body: bodyEvent.text,
-                                  type: selectedEvent!.name,
-                                  date: DateTime.now()
-                                      .toString()
-                                      .split(" ")[0]
-                                      .toString(),
-                                  color: selectedEvent!.color.toString()));
-                              bodyEvent.clear();
-                            });
-                          },
-                          child: Text('إضافة سجل حدث'),
-                        ),
+
+                        AppButton(text: 'إضافة سجل حدث',   onPressed: () {
+                          setState(() {
+                            eventRecords.add(EventRecordModel(
+                                body: bodyEvent.text,
+                                type: selectedEvent!.name,
+                                date: DateTime.now()
+                                    .toString()
+                                    .split(" ")[0]
+                                    .toString(),
+                                color: selectedEvent!.color.toString()));
+                            bodyEvent.clear();
+                          });
+                        },)
+
                       ],
                     );
                   }),
@@ -386,31 +380,27 @@ class _StudentInputFormState extends State<StudentInputForm> {
               height: defaultPadding,
             ),
             GetBuilder<StudentViewModel>(builder: (controller) {
-              return ElevatedButton(
-                style: ButtonStyle(
-                    foregroundColor: WidgetStateProperty.all(Colors.white),
-                    backgroundColor: WidgetStateProperty.all(primaryColor)),
-                onPressed: () {
-                  final student = StudentModel(
-                    studentID: generateId("STD"),
-                    parentId: guardianController.text,
-                    stdLanguage: languageController.text,
-                    stdExam: [],
-                    section: sectionController.text,
-                    studentNumber: studentNumberController.text,
-                    StudentBirthDay: ageController.text,
-                    studentName: studentNameController.text,
-                    stdClass: classController.text,
-                    gender: genderController.text,
-                    bus: busController.text,
-                    startDate: startDateController.text,
-                    eventRecords: eventRecords,
-                  );
-                  controller.addStudent(student);
-                  print('بيانات الموظف: $student');
-                },
-                child: Text('إرسال'),
-              );
+
+              return  AppButton(text: "حفظ",   onPressed: () {
+                final student = StudentModel(
+                  studentID: generateId("STD"),
+                  parentId: guardianController.text,
+                  stdLanguage: languageController.text,
+                  stdExam: [],
+                  section: sectionController.text,
+                  studentNumber: studentNumberController.text,
+                  StudentBirthDay: ageController.text,
+                  studentName: studentNameController.text,
+                  stdClass: classController.text,
+                  gender: genderController.text,
+                  bus: busController.text,
+                  startDate: startDateController.text,
+                  eventRecords: eventRecords,
+                );
+                controller.addStudent(student);
+                print('بيانات الموظف: $student');
+              },);
+
             }),
           ],
         ),

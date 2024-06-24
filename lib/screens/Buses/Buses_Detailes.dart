@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 import '../../models/Bus_Model.dart';
@@ -292,28 +293,23 @@ generateRandomEmployees(1).first,
                         );
                       }),
                   SizedBox(height: 16.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                      WidgetStateProperty.all(primaryColor),
-                    ),
-                    onPressed: () {
-                      BusModel bus = BusModel(
-                        name: nameController.text,
-                        number: numberController.text,
-                        type: typeController.text,
-                        employee: employeeController.text,
-                        students: _students,
-                        startDate: DateTime.parse(startDateController.text),
-                        expense:
-                        double.tryParse(expenseController.text) ?? 0.0,
-                        eventRecords: eventRecords,
-                      );
-                      // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                      print('Bus Model: $bus');
-                    },
-                    child: Text('حفظ', style: TextStyle(color: Colors.white)),
-                  ),
+                  AppButton(text: 'حفظ',     onPressed: () {
+                    BusModel bus = BusModel(
+                      name: nameController.text,
+                      number: numberController.text,
+                      type: typeController.text,
+                      employee: employeeController.text,
+                      students: _students,
+                      startDate: DateTime.parse(startDateController.text),
+                      expense:
+                      double.tryParse(expenseController.text) ?? 0.0,
+                      eventRecords: eventRecords,
+                    );
+                    // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+                    print('Bus Model: $bus');
+                  },)
+
+
             ])));
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Store_Model.dart';
 import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 
@@ -75,26 +76,20 @@ class _StoreInputFormState extends State<StoreInputForm> {
             ),
 
             SizedBox(height: defaultPadding * 2),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(primaryColor)
-              ),
-              onPressed: () {
+            AppButton(text: 'حفظ',   onPressed: () {
 
-                StoreModel store = StoreModel(
-               subName:  subNameController.text,
-                    subQuantity: subQuantityController.text,
-                    id: generateId("SUB"),
+              StoreModel store = StoreModel(
+                subName:  subNameController.text,
+                subQuantity: subQuantityController.text,
+                id: generateId("SUB"),
 
-                );
+              );
 
-                Get.find<StoreViewModel>().addStore(store);
-                // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                print('store Model: $store');
-              },
+              Get.find<StoreViewModel>().addStore(store);
+              // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+              print('store Model: $store');
+            },)
 
-              child: Text('حفظ',style:TextStyle(color: Colors.white),),
-            ),
           ],
         ),
       ),

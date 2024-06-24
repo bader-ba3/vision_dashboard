@@ -7,6 +7,7 @@ import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
@@ -35,8 +36,8 @@ class _StudentScreenState extends State<StudentScreen> {
     "الحافلة",
     "ولي الأمر",
     "علامات الطالب",
+    "المعدل",
     "الخيارات",
-    "المعدل"
   ];
 
   @override
@@ -97,7 +98,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                       dataRowItem(size / data.length,
                                           student.StudentBirthDay.toString()),
                                       dataRowItem(size / data.length,
-                                          student.stdClass.toString()),
+                                          student.stdClass.toString()+" "+ student.stdLanguage.toString()),
                                       dataRowItem(size / data.length,
                                           student.section.toString()),
                                       dataRowItem(
@@ -119,172 +120,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                                 student.parentId.toString()]!;
                                         showDialog(
                                           context: context,
-                                          builder: (context) => AlertDialog(
-                                            backgroundColor: secondaryColor,
-                                            actions: [
-                                              Column(
-                                                children: [
-                                                  Container(
-                                                    width: Get.width / 3,
-                                                    height: Get.height / 3.5,
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          ClampingScrollPhysics(),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(14.0),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "الاسم الكامل: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .fullName
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "العنوان: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .address
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "الجنسية: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .nationality
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "العمر: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .age
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "العمل: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .work
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "رقم الام: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .motherPhone
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Text(
-                                                                      "رقم الطوارئ: "),
-                                                                  Text(
-                                                                    parentModel
-                                                                        .emergencyPhone
-                                                                        .toString(),
-                                                                    style: Styles
-                                                                        .headLineStyle2,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
-                                                      itemCount: student.stdExam
-                                                              ?.length ??
-                                                          0,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        foregroundColor:
-                                                            WidgetStateProperty
-                                                                .all(Colors
-                                                                    .white),
-                                                        backgroundColor:
-                                                            WidgetStateProperty
-                                                                .all(
-                                                                    primaryColor),
-                                                      ),
-                                                      onPressed: () {
-                                                        Get.back();
-                                                      },
-                                                      child: Text("تم"))
-                                                ],
-                                              )
-                                            ],
-                                          ),
+                                          builder: (context) => buildParentAlertDialog(parentModel, student),
                                         );
                                       }),
                                       dataRowItem(size / data.length, "عرض",
@@ -292,97 +128,19 @@ class _StudentScreenState extends State<StudentScreen> {
                                         print(student.stdExam!.length);
                                         showDialog(
                                           context: context,
-                                          builder: (context) => AlertDialog(
-                                            backgroundColor: secondaryColor,
-                                            actions: [
-                                              Column(
-                                                children: [
-                                                  Container(
-                                                    width: Get.width / 3,
-                                                    height: min(
-                                                        50.0 *
-                                                            (student.stdExam
-                                                                    ?.length ??
-                                                                1),
-                                                        Get.height / 3),
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          ClampingScrollPhysics(),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(14.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Spacer(),
-                                                              Text(
-                                                                "المادة: "
-                                                              ),
-                                                              Text(
-                                                                exam
-                                                                    .examMap[student
-                                                                            .stdExam![
-                                                                        index]]!
-                                                                    .subject!,
-                                                                style: Styles
-                                                                    .headLineStyle2,
-                                                              ),
-                                                              Spacer(),
-                                                              Text("العلامة: "),
-                                                              Text(
-                                                                exam
-                                                                    .examMap[student
-                                                                            .stdExam![
-                                                                        index]]!
-                                                                    .marks![student.studentID]!,
-                                                                style: Styles
-                                                                    .headLineStyle2,
-                                                              ),
-                                                              Spacer(),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
-                                                      itemCount: student.stdExam
-                                                              ?.length ??
-                                                          0,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        foregroundColor:
-                                                            WidgetStateProperty
-                                                                .all(Colors
-                                                                    .white),
-                                                        backgroundColor:
-                                                            WidgetStateProperty
-                                                                .all(
-                                                                    primaryColor),
-                                                      ),
-                                                      onPressed: () {
-                                                        Get.back();
-                                                      },
-                                                      child: Text("تم"))
-                                                ],
-                                              )
-                                            ],
-                                          ),
+                                          builder: (context) => buildMarksAlertDialog(student),
                                         );
-                                      }),
-                                      dataRowItem(size / data.length, "حذف",
-                                          color: Colors.red, onTap: () {
-                                        controller.deleteStudent(
-                                            student.studentID.toString());
                                       }),
                                       dataRowItem(
                                           size / data.length, student.grade.toString()),
+                                      dataRowItem(size / data.length, "حذف",
+                                          color: Colors.red, onTap: () {
+                                        if(student.stdExam!.length>1)
+                                            controller.deleteStudent(
+                                                student.studentID.toString());
+                                          }),
                                     ]),
+
                             ]),
                       ),
                     );
@@ -394,6 +152,234 @@ class _StudentScreenState extends State<StudentScreen> {
         }),
       ),
     );
+  }
+
+  AlertDialog buildMarksAlertDialog(StudentModel student) {
+    return AlertDialog(
+                                          backgroundColor: secondaryColor,
+                                          actions: [
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  width: Get.width / 3,
+                                                  height: min(
+                                                      60.0 *
+                                                          (student.stdExam
+                                                                  ?.length ??
+                                                              1),
+                                                      Get.height / 3),
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        ClampingScrollPhysics(),
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(14.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Spacer(),
+                                                            Text(
+                                                              "المادة: "
+                                                            ),
+                                                            Text(
+                                                              exam
+                                                                  .examMap[student
+                                                                          .stdExam![
+                                                                      index]]!
+                                                                  .subject!,
+                                                              style: Styles
+                                                                  .headLineStyle2,
+                                                            ),
+                                                            Spacer(),
+                                                            Text("العلامة: "),
+                                                            Text(
+                                                              "${(double.parse(exam.examMap[student.stdExam![index]]!.marks![student.studentID]!)*double.parse(exam.examMap[student.stdExam![index]]!.examMaxMark!))/100}",
+                                                              style: Styles
+                                                                  .headLineStyle2,
+                                                            ),
+                                                            Spacer(),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    itemCount: student.stdExam
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                AppButton(text: "تم",    onPressed: () {
+                                                  Get.back();
+                                                },)
+
+                                              ],
+                                            )
+                                          ],
+                                        );
+  }
+
+  AlertDialog buildParentAlertDialog(ParentModel parentModel, StudentModel student) {
+    return AlertDialog(
+                                          backgroundColor: secondaryColor,
+                                          actions: [
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  width: Get.width / 3,
+                                                  height: Get.height / 3.5,
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        ClampingScrollPhysics(),
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(14.0),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "الاسم الكامل: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .fullName
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "العنوان: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .address
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "الجنسية: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .nationality
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "العمر: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .age
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "العمل: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .work
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "رقم الام: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .motherPhone
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    "رقم الطوارئ: "),
+                                                                Text(
+                                                                  parentModel
+                                                                      .emergencyPhone
+                                                                      .toString(),
+                                                                  style: Styles
+                                                                      .headLineStyle2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    itemCount: student.stdExam
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+
+                                                AppButton(text: "تم",       onPressed: () {
+                                                  Get.back();
+                                                },)
+
+                                              ],
+                                            )
+                                          ],
+                                        );
   }
 
   dataRowItem(size, text, {onTap, color}) {

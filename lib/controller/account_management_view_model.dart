@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
 import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../models/account_management_model.dart';
@@ -206,9 +207,10 @@ class AccountManagementViewModel extends GetxController{
                     );
                   },),
                 ),actions: [
-                  ElevatedButton(onPressed: (){
+                  AppButton(text: "موافق", onPressed: (){
                     Get.back();
-                  }, child: Text("موافق"))
+                  })
+
          ]
           );
         }

@@ -283,20 +283,7 @@ class BusesScreen extends StatelessWidget {
                   ),
                 ),
 
-                /*ElevatedButton(
-                  onPressed: () {
-                    Get.to(BusInputForm());
-                  },
-                  style: ButtonStyle(
-                      backgroundColor:
-                      WidgetStateProperty.all(secondaryColor),
-                      padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 30))),
-                  child: Text(
-                    "اضافة حافلة جديدة",
-                    style: Styles.headLineStyle2,
-                  ),
-                ),*/
+
                 SizedBox(
                   height: 25,
                 ),
@@ -533,7 +520,8 @@ final  List listRecentTrip = [
           record.status,
           style: TextStyle(color: record.status == "Stopped" ? Colors.red : Colors.green),
         )),
-        DataCell(ElevatedButton(
+        DataCell(
+            ElevatedButton(
           style: ButtonStyle(
             foregroundColor: WidgetStatePropertyAll(Colors.blue),
           ),

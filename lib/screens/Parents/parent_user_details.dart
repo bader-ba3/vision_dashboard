@@ -3,6 +3,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
@@ -186,19 +187,13 @@ class _ParentInputFormState extends State<ParentInputForm> {
                         SizedBox(width: 16.0),
                         CustomTextField(controller: bodyEventController, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            foregroundColor: WidgetStateProperty.all(Colors.white),
-                            backgroundColor: WidgetStateProperty.all(primaryColor),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              eventRecords.add(EventRecordModel(body: bodyEventController.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
-                              bodyEventController.clear();
-                            });
-                          },
-                          child: Text('إضافة سجل حدث'),
-                        ),
+                        AppButton(text: 'إضافة سجل حدث',   onPressed: () {
+                          setState(() {
+                            eventRecords.add(EventRecordModel(body: bodyEventController.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
+                            bodyEventController.clear();
+                          });
+                        },)
+
                       ],
                     );
                   }),
@@ -256,16 +251,12 @@ class _ParentInputFormState extends State<ParentInputForm> {
               ),
             ),
             SizedBox(height: defaultPadding * 2),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(primaryColor)
-              ),
-              onPressed: () {
+            AppButton(text: 'حفظ',    onPressed: () {
 
-                ParentModel parent = ParentModel(
-                age: ageController.text,
-                nationality: nationalityController.text,
-                parentID: faker.randomGenerator.integer(1000000).toString(),
+              ParentModel parent = ParentModel(
+                  age: ageController.text,
+                  nationality: nationalityController.text,
+                  parentID: faker.randomGenerator.integer(1000000).toString(),
                   id: generateId("PARENT"),
                   fullName: fullNameController.text,
                   address: addressController.text,
@@ -275,15 +266,13 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   phoneNumber: numberController.text,
                   eventRecords: eventRecords,
                   startDate: startDateController.text
-                );
+              );
 
-                Get.find<ParentsViewModel>().addParent(parent);
-                // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                print('Parent Model: $parent');
-              },
+              Get.find<ParentsViewModel>().addParent(parent);
+              // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+              print('Parent Model: $parent');
+            },)
 
-              child: Text('حفظ',style:TextStyle(color: Colors.white),),
-            ),
           ],
         ),
       ),

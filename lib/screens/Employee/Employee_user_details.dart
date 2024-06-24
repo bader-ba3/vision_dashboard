@@ -3,6 +3,7 @@ import 'package:vision_dashboard/models/Employee_Model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/event_model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../controller/event_view_model.dart';
 import '../../models/event_record_model.dart';
@@ -128,43 +129,34 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                         SizedBox(width: 16.0),
                         CustomTextField(controller: bodyEvent, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            foregroundColor: WidgetStateProperty.all(Colors.white),
-                            backgroundColor: WidgetStateProperty.all(primaryColor),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              eventRecords.add(EventRecordModel(body: bodyEvent.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
-                              bodyEvent.clear();
-                            });
-                          },
-                          child: Text('إضافة سجل حدث'),
-                        ),
+                        AppButton(text: 'إضافة سجل حدث',  onPressed: () {
+                          setState(() {
+                            eventRecords.add(EventRecordModel(body: bodyEvent.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
+                            bodyEvent.clear();
+                          });
+                        },)
+
                       ],
                     );
                   }),
-                  ElevatedButton(
-                    style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.white), backgroundColor: WidgetStateProperty.all(primaryColor)),
-                    onPressed: () {
-                      final employee = EmployeeModel(
-                        fullName: fullNameController.text,
-                        mobileNumber: mobileNumberController.text,
-                        address: addressController.text,
-                        nationality: nationalityController.text,
-                        gender: genderController.text,
-                        age: ageController.text,
-                        jobTitle: jobTitleController.text,
-                        salary: salaryController.text,
-                        contract: contractController.text,
-                        bus: busController.text,
-                        startDate: startDateController.text,
-                        eventRecords: eventRecords,
-                      );
-                      print('بيانات الموظف: $employee');
-                    },
-                    child: Text('إرسال'),
-                  ),
+                  AppButton(text: "حفظ",   onPressed: () {
+                    final employee = EmployeeModel(
+                      fullName: fullNameController.text,
+                      mobileNumber: mobileNumberController.text,
+                      address: addressController.text,
+                      nationality: nationalityController.text,
+                      gender: genderController.text,
+                      age: ageController.text,
+                      jobTitle: jobTitleController.text,
+                      salary: salaryController.text,
+                      contract: contractController.text,
+                      bus: busController.text,
+                      startDate: startDateController.text,
+                      eventRecords: eventRecords,
+                    );
+                    print('بيانات الموظف: $employee');
+                  },),
+
                   SizedBox(height: 16.0),
                 ],
               ),

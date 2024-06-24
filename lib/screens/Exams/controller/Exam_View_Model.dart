@@ -7,9 +7,8 @@ import 'package:vision_dashboard/models/Student_Model.dart';
 import '../../../controller/delete_management_view_model.dart';
 
 class ExamViewModel extends GetxController {
-
   final examCollectionRef =
-  FirebaseFirestore.instance.collection(examsCollection);
+      FirebaseFirestore.instance.collection(examsCollection);
 
   ExamViewModel() {
     getAllExam();
@@ -19,7 +18,6 @@ class ExamViewModel extends GetxController {
 
   Map<String, ExamModel> get examMap => _examMap;
   bool addMarks = false;
-
 
   changeExamScreen() {
     addMarks = !addMarks;
@@ -40,6 +38,17 @@ class ExamViewModel extends GetxController {
         _examMap[element.id] = ExamModel.fromJson(element.data());
       }
       print("Exams :${_examMap.keys.length}");
+      getPassRate();
+      update();
+    });
+  }getAllExamWithOutListen() async {
+    await examCollectionRef.get().then((value) {
+      _examMap.clear();
+      for (var element in value.docs) {
+        _examMap[element.id] = ExamModel.fromJson(element.data());
+      }
+      print("Exams :${_examMap.keys.length}");
+      getPassRate();
       update();
     });
   }
@@ -58,16 +67,36 @@ class ExamViewModel extends GetxController {
 
   deleteExam(String examId) async {
     await addDeleteOperation(
-        collectionName: examsCollection,
-        affectedId: examId);
+        collectionName: examsCollection, affectedId: examId);
     update();
   }
 
-  void getGrade(Map<String, StudentModel> studentMap) {
+  getPassRate() {
+    examMap.forEach(
+      (key, value) {
+        int numOfPass = 0;
+        value.marks?.forEach(
+          (_, value0) {
+            double studentPercentage = double.parse(value0);
+            int examMaxMark = int.parse(examMap[key]!.examMaxMark!);
+            double studentMark = (studentPercentage * examMaxMark) / 100;
+            int examPassMark = int.parse(examMap[key]!.examPassMark!);
+            if (studentMark >= examPassMark) {
+              numOfPass++;
+            }
+          },
+        );
+        examMap[key]!.passRate = (numOfPass / value.marks!.length) * 100;
+      },
+    );
+  }
+
+  getGrade(Map<String, StudentModel> studentMap)async {
+  // await  getAllExamWithOutListen();
     studentMap.forEach((key, value) {
       for (var exam in value.stdExam!) {
-        studentMap[key]!.grade =
-            studentMap[key]!.grade! + double.parse(examMap[exam]?.marks?[key]??"0");
+        studentMap[key]!.grade = studentMap[key]!.grade! +
+            double.parse(examMap[exam]?.marks?[key] ?? "0");
       }
       studentMap[key]!.grade =
           studentMap[key]!.grade! / studentMap[key]!.stdExam!.length;
