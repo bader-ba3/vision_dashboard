@@ -1,4 +1,3 @@
-
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,16 +10,15 @@ import '../../controller/event_view_model.dart';
 import '../../models/Parent_Model.dart';
 import '../../models/event_model.dart';
 import '../../models/event_record_model.dart';
+import '../../utils/Dialogs.dart';
 import '../../utils/const.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ParentInputForm extends StatefulWidget {
-
   ParentInputForm({this.parent});
 
+  final ParentModel? parent;
 
-
- final ParentModel? parent;
   @override
   _ParentInputFormState createState() => _ParentInputFormState();
 }
@@ -40,43 +38,58 @@ class _ParentInputFormState extends State<ParentInputForm> {
   List<EventRecordModel> eventRecords = [];
   EventModel? selectedEvent;
 
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    if(widget.parent!=null){
-      fullNameController.text=widget.parent!.fullName.toString();
-      numberController.text=widget.parent!.phoneNumber.toString();
-      addressController.text=widget.parent!.address.toString();
-      nationalityController.text=widget.parent!.nationality.toString();
-      genderController.text=widget.parent!.parentID.toString();
-      ageController.text=widget.parent!.age.toString();
-      startDateController.text=widget.parent!.startDate.toString();
-      motherPhoneNumberController.text=widget.parent!.motherPhone.toString();
-
-      emergencyPhoneController.text=widget.parent!.emergencyPhone.toString();
-      workController.text=widget.parent!.work.toString();
-      eventRecords=widget.parent!.eventRecords??[];
+    if (widget.parent != null) {
+      fullNameController.text = widget.parent!.fullName.toString();
+      numberController.text = widget.parent!.phoneNumber.toString();
+      addressController.text = widget.parent!.address.toString();
+      nationalityController.text = widget.parent!.nationality.toString();
+      genderController.text = widget.parent!.parentID.toString();
+      ageController.text = widget.parent!.age.toString();
+      startDateController.text = widget.parent!.startDate.toString();
+      motherPhoneNumberController.text = widget.parent!.motherPhone.toString();
+      emergencyPhoneController.text = widget.parent!.emergencyPhone.toString();
+      workController.text = widget.parent!.work.toString();
+      eventRecords = widget.parent!.eventRecords ?? [];
     }
   }
 
   @override
   void dispose() {
-
-     fullNameController.dispose();
-     numberController.dispose();
-     addressController.dispose();
-     nationalityController.dispose();
-     genderController.dispose();
-     ageController.dispose();
-     startDateController.dispose();
-     motherPhoneNumberController.dispose();
+    fullNameController.dispose();
+    numberController.dispose();
+    addressController.dispose();
+    nationalityController.dispose();
+    genderController.dispose();
+    ageController.dispose();
+    startDateController.dispose();
+    motherPhoneNumberController.dispose();
     bodyEventController.dispose();
-     emergencyPhoneController.dispose();
-     workController.dispose();
+    emergencyPhoneController.dispose();
+    workController.dispose();
     eventRecords.clear();
-     super.dispose();
+    super.dispose();
+  }
+
+
+
+
+
+  // Function to validate form fields
+  bool _validateFields() {
+    if (!validateNotEmpty(fullNameController.text, "الاسم الكامل")) return false;
+    if (!validateNumericField(numberController.text, "رقم الهاتف")) return false;
+    if (!validateNotEmpty(addressController.text, "العنوان")) return false;
+    if (!validateNotEmpty(nationalityController.text, "الجنسية")) return false;
+    if (!validateNotEmpty(genderController.text, "الجنس")) return false;
+    if (!validateNumericField(ageController.text, "العمر")) return false;
+    if (!validateNumericField(motherPhoneNumberController.text, "رقم هاتف الأم")) return false;
+    if (!validateNumericField(emergencyPhoneController.text, "رقم الطوارئ")) return false;
+    if (!validateNotEmpty(workController.text, "العمل")) return false;
+    if (!validateNotEmpty(startDateController.text, "تاريخ البداية")) return false;
+    return true;
   }
 
 
@@ -102,54 +115,51 @@ class _ParentInputFormState extends State<ParentInputForm> {
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 25,
-                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextField(controller: fullNameController, title: 'الاسم الكامل'),
-                  CustomTextField(controller: numberController, title: 'رقم الهاتف',keyboardType: TextInputType.number),
+                  CustomTextField(controller: numberController, title: 'رقم الهاتف', keyboardType: TextInputType.number),
                   CustomTextField(controller: addressController, title: 'العنوان'),
                   CustomTextField(controller: nationalityController, title: 'الجنسية'),
                   CustomTextField(controller: genderController, title: 'الجنس'),
                   CustomTextField(controller: ageController, title: 'العمر', keyboardType: TextInputType.number),
-                  CustomTextField(controller:motherPhoneNumberController , title: 'رقم هاتف الام', keyboardType: TextInputType.number),
-                  CustomTextField(controller:emergencyPhoneController , title: 'رقم الطوارئ', keyboardType: TextInputType.number),
-                  CustomTextField(controller:workController , title: 'العمل', keyboardType: TextInputType.number),
+                  CustomTextField(controller: motherPhoneNumberController, title: 'رقم هاتف الام', keyboardType: TextInputType.number),
+                  CustomTextField(controller: emergencyPhoneController, title: 'رقم الطوارئ', keyboardType: TextInputType.number),
+                  CustomTextField(controller: workController, title: 'العمل'),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomTextField(
-                          controller: startDateController,
-                          title: 'تاريخ البداية',
-                          enable: false,
-                          keyboardType: TextInputType.datetime),
+                        controller: startDateController,
+                        title: 'تاريخ البداية',
+                        enable: false,
+                        keyboardType: TextInputType.datetime,
+                      ),
                       IconButton(
-                          onPressed: () {
-                            showDatePicker(
-                                context: context,
-                                firstDate: DateTime(2010),
-                                lastDate: DateTime(2100))
-                                .then((date) {
-                              if (date != null) {
-                                startDateController.text =
-                                date.toString().split(" ")[0];
-                              }
-                            });
-                          },
-                          icon: Icon(
-                            Icons.date_range_outlined,
-                            color: primaryColor,
-                          ))
+                        onPressed: () {
+                          showDatePicker(
+                            context: context,
+                            firstDate: DateTime(2010),
+                            lastDate: DateTime(2100),
+                          ).then((date) {
+                            if (date != null) {
+                              startDateController.text = date.toString().split(" ")[0];
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          Icons.date_range_outlined,
+                          color: primaryColor,
+                        ),
+                      ),
                     ],
                   ),
-
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-
                         SizedBox(
                           width: Get.width / 4.5,
                           child: DropdownButtonFormField<EventModel>(
-
                             decoration: InputDecoration(
                               labelText: "نوع الحدث",
                               labelStyle: TextStyle(color: primaryColor),
@@ -174,9 +184,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                             },
                             items: eventController.allEvents.values
                                 .toList()
-                                .where(
-                                  (element) => element.role == Const.eventTypeParent,
-                            )
+                                .where((element) => element.role == Const.eventTypeParent)
                                 .map((e) => DropdownMenuItem(
                               child: Text(e.name),
                               value: e,
@@ -185,27 +193,36 @@ class _ParentInputFormState extends State<ParentInputForm> {
                           ),
                         ),
                         SizedBox(width: 16.0),
-                        CustomTextField(controller: bodyEventController, title: 'الوصف', enable: true, keyboardType: TextInputType.text),
+                        CustomTextField(
+                          controller: bodyEventController,
+                          title: 'الوصف',
+                          enable: true,
+                          keyboardType: TextInputType.text,
+                        ),
                         SizedBox(width: 16.0),
-                        AppButton(text: 'إضافة سجل حدث',   onPressed: () {
-                          setState(() {
-                            eventRecords.add(EventRecordModel(body: bodyEventController.text, type: selectedEvent!.name, date: DateTime.now().toString().split(" ")[0].toString(), color: selectedEvent!.color.toString()));
-                            bodyEventController.clear();
-                          });
-                        },)
-
+                        AppButton(
+                          text: 'إضافة سجل حدث',
+                          onPressed: () {
+                            setState(() {
+                              eventRecords.add(EventRecordModel(
+                                body: bodyEventController.text,
+                                type: selectedEvent!.name,
+                                date: DateTime.now().toString().split(" ")[0],
+                                color: selectedEvent!.color.toString(),
+                              ));
+                              bodyEventController.clear();
+                            });
+                          },
+                        ),
                       ],
                     );
                   }),
-
                 ],
               ),
             ),
             SizedBox(height: defaultPadding * 2),
             Text('سجل الأحداث:', style: Styles.headLineStyle1),
-            SizedBox(
-              height: defaultPadding,
-            ),
+            SizedBox(height: defaultPadding),
             Container(
               padding: EdgeInsets.all(0.0),
               alignment: Alignment.center,
@@ -218,7 +235,10 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Container(
-                      decoration: BoxDecoration(color:Color(int.parse(record.color)).withOpacity(0.2), borderRadius: BorderRadius.circular(15)),
+                      decoration: BoxDecoration(
+                        color: Color(int.parse(record.color)).withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 10),
                         child: Row(
@@ -227,16 +247,12 @@ class _ParentInputFormState extends State<ParentInputForm> {
                               record.type,
                               style: Styles.headLineStyle1.copyWith(color: Colors.black),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            SizedBox(width: 10),
                             Text(
                               record.body,
                               style: Styles.headLineStyle1.copyWith(color: Colors.black),
                             ),
-                            SizedBox(
-                              width: 50,
-                            ),
+                            SizedBox(width: 50),
                             Text(
                               record.date,
                               style: Styles.headLineStyle3,
@@ -251,33 +267,34 @@ class _ParentInputFormState extends State<ParentInputForm> {
               ),
             ),
             SizedBox(height: defaultPadding * 2),
-            AppButton(text: 'حفظ',    onPressed: () {
+            AppButton(
+              text: 'حفظ',
+              onPressed: () {
+                if (_validateFields()) {
+                  ParentModel parent = ParentModel(
+                    age: ageController.text,
+                    nationality: nationalityController.text,
+                    parentID: faker.randomGenerator.integer(1000000).toString(),
+                    id: generateId("PARENT"),
+                    fullName: fullNameController.text,
+                    address: addressController.text,
+                    work: workController.text,
+                    emergencyPhone: emergencyPhoneController.text,
+                    motherPhone: motherPhoneNumberController.text,
+                    phoneNumber: numberController.text,
+                    eventRecords: eventRecords,
+                    startDate: startDateController.text,
+                  );
 
-              ParentModel parent = ParentModel(
-                  age: ageController.text,
-                  nationality: nationalityController.text,
-                  parentID: faker.randomGenerator.integer(1000000).toString(),
-                  id: generateId("PARENT"),
-                  fullName: fullNameController.text,
-                  address: addressController.text,
-                  work: workController.text,
-                  emergencyPhone: emergencyPhoneController.text,
-                  motherPhone: motherPhoneNumberController.text,
-                  phoneNumber: numberController.text,
-                  eventRecords: eventRecords,
-                  startDate: startDateController.text
-              );
-
-              Get.find<ParentsViewModel>().addParent(parent);
-              // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-              print('Parent Model: $parent');
-            },)
-
+                  Get.find<ParentsViewModel>().addParent(parent);
+                  // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+                  print('Parent Model: $parent');
+                }
+              },
+            ),
           ],
         ),
       ),
     );
-
   }
 }
-

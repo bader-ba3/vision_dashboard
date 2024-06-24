@@ -9,9 +9,9 @@ import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
+import 'package:vision_dashboard/utils/Dialogs.dart';
 
 import '../../models/Exam_model.dart';
-
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ExamInputForm extends StatefulWidget {
@@ -22,17 +22,20 @@ class ExamInputForm extends StatefulWidget {
 class _ExamInputFormState extends State<ExamInputForm> {
   List<String> _selectedSection = [];
   Map<String, String> _selectedStudent = {};
-  String _selectedClass ="";
-
-
+  String _selectedClass = "";
 
   final Map<String, List<StudentModel>> _allSection = {};
-StudentViewModel studentViewModel=Get.find<StudentViewModel>();
-  getSectionStudent(){
-    for (var a in sectionsList){
-      _allSection[a]=studentViewModel.studentMap.values.where((element) => element.section==a&&element.stdClass==_selectedClass,).toList();
+  StudentViewModel studentViewModel = Get.find<StudentViewModel>();
 
-      if(_allSection[a]!.isEmpty){
+  getSectionStudent() {
+    for (var a in sectionsList) {
+      _allSection[a] = studentViewModel.studentMap.values
+          .where(
+            (element) => element.section == a && element.stdClass == _selectedClass,
+      )
+          .toList();
+
+      if (_allSection[a]!.isEmpty) {
         _allSection.remove(a);
       }
       print(_allSection.length);
@@ -41,11 +44,10 @@ StudentViewModel studentViewModel=Get.find<StudentViewModel>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    examId=generateId("Exam");
-
+    examId = generateId("Exam");
   }
+
   List<String>? _questionImageFile = [], _answerImageFile = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
@@ -53,7 +55,8 @@ StudentViewModel studentViewModel=Get.find<StudentViewModel>();
   final examPassMarkController = TextEditingController();
   final examMaxMarkController = TextEditingController();
   final studentsController = TextEditingController();
-String examId="";
+  String examId = "";
+
   @override
   void dispose() {
     subjectController.dispose();
@@ -62,6 +65,22 @@ String examId="";
     studentsController.dispose();
     super.dispose();
   }
+
+
+  bool _validateFields() {
+    if (subjectController.text.isEmpty ||
+        professorController.text.isEmpty ||
+        dateController.text.isEmpty ||
+        examPassMarkController.text.isEmpty ||
+        examMaxMarkController.text.isEmpty ||
+        !isNumeric(examPassMarkController.text) ||
+        !isNumeric(examMaxMarkController.text)) {
+      showErrorDialog("خطأ","يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.");
+      return false;
+    }
+    return true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +123,13 @@ String examId="";
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(2010),
-                                    lastDate: DateTime(2100))
+                                context: context,
+                                firstDate: DateTime(2010),
+                                lastDate: DateTime(2100))
                                 .then((date) {
                               if (date != null) {
                                 dateController.text =
-                                    date.toString().split(" ")[0];
+                                date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -126,14 +145,13 @@ String examId="";
                     label: 'اختر الصف',
                     onChange: (value) {
                       print(value);
-                      if(value!=null)
-                        _selectedClass=value;
+                      if (value != null) _selectedClass = value;
                       getSectionStudent();
                       setState(() {});
                     },
                   ),
                   CustomDropDown(
-                    value: _selectedSection.length.toString() + "شعبة مختارة",
+                    value: _selectedSection.length.toString() + " شعبة مختارة",
                     listValue: _allSection.keys.toList(),
                     label: 'اختر الشعب للأضافة',
                     onChange: (value) {
@@ -159,11 +177,11 @@ String examId="";
                               onTap: () async {
                                 FilePickerResult? _ = await FilePicker.platform
                                     .pickFiles(
-                                        type: FileType.image,
-                                        allowMultiple: true);
+                                    type: FileType.image,
+                                    allowMultiple: true);
                                 if (_ != null) {
                                   _.xFiles.forEach(
-                                    (element) async {
+                                        (element) async {
                                       _questionImageFile!
                                           .add(await element.path);
                                     },
@@ -173,7 +191,7 @@ String examId="";
                               },
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -186,7 +204,7 @@ String examId="";
                             ),
                             ...List.generate(
                               _questionImageFile!.length,
-                              (index) {
+                                  (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -195,7 +213,7 @@ String examId="";
                                       decoration: BoxDecoration(
                                           color: Colors.grey,
                                           borderRadius:
-                                              BorderRadius.circular(15)),
+                                          BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.file(
@@ -228,11 +246,11 @@ String examId="";
                               onTap: () async {
                                 FilePickerResult? _ = await FilePicker.platform
                                     .pickFiles(
-                                        type: FileType.image,
-                                        allowMultiple: true);
+                                    type: FileType.image,
+                                    allowMultiple: true);
                                 if (_ != null) {
                                   _.xFiles.forEach(
-                                    (element) async {
+                                        (element) async {
                                       _answerImageFile!.add(await element.path);
                                     },
                                   );
@@ -241,7 +259,7 @@ String examId="";
                               },
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -254,7 +272,7 @@ String examId="";
                             ),
                             ...List.generate(
                               _answerImageFile!.length,
-                              (index) {
+                                  (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -263,7 +281,7 @@ String examId="";
                                       decoration: BoxDecoration(
                                           color: Colors.grey,
                                           borderRadius:
-                                              BorderRadius.circular(15)),
+                                          BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.file(
@@ -280,9 +298,6 @@ String examId="";
                       ),
                     ],
                   ),
-
-
-
                 ],
               ),
             ),
@@ -291,8 +306,8 @@ String examId="";
             ),
             ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(
-                      height: defaultPadding,
-                    ),
+                  height: defaultPadding,
+                ),
                 itemCount: _selectedSection.length,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -326,10 +341,10 @@ String examId="";
                               DataColumn(label: Text("موجود")),
                             ],
                             rows:
-                                _allSection[_selectedSection[parentIndex]]!.map(
-                              (e) {
-                                if(e.available==true)
-                                _selectedStudent[e.studentID!] = "0.0";
+                            _allSection[_selectedSection[parentIndex]]!.map(
+                                  (e) {
+                                if (e.available == true)
+                                  _selectedStudent[e.studentID!] = "0.0";
                                 return studentDataRow(e);
                               },
                             ).toList(),
@@ -342,11 +357,12 @@ String examId="";
             SizedBox(
               height: defaultPadding,
             ),
-            GetBuilder<ExamViewModel>(
-              builder: (examController) {
-                return
-                  AppButton(text: 'حفظ',   onPressed: () {
-                  final exam = ExamModel(
+            GetBuilder<ExamViewModel>(builder: (examController) {
+              return AppButton(
+                text: 'حفظ',
+                onPressed: () {
+                  if (_validateFields()) {
+                    final exam = ExamModel(
                       id: examId,
                       questionImage: _questionImageFile ?? [],
                       answerImage: _answerImageFile,
@@ -355,18 +371,16 @@ String examId="";
                       examPassMark: examPassMarkController.text,
                       examMaxMark: examMaxMarkController.text,
                       date: DateTime.parse(dateController.text),
-
-                      marks: _selectedStudent
-                  );
-                  print(_selectedStudent.length);
-                  studentViewModel.addExamToStudent(_selectedStudent.keys.toList(),examId);
-                  examController.addExam(exam);
-
-                },);
-
-
-              }
-            ),
+                      marks: _selectedStudent,
+                    );
+                    print(_selectedStudent.length);
+                    studentViewModel
+                        .addExamToStudent(_selectedStudent.keys.toList(), examId);
+                    examController.addExam(exam);
+                  }
+                },
+              );
+            }),
           ],
         ),
       ),

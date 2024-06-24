@@ -129,10 +129,7 @@ class _AddMarksState extends State<AddMarks> {
     widget.examModel.marks?[exam] = updatedMark.toString();
   }
 
-  bool isNumeric(String str) {
-    final number = num.tryParse(str);
-    return number != null;
-  }
+
 
   dataRowItem(size, text, {onTap, color}) {
     return DataCell(

@@ -23,3 +23,24 @@ confirm: AppButton(text: "موافق", onPressed: () {
     barrierDismissible: false,
   );
 }
+bool isNumeric(String str) {
+  final number = num.tryParse(str);
+  return number != null;
+}
+
+
+bool validateNotEmpty(String value, String fieldName) {
+  if (value.isEmpty) {
+    showErrorDialog("خطأ", "$fieldName لا يمكن أن يكون فارغًا");
+    return false;
+  }
+  return true;
+}
+
+bool validateNumericField(String value, String fieldName) {
+  if (value.isEmpty || !isNumeric(value)) {
+    showErrorDialog("خطأ", "$fieldName يجب أن يحتوي على أرقام فقط");
+    return false;
+  }
+  return true;
+}

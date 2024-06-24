@@ -9,6 +9,7 @@ import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
 import '../../models/event_model.dart';
+import '../../utils/Dialogs.dart';
 import '../../utils/const.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -48,6 +49,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
 
   @override
   void dispose() {
+    clearController();
     eventRecords.clear();
     studentNameController.dispose();
     studentNumberController.dispose();
@@ -66,6 +68,44 @@ class _StudentInputFormState extends State<StudentInputForm> {
   }
 
   String? selectedValue;
+
+
+
+  bool _validateFields() {
+    if (!validateNotEmpty(studentNameController.text, "اسم الطالب")) return false;
+    if (!validateNumericField(studentNumberController.text, "رقم الطالب")) return false;
+    if (!validateNotEmpty(ageController.text, "التولد")) return false;
+    if (!validateNotEmpty(classController.text, "الصف")) return false;
+    if (!validateNotEmpty(sectionController.text, "الشعبة")) return false;
+    if (!validateNotEmpty(languageController.text, "اللغة")) return false;
+    if (!validateNotEmpty(busController.text, "الحافلة")) return false;
+    if (!validateNotEmpty(genderController.text, "الجنس")) return false;
+    if (!validateNotEmpty(guardianController.text, "الوالد")) return false;
+    if (_payWay == "") {
+      showErrorDialog("خطأ", "يرجى اختيار طريقة الدفع");
+      return false;
+    }
+    if (!validateNotEmpty(startDateController.text, "تاريخ البداية")) return false;
+    return true;
+  }
+
+
+  clearController(){
+    eventRecords.clear();
+    studentNameController.clear();
+    studentNumberController.clear();
+    addressController.clear();
+    sectionController.clear();
+    genderController.clear();
+    ageController.clear();
+    classController.clear();
+    teachersController.clear();
+    examsController.clear();
+    startDateController.clear();
+    gradesController.clear();
+    busController.clear();
+    guardianController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +127,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 50,
-                // spacing: 25,
                 children: <Widget>[
                   CustomTextField(
                       controller: studentNameController, title: "اسم الطالب"),
@@ -152,7 +191,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         .values
                         .map(
                           (e) => e.fullName!,
-                        )
+                    )
                         .toList(),
                     label: 'ولي الأمر',
                     onChange: (value) {
@@ -162,7 +201,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             .values
                             .where(
                               (element) => element.fullName == value,
-                            )
+                        )
                             .first
                             .id!;
                       }
@@ -189,13 +228,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(2010),
-                                    lastDate: DateTime(2100))
+                                context: context,
+                                firstDate: DateTime(2010),
+                                lastDate: DateTime(2100))
                                 .then((date) {
                               if (date != null) {
                                 startDateController.text =
-                                    date.toString().split(" ")[0];
+                                date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -216,13 +255,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2024))
+                                context: context,
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2024))
                                 .then((date) {
                               if (date != null) {
                                 ageController.text =
-                                    date.toString().split(" ")[0];
+                                date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -268,7 +307,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: primaryColor, width: 2),
+                                BorderSide(color: primaryColor, width: 2),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
@@ -284,12 +323,12 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                 .toList()
                                 .where(
                                   (element) =>
-                                      element.role == Const.eventTypeStudent,
-                                )
+                              element.role == Const.eventTypeStudent,
+                            )
                                 .map((e) => DropdownMenuItem(
-                                      child: Text(e.name),
-                                      value: e,
-                                    ))
+                              child: Text(e.name),
+                              value: e,
+                            ))
                                 .toList(),
                           ),
                         ),
@@ -340,7 +379,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     child: Container(
                       decoration: BoxDecoration(
                           color:
-                              Color(int.parse(record.color)).withOpacity(0.2),
+                          Color(int.parse(record.color)).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(15)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -382,23 +421,26 @@ class _StudentInputFormState extends State<StudentInputForm> {
             GetBuilder<StudentViewModel>(builder: (controller) {
 
               return  AppButton(text: "حفظ",   onPressed: () {
-                final student = StudentModel(
-                  studentID: generateId("STD"),
-                  parentId: guardianController.text,
-                  stdLanguage: languageController.text,
-                  stdExam: [],
-                  section: sectionController.text,
-                  studentNumber: studentNumberController.text,
-                  StudentBirthDay: ageController.text,
-                  studentName: studentNameController.text,
-                  stdClass: classController.text,
-                  gender: genderController.text,
-                  bus: busController.text,
-                  startDate: startDateController.text,
-                  eventRecords: eventRecords,
-                );
-                controller.addStudent(student);
-                print('بيانات الموظف: $student');
+                if (_validateFields()) {
+                  final student = StudentModel(
+                    studentID: generateId("STD"),
+                    parentId: guardianController.text,
+                    stdLanguage: languageController.text,
+                    stdExam: [],
+                    section: sectionController.text,
+                    studentNumber: studentNumberController.text,
+                    StudentBirthDay: ageController.text,
+                    studentName: studentNameController.text,
+                    stdClass: classController.text,
+                    gender: genderController.text,
+                    bus: busController.text,
+                    startDate: startDateController.text,
+                    eventRecords: eventRecords,
+                  );
+                  controller.addStudent(student);
+                  clearController();
+                  // print('بيانات الموظف: $student');
+                }
               },);
 
             }),
