@@ -65,9 +65,16 @@ List<String> sexList = [
   "ذكر",
   "انثى",
 ];
+List<String> jobList = [
+  "مدرس/ه",
+  "مدير/ه",
+  "موظف/ه اداري/ه",
+];
+
+List<String> contractsList = ['دوام جزئي', 'دوام كلي', 'اون لاين'];
 List<String> languageList = [
   "عربي",
-  "لغالت",
+  "لغات",
 ];
 List<String> busesList = [
   "الحافلة الاولى",
@@ -87,7 +94,7 @@ List<String> sectionsList = [
   "الخامسة",
   "السادسة",
 ];
-
+ const accountManagementCollection = "AccountManagement";
 class Styles {
   static Color textColor = primaryColor;
 

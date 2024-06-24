@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:faker/faker.dart';
 
-import 'Employee_Model.dart';
+
 import 'event_record_model.dart';
 
 
@@ -99,7 +99,7 @@ List<ParentModel> generateRandomParents(int count) {
       motherPhone:
           "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
       parentID: faker.randomGenerator.integer(1000000).toString(),
-      eventRecords: generateRandomEvents(5),
+      eventRecords: [],
     ));
   }
 

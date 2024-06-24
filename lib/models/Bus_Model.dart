@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:faker/faker.dart';
 
-import 'Employee_Model.dart';
 import 'event_record_model.dart';
 
 class BusModel {
@@ -72,7 +71,7 @@ List<BusModel> generateRandomBuses(int count) {
       students: List<String>.generate(10, (_) => faker.person.name()), // 10 random students per bus
       startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023),
       expense: random.nextDouble() * 1000,
-      eventRecords: generateRandomEvents(5),
+      eventRecords: [],
     ));
   }
 

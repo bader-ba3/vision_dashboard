@@ -8,9 +8,9 @@ import 'package:vision_dashboard/models/employee_time_model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
 import 'package:vision_dashboard/utils/minutesToTime.dart';
+import '../constants.dart';
 import '../models/account_management_model.dart';
 import '../screens/main/main_screen.dart';
-import '../utils/const.dart' ;
 import 'nfc/conditional_import.dart';
 enum UserManagementStatus {
   first,
@@ -20,7 +20,7 @@ enum UserManagementStatus {
 }
 class AccountManagementViewModel extends GetxController{
   RxMap<String,AccountManagementModel> allAccountManagement = <String,AccountManagementModel>{}.obs;
-  final accountManagementFireStore = FirebaseFirestore.instance.collection(Const.accountManagementCollection).withConverter<AccountManagementModel>(
+  final accountManagementFireStore = FirebaseFirestore.instance.collection(accountManagementCollection).withConverter<AccountManagementModel>(
     fromFirestore: (snapshot, _) => AccountManagementModel.fromJson(snapshot.data()!),
     toFirestore: (account, _) => account.toJson(),
   );
@@ -71,7 +71,7 @@ class AccountManagementViewModel extends GetxController{
   UserManagementStatus? userStatus ;
   void checkUserStatus() async {
     if (userName != null) {
-      FirebaseFirestore.instance.collection(Const.accountManagementCollection).where('userName', isEqualTo: userName).where("password",isEqualTo: password).snapshots().listen((value) {
+      FirebaseFirestore.instance.collection(accountManagementCollection).where('userName', isEqualTo: userName).where("password",isEqualTo: password).snapshots().listen((value) {
         if (userName == null) {
           userStatus = UserManagementStatus.first;
           Get.offAll(() => LoginScreen());
@@ -95,7 +95,7 @@ class AccountManagementViewModel extends GetxController{
       });
     } 
     else if (serialNFC != null) {
-      FirebaseFirestore.instance.collection(Const.accountManagementCollection).where('serialNFC', isEqualTo: serialNFC).snapshots().listen((value) {
+      FirebaseFirestore.instance.collection(accountManagementCollection).where('serialNFC', isEqualTo: serialNFC).snapshots().listen((value) {
         if (serialNFC == null) {
           userStatus = UserManagementStatus.first;
           Get.offAll(() => LoginScreen());

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:faker/faker.dart';
 
-import 'Employee_Model.dart';
+
 import 'event_record_model.dart';
 
 class StudentModel {
@@ -107,7 +107,7 @@ List<StudentModel> generateRandomStudents(int count) {
       grade: random.nextDouble(),
       available: true,
       startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023).toString(),
-      eventRecords: generateRandomEvents(5),
+      eventRecords: [],
       bus: 'Bus ${random.nextInt(10) > 5 ? 'Yes' : 'NO'}',
       // guardian: faker.person.name(),
     ));

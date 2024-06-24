@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/models/account_management_model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
-
 import '../../constants.dart';
 import '../../models/Bus_Model.dart';
-import '../../models/Employee_Model.dart';
 import '../../models/Student_Model.dart';
 import '../../models/event_record_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
@@ -59,36 +58,27 @@ class _BusInputFormState extends State<BusInputForm> {
       generateRandomStudents(1).first,
     ]
   };
-  final Map<String, List<EmployeeModel>> _allEmployee = {
+  final Map<String, List<AccountManagementModel>> _allEmployee = {
     "الاساتذة": [
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
-generateRandomEmployees(1).first,
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+
     ],
     "الاداريين": [
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+
     ],
     "الموظفين": [
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
-      generateRandomEmployees(1).first,
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
+
     ],
   };
 
@@ -334,10 +324,10 @@ generateRandomEmployees(1).first,
       ],
     );
   }
-  DataRow employeeDataRow(EmployeeModel employee) {
+  DataRow employeeDataRow(AccountManagementModel employee) {
     return DataRow(
       cells: [
-        DataCell(Text(employee.fullName.toString())),
+        DataCell(Text(employee.userName.toString())),
         DataCell(Text(employee.address.toString())),
         DataCell(Text(employee.startDate!.toString())),
         DataCell(Text(employee.gender.toString())),

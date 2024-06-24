@@ -27,6 +27,8 @@ class CustomDropDown extends StatelessWidget {
 
         ),
         value: null,
+        iconEnabledColor: Colors.blue,
+        // dropdownColor: Colors.redAccent,
         hint: Text(label,style: Styles.headLineStyle4.copyWith(color: blueColor.withOpacity(0.7)),),
         onChanged: onChange,
         items: listValue.map((e) {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Employee/Employee_user_details.dart';
-import 'package:vision_dashboard/screens/Employee/Employee_users_screen.dart';
+
+import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 
 import '../../constants.dart';
+import 'Employee_user_details.dart';
 
 
 class EmployeeView extends StatefulWidget {
@@ -25,7 +26,7 @@ class _EmployeeViewState extends State<EmployeeView> {
         duration: Duration(milliseconds: 500),
         firstChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
-          child: EmployeeUsersScreen(),
+          child: AccountManagementScreen(),
         ),
         secondChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),

@@ -2,7 +2,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Buses/Buses_View.dart';
-import 'package:vision_dashboard/screens/Employee/Employee_View.dart';
 import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
 import 'package:vision_dashboard/screens/Store/Store_View.dart';
@@ -15,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_container/tab_container.dart';
 
+import '../account_management/Employee_View.dart';
 import '../delete_management/delete_management_view.dart';
 import '../employee_time/employee_time.dart';
 import '../event/event_view_screen.dart';
@@ -45,11 +45,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     name: "الصفوف",
     img: "assets/icons/menu_tran.svg",
     widget: ClassesView(),
-    ),
-    (
-    name: "الموظفين",
-    img: "assets/icons/menu_task.svg",
-    widget: EmployeeView(),
     ),
     (
     name: "الدوام",
@@ -94,7 +89,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     (
     name: "ادارة الحسابات",
     img: "assets/icons/menu_setting.svg",
-    widget: AccountManagementScreen(),
+    widget: EmployeeView(),
     ),
     (
     name: "المستودع",
