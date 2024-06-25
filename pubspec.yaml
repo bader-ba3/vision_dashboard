@@ -53,6 +53,8 @@ dependencies:
   duration:
   accordion:
   syncfusion_flutter_datagrid:
+  syncfusion_flutter_signaturepad: ^26.1.39
+
 
 dev_dependencies:
   flutter_test:

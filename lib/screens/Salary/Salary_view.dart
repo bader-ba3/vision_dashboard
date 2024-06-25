@@ -1,40 +1,60 @@
 import 'dart:math';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+import 'package:vision_dashboard/screens/Salary/sign_view.dart';
 
 import '../../constants.dart';
+import '../../controller/account_management_view_model.dart';
 import '../../controller/delete_management_view_model.dart';
 import '../../controller/home_controller.dart';
-
-
+import '../Widgets/AppButton.dart';
 import '../Widgets/header.dart';
 
-class AccountManagementScreen extends StatefulWidget {
-  const AccountManagementScreen({super.key});
+class SalaryView extends StatefulWidget {
+  const SalaryView({super.key});
 
   @override
-  State<AccountManagementScreen> createState() =>
-      _AccountManagementScreenState();
+  State<SalaryView> createState() => _SalaryViewState();
 }
 
-class _AccountManagementScreenState extends State<AccountManagementScreen> {
+class _SalaryViewState extends State<SalaryView> {
+  final GlobalKey<SfSignaturePadState> signatureGlobalKey = GlobalKey();
+  void _handleClearButtonPressed() {
+    signatureGlobalKey.currentState!.clear();
+  }
+  void _handleSaveButtonPressed() async {
+    final data =
+    await signatureGlobalKey.currentState!.toImage(pixelRatio: 3.0);
+    final bytes = await data.toByteData(format: ui.ImageByteFormat.png);
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Container(
+
+                color: Colors.grey[300],
+                child: Image.memory(bytes!.buffer.asUint8List()),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
   final ScrollController _scrollController = ScrollController();
   List data = [
     "User Name",
     "الاسم الكامل",
-    "كامة السر",
-    "الدور",
     "الحالة",
-    "رقم الموبايل",
-    "العنوان",
-    "الجنسية",
-    "الجنس",
-    "العمر",
+    "الراتب المستحق",
+    "الراتب الكلي",
+    "ساعات العمل",
     "الوظيفة",
     "العقد",
-    "الصفوف",
     "تاريخ البداية",
     "سجل الاحداث",
     "العمليات"
@@ -44,7 +64,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'ادارة الموظفين',
+        title: 'ادارة رواتب الموظفين',
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -82,12 +102,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                               child: GetBuilder<DeleteManagementViewModel>(
                                   builder: (_) {
                                 return DataTable(
-                                    columnSpacing: 25,
+                                    columnSpacing: 0,
                                     columns: List.generate(
                                         data.length,
                                         (index) => DataColumn(
                                             label: Container(
-                                                width: size / data.length+10,
+                                                width: size / data.length,
                                                 child: Center(
                                                     child:
                                                         Text(data[index]))))),
@@ -99,47 +119,76 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                               accountModel.userName.toString()),
                                           dataRowItem(size / data.length,
                                               accountModel.fullName.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.password.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.type.toString()),
                                           dataRowItem(
                                             size / data.length,
                                             accountModel.isActive
                                                 ? "فعال"
                                                 : "ملغى",
                                           ),
+                                          dataRowItem(size / data.length,
+                                              accountModel.salary.toString()),
+                                          dataRowItem(
+                                              size / data.length, "1900"),
                                           dataRowItem(
                                               size / data.length,
-                                              accountModel.mobileNumber
+                                              accountModel.dayOfWork
                                                   .toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.address.toString()),
-                                          dataRowItem(
-                                              size / data.length,
-                                              accountModel.nationality
-                                                  .toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.gender.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.age.toString()),
                                           dataRowItem(size / data.length,
                                               accountModel.jobTitle.toString()),
                                           dataRowItem(size / data.length,
                                               accountModel.contract.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.bus.toString()),
                                           dataRowItem(
                                               size / data.length,
                                               accountModel.startDate
                                                   .toString()
                                                   .split(" ")[0]),
                                           dataRowItem(size / data.length, "عرض",
-                                              color: Colors.teal, onTap: () {}),
-                                          dataRowItem(size / data.length, "حذف",
-                                              color: Colors.red, onTap: () {
-                                            controller
-                                                .deleteAccount(accountModel);
+                                              color: Colors.blue, onTap: () {}),
+                                          dataRowItem(size / data.length,
+                                              "تسليم الراتب",
+                                              color: Colors.green, onTap: () {
+
+                                                showDialog(
+
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                        backgroundColor: secondaryColor,
+                                                        actions: [
+                                                        Container(
+                                                          height: Get.height/2,
+                                                          width: Get.width/2,
+                                                          color: secondaryColor,
+                                                          child: Column(
+                                                              children: [
+
+                                                                Text("يرجى التوقيع من قبل الموظف",style: Styles.headLineStyle1,),
+                                                                Padding(
+                                                                    padding: EdgeInsets.all(10),
+                                                                    child: Container(
+                                                                        child: SfSignaturePad(
+                                                                            key: signatureGlobalKey,
+                                                                            backgroundColor: Colors.white,
+                                                                            strokeColor: Colors.black,
+                                                                            minimumStrokeWidth: 1.0,
+                                                                            maximumStrokeWidth: 4.0),
+                                                                        decoration:
+                                                                        BoxDecoration(border: Border.all(color: Colors.grey)))),
+                                                                SizedBox(height: 10),
+                                                                Row(children: <Widget>[
+
+                                                                  AppButton(text: "حفظ", onPressed: _handleSaveButtonPressed),
+                                                                  AppButton(text: "اعادة", onPressed: _handleClearButtonPressed),
+
+
+                                                                ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
+                                                              ],
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.center),
+                                                        )
+                                                      ],),
+                                                );
+
                                           }),
                                         ]),
                                     ]);

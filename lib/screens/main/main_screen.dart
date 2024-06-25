@@ -4,6 +4,7 @@ import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Buses/Buses_View.dart';
 import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
+import 'package:vision_dashboard/screens/Salary/Salary_view.dart';
 import 'package:vision_dashboard/screens/Store/Store_View.dart';
 import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
 import 'package:vision_dashboard/screens/classes/classes_view.dart';
@@ -58,7 +59,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     (
     name: "الرواتب",
     img: "assets/icons/trip.svg",
-    widget: SizedBox(),
+    widget: SalaryView(),
     ),
     (
     name: "الحافلات",
