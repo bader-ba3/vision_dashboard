@@ -69,11 +69,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
 
   String? selectedValue;
 
-
-
   bool _validateFields() {
-    if (!validateNotEmpty(studentNameController.text, "اسم الطالب")) return false;
-    if (!validateNumericField(studentNumberController.text, "رقم الطالب")) return false;
+    if (!validateNotEmpty(studentNameController.text, "اسم الطالب"))
+      return false;
+    if (!validateNumericField(studentNumberController.text, "رقم الطالب"))
+      return false;
     if (!validateNotEmpty(ageController.text, "التولد")) return false;
     if (!validateNotEmpty(classController.text, "الصف")) return false;
     if (!validateNotEmpty(sectionController.text, "الشعبة")) return false;
@@ -85,12 +85,12 @@ class _StudentInputFormState extends State<StudentInputForm> {
       showErrorDialog("خطأ", "يرجى اختيار طريقة الدفع");
       return false;
     }
-    if (!validateNotEmpty(startDateController.text, "تاريخ البداية")) return false;
+    if (!validateNotEmpty(startDateController.text, "تاريخ البداية"))
+      return false;
     return true;
   }
 
-
-  clearController(){
+  clearController() {
     eventRecords.clear();
     studentNameController.clear();
     studentNumberController.clear();
@@ -191,7 +191,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         .values
                         .map(
                           (e) => e.fullName!,
-                    )
+                        )
                         .toList(),
                     label: 'ولي الأمر',
                     onChange: (value) {
@@ -201,7 +201,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             .values
                             .where(
                               (element) => element.fullName == value,
-                        )
+                            )
                             .first
                             .id!;
                       }
@@ -228,13 +228,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                context: context,
-                                firstDate: DateTime(2010),
-                                lastDate: DateTime(2100))
+                                    context: context,
+                                    firstDate: DateTime(2010),
+                                    lastDate: DateTime(2100))
                                 .then((date) {
                               if (date != null) {
                                 startDateController.text =
-                                date.toString().split(" ")[0];
+                                    date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -255,13 +255,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2024))
+                                    context: context,
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2024))
                                 .then((date) {
                               if (date != null) {
                                 ageController.text =
-                                date.toString().split(" ")[0];
+                                    date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -293,44 +293,24 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SizedBox(
-                          width: Get.width / 4.5,
-                          child: DropdownButtonFormField<EventModel>(
-                            decoration: InputDecoration(
-                              labelText: "نوع الحدث",
-                              labelStyle: TextStyle(color: primaryColor),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor),
-                              ),
-                              disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: primaryColor, width: 2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            value: selectedEvent,
-                            hint: Text("نوع الحدث"),
-                            onChanged: (selectedWay) {
-                              if (selectedWay != null) {
-                                setState(() {});
-                                selectedEvent = selectedWay;
-                              }
-                            },
-                            items: eventController.allEvents.values
-                                .toList()
-                                .where(
-                                  (element) =>
-                              element.role == Const.eventTypeStudent,
-                            )
-                                .map((e) => DropdownMenuItem(
-                              child: Text(e.name),
-                              value: e,
-                            ))
-                                .toList(),
-                          ),
+                        CustomDropDown(
+                          value: "نوع الحدث",
+                          listValue: eventController.allEvents.values
+                              .toList()
+                              .where(
+                                (element) =>
+                                    element.role == Const.eventTypeStudent,
+                              )
+                              .map((e) => e.name)
+                              .toList(),
+                          label: "نوع الحدث",
+                          onChange: (selectedWay) {
+                            if (selectedWay != null) {
+                              setState(() {});
+                              selectedEvent?.name = selectedWay;
+
+                            }
+                          },
                         ),
                         SizedBox(width: 16.0),
                         CustomTextField(
@@ -339,21 +319,22 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             enable: true,
                             keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
-
-                        AppButton(text: 'إضافة سجل حدث',   onPressed: () {
-                          setState(() {
-                            eventRecords.add(EventRecordModel(
-                                body: bodyEvent.text,
-                                type: selectedEvent!.name,
-                                date: DateTime.now()
-                                    .toString()
-                                    .split(" ")[0]
-                                    .toString(),
-                                color: selectedEvent!.color.toString()));
-                            bodyEvent.clear();
-                          });
-                        },)
-
+                        AppButton(
+                          text: 'إضافة سجل حدث',
+                          onPressed: () {
+                            setState(() {
+                              eventRecords.add(EventRecordModel(
+                                  body: bodyEvent.text,
+                                  type: selectedEvent!.name,
+                                  date: DateTime.now()
+                                      .toString()
+                                      .split(" ")[0]
+                                      .toString(),
+                                  color: selectedEvent!.color.toString()));
+                              bodyEvent.clear();
+                            });
+                          },
+                        )
                       ],
                     );
                   }),
@@ -379,7 +360,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     child: Container(
                       decoration: BoxDecoration(
                           color:
-                          Color(int.parse(record.color)).withOpacity(0.2),
+                              Color(int.parse(record.color)).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(15)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -419,30 +400,31 @@ class _StudentInputFormState extends State<StudentInputForm> {
               height: defaultPadding,
             ),
             GetBuilder<StudentViewModel>(builder: (controller) {
-
-              return  AppButton(text: "حفظ",   onPressed: () {
-                if (_validateFields()) {
-                  final student = StudentModel(
-                    studentID: generateId("STD"),
-                    parentId: guardianController.text,
-                    stdLanguage: languageController.text,
-                    stdExam: [],
-                    section: sectionController.text,
-                    studentNumber: studentNumberController.text,
-                    StudentBirthDay: ageController.text,
-                    studentName: studentNameController.text,
-                    stdClass: classController.text,
-                    gender: genderController.text,
-                    bus: busController.text,
-                    startDate: startDateController.text,
-                    eventRecords: eventRecords,
-                  );
-                  controller.addStudent(student);
-                  clearController();
-                  // print('بيانات الموظف: $student');
-                }
-              },);
-
+              return AppButton(
+                text: "حفظ",
+                onPressed: () {
+                  if (_validateFields()) {
+                    final student = StudentModel(
+                      studentID: generateId("STD"),
+                      parentId: guardianController.text,
+                      stdLanguage: languageController.text,
+                      stdExam: [],
+                      section: sectionController.text,
+                      studentNumber: studentNumberController.text,
+                      StudentBirthDay: ageController.text,
+                      studentName: studentNameController.text,
+                      stdClass: classController.text,
+                      gender: genderController.text,
+                      bus: busController.text,
+                      startDate: startDateController.text,
+                      eventRecords: eventRecords,
+                    );
+                    controller.addStudent(student);
+                    clearController();
+                    // print('بيانات الموظف: $student');
+                  }
+                },
+              );
             }),
           ],
         ),

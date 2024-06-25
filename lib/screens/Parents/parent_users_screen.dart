@@ -39,13 +39,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "كل اولياء الامور",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium,
-                  ),
+
                   GetBuilder<ParentsViewModel>(builder: (controller) {
                     return SizedBox(
                       width: size + 60,

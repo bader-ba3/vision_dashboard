@@ -6,7 +6,6 @@ import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
 import 'package:vision_dashboard/screens/Store/Store_View.dart';
 import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
-import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 import 'package:vision_dashboard/screens/classes/classes_view.dart';
 import 'package:vision_dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_view_screen.dart';

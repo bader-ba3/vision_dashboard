@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
@@ -157,40 +158,24 @@ class _ParentInputFormState extends State<ParentInputForm> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(
-                          width: Get.width / 4.5,
-                          child: DropdownButtonFormField<EventModel>(
-                            decoration: InputDecoration(
-                              labelText: "نوع الحدث",
-                              labelStyle: TextStyle(color: primaryColor),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor),
-                              ),
-                              disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor, width: 2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            value: selectedEvent,
-                            hint: Text("نوع الحدث"),
-                            onChanged: (selectedWay) {
-                              if (selectedWay != null) {
-                                setState(() {});
-                                selectedEvent = selectedWay;
-                              }
-                            },
-                            items: eventController.allEvents.values
-                                .toList()
-                                .where((element) => element.role == Const.eventTypeParent)
-                                .map((e) => DropdownMenuItem(
-                              child: Text(e.name),
-                              value: e,
-                            ))
-                                .toList(),
-                          ),
+                        CustomDropDown(
+                          value: "نوع الحدث",
+                          listValue: eventController.allEvents.values
+                              .toList()
+                              .where(
+                                (element) =>
+                            element.role == Const.eventTypeParent,
+                          )
+                              .map((e) => e.name)
+                              .toList(),
+                          label: "نوع الحدث",
+                          onChange: (selectedWay) {
+                            if (selectedWay != null) {
+                              setState(() {});
+                              selectedEvent?.name = selectedWay;
+
+                            }
+                          },
                         ),
                         SizedBox(width: 16.0),
                         CustomTextField(

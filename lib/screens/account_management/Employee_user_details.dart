@@ -63,6 +63,29 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
     bodyEvent.dispose();
     super.dispose();
   }
+  clearController(){
+
+     fullNameController.clear();
+     mobileNumberController.clear();
+     addressController .clear();
+     nationalityController .clear();
+     genderController .clear();
+     ageController .clear();
+     jobTitleController .clear();
+     salaryController .clear();
+     contractController .clear();
+     busController.clear();
+     startDateController .clear();
+     eventController .clear();
+     bodyEvent .clear();
+     dayWorkController .clear();
+     bodyEvent.clear();
+     userNameController.clear();
+     userPassController.clear();
+     eventRecords.clear();
+     role=null;
+
+  }
   bool _validateFields() {
     if (fullNameController.text.isEmpty ||
         mobileNumberController.text.isEmpty ||
@@ -221,45 +244,26 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                   ),
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(
-                          width: Get.width / 4.5,
-                          child: DropdownButtonFormField<EventModel>(
-                            decoration: InputDecoration(
-                              labelText: "نوع الحدث",
-                              labelStyle: TextStyle(color: primaryColor),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor),
-                              ),
-                              disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primaryColor),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: primaryColor, width: 2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            value: selectedEvent,
-                            hint: Text("نوع الحدث"),
-                            onChanged: (selectedWay) {
-                              if (selectedWay != null) {
-                                setState(() {});
-                                selectedEvent = selectedWay;
-                              }
-                            },
-                            items: eventController.allEvents.values
-                                .toList()
-                                .where(
-                                  (element) =>
-                                      element.role == Const.eventTypeEmployee,
-                                )
-                                .map((e) => DropdownMenuItem(
-                                      child: Text(e.name),
-                                      value: e,
-                                    ))
-                                .toList(),
-                          ),
+                        CustomDropDown(
+                          value: "نوع الحدث",
+                          listValue: eventController.allEvents.values
+                              .toList()
+                              .where(
+                                (element) =>
+                            element.role == Const.eventTypeEmployee,
+                          )
+                              .map((e) => e.name)
+                              .toList(),
+                          label: "نوع الحدث",
+                          onChange: (selectedWay) {
+                            if (selectedWay != null) {
+                              setState(() {});
+                              selectedEvent?.name = selectedWay;
+
+                            }
+                          },
                         ),
                         SizedBox(width: 16.0),
                         CustomTextField(
@@ -351,7 +355,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
             GetBuilder<AccountManagementViewModel>(builder: (controller) {
               return AppButton(
                 text: "حفظ",
-                onPressed: () {
+                onPressed: () async{
                   if(_validateFields()) {
                     role ??= accountType.keys.first;
                     AccountManagementModel model = AccountManagementModel(
@@ -375,7 +379,8 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       startDate: startDateController.text,
                       eventRecords: eventRecords,
                     );
-                    controller.addAccount(model);
+                   await controller.addAccount(model);
+                    clearController();
                   }
                 },
               );
