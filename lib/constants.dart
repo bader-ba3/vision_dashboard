@@ -46,6 +46,7 @@ const String parentsCollection = 'Parents';
 const String studentCollection = 'Students';
 const String storeCollection = 'Store';
 const String examsCollection = 'Exams';
+const String salaryCollection = 'Salaries';
 List<String> classNameList = [
   "KG 1",
   "KG 2",
@@ -94,6 +95,21 @@ List<String> sectionsList = [
   "الخامسة",
   "السادسة",
 ];
+Map<String, String> months = {
+  "يناير (1)": "01",
+  "فبراير (2)": "02",
+  "مارس (3)": "03",
+  "أبريل (4)": "04",
+  "مايو (5)": "05",
+  "يونيو (6)": "06",
+  "يوليو (7)": "07",
+  "أغسطس (8)": "08",
+  "سبتمبر (9)": "09",
+  "أكتوبر (10)": "10",
+  "نوفمبر (11)": "11",
+  "ديسمبر (12)": "12",
+};
+
  const accountManagementCollection = "AccountManagement";
 class Styles {
   static Color textColor = primaryColor;

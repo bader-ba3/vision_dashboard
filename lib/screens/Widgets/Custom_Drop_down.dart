@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../constants.dart';
 
 class CustomDropDown extends StatelessWidget {
-   CustomDropDown({super.key,required this.value,required this.listValue,required this.label,required this.onChange});
+   CustomDropDown({super.key,required this.value,required this.listValue,required this.label,required this.onChange,this.isFullBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,10 @@ class CustomDropDown extends StatelessWidget {
         decoration:  InputDecoration(
           labelText: label,
           labelStyle: TextStyle(color: primaryColor),
-          enabledBorder: UnderlineInputBorder(
+          enabledBorder:isFullBorder!=null? OutlineInputBorder(
+            borderSide: BorderSide(color: primaryColor,width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ):UnderlineInputBorder(
             borderSide: BorderSide(color: primaryColor),
           ),
           disabledBorder:UnderlineInputBorder(
@@ -26,7 +29,7 @@ class CustomDropDown extends StatelessWidget {
           ),
 
         ),
-        value: null,
+        value:value==''? null:value,
         iconEnabledColor: Colors.blue,
         // dropdownColor: Colors.redAccent,
         hint: Text(label,style: Styles.headLineStyle4.copyWith(color: blueColor.withOpacity(0.7)),),
@@ -42,7 +45,7 @@ class CustomDropDown extends StatelessWidget {
   }
 
 final String value,label ;
-
+final bool? isFullBorder;
 final List<String> listValue ;
 
 final Function(String? value) onChange;

@@ -37,8 +37,10 @@ class _TotalBarChartWidgetState extends State<TotalBarChartWidget> {
               child: TotalBarChart(
                 index: widget.index,
               )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Wrap(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            alignment: WrapAlignment.spaceEvenly,
+            runSpacing: 10,
             children: [
               GestureDetector(
                 onTap: () {

@@ -140,7 +140,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     ],
                   ),
                   CustomDropDown(
-                    value: 'اختر الصف',
+                    value: '',
                     listValue: classNameList,
                     label: 'اختر الصف',
                     onChange: (value) {
@@ -151,7 +151,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: _selectedSection.length.toString() + " شعبة مختارة",
+                    value: '',
                     listValue: _allSection.keys.toList(),
                     label: 'اختر الشعب للأضافة',
                     onChange: (value) {

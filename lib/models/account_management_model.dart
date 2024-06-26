@@ -16,9 +16,10 @@ class AccountManagementModel {
       jobTitle,
       contract,
       bus,
-      startDate,
-  fullName;
+      startDate,salaryWithDelay,
 
+  fullName;
+List<dynamic>? salaryReceived;
   bool? available = true;
   List<EventRecordModel>? eventRecords;
 
@@ -41,6 +42,8 @@ class AccountManagementModel {
       this.bus,
       this.startDate,
       this.eventRecords,
+      this.salaryReceived,
+      this.salaryWithDelay,
       this.fullName,
       this.available});
 
@@ -52,6 +55,7 @@ class AccountManagementModel {
     fullName = json['fullName'];
     serialNFC = json['serialNFC'];
     salary = json['salary'];
+    salaryReceived = json['salaryReceived']??[];
     dayOfWork = json['dayOfWork'];
     isActive = json['isActive'] ?? true;
     (json['employeeTime'] ?? {}).forEach((k, v) {
@@ -77,6 +81,7 @@ class AccountManagementModel {
       "userName": userName,
       "fullName": fullName,
       "password": password,
+      "salaryReceived": salaryReceived?.toList(),
       "type": type,
       "serialNFC": serialNFC,
       "isActive": isActive,
@@ -94,8 +99,7 @@ class AccountManagementModel {
       'contract': contract,
       'bus': bus,
       if (startDate != null) 'startDate': startDate!,
-      if (eventRecords!.isNotEmpty)
-        'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
+        'eventRecords':eventRecords!.isNotEmpty? eventRecords!.map((event) => event.toJson()).toList():[],
     };
   }
 }

@@ -159,7 +159,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CustomDropDown(
-                          value: "نوع الحدث",
+                          value: '',
                           listValue: eventController.allEvents.values
                               .toList()
                               .where(

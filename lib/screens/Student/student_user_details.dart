@@ -135,7 +135,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       title: 'رقم الطالب',
                       keyboardType: TextInputType.phone),
                   CustomDropDown(
-                    value: 'الشعبة',
+                    value: '',
                     listValue: sectionsList,
                     label: 'الشعبة',
                     onChange: (value) {
@@ -145,7 +145,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: 'الجنس',
+                    value: '',
                     listValue: sexList,
                     label: 'الجنس',
                     onChange: (value) {
@@ -155,7 +155,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: 'الصف',
+                    value: '',
                     listValue: classNameList,
                     label: 'الصف',
                     onChange: (value) {
@@ -165,7 +165,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: 'اللغة',
+                    value: '',
                     listValue: languageList,
                     label: 'اللغة',
                     onChange: (value) {
@@ -175,7 +175,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: 'الحافلة',
+                    value: '',
                     listValue: busesList,
                     label: 'الحافلة',
                     onChange: (value) {
@@ -185,7 +185,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: "ولي الأمر",
+                    value: '',
                     listValue: Get.find<ParentsViewModel>()
                         .parentMap
                         .values
@@ -208,7 +208,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: _payWay,
+                    value: '',
                     listValue: _payWays,
                     label: "طرق الدفع",
                     onChange: (selectedWay) {
@@ -294,7 +294,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CustomDropDown(
-                          value: "نوع الحدث",
+                          value: '',
                           listValue: eventController.allEvents.values
                               .toList()
                               .where(

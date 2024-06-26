@@ -144,7 +144,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                   CustomTextField(
                       controller: nationalityController, title: 'الجنسية'),
                   CustomDropDown(
-                    value: 'الجنس',
+                    value: '',
                     listValue: sexList,
                     label: 'الجنس',
                     onChange: (value) {
@@ -162,7 +162,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       title: 'عدد ايام العمل',
                       keyboardType: TextInputType.number),
                   CustomDropDown(
-                      value: 'الوظيفة',
+                      value: '',
                       listValue: jobList,
                       label: 'الوظيفة',
                       onChange: (value) {
@@ -175,7 +175,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       title: 'الراتب',
                       keyboardType: TextInputType.number),
                   CustomDropDown(
-                    value: 'العقد',
+                    value: '',
                     listValue: contractsList,
                     label: 'العقد',
                     onChange: (value) {
@@ -185,7 +185,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: 'الحافلة',
+                    value: '',
                     listValue: busesList,
                     label: 'الحافلة',
                     onChange: (value) {
@@ -232,7 +232,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       title: 'كلمة المرور',
                       keyboardType: TextInputType.datetime),
                   CustomDropDown(
-                    value: "value",
+                    value: '',
                     listValue: accountType.entries
                         .map((e) => e.value.toString())
                         .toList(),
@@ -247,7 +247,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CustomDropDown(
-                          value: "نوع الحدث",
+                          value: '',
                           listValue: eventController.allEvents.values
                               .toList()
                               .where(

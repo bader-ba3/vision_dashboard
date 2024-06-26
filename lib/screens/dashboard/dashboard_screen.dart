@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: Get.width,
               child: Wrap(
                 direction: Axis.horizontal,
-                alignment: MediaQuery.sizeOf(context).width < 800 ?WrapAlignment.center:WrapAlignment.spaceBetween,
+                alignment: MediaQuery.sizeOf(context).width < 800 ?WrapAlignment.center:WrapAlignment.spaceEvenly,
                 runSpacing: 25,
                 spacing: 0,
                 children: [
