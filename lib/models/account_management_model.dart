@@ -18,7 +18,6 @@ class AccountManagementModel {
       contract,
       bus,
       startDate,salaryWithDelay,
-
   fullName;
 List<dynamic>? salaryReceived;
   bool? available = true;
@@ -50,28 +49,28 @@ List<dynamic>? salaryReceived;
       this.available});
 
   AccountManagementModel.fromJson(json) {
-    id = json['id'];
-    userName = json['userName'];
-    password = json['password'];
-    type = json['type'];
-    fullName = json['fullName'];
-    serialNFC = json['serialNFC'];
-    salary = json['salary'];
-    salaryReceived = json['salaryReceived']??[];
-    dayOfWork = json['dayOfWork'];
+    id = json['id']??'';
+    userName = json['userName']??'';
+    password = json['password']??'';
+    type = json['type']??'';
+    fullName = json['fullName']??'';
+    serialNFC = json['serialNFC']??'';
+    salary = json['salary']??'';
+    salaryReceived = json['salaryReceived']??[]??'';
+    dayOfWork = json['dayOfWork']??'';
     isActive = json['isActive'] ?? true;
     (json['employeeTime'] ?? {}).forEach((k, v) {
       employeeTime[k] = EmployeeTimeModel.fromJson(v);
     });
-    mobileNumber = json['mobileNumber'];
-    address = json['address'];
-    nationality = json['nationality'];
-    gender = json['gender'];
-    age = json['age'];
-    jobTitle = json['jobTitle'];
-    contract = json['contract'];
-    bus = json['bus'];
-    startDate = json['startDate'];
+    mobileNumber = json['mobileNumber']??'';
+    address = json['address']??'';
+    nationality = json['nationality']??'';
+    gender = json['gender']??'';
+    age = json['age']??'';
+    jobTitle = json['jobTitle']??'';
+    contract = json['contract']??'';
+    bus = json['bus']??'';
+    startDate = json['startDate']??'';
     eventRecords = ((json['eventRecords'] ??[])as List<dynamic>?)
         ?.map((event) => EventRecordModel.fromJson(event))
         .toList()??[];
@@ -79,27 +78,27 @@ List<dynamic>? salaryReceived;
 
   toJson() {
     return {
-      "id": id,
+     "id": id,
       "userName": userName,
-      "fullName": fullName,
+      if(fullName!=null)   "fullName": fullName,
       "password": password,
-      "salaryReceived": salaryReceived?.toList(),
+      if(salaryReceived!=null)    "salaryReceived": salaryReceived?.toList(),
       "type": type,
-      "serialNFC": serialNFC,
+      if(serialNFC!=null)    "serialNFC": serialNFC,
       "isActive": isActive,
-      "salary": salary,
-      "dayOfWork": dayOfWork,
+      if(salary!=null) "salary": salary,
+      if(dayOfWork!=null) "dayOfWork": dayOfWork,
       "employeeTime": Map.fromEntries(employeeTime.entries
-          .map((e) => MapEntry(e.key, e.value.toJson()))
-          .toList()),
-      'mobileNumber': mobileNumber,
-      'address': address,
-      'nationality': nationality,
-      'gender': gender,
-      'age': age,
-      'jobTitle': jobTitle,
-      'contract': contract,
-      'bus': bus,
+        .map((e) => MapEntry(e.key, e.value.toJson()))
+        .toList()),
+      if(mobileNumber!=null)  'mobileNumber': mobileNumber,
+      if(address!=null)  'address': address,
+      if(nationality!=null)  'nationality': nationality,
+      if(gender!=null)   'gender': gender,
+      if(age!=null) 'age': age,
+      if(jobTitle!=null) 'jobTitle': jobTitle,
+      if(contract!=null) 'contract': contract,
+      if(bus!=null)  'bus': bus,
       if (startDate != null) 'startDate': startDate!,
         'eventRecords':eventRecords!.isNotEmpty? eventRecords!.map((event) => event.toJson()).toList():[],
     };

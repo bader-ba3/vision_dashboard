@@ -1,5 +1,5 @@
 class SalaryModel{
-  String? salaryId,employeeId,constSalary,dilaySalary,paySalary,signImage;  bool? enableEdite;
+  String? salaryId,employeeId,constSalary,dilaySalary,paySalary,signImage;
 
   SalaryModel({
     this.salaryId,
@@ -8,7 +8,7 @@ class SalaryModel{
     this.dilaySalary,
     this.paySalary,
     this.signImage,
-    this.enableEdite,
+
   });
 
   // fromJson method

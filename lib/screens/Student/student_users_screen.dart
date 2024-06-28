@@ -7,6 +7,7 @@ import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/student_user_details.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
@@ -38,6 +39,7 @@ class _StudentScreenState extends State<StudentScreen> {
     "علامات الطالب",
     "المعدل",
     "الخيارات",
+    "",
   ];
 
   @override
@@ -72,6 +74,7 @@ class _StudentScreenState extends State<StudentScreen> {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                             columnSpacing: 0,
+                            dividerThickness: 0,
                             columns: List.generate(
                                 data.length,
                                 (index) => DataColumn(
@@ -138,6 +141,12 @@ class _StudentScreenState extends State<StudentScreen> {
                                       }),
                                       dataRowItem(size / data.length,
                                           student.grade.toString()),
+                                      dataRowItem(size / data.length, "تعديل",
+                                          color: Colors.teal, onTap: () {
+                                            if (enableUpdate == true)
+                                              showParentInputDialog(
+                                                  context, student);
+                                          }),
                                       dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع": "حذف",
                                           color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
                                         if (/*student.stdExam!.length > 1&&*/enableUpdate)
@@ -316,7 +325,29 @@ class _StudentScreenState extends State<StudentScreen> {
       ],
     );
   }
+  void showParentInputDialog(BuildContext context, dynamic student) {
+    showDialog(
 
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height / 2,
+            width: Get.width/1.5,
+            child: StudentInputForm(studentModel:student ,),
+          ),
+        );
+      },
+    );
+  }
   dataRowItem(size, text, {onTap, color}) {
     return DataCell(
       Container(

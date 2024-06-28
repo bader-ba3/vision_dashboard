@@ -24,7 +24,6 @@ class ParentsViewModel extends GetxController {
       _parentMap.clear();
       for (var element in value.docs) {
         _parentMap[element.id] = ParentModel.fromJson(element.data());
-        _parentMap[element.id]?.enableEdite=true;
       }
       print("Parents :${_parentMap.values.length}");
       update();
@@ -55,7 +54,7 @@ class ParentsViewModel extends GetxController {
       _parentMap.clear();
       for (var element in value.docs) {
         _parentMap[element.id] = ParentModel.fromJson(element.data());
-        _parentMap[element.id]?.enableEdite=false;
+
       }
       print("Parents :${_parentMap.values.length}");
       update();

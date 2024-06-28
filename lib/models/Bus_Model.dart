@@ -12,7 +12,7 @@ class BusModel {
   List<String> students;
   DateTime startDate;
   double expense;
-  bool? enableEdite;
+
   List<EventRecordModel> eventRecords;
 
   BusModel({
@@ -24,7 +24,7 @@ class BusModel {
     required this.startDate,
     required this.expense,
     required this.eventRecords,
-    this.enableEdite
+
   });
 
   Map<String, dynamic> toJson() => {

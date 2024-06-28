@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
+
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/models/event_record_model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
@@ -17,44 +18,45 @@ import '../Widgets/Custom_Text_Filed.dart';
 class StudentInputForm extends StatefulWidget {
   @override
   _StudentInputFormState createState() => _StudentInputFormState();
+  StudentInputForm({this.studentModel});
+ final StudentModel? studentModel;
 }
 
 class _StudentInputFormState extends State<StudentInputForm> {
+
+ 
+
   String _payWay = '';
   EventModel? selectedEvent;
   TextEditingController bodyEvent = TextEditingController();
 
   Map<String, InstallmentModel> instalmentMap = {};
 
-  // قائمة بكل الطلاب المتاحين
+
   final List<String> _payWays = [
     'كاش',
     'اقساط',
     'كريدت',
-    // أضف المزيد من الطلاب إذا لزم الأمر
   ];
   final studentNameController = TextEditingController();
   final studentNumberController = TextEditingController();
-  final addressController = TextEditingController();
+
   final sectionController = TextEditingController();
   final genderController = TextEditingController();
   final ageController = TextEditingController();
   final classController = TextEditingController();
-  final teachersController = TextEditingController();
-  final examsController = TextEditingController();
+
+
   final startDateController = TextEditingController();
-  final gradesController = TextEditingController();
+
   final busController = TextEditingController();
   final guardianController = TextEditingController();
   final languageController = TextEditingController();
   final totalPaymentController = TextEditingController();
-
   List<TextEditingController> monthsController = [];
   List<TextEditingController> costsController = [];
-  final monthController = TextEditingController();
-  final costController = TextEditingController();
-  List<EventRecordModel> eventRecords = [];
 
+  List<EventRecordModel> eventRecords = [];
   String parentName = '';
 
   @override
@@ -63,15 +65,14 @@ class _StudentInputFormState extends State<StudentInputForm> {
     eventRecords.clear();
     studentNameController.dispose();
     studentNumberController.dispose();
-    addressController.dispose();
+
     sectionController.dispose();
     genderController.dispose();
     ageController.dispose();
     classController.dispose();
-    teachersController.dispose();
-    examsController.dispose();
+
     startDateController.dispose();
-    gradesController.dispose();
+
     busController.dispose();
     guardianController.dispose();
     super.dispose();
@@ -84,7 +85,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     print(installmentCount);
   }
 
-  String? selectedValue;
+
 
   bool _validateFields() {
     if (!validateNotEmpty(studentNameController.text, "اسم الطالب"))
@@ -100,6 +101,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     if (!validateNotEmpty(languageController.text, "اللغة")) return false;
     if (!validateNotEmpty(busController.text, "الحافلة")) return false;
     if (!validateNotEmpty(genderController.text, "الجنس")) return false;
+    if(widget.studentModel==null)
     if (!validateNotEmpty(guardianController.text, "الوالد")) return false;
     if (_payWay == "") {
       showErrorDialog("خطأ", "يرجى اختيار طريقة الدفع");
@@ -110,22 +112,63 @@ class _StudentInputFormState extends State<StudentInputForm> {
     return true;
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+  init(){
+    if(widget.studentModel!=null) {
+      _payWay = widget.studentModel!.paymentWay ?? '';
+      instalmentMap = widget.studentModel!.installmentRecords ?? {};
+      studentNameController.text = widget.studentModel!.studentName ?? '';
+      studentNumberController.text = widget.studentModel!.studentNumber ?? '';
+      sectionController.text = widget.studentModel!.section ?? '';
+      genderController.text = widget.studentModel!.gender ?? '';
+      ageController.text = widget.studentModel!.StudentBirthDay ?? '';
+      classController.text = widget.studentModel!.stdClass ?? '';
+      startDateController.text = widget.studentModel!.startDate ?? '';
+      busController.text = widget.studentModel!.bus ?? '';
+
+    guardianController.text=widget.studentModel!.parentId!;
+      languageController.text = widget.studentModel!.stdLanguage ?? '';
+      totalPaymentController.text =
+          widget.studentModel!.totalPayment.toString() ?? '';
+      installmentCount = widget.studentModel?.installmentRecords?.values.length ?? 0;
+
+      print(widget.studentModel?.installmentRecords?.values.length);
+      monthsController = List.generate(
+        widget.studentModel?.installmentRecords?.values.length ?? 0,
+        (index) => TextEditingController()
+          ..text = widget.studentModel!.installmentRecords!.values.elementAt(index).installmentDate
+              .toString(),
+      );
+      costsController = List.generate(
+        widget.studentModel?.installmentRecords?.length ?? 0,
+        (index) => TextEditingController()
+          ..text = widget.studentModel!.installmentRecords!.values.elementAt(index).installmentCost
+              .toString(),
+      );
+      eventRecords = widget.studentModel!.eventRecords ?? [];
+    }
+  }
+
   int installmentCount = 0;
 
   clearController() {
     eventRecords.clear();
     studentNameController.clear();
     studentNumberController.clear();
-    addressController.clear();
+
     sectionController.clear();
     genderController.text = '';
     _payWay = '';
     ageController.clear();
     classController.clear();
-    teachersController.clear();
-    examsController.clear();
     startDateController.clear();
-    gradesController.clear();
     busController.clear();
     guardianController.clear();
     monthsController.clear();
@@ -213,6 +256,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       }
                     },
                   ),
+                  if(widget.studentModel==null)
                   CustomDropDown(
                     value: parentName,
                     listValue: Get.find<ParentsViewModel>()
@@ -334,6 +378,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               shrinkWrap: true,
                               itemCount: installmentCount,
                               itemBuilder: (context, index) {
+                                print(monthsController[index]);
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
@@ -350,7 +395,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                         children: [
                                           Spacer(),
                                           CustomDropDown(
-                                            value: '',
+                                            value: months.entries.where((element) => element.value==monthsController[index].text,).firstOrNull?.key??'',
                                             listValue: months.keys
                                                 .map((e) => e.toString())
                                                 .toList(),
@@ -405,22 +450,24 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               text: "حفظ",
                               onPressed: () {
                                 if (_validateFields()) {
+                                  instalmentMap.clear();
                                   for (int index = 0;
                                       index < monthsController.length;
                                       index++) {
+
                                     String insId = generateId("INSTALLMENT");
                                     instalmentMap[insId] = InstallmentModel(
                                       installmentCost:
                                           costsController[index].text,
                                       installmentDate:
                                           monthsController[index].text,
-                                      installmentId: insId,
+                                      installmentId:insId,
                                       isPay: false,
                                     );
                                   }
                                   final student = StudentModel(
-                                    studentID: generateId("STD"),
-                                    parentId: guardianController.text,
+                                    studentID:widget.studentModel==null? generateId("STD"):widget.studentModel!.studentID!,
+                                    parentId:  guardianController.text,
                                     stdLanguage: languageController.text,
                                     stdExam: [],
                                     section: sectionController.text,
@@ -437,9 +484,12 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                     eventRecords: eventRecords,
                                     installmentRecords: instalmentMap,
                                   );
-                                  controller.addStudent(student);
+                                  widget.studentModel!=null?controller.updateStudent(student): controller.addStudent(student);
+
                                   clearController();
                                   setState(() {});
+                                  if(widget.studentModel!=null)
+                                    Get.back();
                                   // print('بيانات الموظف: $student');
                                 }
                               },
@@ -454,7 +504,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         text: "حفظ",
                         onPressed: () {
                           if (_validateFields()) {
-                            String id = generateId("INSTALLMENT");
+                            String id =widget.studentModel==null? generateId("INSTALLMENT"):widget.studentModel!.installmentRecords!.keys.toList()[0] ;
                             instalmentMap[id] = InstallmentModel(
                                 isPay: true,
                                 installmentId: id,
@@ -465,8 +515,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                 installmentCost: totalPaymentController.text,
                                 payTime: DateTime.now().toString());
                             final student = StudentModel(
-                              studentID: generateId("STD"),
-                              parentId: guardianController.text,
+                              studentID:widget.studentModel==null? generateId("STD"):widget.studentModel!.studentID!,
+                             parentId:  guardianController.text,
                               stdLanguage: languageController.text,
                               stdExam: [],
                               section: sectionController.text,
@@ -483,8 +533,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               totalPayment:
                                   int.parse(totalPaymentController.text),
                             );
-                            controller.addStudent(student);
+                            widget.studentModel!=null?controller.updateStudent(student): controller.addStudent(student);
                             clearController();
+                            if(widget.studentModel!=null)
+                              Get.back();
                             // print('بيانات الموظف: $student');
                           }
                         },

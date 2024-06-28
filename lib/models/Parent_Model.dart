@@ -16,7 +16,7 @@ class ParentModel {
   id,
   nationality,startDate,
       work;
-  bool? enableEdite;
+
   List<dynamic>? children;
   List<EventRecordModel>? eventRecords;
 
@@ -33,7 +33,7 @@ class ParentModel {
     this.parentID,
     this.eventRecords,
     this.nationality,
-    this.enableEdite,
+
     this.children,
   });
 
@@ -52,7 +52,7 @@ class ParentModel {
       'id':id,
       'age':age,
       'children':children,
-      'enableEdite':enableEdite,
+
       'eventRecords': eventRecords?.map((event) => event.toJson()).toList()??[],
     };
   }

@@ -21,7 +21,7 @@ class StudentModel {
   double? grade;
   List<String>? stdExam;
   bool? available = true;
-  bool? enableEdite;
+
   Map<String, InstallmentModel>? installmentRecords = {};
   List<EventRecordModel>? eventRecords;
   String? bus;
@@ -45,7 +45,7 @@ class StudentModel {
     this.section,
     this.stdClass,
     this.stdLanguage,
-    this.enableEdite,
+
     this.totalPayment,
     this.paymentWay,
   });

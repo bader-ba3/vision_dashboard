@@ -63,6 +63,7 @@ class StudentViewModel extends GetxController {
     await studentCollectionRef
         .doc(studentModel.studentID)
         .set(studentModel.toJson());
+    if(studentModel.parentId!=null)
     await FirebaseFirestore.instance
         .collection(parentsCollection)
         .doc(studentModel.parentId)
@@ -77,12 +78,7 @@ class StudentViewModel extends GetxController {
     await studentCollectionRef
         .doc(studentModel.studentID)
         .set(studentModel.toJson());
-    await FirebaseFirestore.instance
-        .collection(parentsCollection)
-        .doc(studentModel.parentId)
-        .set({
-      "children": FieldValue.arrayUnion([studentModel.studentID])
-    }, SetOptions(merge: true));
+
     update();
   }
 
