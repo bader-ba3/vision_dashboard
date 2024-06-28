@@ -6,6 +6,7 @@ class AccountManagementModel {
   late String id, userName, password, type;
   String? serialNFC;
   int? salary, dayOfWork;
+  bool? enableEdite;
   late bool isActive;
   Map<String, EmployeeTimeModel> employeeTime = {};
   String? mobileNumber,
@@ -45,6 +46,7 @@ List<dynamic>? salaryReceived;
       this.salaryReceived,
       this.salaryWithDelay,
       this.fullName,
+      this.enableEdite,
       this.available});
 
   AccountManagementModel.fromJson(json) {
@@ -70,9 +72,9 @@ List<dynamic>? salaryReceived;
     contract = json['contract'];
     bus = json['bus'];
     startDate = json['startDate'];
-    eventRecords = ((json['eventRecords'] ??[])as List)
-        .map((event) => EventRecordModel.fromJson(event))
-        .toList();
+    eventRecords = ((json['eventRecords'] ??[])as List<dynamic>?)
+        ?.map((event) => EventRecordModel.fromJson(event))
+        .toList()??[];
   }
 
   toJson() {

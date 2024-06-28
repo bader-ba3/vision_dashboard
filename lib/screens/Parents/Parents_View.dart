@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import 'package:vision_dashboard/screens/Parents/parent_users_screen.dart';
 
@@ -16,7 +17,6 @@ class _ParentsViewState extends State<ParentsView>{
   bool isAdd=false;
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
 
@@ -32,7 +32,7 @@ class _ParentsViewState extends State<ParentsView>{
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:enableUpdate? FloatingActionButton(
         backgroundColor:primaryColor,
         onPressed: () {
           setState(() {
@@ -40,7 +40,7 @@ class _ParentsViewState extends State<ParentsView>{
           });
         },
         child: Icon(!isAdd? Icons.add:Icons.grid_view),
-      ),
+      ):Container(),
     );
   }
 }

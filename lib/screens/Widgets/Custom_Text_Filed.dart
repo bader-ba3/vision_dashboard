@@ -7,8 +7,9 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.controller,
-    required this.title,  this. keyboardType,this.enable,this.hint,this.onChange
+    required this.title,  this. keyboardType,this.enable,this.hint,this.onChange,this.size,this.isFullBorder
   });
+  final bool? isFullBorder;
 
   final TextEditingController controller;
   final String title;
@@ -16,10 +17,11 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? enable;
   final Function(String? value)? onChange;
+  final double? size;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Get.width/4.5,
+      width:size?? Get.width/4.5,
       child:TextFormField(
         onChanged: onChange,
         keyboardType: keyboardType,
@@ -34,7 +36,10 @@ class CustomTextField extends StatelessWidget {
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: primaryColor),
           ),
-          disabledBorder:UnderlineInputBorder(
+          disabledBorder:isFullBorder!=null? OutlineInputBorder(
+            borderSide: BorderSide(color: primaryColor,width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ):UnderlineInputBorder(
             borderSide: BorderSide(color: primaryColor),
           ),
           focusedBorder: OutlineInputBorder(

@@ -30,7 +30,7 @@ class _ExpensesViewScreenState extends State<ExpensesViewScreen> {
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:enableUpdate?FloatingActionButton(
         backgroundColor:primaryColor,
         onPressed: () {
           setState(() {
@@ -38,7 +38,8 @@ class _ExpensesViewScreenState extends State<ExpensesViewScreen> {
           });
         },
         child: Icon(!isAdd? Icons.add:Icons.grid_view),
-      ),
+      ):Container(),
+
     );
   }
 }

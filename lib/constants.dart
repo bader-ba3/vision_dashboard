@@ -41,12 +41,13 @@ String generateId(String type) {
   var _ = DateTime.now().microsecondsSinceEpoch.toString();
   return "$type$_";
 }
-
+bool enableUpdate=true;
 const String parentsCollection = 'Parents';
 const String studentCollection = 'Students';
 const String storeCollection = 'Store';
 const String examsCollection = 'Exams';
 const String salaryCollection = 'Salaries';
+const String archiveCollection = 'Archive';
 List<String> classNameList = [
   "KG 1",
   "KG 2",

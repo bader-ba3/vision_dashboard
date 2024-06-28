@@ -6,6 +6,7 @@ class ExamModel {
   String? subject,professor,id,examPassMark,examMaxMark;
   DateTime? date;
   double? passRate;
+  bool? enableEdite;
   List<String>? questionImage,answerImage;
 Map<String,dynamic>? marks;
 
@@ -20,6 +21,7 @@ Map<String,dynamic>? marks;
     this.answerImage,
     this.examPassMark,
     this.examMaxMark,
+    this.enableEdite,
 
   });
 

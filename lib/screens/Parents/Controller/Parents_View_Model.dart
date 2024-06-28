@@ -7,6 +7,9 @@ import 'package:vision_dashboard/models/Parent_Model.dart';
 class ParentsViewModel extends GetxController {
   final parentCollectionRef =
       FirebaseFirestore.instance.collection(parentsCollection);
+  final firebaseFirestore =
+  FirebaseFirestore.instance;
+
 
 
   ParentsViewModel(){
@@ -21,14 +24,15 @@ class ParentsViewModel extends GetxController {
       _parentMap.clear();
       for (var element in value.docs) {
         _parentMap[element.id] = ParentModel.fromJson(element.data());
+        _parentMap[element.id]?.enableEdite=true;
       }
-      print("Parents :${_parentMap.keys.length}");
+      print("Parents :${_parentMap.values.length}");
       update();
     });
   }
 
   addParent(ParentModel parentModel) {
-    parentCollectionRef.doc(parentModel.id).set(parentModel.toJson());
+    parentCollectionRef.doc(parentModel.id).set(parentModel.toJson(), SetOptions(merge: true));
     update();
   }
 
@@ -44,5 +48,18 @@ class ParentsViewModel extends GetxController {
         collectionName: parentsCollection,
         affectedId: parentId);
     update();
+  }
+
+  getOldParent(String value) async{
+    await   firebaseFirestore.collection(archiveCollection).doc(value).collection(parentsCollection).get().then((value) {
+      _parentMap.clear();
+      for (var element in value.docs) {
+        _parentMap[element.id] = ParentModel.fromJson(element.data());
+        _parentMap[element.id]?.enableEdite=false;
+      }
+      print("Parents :${_parentMap.values.length}");
+      update();
+    });
+
   }
 }

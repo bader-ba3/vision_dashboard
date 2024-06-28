@@ -25,10 +25,6 @@ class SalaryViewModel extends GetxController{
         _salaryMap[element.id] = SalaryModel.fromJson(element.data());
       }
       print("salaries :${_salaryMap.keys.length}");
-
-      _salaryMap.forEach((key, value) {
-        print("key $key-------------$value ");
-      },);
       update();
     });
   }
@@ -50,5 +46,17 @@ class SalaryViewModel extends GetxController{
         collectionName: salaryCollection,
         affectedId: salaryId);
     update();
+  }
+
+   getOldData(String value)async {
+
+    await  FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(salaryCollection).get().then((value) {
+      _salaryMap.clear();
+      for (var element in value.docs) {
+        _salaryMap[element.id] = SalaryModel.fromJson(element.data());
+      }
+      print("salaries :${_salaryMap.keys.length}");
+      update();
+    });
   }
 }

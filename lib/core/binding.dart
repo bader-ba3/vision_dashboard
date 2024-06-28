@@ -8,6 +8,7 @@ import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+import 'package:vision_dashboard/screens/account_management/Controller/Min_View_Model.dart';
 
 import '../screens/Store/Controller/Store_View_Model.dart';
 class GetBinding extends Bindings {
@@ -24,6 +25,7 @@ class GetBinding extends Bindings {
     Get.put(StudentViewModel());
     Get.put(StoreViewModel());
     Get.put(SalaryViewModel());
+    Get.put(MinViewModel());
   }
 
 }

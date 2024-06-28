@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/student_user_details.dart';
 import 'package:vision_dashboard/screens/Student/student_users_screen.dart';
 import '../../constants.dart';
@@ -33,7 +34,7 @@ class _StudentViewState extends State<StudentView> {
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:enableUpdate?FloatingActionButton(
         backgroundColor:primaryColor,
         onPressed: () {
           setState(() {
@@ -41,7 +42,7 @@ class _StudentViewState extends State<StudentView> {
           });
         },
         child: Icon(!isAdd? Icons.add:Icons.grid_view),
-      ),
+      ):Container(),
     );
   }
 }

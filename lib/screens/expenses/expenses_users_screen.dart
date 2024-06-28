@@ -39,72 +39,68 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 color: secondaryColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "كل المصاريف",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium,
+              child: GetBuilder<ExpensesViewModel>(builder: (controller) {
+                return SizedBox(
+                  width: size + 60,
+                  child: Scrollbar(
+                    controller: _scrollController,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                        return DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
+                          for (var expense in controller.allExpenses.values)
+                            DataRow(
+                                color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: expense.id) ? Colors.red : Colors.transparent),
+                                cells: [
+                                  dataRowItem(size / data.length, expense.id.toString()),
+                                  dataRowItem(size / data.length, expense.title.toString()),
+                                  dataRowItem(size / data.length, expense.total.toString()),
+                                  dataRowItem(size / data.length, expense.userId.toString()),
+                                  dataRowItem(size / data.length, expense.body.toString()),
+                                  dataRowItem(size / data.length, "عرض التفاصيل",color: Colors.teal,onTap: (){
+                                    Get.defaultDialog(
+                                        backgroundColor: Colors.white,
+                                        title: "التفاصيل", content: SizedBox(
+                                        width: Get.height / 2,
+                                        height: Get.height / 2,
+                                        child: Text(expense.body.toString(), style: TextStyle(fontSize: 20),)));
+                                  }),
+                                  dataRowItem(size / data.length, expense.images.length.toString()),
+                                  dataRowItem(size / data.length,"عرض الصور",color: Colors.teal,onTap: (){
+                                    Get.defaultDialog(
+                                        backgroundColor: Colors.white,
+                                        title: "الصور", content: Container(
+                                        color: Colors.white,
+                                        width: Get.height / 1.5,
+                                        height: Get.height / 1.5,
+                                        child: PageView.builder(
+                                          itemCount: expense.images.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return SizedBox(
+                                                width: Get.height / 1.5,
+                                                child: Image.network(expense.images[index], fit: BoxFit.fitWidth,));
+                                          },)));
+                                  }),
+                                  dataRowItem(size / data.length,checkIfPendingDelete(affectedId: expense.id)?"استرجاع": "حذف", color:checkIfPendingDelete(affectedId: expense.id)?Colors.white: Colors.red,onTap:(){
+                                      if (enableUpdate) {
+                                        if (checkIfPendingDelete(affectedId: expense.id))
+                                          returnPendingDelete(
+                                              affectedId:
+                                              expense.id);
+                                        else
+                                          addDeleteOperation(collectionName: Const.expensesCollection, affectedId: expense.id);
+
+                                      }
+                                  } ),
+                                ]),
+                        ]);
+                      }),
+                    ),
                   ),
-                  GetBuilder<ExpensesViewModel>(builder: (controller) {
-                    return SizedBox(
-                      width: size + 60,
-                      child: Scrollbar(
-                        controller: _scrollController,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                            return DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
-                              for (var expense in controller.allExpenses.values)
-                                DataRow(
-                                    color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: expense.id) ? Colors.red.withOpacity(0.5) : Colors.transparent),
-                                    cells: [
-                                      dataRowItem(size / data.length, expense.id.toString()),
-                                      dataRowItem(size / data.length, expense.title.toString()),
-                                      dataRowItem(size / data.length, expense.total.toString()),
-                                      dataRowItem(size / data.length, expense.userId.toString()),
-                                      dataRowItem(size / data.length, expense.body.toString()),
-                                      dataRowItem(size / data.length, "عرض التفاصيل",color: Colors.teal,onTap: (){
-                                        Get.defaultDialog(
-                                            backgroundColor: Colors.white,
-                                            title: "التفاصيل", content: SizedBox(
-                                            width: Get.height / 2,
-                                            height: Get.height / 2,
-                                            child: Text(expense.body.toString(), style: TextStyle(fontSize: 20),)));
-                                      }),
-                                      dataRowItem(size / data.length, expense.images.length.toString()),
-                                      dataRowItem(size / data.length,"عرض الصور",color: Colors.teal,onTap: (){
-                                        Get.defaultDialog(
-                                            backgroundColor: Colors.white,
-                                            title: "الصور", content: Container(
-                                            color: Colors.white,
-                                            width: Get.height / 1.5,
-                                            height: Get.height / 1.5,
-                                            child: PageView.builder(
-                                              itemCount: expense.images.length,
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder: (context, index) {
-                                                return SizedBox(
-                                                    width: Get.height / 1.5,
-                                                    child: Image.network(expense.images[index], fit: BoxFit.fitWidth,));
-                                              },)));
-                                      }),
-                                      dataRowItem(size / data.length, "حذف", color: Colors.red,onTap:checkIfPendingDelete(affectedId: expense.id)?null:(){
-                                        addDeleteOperation(collectionName: Const.expensesCollection, affectedId: expense.id);
-                                      } ),
-                                    ]),
-                            ]);
-                          }),
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
+                );
+              }),
             ),
           );
         }),

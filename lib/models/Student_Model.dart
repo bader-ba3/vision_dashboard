@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:faker/faker.dart';
-
+import 'package:vision_dashboard/models/Installment_model.dart';
 
 import 'event_record_model.dart';
 
@@ -10,16 +10,19 @@ class StudentModel {
       studentID,
       gender,
       StudentBirthDay,
-stdLanguage,
+      stdLanguage,
       parentId,
       section,
       startDate,
+      paymentWay,
       stdClass;
   String? studentNumber;
+  int? totalPayment;
   double? grade;
   List<String>? stdExam;
   bool? available = true;
-
+  bool? enableEdite;
+  Map<String, InstallmentModel>? installmentRecords = {};
   List<EventRecordModel>? eventRecords;
   String? bus;
 
@@ -35,53 +38,70 @@ stdLanguage,
     this.grade,
     this.startDate,
     this.eventRecords,
+    this.installmentRecords,
     this.bus,
     this.parentId,
     this.available,
     this.section,
     this.stdClass,
     this.stdLanguage,
+    this.enableEdite,
+    this.totalPayment,
+    this.paymentWay,
   });
 
   Map<String, dynamic> toJson() => {
-        'studentName': studentName,
-        'studentNumber': studentNumber,
-        'studentID': studentID,
-        'gender': gender,
-        'StudentBirthDay': StudentBirthDay,
-        'stdClass': stdClass,
-        'grade': grade,
-        'stdLanguage': stdLanguage,
-        'stdExam': stdExam,
-        'section': section,
-        'startDate': startDate!,
-        'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
-        'parentId': parentId!,
-        'bus': bus,
+        if (studentName != null) 'studentName': studentName,
+        if (studentNumber != null) 'studentNumber': studentNumber,
+        if (studentID != null) 'studentID': studentID,
+        if (gender != null) 'gender': gender,
+        if (StudentBirthDay != null) 'StudentBirthDay': StudentBirthDay,
+        if (stdClass != null) 'stdClass': stdClass,
+        if (grade != null) 'grade': grade,
+        if (stdLanguage != null) 'stdLanguage': stdLanguage,
+        if (stdExam != null) 'stdExam': stdExam,
+        if (section != null) 'section': section,
+        if (startDate != null) 'startDate': startDate!,
+        if (eventRecords != null)
+          'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
+        if (installmentRecords != null)
+          'installmentRecords': Map.fromEntries(installmentRecords!.entries
+              .map((e) => MapEntry(e.key, e.value.toJson()))
+              .toList()),
+        if (parentId != null) 'parentId': parentId!,
+        if (bus != null) 'bus': bus,
+        if (paymentWay != null) 'paymentWay': paymentWay,
+        if (totalPayment != null) 'totalPayment': totalPayment,
       };
 
-  factory StudentModel.fromJson(Map<String, dynamic> json) {
-    return StudentModel(
-      grade: 0.0,
-      studentName: json['studentName'],
-      studentNumber: json['studentNumber'],
-      studentID: json['studentID'],
-      parentId: json['parentId'],
-      section: json['section'],
-      stdLanguage: json['stdLanguage'],
-      stdExam: (json['stdExam'] as List<dynamic>?)
-          ?.map((item) => item as String)
-          .toList()??[],
-      stdClass: json['stdClass'],
-      gender: json['gender'],
-      StudentBirthDay: json['StudentBirthDay'],
-      startDate: json['startDate'],
-      eventRecords: (json['eventRecords'] as List)
-          .map((event) => EventRecordModel.fromJson(event))
-          .toList(),
-      bus: json['bus'],
-      available: true,
-    );
+  StudentModel.fromJson(Map<String, dynamic> json) {
+    grade = 0.0;
+    studentName = json['studentName'] ?? '';
+    studentNumber = json['studentNumber'] ?? '';
+    studentID = json['studentID'] ?? '';
+    parentId = json['parentId'] ?? '';
+    section = json['section'] ?? '';
+    stdLanguage = json['stdLanguage'] ?? '';
+    stdExam = (json['stdExam'] as List<dynamic>?)
+            ?.map((item) => item as String)
+            .toList() ??
+        [];
+    stdClass = json['stdClass'] ?? '';
+    gender = json['gender'] ?? '';
+    StudentBirthDay = json['StudentBirthDay'] ?? '';
+    startDate = json['startDate'] ?? '';
+    eventRecords = (json['eventRecords'] as List<dynamic>?)
+            ?.map((event) => EventRecordModel.fromJson(event))
+            .toList() ??
+        [];
+    (json['installmentRecords'] ?? {}).forEach((k, v) {
+      installmentRecords![k] = InstallmentModel.fromJson(v);
+    });
+
+    bus = json['bus'] ?? '';
+    totalPayment = json['totalPayment'] ?? 0;
+    paymentWay = json['paymentWay'] ?? '';
+    available = true;
   }
 
   @override

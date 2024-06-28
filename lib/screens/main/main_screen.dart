@@ -7,6 +7,7 @@ import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
 import 'package:vision_dashboard/screens/Salary/Salary_view.dart';
 import 'package:vision_dashboard/screens/Store/Store_View.dart';
 import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
+import 'package:vision_dashboard/screens/Study%20Fees/Study_Fees_View.dart';
 import 'package:vision_dashboard/screens/classes/classes_view.dart';
 import 'package:vision_dashboard/screens/dashboard/dashboard_screen.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_view_screen.dart';
@@ -69,7 +70,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     (
     name: "الرسوم الدراسية",
     img: "assets/icons/garage.svg",
-    widget: SizedBox(),
+    widget: StudyFeesView(),
     ),
     (
     name: "اللأحداث",
@@ -87,7 +88,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     widget: DeleteManagementView(),
     ),
     (
-    name: "ادارة الحسابات",
+    name: "ادارة المنصة",
     img: "assets/icons/menu_setting.svg",
     widget: EmployeeView(),
     ),

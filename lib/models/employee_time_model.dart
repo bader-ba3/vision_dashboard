@@ -3,7 +3,7 @@ class EmployeeTimeModel{
   DateTime? startDate , endDate ;
   int? totalDate , totalLate,totalEarlier;
   bool? isDayEnd,isLateWithReason,isEarlierWithReason;
-
+  bool? enableEdite;
   EmployeeTimeModel({
     required this.dayName,
     required this.startDate,
@@ -16,6 +16,7 @@ class EmployeeTimeModel{
     required this.isEarlierWithReason,
     required this.reasonOfEarlier,
     required this.totalEarlier,
+    this.enableEdite,
   });
 
   EmployeeTimeModel.fromJson(json){

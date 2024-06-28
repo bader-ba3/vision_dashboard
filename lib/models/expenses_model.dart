@@ -1,9 +1,10 @@
 class ExpensesModel {
   late String id , title ,userId ;
   late int total  ;
+  bool? enableEdite;
   String? body ;
   List<dynamic>  images = [];
-  ExpensesModel({required this.id ,required this.title ,required this.userId ,required this.total ,required this.body ,required this.images });
+  ExpensesModel({required this.id ,required this.title ,required this.userId ,required this.total ,required this.body ,required this.images ,this.enableEdite});
   ExpensesModel.fromJson(json){
     id = json['id'];
     title = json['title'];

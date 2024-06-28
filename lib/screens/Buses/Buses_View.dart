@@ -32,7 +32,7 @@ class _BusesViewState extends State<BusesView>{
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:enableUpdate?FloatingActionButton(
         backgroundColor:primaryColor,
         onPressed: () {
           setState(() {
@@ -40,7 +40,8 @@ class _BusesViewState extends State<BusesView>{
           });
         },
         child: Icon(!isAdd? Icons.add:Icons.grid_view),
-      ),
+      ):Container(),
+
     );
   }
 }

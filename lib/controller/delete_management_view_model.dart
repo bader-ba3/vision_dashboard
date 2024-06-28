@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:get/get.dart';
+import 'package:vision_dashboard/constants.dart';
 
 import '../models/delete_management_model.dart';
 import '../utils/const.dart';
@@ -16,6 +17,10 @@ class DeleteManagementViewModel extends GetxController{
   );
 
   DeleteManagementViewModel(){
+    getAllDeleteModel();
+  }
+
+  getAllDeleteModel(){
     deleteManagementFireStore.snapshots().listen((event) {
       allDelete = Map<String,DeleteManagementModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(), i.data()))).obs;
       update();
@@ -45,6 +50,15 @@ class DeleteManagementViewModel extends GetxController{
   deleteDeleteOperation(DeleteManagementModel deleteModel){
     deleteManagementFireStore.doc(deleteModel.id).delete();
   }
+
+  getOldData(String value) {
+   FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(Const.deleteManagementCollection).get().then((event) {
+      allDelete = Map<String,DeleteManagementModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(),DeleteManagementModel.fromJson(i.data()) ))).obs;
+
+    },);
+   update();
+  }
+
 }
 
 addDeleteOperation({required String collectionName, required String affectedId , String? details}){
@@ -55,4 +69,10 @@ addDeleteOperation({required String collectionName, required String affectedId ,
 bool checkIfPendingDelete({ required String affectedId}){
  return Get.find<DeleteManagementViewModel>().allDelete.values.where((element) => element.affectedId == affectedId,).length >0;
 }
+ returnPendingDelete({ required String affectedId}){
+   DeleteManagementViewModel controller= Get.find<DeleteManagementViewModel>();
+ DeleteManagementModel deleteManagementModel=controller .allDelete.values.firstWhere((element) => element.affectedId == affectedId,) ;
+ controller.undoTheDelete(deleteManagementModel);
+ controller.update();
 
+}

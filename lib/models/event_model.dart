@@ -1,8 +1,8 @@
 class EventModel {
   late String id,name,role;
   late int color;
-
-  EventModel({required this.name,required this.id  ,required this.role ,required this.color  });
+  bool? enableEdite;
+  EventModel({required this.name,required this.id  ,required this.role ,required this.color,this.enableEdite  });
 
   EventModel.fromJson(json){
     id = json['id'];

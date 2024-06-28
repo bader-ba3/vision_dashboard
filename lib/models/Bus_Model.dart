@@ -12,6 +12,7 @@ class BusModel {
   List<String> students;
   DateTime startDate;
   double expense;
+  bool? enableEdite;
   List<EventRecordModel> eventRecords;
 
   BusModel({
@@ -23,6 +24,7 @@ class BusModel {
     required this.startDate,
     required this.expense,
     required this.eventRecords,
+    this.enableEdite
   });
 
   Map<String, dynamic> toJson() => {
@@ -45,9 +47,9 @@ class BusModel {
       students: List<String>.from(json['students']),
       startDate: DateTime.parse(json['startDate']),
       expense: json['expense'].toDouble(),
-      eventRecords: (json['eventRecords'] as List)
-          .map((event) => EventRecordModel.fromJson(event))
-          .toList(),
+      eventRecords: (json['eventRecords'] as List<dynamic>?)
+          ?.map((event) => EventRecordModel.fromJson(event))
+          .toList()??[],
     );
   }
 

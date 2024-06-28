@@ -142,6 +142,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                   ],
                                 )
                               else
+                                if(enableUpdate)
                                 Container(
                                   decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
                                   padding: EdgeInsets.all(8),
@@ -151,7 +152,18 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                       style: TextStyle(fontSize: 22),
                                     ),
                                   ),
-                                ),
+                                )else
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
+                                    padding: EdgeInsets.all(8),
+                                    child: Center(
+                                      child: Text(
+                                        "لا يمكن تسجيل دوام اثناء عرض السنة المؤشفة",
+                                        style: TextStyle(fontSize: 22),
+                                      ),
+                                    ),
+                                  )
+
                             ],
                           ),
                   ),

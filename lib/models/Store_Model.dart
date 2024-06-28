@@ -1,10 +1,12 @@
 class StoreModel{
   String? id,subName,subQuantity;
+  bool? enableEdite;
 
   StoreModel({
     this.id,
     this.subName,
     this.subQuantity,
+    this.enableEdite,
   });
 
   // fromJson method

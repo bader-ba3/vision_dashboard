@@ -10,7 +10,6 @@ import '../../constants.dart';
 import '../../models/Store_Model.dart';
 import '../Widgets/header.dart';
 
-
 class StoreScreen extends StatefulWidget {
   const StoreScreen({super.key});
 
@@ -20,18 +19,23 @@ class StoreScreen extends StatefulWidget {
 
 class _StoreScreenState extends State<StoreScreen> {
   final ScrollController _scrollController = ScrollController();
-  List data = ["اسم المادة","الكمية","الخيارات"];
+  List data = ["اسم المادة", "الكمية", "الخيارات"];
   final TextEditingController subNameController = TextEditingController();
   final TextEditingController subQuantityController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'المستودع',),
+      appBar: Header(
+        title: 'المستودع',
+      ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
-          double size = max(MediaQuery
-              .sizeOf(context)
-              .width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+          double size = max(
+                  MediaQuery.sizeOf(context).width -
+                      (controller.isDrawerOpen ? 240 : 120),
+                  1000) -
+              60;
           return Padding(
             padding: const EdgeInsets.all(8),
             child: Container(
@@ -43,7 +47,6 @@ class _StoreScreenState extends State<StoreScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   GetBuilder<StoreViewModel>(builder: (controller) {
                     return SizedBox(
                       width: size + 60,
@@ -52,39 +55,65 @@ class _StoreScreenState extends State<StoreScreen> {
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
-                          child: DataTable(columnSpacing: 0, columns:
-                          List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                          child: DataTable(
+                              columnSpacing: 0,
+                              columns: List.generate(
+                                  data.length,
+                                  (index) => DataColumn(
+                                      label: Container(
+                                          width: size / data.length,
+                                          child: Center(
+                                              child: Text(data[index]))))),
                               rows: [
-                                for (var parent in controller.storeMap.values.toList())
+                                for (var parent
+                                    in controller.storeMap.values.toList())
                                   DataRow(cells: [
-                                    dataRowItem(size / data.length, parent.subQuantity.toString()),
-                                    dataRowItem(size / data.length, parent.subName.toString()),
-                                    dataRowItem(size / data.length, "تعديل",color: Colors.teal,onTap: (){
-                                      showDialog(context: context, builder:
-                                      (context) =>AlertDialog(
+                                    dataRowItem(size / data.length,
+                                        parent.subQuantity.toString()),
+                                    dataRowItem(size / data.length,
+                                        parent.subName.toString()),
+                                    dataRowItem(size / data.length, "تعديل",
+                                        color: Colors.teal, onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          backgroundColor: secondaryColor,
+                                          title: Text("تعديل المادة"),
+                                          actions: [
+                                            CustomTextField(
+                                                controller:
+                                                    subQuantityController
+                                                      ..text = parent
+                                                          .subQuantity
+                                                          .toString(),
+                                                title: data[0]),
+                                            CustomTextField(
+                                                controller: subNameController
+                                                  ..text =
+                                                      parent.subName.toString(),
+                                                title: data[1]),
+                                            AppButton(
+                                              text: 'حفظ',
+                                              onPressed: () {
+                                                StoreModel store = StoreModel(
+                                                  subName:
+                                                      subNameController.text,
+                                                  subQuantity:
+                                                      subQuantityController
+                                                          .text,
+                                                  id: parent.id,
+                                                );
 
-                                        backgroundColor: secondaryColor,
-                                        title: Text("تعديل المادة"),actions: [
-                                        CustomTextField(controller: subQuantityController..text=parent.subQuantity.toString(), title: data[0]),
-                                        CustomTextField(controller: subNameController..text=parent.subName.toString(), title: data[1]),
-AppButton(text: 'حفظ',        onPressed: () {
-
-  StoreModel store = StoreModel(
-    subName:  subNameController.text,
-    subQuantity: subQuantityController.text,
-    id: parent.id,
-
-  );
-
-  Get.find<StoreViewModel>().updateStore(store);
-  // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-  print('store Model: $store');
-},)
-
-                                      ],) ,)
-                                      ;
+                                                Get.find<StoreViewModel>()
+                                                    .updateStore(store);
+                                                // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+                                                print('store Model: $store');
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                      );
                                     }),
-
                                   ]),
                               ]),
                         ),
@@ -129,10 +158,10 @@ AppButton(text: 'حفظ',        onPressed: () {
             onTap: onTap,
             child: Center(
                 child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: color == null ? null : TextStyle(color: color),
-                ))),
+              text,
+              textAlign: TextAlign.center,
+              style: color == null ? null : TextStyle(color: color),
+            ))),
       ),
     );
   }

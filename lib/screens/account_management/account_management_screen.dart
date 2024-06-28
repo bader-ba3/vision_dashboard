@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
+import 'package:vision_dashboard/screens/account_management/Controller/Min_View_Model.dart';
 
 import '../../constants.dart';
 import '../../controller/delete_management_view_model.dart';
@@ -44,7 +47,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'ادارة الموظفين',
+        title: 'ادارة المنصة',
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -55,13 +58,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   1000) -
               60;
           return Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(15),
             child:
                 GetBuilder<AccountManagementViewModel>(builder: (controller) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 10,
+                    height: defaultPadding,
                   ),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
@@ -138,6 +142,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                               color: Colors.teal, onTap: () {}),
                                           dataRowItem(size / data.length, "حذف",
                                               color: Colors.red, onTap: () {
+                                            if(enableUpdate)
                                             controller
                                                 .deleteAccount(accountModel);
                                           }),
@@ -150,6 +155,64 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       ],
                     ),
                   ),
+
+                  SizedBox(
+                    height: defaultPadding*2,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(defaultPadding),
+                    decoration: BoxDecoration(
+                      color: secondaryColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: GetBuilder<MinViewModel>(
+                        builder: (controller) {
+                          return Column(
+                            children: [
+                              CustomDropDown(value: 'الافتراضي', listValue:controller.allArchive.map((e) => e.toString(),).toList(), label: "السنة المختارة", onChange: (value) {
+
+
+                                if(value!=null)
+                                { if(value!="الافتراضي") {
+                                  controller.getOldData(value);
+                                  enableUpdate = false;
+                                  controller.update();
+                                } else{
+                                  controller.getDefaultData();
+                                  enableUpdate = true;
+                                  controller.update();
+
+                                }
+
+                                }
+                              },
+
+                              ),
+                              SizedBox(
+                                height: defaultPadding*2,
+                              ),
+                              Wrap(
+                                runSpacing: 20,
+                                alignment: WrapAlignment.spaceEvenly,
+                                spacing: 50,
+                                children: [
+                                  AppButton(text: "ارشفة البيانات الحالية", onPressed: (){
+                                    controller.archive();
+
+                                  }),
+                                  AppButton(text: "تصفير البيانات الحالية", onPressed: (){
+                                    controller.archive();
+
+                                  }),
+                                ],
+                              ),
+                            ],
+                          );
+                        }
+                    ),
+                  ),
+
+
                 ],
               );
             }),

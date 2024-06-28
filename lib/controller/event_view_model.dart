@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/event_model.dart';
 
+import '../constants.dart';
 import '../utils/const.dart';
 
 
@@ -16,12 +17,14 @@ class EventViewModel extends GetxController{
   );
 
   EventViewModel(){
-    eventFireStore.snapshots().listen((event) {
-      allEvents = Map<String,EventModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(), i.data()))).obs;
-      update();
-    },);
+    getAllEventRecord();
   }
-
+getAllEventRecord(){
+  eventFireStore.snapshots().listen((event) {
+    allEvents = Map<String,EventModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(), i.data()))).obs;
+    update();
+  },);
+}
   addEvent(EventModel eventModel){
     eventFireStore.doc(eventModel.id).set(eventModel);
   }
@@ -32,6 +35,13 @@ class EventViewModel extends GetxController{
 
   deleteEvent(EventModel eventModel){
     eventFireStore.doc(eventModel.id).delete();
+  }
+
+   getOldData(String value) {
+    FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(Const.eventCollection).get().then((event) {
+      allEvents = Map<String,EventModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(),EventModel.fromJson(i.data())))).obs;
+      update();
+    },);
   }
 
 }

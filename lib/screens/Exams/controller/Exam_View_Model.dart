@@ -102,4 +102,17 @@ class ExamViewModel extends GetxController {
           studentMap[key]!.grade! / studentMap[key]!.stdExam!.length;
     });
   }
+
+   getOldData(String value) async{
+
+    await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(examsCollection).get().then((value) {
+      _examMap.clear();
+      for (var element in value.docs) {
+        _examMap[element.id] = ExamModel.fromJson(element.data());
+      }
+      print("Exams :${_examMap.keys.length}");
+      getPassRate();
+      update();
+    });
+  }
 }

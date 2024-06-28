@@ -16,8 +16,8 @@ class ParentModel {
   id,
   nationality,startDate,
       work;
-
-  // List<ExamModel> exams;
+  bool? enableEdite;
+  List<dynamic>? children;
   List<EventRecordModel>? eventRecords;
 
   ParentModel({
@@ -32,10 +32,12 @@ class ParentModel {
     this.work,
     this.parentID,
     this.eventRecords,
-    this.nationality
+    this.nationality,
+    this.enableEdite,
+    this.children,
   });
 
-  // Method to convert ParentModel instance to JSON
+
   Map<String, dynamic> toJson() {
     return {
       'startDate':startDate,
@@ -49,24 +51,27 @@ class ParentModel {
       'work': work,
       'id':id,
       'age':age,
-      'eventRecords': eventRecords?.map((event) => event.toJson()).toList(),
+      'children':children,
+      'enableEdite':enableEdite,
+      'eventRecords': eventRecords?.map((event) => event.toJson()).toList()??[],
     };
   }
 
   // Method to create ParentModel instance from JSON
   factory ParentModel.fromJson(Map<String, dynamic> json) {
     return ParentModel(
-      fullName: json['fullName'],
-      parentID: json['parentID'],
-      address: json['address'],
-      age:json['age'],
-      startDate:json['startDate'],
-      nationality: json['nationality'],
-      phoneNumber: json['phoneNumber'],
-      motherPhone: json['motherPhone'],
-      emergencyPhone: json['emergencyPhone'],
-      work: json['work'],
-      id: json['id'],
+      fullName: json['fullName']??'',
+      parentID: json['parentID']??'',
+      address: json['address']??'',
+      age:json['age']??'',
+      startDate:json['startDate']??'',
+      nationality: json['nationality']??'',
+      phoneNumber: json['phoneNumber']??'',
+      motherPhone: json['motherPhone']??'',
+      emergencyPhone: json['emergencyPhone']??'',
+      work: json['work']??'',
+      id: json['id']??'',
+      children: json['children']??[],
       eventRecords: (json['eventRecords'] as List<dynamic>?)
           ?.map((event) => EventRecordModel.fromJson(event))
           .toList(),

@@ -46,4 +46,17 @@ class StoreViewModel extends GetxController{
         affectedId: storeId);
     update();
   }
+
+   getOldData(String value)async{
+
+    await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(storeCollection).get().then((value) {
+
+      _storeMap.clear();
+      for (var element in value.docs) {
+        _storeMap[element.id] = StoreModel.fromJson(element.data());
+      }
+      print("StoreModel :${_storeMap.keys.length}");
+      update();
+    });
+  }
 }

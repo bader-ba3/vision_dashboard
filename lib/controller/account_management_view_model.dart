@@ -3,11 +3,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/event_view_model.dart';
+import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/models/Salary_Model.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
+import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
+import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
+import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
+import 'package:vision_dashboard/utils/const.dart';
 import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../constants.dart';
 import '../models/account_management_model.dart';
@@ -34,8 +41,12 @@ class AccountManagementViewModel extends GetxController {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   AccountManagementViewModel() {
+  getAllEmployee();
+  }
+
+  getAllEmployee(){
     accountManagementFireStore.snapshots().listen(
-      (event) {
+          (event) {
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
             event.docs
                 .toList()
@@ -65,40 +76,41 @@ class AccountManagementViewModel extends GetxController {
         .update({"isActive": !accountModel.isActive});
   }
 
-
- Future<String> uploadImage(bytes,fileName)async{
+  Future<String> uploadImage(bytes, fileName) async {
     try {
-      await _storage.ref(fileName).putData(bytes!.buffer.asUint8List() );
-    return   await _storage.ref(fileName).getDownloadURL();
+      await _storage.ref(fileName).putData(bytes!.buffer.asUint8List());
+      return await _storage.ref(fileName).getDownloadURL();
     } catch (e) {
       print('Error uploading signature: $e');
-   return   'Error';
+      return 'Error';
     }
-
   }
 
-  adReceiveSalary(String accountId, String paySalary,String salaryDate,String constSalary,String dilaySalary,bytes)async {
+  adReceiveSalary(String accountId, String paySalary, String salaryDate,
+      String constSalary, String dilaySalary, bytes) async {
     String fileName = 'signatures/$accountId/$salaryDate.png';
 
-    uploadImage(bytes,fileName).then((value) async{
-      if(value!=Error){
-        String salaryId="${salaryDate} ${generateId("SALARY")}";
-        await   FirebaseFirestore.instance
-            .collection(accountManagementCollection)
-            .doc(accountId)
-            .set({"salaryReceived":FieldValue.arrayUnion([salaryId])},SetOptions(merge: true));
-        Get.find<SalaryViewModel>().addSalary(SalaryModel(
-          salaryId: salaryId,
-          constSalary: constSalary,
-          employeeId: accountId,
-          dilaySalary: dilaySalary,
-          paySalary: paySalary,
-          signImage: fileName,
-        ));
-
-      }
-    },);
-
+    uploadImage(bytes, fileName).then(
+      (value) async {
+        if (value != Error) {
+          String salaryId = "${salaryDate} ${generateId("SALARY")}";
+          await FirebaseFirestore.instance
+              .collection(accountManagementCollection)
+              .doc(accountId)
+              .set({
+            "salaryReceived": FieldValue.arrayUnion([salaryId])
+          }, SetOptions(merge: true));
+          Get.find<SalaryViewModel>().addSalary(SalaryModel(
+            salaryId: salaryId,
+            constSalary: constSalary,
+            employeeId: accountId,
+            dilaySalary: dilaySalary,
+            paySalary: paySalary,
+            signImage: fileName,
+          ));
+        }
+      },
+    );
   }
 
   bool isSupportNfc = false;
@@ -431,6 +443,20 @@ class AccountManagementViewModel extends GetxController {
   }
 
   void disposeNFC() {}
+
+
+
+   getOldData(String value) {
+  FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(accountManagementCollection).get().then(
+          (event) {
+        allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
+            event.docs
+                .toList()
+                .map((i) => MapEntry(i.id.toString(),AccountManagementModel.fromJson(i.data())  ))).obs;
+        update();
+      },
+    );
+  }
 }
 
 String getMyUserId() {

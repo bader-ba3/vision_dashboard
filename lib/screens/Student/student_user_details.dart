@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/models/Installment_model.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/models/event_record_model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
@@ -19,9 +20,11 @@ class StudentInputForm extends StatefulWidget {
 }
 
 class _StudentInputFormState extends State<StudentInputForm> {
-  String _payWay = "";
+  String _payWay = '';
   EventModel? selectedEvent;
   TextEditingController bodyEvent = TextEditingController();
+
+  Map<String, InstallmentModel> instalmentMap = {};
 
   // قائمة بكل الطلاب المتاحين
   final List<String> _payWays = [
@@ -44,8 +47,15 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final busController = TextEditingController();
   final guardianController = TextEditingController();
   final languageController = TextEditingController();
+  final totalPaymentController = TextEditingController();
 
+  List<TextEditingController> monthsController = [];
+  List<TextEditingController> costsController = [];
+  final monthController = TextEditingController();
+  final costController = TextEditingController();
   List<EventRecordModel> eventRecords = [];
+
+  String parentName = '';
 
   @override
   void dispose() {
@@ -67,6 +77,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
     super.dispose();
   }
 
+  addInstalment() {
+    installmentCount++;
+    monthsController.add(TextEditingController());
+    costsController.add(TextEditingController());
+    print(installmentCount);
+  }
+
   String? selectedValue;
 
   bool _validateFields() {
@@ -74,8 +91,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
       return false;
     if (!validateNumericField(studentNumberController.text, "رقم الطالب"))
       return false;
+    if (!validateNumericField(totalPaymentController.text, "مبلغ التسجيل"))
+      return false;
     if (!validateNotEmpty(ageController.text, "التولد")) return false;
     if (!validateNotEmpty(classController.text, "الصف")) return false;
+    if (!validateNotEmpty(_payWay, "طريقة الدفع")) return false;
     if (!validateNotEmpty(sectionController.text, "الشعبة")) return false;
     if (!validateNotEmpty(languageController.text, "اللغة")) return false;
     if (!validateNotEmpty(busController.text, "الحافلة")) return false;
@@ -90,13 +110,16 @@ class _StudentInputFormState extends State<StudentInputForm> {
     return true;
   }
 
+  int installmentCount = 0;
+
   clearController() {
     eventRecords.clear();
     studentNameController.clear();
     studentNumberController.clear();
     addressController.clear();
     sectionController.clear();
-    genderController.clear();
+    genderController.text = '';
+    _payWay = '';
     ageController.clear();
     classController.clear();
     teachersController.clear();
@@ -105,6 +128,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
     gradesController.clear();
     busController.clear();
     guardianController.clear();
+    monthsController.clear();
+    costsController.clear();
+    totalPaymentController.clear();
+    parentName = '';
+    languageController.text = '';
   }
 
   @override
@@ -127,6 +155,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.spaceEvenly,
                 runSpacing: 50,
+                spacing: 25,
                 children: <Widget>[
                   CustomTextField(
                       controller: studentNameController, title: "اسم الطالب"),
@@ -135,7 +164,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       title: 'رقم الطالب',
                       keyboardType: TextInputType.phone),
                   CustomDropDown(
-                    value: '',
+                    value: sectionController.text,
                     listValue: sectionsList,
                     label: 'الشعبة',
                     onChange: (value) {
@@ -145,7 +174,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: '',
+                    value: genderController.text,
                     listValue: sexList,
                     label: 'الجنس',
                     onChange: (value) {
@@ -155,7 +184,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: '',
+                    value: classController.text,
                     listValue: classNameList,
                     label: 'الصف',
                     onChange: (value) {
@@ -165,7 +194,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: '',
+                    value: languageController.text,
                     listValue: languageList,
                     label: 'اللغة',
                     onChange: (value) {
@@ -175,7 +204,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: '',
+                    value: busController.text,
                     listValue: busesList,
                     label: 'الحافلة',
                     onChange: (value) {
@@ -185,7 +214,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: '',
+                    value: parentName,
                     listValue: Get.find<ParentsViewModel>()
                         .parentMap
                         .values
@@ -196,6 +225,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     label: 'ولي الأمر',
                     onChange: (value) {
                       if (value != null) {
+                        parentName = value;
                         guardianController.text = Get.find<ParentsViewModel>()
                             .parentMap
                             .values
@@ -207,13 +237,29 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       }
                     },
                   ),
+                  CustomTextField(
+                      controller: totalPaymentController,
+                      title: 'مبلغ التسجيل',
+                      keyboardType: TextInputType.phone),
                   CustomDropDown(
-                    value: '',
+                    value: _payWay,
                     listValue: _payWays,
                     label: "طرق الدفع",
-                    onChange: (selectedWay) {
+                    onChange: (selectedWay) async {
                       if (selectedWay != null) {
-                        _payWay = selectedWay;
+                        if (selectedWay == 'اقساط') {
+                          _payWay = selectedWay;
+
+                          await addInstalment();
+
+                          setState(() {});
+                        } else {
+                          _payWay = selectedWay;
+                          installmentCount = 0;
+                          monthsController.clear();
+                          costsController.clear();
+                          setState(() {});
+                        }
                       }
                     },
                   ),
@@ -271,24 +317,195 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           ))
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'المبلغ',
-                        style: TextStyle(fontSize: 16),
+                  if (_payWay == 'اقساط')
+                    SizedBox(
+                      width: Get.width / 2,
+                      child: Column(
+                        children: [
+                          SizedBox(height: defaultPadding * 2),
+                          Text('سجل الدفعات:', style: Styles.headLineStyle1),
+                          SizedBox(
+                            height: defaultPadding,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemCount: installmentCount,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.5),
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            width: 2.0, color: primaryColor)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14.0, horizontal: 10),
+                                      child: Row(
+                                        children: [
+                                          Spacer(),
+                                          CustomDropDown(
+                                            value: '',
+                                            listValue: months.keys
+                                                .map((e) => e.toString())
+                                                .toList(),
+                                            label: "الشهر",
+                                            size: Get.width / 5.5,
+                                            isFullBorder: true,
+                                            onChange: (value) {
+                                              if (value != null) {
+                                                monthsController[index].text =
+                                                    months[value]!;
+                                              }
+                                            },
+                                          ),
+                                          Spacer(),
+                                          CustomTextField(
+                                            controller: costsController[index],
+                                            title: "الدفعة",
+                                            size: Get.width / 5.5,
+                                            keyboardType: TextInputType.number,
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                addInstalment();
+                                setState(() {});
+                              },
+                              icon: Row(
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.blue,
+                                  ),
+                                  Text(
+                                    "اضافة",
+                                    style: Styles.headLineStyle3,
+                                  ),
+                                ],
+                              )),
+                          SizedBox(
+                            height: defaultPadding,
+                          ),
+                          GetBuilder<StudentViewModel>(builder: (controller) {
+                            return AppButton(
+                              text: "حفظ",
+                              onPressed: () {
+                                if (_validateFields()) {
+                                  for (int index = 0;
+                                      index < monthsController.length;
+                                      index++) {
+                                    String insId = generateId("INSTALLMENT");
+                                    instalmentMap[insId] = InstallmentModel(
+                                      installmentCost:
+                                          costsController[index].text,
+                                      installmentDate:
+                                          monthsController[index].text,
+                                      installmentId: insId,
+                                      isPay: false,
+                                    );
+                                  }
+                                  final student = StudentModel(
+                                    studentID: generateId("STD"),
+                                    parentId: guardianController.text,
+                                    stdLanguage: languageController.text,
+                                    stdExam: [],
+                                    section: sectionController.text,
+                                    studentNumber: studentNumberController.text,
+                                    StudentBirthDay: ageController.text,
+                                    studentName: studentNameController.text,
+                                    stdClass: classController.text,
+                                    paymentWay: _payWay,
+                                    totalPayment:
+                                        int.parse(totalPaymentController.text),
+                                    gender: genderController.text,
+                                    bus: busController.text,
+                                    startDate: startDateController.text,
+                                    eventRecords: eventRecords,
+                                    installmentRecords: instalmentMap,
+                                  );
+                                  controller.addStudent(student);
+                                  clearController();
+                                  setState(() {});
+                                  // print('بيانات الموظف: $student');
+                                }
+                              },
+                            );
+                          }),
+                        ],
                       ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        _payWay == "اقساط"
-                            ? "١٠٠٠ لمدة ٥ اشهر "
-                            : "٧٠٠٠ حسم ٢٥٪",
-                        style: Styles.headLineStyle2,
-                      )
-                    ],
-                  ),
+                    ),
+                  if (_payWay != "اقساط")
+                    GetBuilder<StudentViewModel>(builder: (controller) {
+                      return AppButton(
+                        text: "حفظ",
+                        onPressed: () {
+                          if (_validateFields()) {
+                            String id = generateId("INSTALLMENT");
+                            instalmentMap[id] = InstallmentModel(
+                                isPay: true,
+                                installmentId: id,
+                                installmentDate: DateTime.now()
+                                    .month
+                                    .toString()
+                                    .padLeft(2, "0"),
+                                installmentCost: totalPaymentController.text,
+                                payTime: DateTime.now().toString());
+                            final student = StudentModel(
+                              studentID: generateId("STD"),
+                              parentId: guardianController.text,
+                              stdLanguage: languageController.text,
+                              stdExam: [],
+                              section: sectionController.text,
+                              studentNumber: studentNumberController.text,
+                              StudentBirthDay: ageController.text,
+                              studentName: studentNameController.text,
+                              stdClass: classController.text,
+                              gender: genderController.text,
+                              bus: busController.text,
+                              startDate: startDateController.text,
+                              eventRecords: eventRecords,
+                              installmentRecords: instalmentMap,
+                              paymentWay: _payWay,
+                              totalPayment:
+                                  int.parse(totalPaymentController.text),
+                            );
+                            controller.addStudent(student);
+                            clearController();
+                            // print('بيانات الموظف: $student');
+                          }
+                        },
+                      );
+                    }),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: defaultPadding * 2,
+            ),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -308,7 +525,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             if (selectedWay != null) {
                               setState(() {});
                               selectedEvent?.name = selectedWay;
-
                             }
                           },
                         ),
@@ -338,94 +554,66 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ],
                     );
                   }),
-                  SizedBox(height: 16.0),
+                  SizedBox(height: defaultPadding * 2),
+                  Text('سجل الأحداث:', style: Styles.headLineStyle1),
+                  SizedBox(
+                    height: defaultPadding,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: eventRecords.length,
+                      itemBuilder: (context, index) {
+                        final record = eventRecords[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Color(int.parse(record.color))
+                                    .withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 14.0, horizontal: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    record.type,
+                                    style: Styles.headLineStyle1
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    record.body,
+                                    style: Styles.headLineStyle1
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Text(
+                                    record.date,
+                                    style: Styles.headLineStyle3,
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: defaultPadding,
+                  ),
                 ],
               ),
-            ),
-            SizedBox(height: defaultPadding * 2),
-            Text('سجل الأحداث:', style: Styles.headLineStyle1),
-            SizedBox(
-              height: defaultPadding,
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: eventRecords.length,
-                itemBuilder: (context, index) {
-                  final record = eventRecords[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color:
-                              Color(int.parse(record.color)).withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 14.0, horizontal: 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              record.type,
-                              style: Styles.headLineStyle1
-                                  .copyWith(color: Colors.black),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              record.body,
-                              style: Styles.headLineStyle1
-                                  .copyWith(color: Colors.black),
-                            ),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            Text(
-                              record.date,
-                              style: Styles.headLineStyle3,
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: defaultPadding,
-            ),
-            GetBuilder<StudentViewModel>(builder: (controller) {
-              return AppButton(
-                text: "حفظ",
-                onPressed: () {
-                  if (_validateFields()) {
-                    final student = StudentModel(
-                      studentID: generateId("STD"),
-                      parentId: guardianController.text,
-                      stdLanguage: languageController.text,
-                      stdExam: [],
-                      section: sectionController.text,
-                      studentNumber: studentNumberController.text,
-                      StudentBirthDay: ageController.text,
-                      studentName: studentNameController.text,
-                      stdClass: classController.text,
-                      gender: genderController.text,
-                      bus: busController.text,
-                      startDate: startDateController.text,
-                      eventRecords: eventRecords,
-                    );
-                    controller.addStudent(student);
-                    clearController();
-                    // print('بيانات الموظف: $student');
-                  }
-                },
-              );
-            }),
+            )
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
+import '../constants.dart';
 import '../utils/const.dart';
 
 class ExpensesViewModel extends GetxController{
@@ -11,6 +12,10 @@ class ExpensesViewModel extends GetxController{
   );
 
   ExpensesViewModel(){
+    getAllExpenses();
+  }
+
+  getAllExpenses(){
     expensesFireStore.snapshots().listen((event) {
       allExpenses = Map<String,ExpensesModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(), i.data()))).obs;
       update();
@@ -23,5 +28,13 @@ class ExpensesViewModel extends GetxController{
 
   updateExpenses(ExpensesModel expensesModel){
     expensesFireStore.doc(expensesModel.id).update(expensesModel.toJson());
+  }
+
+   getOldData(String value) async{
+
+    await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(Const.expensesCollection).get().then((value) {
+      allExpenses = Map<String,ExpensesModel>.fromEntries(value.docs.toList().map((i)=>MapEntry(i.id.toString(),ExpensesModel.fromJson(i.data()) ))).obs;
+      update();
+    },);
   }
 }

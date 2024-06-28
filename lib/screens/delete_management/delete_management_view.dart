@@ -39,47 +39,38 @@ class _DeleteManagementViewState extends State<DeleteManagementView> {
                 color: secondaryColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "كل طلبات الحذف",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium,
+              child: GetBuilder<DeleteManagementViewModel>(builder: (controller) {
+                return SizedBox(
+                  width: size + 60,
+                  child: Scrollbar(
+                    controller: _scrollController,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                     child: DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
+                       for (var deleteModel in controller.allDelete.values)
+                         DataRow(
+                             color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: deleteModel.id) ? Colors.red : Colors.transparent),
+                             cells: [
+                               dataRowItem(size / data.length, deleteModel.id.toString()),
+                               dataRowItem(size / data.length, deleteModel.details??"لا يوجد"),
+                               dataRowItem(size / data.length, deleteModel.affectedId.toString()),
+                               dataRowItem(size / data.length, deleteModel.collectionName.toString()),
+
+                               dataRowItem(size / data.length, "استرجاع",color: Colors.teal,onTap: (){
+                                 if(enableUpdate)
+                                 controller.undoTheDelete(deleteModel);
+                               }),
+                               dataRowItem(size / data.length, "حذف نهائي",color: Colors.red.shade700,onTap: (){
+                                 if(enableUpdate)
+                                 controller.doTheDelete(deleteModel);
+                               }),
+                             ]),
+                     ]),
+                    ),
                   ),
-                  GetBuilder<DeleteManagementViewModel>(builder: (controller) {
-                    return SizedBox(
-                      width: size + 60,
-                      child: Scrollbar(
-                        controller: _scrollController,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                         child: DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
-                           for (var deleteModel in controller.allDelete.values)
-                             DataRow(
-                                 color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: deleteModel.id) ? Colors.red : Colors.transparent),
-                                 cells: [
-                                   dataRowItem(size / data.length, deleteModel.id.toString()),
-                                   dataRowItem(size / data.length, deleteModel.details??"لا يوجد"),
-                                   dataRowItem(size / data.length, deleteModel.affectedId.toString()),
-                                   dataRowItem(size / data.length, deleteModel.collectionName.toString()),
-                                   dataRowItem(size / data.length, "استرجاع",color: Colors.teal,onTap: (){
-                                     controller.undoTheDelete(deleteModel);
-                                   }),
-                                   dataRowItem(size / data.length, "حذف نهائي",color: Colors.red.shade700,onTap: (){
-                                     controller.doTheDelete(deleteModel);
-                                   }),
-                                 ]),
-                         ]),
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
+                );
+              }),
             ),
           );
         }),

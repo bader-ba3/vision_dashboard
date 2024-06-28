@@ -84,8 +84,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                 DataRow(
                                     color: WidgetStatePropertyAll(
                                         checkIfPendingDelete(
-                                                affectedId: student.studentID
-                                                    .toString())
+                                                affectedId: student.studentID!)
                                             ? Colors.redAccent
                                             : Colors.transparent),
                                     cells: [
@@ -139,11 +138,16 @@ class _StudentScreenState extends State<StudentScreen> {
                                       }),
                                       dataRowItem(size / data.length,
                                           student.grade.toString()),
-                                      dataRowItem(size / data.length, "حذف",
-                                          color: Colors.red, onTap: () {
-                                        if (student.stdExam!.length > 1)
-                                          controller.deleteStudent(
-                                              student.studentID.toString());
+                                      dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع": "حذف",
+                                          color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
+                                        if (/*student.stdExam!.length > 1&&*/enableUpdate)
+                                          if (checkIfPendingDelete(affectedId: student.studentID!))
+                                            returnPendingDelete(
+                                                affectedId: student.studentID!);
+                                          else
+                                            controller.deleteStudent(
+                                                student.studentID!);
+
                                       }),
                                     ]),
                             ]),

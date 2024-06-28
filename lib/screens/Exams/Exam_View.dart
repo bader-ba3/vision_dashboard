@@ -32,7 +32,7 @@ class _ExamViewState extends State<ExamView>{
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:enableUpdate?FloatingActionButton(
         backgroundColor:primaryColor,
         onPressed: () {
           setState(() {
@@ -40,7 +40,8 @@ class _ExamViewState extends State<ExamView>{
           });
         },
         child: Icon(!isAdd? Icons.add:Icons.grid_view),
-      ),
+      ):Container(),
+
     );
   }
 }

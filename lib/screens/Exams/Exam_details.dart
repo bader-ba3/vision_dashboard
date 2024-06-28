@@ -298,6 +298,30 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       ),
                     ],
                   ),
+                  GetBuilder<ExamViewModel>(builder: (examController) {
+                    return AppButton(
+                      text: 'حفظ',
+                      onPressed: () {
+                        if (_validateFields()) {
+                          final exam = ExamModel(
+                            id: examId,
+                            questionImage: _questionImageFile ?? [],
+                            answerImage: _answerImageFile,
+                            subject: subjectController.text,
+                            professor: professorController.text,
+                            examPassMark: examPassMarkController.text,
+                            examMaxMark: examMaxMarkController.text,
+                            date: DateTime.parse(dateController.text),
+                            marks: _selectedStudent,
+                          );
+                          print(_selectedStudent.length);
+                          studentViewModel
+                              .addExamToStudent(_selectedStudent.keys.toList(), examId);
+                          examController.addExam(exam);
+                        }
+                      },
+                    );
+                  }),
                 ],
               ),
             ),
@@ -357,30 +381,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
             SizedBox(
               height: defaultPadding,
             ),
-            GetBuilder<ExamViewModel>(builder: (examController) {
-              return AppButton(
-                text: 'حفظ',
-                onPressed: () {
-                  if (_validateFields()) {
-                    final exam = ExamModel(
-                      id: examId,
-                      questionImage: _questionImageFile ?? [],
-                      answerImage: _answerImageFile,
-                      subject: subjectController.text,
-                      professor: professorController.text,
-                      examPassMark: examPassMarkController.text,
-                      examMaxMark: examMaxMarkController.text,
-                      date: DateTime.parse(dateController.text),
-                      marks: _selectedStudent,
-                    );
-                    print(_selectedStudent.length);
-                    studentViewModel
-                        .addExamToStudent(_selectedStudent.keys.toList(), examId);
-                    examController.addExam(exam);
-                  }
-                },
-              );
-            }),
+
           ],
         ),
       ),
