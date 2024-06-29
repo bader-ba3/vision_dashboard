@@ -95,40 +95,54 @@ class _ClassesViewState extends State<ClassesView> {
 
                 GetBuilder<StudentViewModel>(
                   builder: (studentController) {
-                    return Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='عربي',).toList().length==0?Expanded(child: Center(child: Text("لايوجد طلاب",style: Styles.headLineStyle2.copyWith(color: blueColor)))):
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='عربي',).toList().length,
-                              itemBuilder: (context, index) {
-                                List<StudentModel> listStudent=studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='عربي',).toList();
-                              return Container(
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300,width: 2)),
-                                child: Center(child: Text(listStudent[index].studentName! ,style: Styles.headLineStyle3.copyWith(color: blueColor))),
-                              );
-                            },),
-                          ),
-                          studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='لغات',).toList().length==0?Expanded(child: Center(child: Text("لايوجد طلاب",style: Styles.headLineStyle2.copyWith(color:blueColor)))):
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='لغات',).toList().length,
-                              itemBuilder: (context, index) {
-                                List<StudentModel> listStudent=studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='لغات',).toList();
-                                return Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300,width: 2)),
-                                  child: Center(child: Text(listStudent[index].studentName! ,style: Styles.headLineStyle3.copyWith(color: blueColor))),
+                    return Expanded(
+                      child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='عربي',).toList().length==0?Expanded(child: Center(child: Text("لايوجد طلاب",style: Styles.headLineStyle2.copyWith(color: blueColor)))):
+                            Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='عربي',).toList().length,
+                                itemBuilder: (context, index) {
+                                  List<StudentModel> listStudent=studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='عربي',).toList();
+                                return Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(listStudent[index].studentName! ,style: Styles.headLineStyle3.copyWith(color: blueColor))),
+                                    ),
+                                    Container(height: 5,color: secondaryColor,),
+                                  ],
                                 );
                               },),
-                          ),
-                        ],
-                      );
+                            ),
+                            Container(height: double.maxFinite,width:3,color: Colors.grey.shade300,),
+                            studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='لغات',).toList().length==0?Expanded(child: Center(child: Text("لايوجد طلاب",style: Styles.headLineStyle2.copyWith(color:blueColor)))):
+                            Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='لغات',).toList().length,
+                                itemBuilder: (context, index) {
+                                  List<StudentModel> listStudent=studentController.studentMap.values.where((element) => element.stdClass==classNameList[SelectedClass!]&&element.stdLanguage=='لغات',).toList();
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(child: Text(listStudent[index].studentName! ,style: Styles.headLineStyle3.copyWith(color: blueColor))),
+                                      ),
+                                      Container(height: 5,color: secondaryColor,),
+                      
+                                    ],
+                                  );
+                                },),
+                            ),
+                          ],
+                        ),
+                    );
                   }
                 ),
               ],
