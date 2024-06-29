@@ -114,6 +114,8 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
                                 columnSpacing: 0,
+                                dividerThickness: 0.3,
+
                                 columns: List.generate(
                                     data.length,
                                     (index) => DataColumn(

@@ -54,7 +54,10 @@ class _ExamScreenState extends State<ExamScreen> {
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
-                          child: DataTable(columnSpacing: 0, columns:
+                          child: DataTable(columnSpacing: 0,
+                              dividerThickness: 0.3,
+
+                              columns:
                           List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
                               rows: [
                                 for (var exam in examController.examMap.values)

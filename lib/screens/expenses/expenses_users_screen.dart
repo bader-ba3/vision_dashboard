@@ -48,7 +48,10 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                       controller: _scrollController,
                       scrollDirection: Axis.horizontal,
                       child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                        return DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
+                        return DataTable(columnSpacing: 0,
+                            dividerThickness: 0.3,
+
+                            columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
                           for (var expense in controller.allExpenses.values)
                             DataRow(
                                 color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: expense.id) ? Colors.red : Colors.transparent),

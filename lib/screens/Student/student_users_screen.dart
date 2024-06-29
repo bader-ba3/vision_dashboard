@@ -74,7 +74,8 @@ class _StudentScreenState extends State<StudentScreen> {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                             columnSpacing: 0,
-                            dividerThickness: 0,
+                            dividerThickness: 0.3,
+
                             columns: List.generate(
                                 data.length,
                                 (index) => DataColumn(
@@ -85,6 +86,7 @@ class _StudentScreenState extends State<StudentScreen> {
                             rows: [
                               for (var student in controller.studentMap.values)
                                 DataRow(
+
                                     color: WidgetStatePropertyAll(
                                         checkIfPendingDelete(
                                                 affectedId: student.studentID!)

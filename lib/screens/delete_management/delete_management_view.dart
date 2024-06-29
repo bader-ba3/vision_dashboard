@@ -47,7 +47,10 @@ class _DeleteManagementViewState extends State<DeleteManagementView> {
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       scrollDirection: Axis.horizontal,
-                     child: DataTable(columnSpacing: 0, columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
+                     child: DataTable(columnSpacing: 0,
+                         dividerThickness: 0.3,
+
+                         columns: List.generate(data.length, (index) => DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))), rows: [
                        for (var deleteModel in controller.allDelete.values)
                          DataRow(
                              color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: deleteModel.id) ? Colors.red : Colors.transparent),

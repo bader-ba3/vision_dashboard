@@ -55,6 +55,8 @@ class _EventScreenState extends State<EventScreen> {
                           builder: (_) {
                         return DataTable(
                             columnSpacing: 0,
+                            dividerThickness: 0.3,
+
                             columns: List.generate(
                                 data.length,
                                 (index) => DataColumn(

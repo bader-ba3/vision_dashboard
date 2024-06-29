@@ -66,6 +66,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                             controller: _scrollController,
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
+                                dividerThickness: 0.3,
                                 columnSpacing: 0,
                                 columns: List.generate(
                                     data.length,

@@ -50,6 +50,8 @@ final  ScrollController scrollController;
                     return GetBuilder<SalaryViewModel>(builder: (salaryController) {
                       return DataTable(
                           columnSpacing: 0,
+                          dividerThickness: 0.3,
+
                           columns: _buildDataColumns(type),
                           rows: _buildDataRows(controller, salaryController,context));
                     });

@@ -64,9 +64,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: defaultPadding,
-                  ),
+
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(
@@ -86,7 +84,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                               child: GetBuilder<DeleteManagementViewModel>(
                                   builder: (_) {
                                 return DataTable(
-                                    columnSpacing: 25,
+                                    columnSpacing: 10,
+                                    dividerThickness: 0.3,
+
                                     columns: List.generate(
                                         data.length,
                                         (index) => DataColumn(

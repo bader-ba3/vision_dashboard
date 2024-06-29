@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
@@ -19,7 +19,7 @@ class StoreScreen extends StatefulWidget {
 
 class _StoreScreenState extends State<StoreScreen> {
   final ScrollController _scrollController = ScrollController();
-  List data = ["اسم المادة", "الكمية", "الخيارات"];
+  List data = ["اسم المادة", "الكمية", "الخيارات", ""];
   final TextEditingController subNameController = TextEditingController();
   final TextEditingController subQuantityController = TextEditingController();
 
@@ -55,67 +55,58 @@ class _StoreScreenState extends State<StoreScreen> {
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                              columnSpacing: 0,
-                              columns: List.generate(
-                                  data.length,
-                                  (index) => DataColumn(
-                                      label: Container(
-                                          width: size / data.length,
-                                          child: Center(
-                                              child: Text(data[index]))))),
-                              rows: [
-                                for (var parent
-                                    in controller.storeMap.values.toList())
-                                  DataRow(cells: [
-                                    dataRowItem(size / data.length,
-                                        parent.subQuantity.toString()),
-                                    dataRowItem(size / data.length,
-                                        parent.subName.toString()),
-                                    dataRowItem(size / data.length, "تعديل",
-                                        color: Colors.teal, onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          backgroundColor: secondaryColor,
-                                          title: Text("تعديل المادة"),
-                                          actions: [
-                                            CustomTextField(
-                                                controller:
-                                                    subQuantityController
-                                                      ..text = parent
-                                                          .subQuantity
-                                                          .toString(),
-                                                title: data[0]),
-                                            CustomTextField(
-                                                controller: subNameController
-                                                  ..text =
-                                                      parent.subName.toString(),
-                                                title: data[1]),
-                                            AppButton(
-                                              text: 'حفظ',
-                                              onPressed: () {
-                                                StoreModel store = StoreModel(
-                                                  subName:
-                                                      subNameController.text,
-                                                  subQuantity:
-                                                      subQuantityController
-                                                          .text,
-                                                  id: parent.id,
-                                                );
+                          child: GetBuilder<DeleteManagementViewModel>(
+                            builder: (_) {
+                              return DataTable(
+                                  columnSpacing: 0,
+                                  dividerThickness: 0.3,
+                                  columns: List.generate(
+                                      data.length,
+                                      (index) => DataColumn(
+                                          label: Container(
+                                              width: size / (data.length),
+                                              child: Center(
+                                                  child: Text(data[index]))))),
 
-                                                Get.find<StoreViewModel>()
-                                                    .updateStore(store);
-                                                // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                                                print('store Model: $store');
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                  ]),
-                              ]),
+                                  rows: [
+                                    for (var storeModel
+                                        in controller.storeMap.values.toList())
+                                      DataRow(
+                                          color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: storeModel.id!)?Colors.red:Colors.transparent),
+                                          cells: [
+                                        dataRowItem(size / (data.length),
+                                            storeModel.subQuantity.toString()),
+                                        dataRowItem(size / (data.length),
+                                            storeModel.subName.toString()),
+                                        dataRowItem(size / (data.length), "تعديل",
+                                            color: Colors.teal, onTap: () {
+                                          buildEditDialog(context, storeModel);
+                                        }),
+                                        DataCell(
+                                            Container(
+                                            width: size / (data.length),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  checkIfPendingDelete(affectedId: storeModel.id!)?
+                                                      returnPendingDelete(affectedId:  storeModel.id!):
+                                                      addDeleteOperation(collectionName: storeCollection, affectedId:  storeModel.id!);
+                                                },
+                                                icon: Row(
+                                                  children: [
+                                                    Spacer(),
+                                                    Icon(
+                                                      checkIfPendingDelete(affectedId: storeModel.id!)?Icons.check:  Icons.delete,
+                                                      color: checkIfPendingDelete(affectedId: storeModel.id!)? Colors.green:Colors.red,
+                                                    ),
+                                                 SizedBox(width: 5,),
+                                                    Text(checkIfPendingDelete(affectedId: storeModel.id!)?"استرجاع":"حذف"),
+                                                    Spacer(),
+                                                  ],
+                                                ))))
+                                      ]),
+                                  ]);
+                            }
+                          ),
                         ),
                       ),
                     );
@@ -129,24 +120,37 @@ class _StoreScreenState extends State<StoreScreen> {
     );
   }
 
-  void showParentInputDialog(BuildContext context, dynamic parent) {
-    showDialog(
+  Future<dynamic> buildEditDialog(BuildContext context, StoreModel storeModel) {
+    return showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            height: Get.height / 2,
-            width: Get.width,
-            child: ParentInputForm(parent: parent),
-          ),
-        );
-      },
+      builder: (context) => AlertDialog(
+        backgroundColor: secondaryColor,
+        title: Text("تعديل المادة"),
+        actions: [
+          CustomTextField(
+              controller: subQuantityController
+                ..text = storeModel.subQuantity.toString(),
+              title: data[0]),
+          CustomTextField(
+              controller: subNameController
+                ..text = storeModel.subName.toString(),
+              title: data[1]),
+          AppButton(
+            text: 'حفظ',
+            onPressed: () {
+              StoreModel store = StoreModel(
+                subName: subNameController.text,
+                subQuantity: subQuantityController.text,
+                id: storeModel.id,
+              );
+
+              Get.find<StoreViewModel>().updateStore(store);
+              print('store Model: $store');
+              Get.back();
+            },
+          )
+        ],
+      ),
     );
   }
 
