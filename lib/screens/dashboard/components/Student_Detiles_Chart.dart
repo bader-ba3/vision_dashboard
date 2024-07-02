@@ -1,5 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:vision_dashboard/models/Student_Model.dart';
 
 import '../../../constants.dart';
 import 'InfoBarchart.dart';
@@ -7,9 +9,11 @@ import 'info_card.dart';
 
 class StudentsDetailsChart extends StatefulWidget {
   const StudentsDetailsChart({
-    Key? key,
+    Key? key,required this.students
   }) : super(key: key);
 
+
+  final Map<String,StudentModel> students;
   @override
   State<StudentsDetailsChart> createState() => _StudentsDetailsChartState();
 }
@@ -29,14 +33,14 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "الطلاب",
+            "الطلاب".tr,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: defaultPadding),
-          InfoBarChart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title:"طالب",subtitle:"1925"),
+          InfoBarChart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title:"طالب".tr,subtitle:widget.students.length.toString()),
           InfoCard(
             onTap: (){
               touchedIndex==0?touchedIndex=-1:touchedIndex=0;
@@ -45,8 +49,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
 
               });
             },
-            title: "ذكر",
-            amountOfEmployee: "1195",
+            title: "ذكر".tr,
+            amountOfEmployee: widget.students.values.where((element) => element.gender=='ذكر'.tr,).length.toString(),
             color: Colors.blue,
           ),
           InfoCard(
@@ -57,8 +61,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
 
               });
             },
-            title: "انثى",
-            amountOfEmployee: "700",
+            title: "انثى".tr,
+            amountOfEmployee: widget.students.values.where((element) => element.gender=='انثى'.tr,).length.toString(),
             color: Colors.pink,
           ),
           InfoCard(
@@ -69,8 +73,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
 
               });
             },
-            title: "ذوي الهمم",
-            amountOfEmployee: "30",
+            title: "ذوي الهمم".tr,
+            amountOfEmployee: "0",
             color: Colors.blueGrey,
           ),
 
@@ -89,8 +93,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
         case 0:
           return PieChartSectionData(
             color: Colors.blue,
-            value: 1195,
-            title: '${((1195 / 1925)*100).round()}%',
+            value: widget.students.values.where((element) => element.gender=='ذكر'.tr,).length*1.0,
+            title: '${((widget.students.values.where((element) => element.gender=='ذكر'.tr,).length / widget.students.length)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -102,8 +106,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
         case 1:
           return PieChartSectionData(
             color: Colors.pink,
-            value: 700,
-            title: '${((700 / 1925)*100).round()}%',
+            value: widget.students.values.where((element) => element.gender=='انثى'.tr,).length*1.0,
+            title: '${((widget.students.values.where((element) => element.gender=='انثى'.tr,).length / widget.students.length)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -115,8 +119,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
         case 2:
           return PieChartSectionData(
             color: Colors.blueGrey,
-            value: 30,
-            title: '${((30 / 1925)*100).round()}%',
+            value: 0,
+            title: '${((0 / 1925)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

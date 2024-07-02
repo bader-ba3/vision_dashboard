@@ -40,14 +40,14 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
           spacing: 25,
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextField(controller: titleController, title: 'العنوان'),
-            CustomTextField(controller: totalController, title: 'القيمة'),
+            CustomTextField(controller: titleController, title: 'العنوان'.tr),
+            CustomTextField(controller: totalController, title: 'القيمة'.tr),
             multiLineCustomTextField(
-                controller: bodyController, title: 'تاريخ البداية'),
+                controller: bodyController, title: 'تاريخ البداية'.tr),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("صورة الفاتورة"),
+                Text("صورة الفاتورة".tr),
                 SizedBox(
                   height: 15,
                 ),
@@ -110,7 +110,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
               ],
             ),
             AppButton(
-              text: "حفظ",
+              text: "حفظ".tr,
               onPressed: () async {
                 List imageLinkList = [];
                 for (var i in ImagesTempData) {
@@ -176,7 +176,7 @@ class multiLineCustomTextField extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('الوصف', style: TextStyle(color: primaryColor)),
+            Text('الوصف'.tr, style: TextStyle(color: primaryColor)),
             Expanded(
               child: TextFormField(
                 keyboardType: TextInputType.multiline,

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_BarChar.dart';
 
 import '../../../constants.dart';
@@ -55,7 +56,7 @@ class _EmployeeSalaryChartBoxState extends State<EmployeeSalaryChartBox> {
                     width: 5,
                   ),
                   Text(
-                    "المستحق",
+                    "المستحق".tr,
                     // style: Styles.headLineStyle3,
                   )
                 ],
@@ -77,7 +78,7 @@ class _EmployeeSalaryChartBoxState extends State<EmployeeSalaryChartBox> {
                     width: 5,
                   ),
                   Text(
-                    "المدفوع",
+                    "المدفوع".tr,
                     // style: Styles.headLineStyle3,
                   )
                 ],

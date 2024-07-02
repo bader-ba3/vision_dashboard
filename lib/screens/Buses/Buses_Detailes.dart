@@ -76,11 +76,11 @@ class _BusInputFormState extends State<BusInputForm> {
                   spacing: 25,
                   children: [
                     CustomTextField(
-                        controller: nameController, title: 'اسم الحافلة'),
+                        controller: nameController, title: 'اسم الحافلة'.tr),
                     CustomTextField(
-                        controller: numberController, title: 'رقم الحافلة'),
+                        controller: numberController, title: 'رقم الحافلة'.tr),
                     CustomTextField(
-                        controller: typeController, title: 'نوع الحافلة'),
+                        controller: typeController, title: 'نوع الحافلة'.tr),
 
 
                     Row(
@@ -88,7 +88,7 @@ class _BusInputFormState extends State<BusInputForm> {
                       children: [
                         CustomTextField(
                           controller: startDateController,
-                          title: 'تاريخ البداية',
+                          title: 'تاريخ البداية'.tr,
                           enable: false,
                           keyboardType: TextInputType.datetime,
                         ),
@@ -114,7 +114,7 @@ class _BusInputFormState extends State<BusInputForm> {
                     GetBuilder<BusViewModel>(
                       builder: (busController) {
                         return AppButton(
-                          text: 'حفظ',
+                          text: 'حفظ'.tr,
                           onPressed: () {
                             BusModel bus = BusModel(
                               name: nameController.text,
@@ -157,11 +157,11 @@ class _BusInputFormState extends State<BusInputForm> {
                   child: DataTable(
                     clipBehavior: Clip.hardEdge,
                     columns: [
-                      DataColumn(label: Text("اسم الطالب")),
-                      DataColumn(label: Text("رقم الطالب")),
-                      DataColumn(label: Text("تاريخ البداية")),
-                      DataColumn(label: Text("ولي الأمر")),
-                      DataColumn(label: Text("موجود")),
+                      DataColumn(label: Text("اسم الطالب".tr)),
+                      DataColumn(label: Text("رقم الطالب".tr)),
+                      DataColumn(label: Text("تاريخ البداية".tr)),
+                      DataColumn(label: Text("ولي الأمر".tr)),
+                      DataColumn(label: Text("موجود".tr)),
                     ],
                     rows: allSection.values
                         .map(
@@ -186,11 +186,11 @@ class _BusInputFormState extends State<BusInputForm> {
                   child: DataTable(
                     clipBehavior: Clip.hardEdge,
                     columns: [
-                      DataColumn(label: Text("اسم الموظف")),
-                      DataColumn(label: Text("العنوان")),
-                      DataColumn(label: Text("تاريخ البداية")),
-                      DataColumn(label: Text("الجنس")),
-                      DataColumn(label: Text("موجود")),
+                      DataColumn(label: Text("اسم الموظف".tr)),
+                      DataColumn(label: Text("العنوان".tr)),
+                      DataColumn(label: Text("تاريخ البداية".tr)),
+                      DataColumn(label: Text("الجنس".tr)),
+                      DataColumn(label: Text("موجود".tr)),
                     ],
                     rows: allEmployee.values
                         .map(

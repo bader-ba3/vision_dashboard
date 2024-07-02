@@ -36,7 +36,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'المصاريف',
+        title: 'المصاريف'.tr,middleText: "تعرض هذه الواجهة معلومات عن مصاريف هذه السنة مع امكانية اضافة مصروف جديد \n ملاحظة : مصاريف الحافلات تتم اضافتها من واجهة الحافلات".tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -72,7 +72,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                     label: Container(
                                         width: size / data.length,
                                         child:
-                                            Center(child: Text(data[index]))))),
+                                            Center(child: Text(data[index].toString().tr))))),
                             rows: [
                               for (var expense in controller.allExpenses.values)
                                 DataRow(
@@ -93,11 +93,11 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                       dataRowItem(size / data.length,
                                           expense.body.toString()),
                                       dataRowItem(
-                                          size / data.length, "عرض التفاصيل",
+                                          size / data.length, "عرض التفاصيل".tr,
                                           color: Colors.teal, onTap: () {
                                         Get.defaultDialog(
                                             backgroundColor: Colors.white,
-                                            title: "التفاصيل",
+                                            title: "التفاصيل".tr,
                                             content: SizedBox(
                                                 width: Get.height / 2,
                                                 height: Get.height / 2,
@@ -110,11 +110,11 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                       dataRowItem(size / data.length,
                                           expense.images.length.toString()),
                                       dataRowItem(
-                                          size / data.length, "عرض الصور",
+                                          size / data.length, "عرض الصور".tr,
                                           color: Colors.teal, onTap: () {
                                         Get.defaultDialog(
                                             backgroundColor: Colors.white,
-                                            title: "الصور",
+                                            title: "الصور".tr,
                                             content: Container(
                                                 color: Colors.white,
                                                 width: Get.height / 1.5,
@@ -139,8 +139,8 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                           size / data.length,
                                           checkIfPendingDelete(
                                                   affectedId: expense.id)
-                                              ? "استرجاع"
-                                              : "حذف",
+                                              ? "استرجاع".tr
+                                              : "حذف".tr,
                                           color: checkIfPendingDelete(
                                                   affectedId: expense.id)
                                               ? Colors.white

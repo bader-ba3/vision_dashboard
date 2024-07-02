@@ -31,7 +31,7 @@ class _EventInputFormState extends State<EventInputForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("إضافة حدث ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+            Text("إضافة حدث".tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
             SizedBox(height: 50,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +42,7 @@ class _EventInputFormState extends State<EventInputForm> {
                     child: TextField(
                       controller: name,
                       decoration: InputDecoration(
-                        hintText: "اسم الحدث",
+                        hintText: "اسم الحدث".tr,
                         fillColor: secondaryColor,
                         filled: true,
                         border: OutlineInputBorder(
@@ -54,7 +54,7 @@ class _EventInputFormState extends State<EventInputForm> {
                 SizedBox(
                   width: 50,
                 ),
-                Text("المستهدف"),
+                Text("المستهدف".tr),
                 SizedBox(
                   width: 20,
                 ),
@@ -85,7 +85,7 @@ class _EventInputFormState extends State<EventInputForm> {
                   selectedColor: Color(selectedColor)),
             ),
             SizedBox(height: 50,),
-            AppButton(text: "حفظ",   onPressed: () {
+            AppButton(text: "حفظ".tr,   onPressed: () {
               role ??= Const.eventTypeStudent;
               EventModel model = EventModel(name: name.text, id: DateTime.now().millisecondsSinceEpoch.toString(), role: role!, color: selectedColor);
               name.clear();

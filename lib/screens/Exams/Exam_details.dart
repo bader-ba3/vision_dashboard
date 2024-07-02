@@ -104,20 +104,20 @@ class _ExamInputFormState extends State<ExamInputForm> {
                 spacing: 25,
                 children: <Widget>[
                   CustomTextField(
-                      controller: subjectController, title: 'المقرر'),
+                      controller: subjectController, title: 'المقرر'.tr),
                   CustomTextField(
-                      controller: professorController, title: 'الاستاذ'),
+                      controller: professorController, title: 'الاستاذ'.tr),
                   CustomTextField(
-                      controller: examPassMarkController, title: 'علامة النجاح'),
+                      controller: examPassMarkController, title: 'علامة النجاح'.tr),
                   CustomTextField(
-                      controller: examMaxMarkController, title: 'العلامة الكاملة'),
+                      controller: examMaxMarkController, title: 'العلامة الكاملة'.tr),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomTextField(
                           controller: dateController,
-                          title: 'التاريخ',
+                          title: 'التاريخ'.tr,
                           enable: false,
                           keyboardType: TextInputType.datetime),
                       IconButton(
@@ -142,7 +142,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   CustomDropDown(
                     value: '',
                     listValue: classNameList,
-                    label: 'اختر الصف',
+                    label: 'اختر الصف'.tr,
                     onChange: (value) {
                       print(value);
                       if (value != null) _selectedClass = value;
@@ -153,7 +153,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   CustomDropDown(
                     value: '',
                     listValue: _allSection.keys.toList(),
-                    label: 'اختر الشعب للأضافة',
+                    label: 'اختر الشعب للأضافة'.tr,
                     onChange: (value) {
                       print(value);
                       _selectedSection.addIf(
@@ -164,7 +164,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("صورة ورقة الاسئلة"),
+                      Text("صورة ورقة الاسئلة".tr),
                       SizedBox(
                         height: 15,
                       ),
@@ -233,7 +233,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("صورة ورقة الاجابة"),
+                      Text("صورة ورقة الاجابة".tr),
                       SizedBox(
                         height: 15,
                       ),
@@ -300,7 +300,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   ),
                   GetBuilder<ExamViewModel>(builder: (examController) {
                     return AppButton(
-                      text: 'حفظ',
+                      text: 'حفظ'.tr,
                       onPressed: () {
                         if (_validateFields()) {
                           final exam = ExamModel(

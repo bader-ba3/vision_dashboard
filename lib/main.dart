@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:vision_dashboard/Translate/App_Translation.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/core/binding.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +26,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      translationsKeys: AppTranslation.translationKes,
+      locale: Get.deviceLocale,
+      fallbackLocale: const Locale("en","US"),
       textDirection: TextDirection.rtl,
       initialBinding: GetBinding(),
       scrollBehavior: AppScrollBehavior(),
       debugShowCheckedModeBanner: false,
       title: 'مركز رؤية التعليمي للتدريب',
-      theme: ThemeData.dark().copyWith(
+      theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.transparent,
         textTheme: GoogleFonts.cairoTextTheme(
           Theme.of(context).textTheme.apply(

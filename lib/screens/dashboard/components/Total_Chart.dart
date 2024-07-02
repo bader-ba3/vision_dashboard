@@ -21,40 +21,40 @@ class TotalBarChartState extends State<TotalBarChart> {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'نيس';
+        text = 'يناير'.tr;
         break;
       case 1:
-        text = 'أيا';
+        text = 'فبراير'.tr;
         break;
       case 2:
-        text = 'حز';
+        text = 'مارس'.tr;
         break;
       case 3:
-        text = 'تمو';
+        text = 'أبريل'.tr;
         break;
       case 4:
-        text = 'آب';
+        text = 'مايو'.tr;
         break;
       case 5:
-        text = 'أيل';
+        text = 'يونيو'.tr;
         break;
       case 6:
-        text = 'تش١';
+        text = 'يوليو'.tr;
         break;
       case 7:
-        text = 'تش٢';
+        text = 'أغسطس'.tr;
         break;
       case 8:
-        text = 'كن١';
+        text = 'سبتمبر'.tr;
         break;
       case 9:
-        text = 'كن٢';
+        text = 'أكتوبر'.tr;
         break;
       case 10:
-        text = 'شبا';
+        text = 'نوفمبر'.tr;
         break;
       case 11:
-        text = 'آذا';
+        text = 'ديسمبر'.tr;
         break;
       default:
         text = '';

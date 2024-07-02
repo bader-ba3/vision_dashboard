@@ -35,7 +35,7 @@ class _ExamScreenState extends State<ExamScreen> {
         return AnimatedCrossFade(firstChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
           child: Scaffold(
-            appBar:   Header(title: 'الامتحانات',),
+            appBar:   Header(title: 'الامتحانات'.tr,middleText: 'تعرض هذه الواجهة بيانات الامتحانات السابقة مع امكانية اضافة امتحان جديد'.tr),
             body: SingleChildScrollView(
               child: GetBuilder<HomeViewModel>(builder: (controller) {
                 double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen?240:120), 1000)-60;
@@ -58,7 +58,7 @@ class _ExamScreenState extends State<ExamScreen> {
                               dividerThickness: 0.3,
 
                               columns:
-                          List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                          List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index].toString().tr))))),
                               rows: [
                                 for (var exam in examController.examMap.values)
                                   DataRow(cells: [
@@ -67,9 +67,9 @@ class _ExamScreenState extends State<ExamScreen> {
                                     dataRowItem(size / data.length, exam.date!.toString().split(" ")[0]),
                                     dataRowItem(size / data.length, exam.marks!.keys.length.toString()),
                                     dataRowItem(size / data.length, exam.examPassMark.toString()),
-                                    dataRowItem(size / data.length, exam.passRate!>0?"${exam.passRate}%".toString():"لم يصحح بعد"),
-                                    dataRowItem(size / data.length, "عرض",color: Colors.blue,onTap: (){}),
-                                    dataRowItem(size / data.length, "اضافة",color: Colors.teal,onTap: (){
+                                    dataRowItem(size / data.length, exam.passRate!>0?"${exam.passRate}%".toString():"لم يصحح بعد".tr),
+                                    dataRowItem(size / data.length, "عرض".tr,color: Colors.blue,onTap: (){}),
+                                    dataRowItem(size / data.length, "اضافة".tr,color: Colors.teal,onTap: (){
                                       if(enableUpdate) {
                                           examModel = exam;
                                           examController.changeExamScreen();

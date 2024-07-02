@@ -73,7 +73,7 @@ final  ScrollController scrollController;
             (index) => DataColumn(
             label: Container(
                 width: size / 2.5 / columns.length,
-                child: Center(child: Text(columns[index])))));
+                child: Center(child: Text(columns[index].toString().tr)))));
   }
 
   List<DataRow> _buildDataRows(AccountManagementViewModel accountController,
@@ -117,7 +117,7 @@ final  ScrollController scrollController;
               _buildDataCell(size / 2.5 / 4, accountModel.salary.toString()),
               _buildDataCell(
                 size / 2.5 / 4,
-                "تسليم الراتب",
+                "تسليم الراتب".tr,
                 color: Colors.green,
                 onTap: () {
                   showDialog(

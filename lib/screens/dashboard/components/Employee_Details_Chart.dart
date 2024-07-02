@@ -1,6 +1,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../constants.dart';
 import 'InfoBarchart.dart';
@@ -30,20 +31,20 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "الموظفين",
+            "الموظفين".tr,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: defaultPadding),
-          InfoBarChart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title: "موظف",subtitle: "60",),
+          InfoBarChart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title: "موظف".tr,subtitle: "60",),
           InfoCard(
             onTap: (){
               touchedIndex==0?touchedIndex=-1:touchedIndex=0;
               setState(() {});
             },
-            title: "اداري",
+            title: "اداري".tr,
             amountOfEmployee: "١٠",
             color: Colors.redAccent,
           ),
@@ -52,7 +53,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
               touchedIndex==1?touchedIndex=-1:touchedIndex=1;
               setState(() {});
             },
-            title: "استاذ",
+            title: "استاذ".tr,
             amountOfEmployee: "30",
             color: primaryColor,
           ),
@@ -61,7 +62,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
               touchedIndex==2?touchedIndex=-1:touchedIndex=2;
               setState(() {});
             },
-            title: "موظف مكتبي",
+            title: "موظف مكتبي".tr,
             amountOfEmployee: "15",
             color: blueColor,
           ),
@@ -70,7 +71,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
               touchedIndex==3?touchedIndex=-1:touchedIndex=3;
               setState(() {});
             },
-            title: "سائق",
+            title: "سائق".tr,
             amountOfEmployee: "5",
             color: Colors.cyan,
           ),

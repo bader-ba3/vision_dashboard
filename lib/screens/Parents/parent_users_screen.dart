@@ -28,14 +28,14 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
     "رقم الطوارئ",
     "سجل الأحداث",
     "الخيارات",
-    "الحذف"
+    ""
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'اولياء الامور',
+        title: 'اولياء الامور'.tr,middleText: 'تقوم هذه الواجه بعرض معلومات تفصيلية عن الاباء ويمكن من خلالها اضافة اب جديد او تعديل اب موجود سابقا او حذفه'.tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -74,7 +74,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                         label: Container(
                                             width: size / data.length,
                                             child: Center(
-                                                child: Text(data[index]))))),
+                                                child: Text(data[index].toString().tr))))),
                                 rows: [
                                   for (var parent
                                       in controller.parentMap.values.toList())
@@ -104,14 +104,12 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                           dataRowItem(size / data.length,
                                               parent.emergencyPhone.toString()),
                                           dataRowItem(
-
-
                                               size / data.length, parent.eventRecords?.length==0?"لايوجد":"عرض  (${parent.eventRecords?.length})  حدث".toString(),onTap: (){
                                             if(parent.eventRecords!.length>0)
                                            showEventDialog(context, parent.eventRecords!);
                                           }),
 
-                                          dataRowItem(size / data.length, "تعديل",
+                                          dataRowItem(size / data.length, "تعديل".tr,
                                               color: Colors.teal, onTap: () {
                                                 if (enableUpdate == true)
                                             showParentInputDialog(
@@ -119,7 +117,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                           }),
                                           dataRowItem(size / data.length,  checkIfPendingDelete(
                                               affectedId:
-                                              parent.id.toString())?'استرجاع':"حذف",
+                                              parent.id.toString())?'استرجاع'.tr:"حذف".tr,
                                               color: checkIfPendingDelete(
                                                   affectedId:
                                                   parent.id.toString())?Colors.white: Colors.red, onTap: () {

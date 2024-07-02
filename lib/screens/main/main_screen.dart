@@ -28,67 +28,67 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   List<({String name, String img, Widget widget})> allData = [
     (
-    name: "لوحة التحكم",
+    name: "لوحة التحكم".tr,
     img: "assets/icons/menu_dashboard.svg",
     widget: DashboardScreen(),
     ),
     (
-    name: "أولياء الامور",
+    name: "أولياء الامور".tr,
     img: "assets/icons/menu_profile.svg",
     widget: ParentsView(),
     ),
     (
-    name: "الطلاب",
+    name: "الطلاب".tr,
     img: "assets/icons/menu_profile.svg",
     widget: StudentView(),
     ),
     (
-    name: "الصفوف",
+    name: "الصفوف".tr,
     img: "assets/icons/menu_tran.svg",
     widget: ClassesView(),
     ),
     (
-    name: "الدوام",
+    name: "الدوام".tr,
     img: "assets/icons/menu_task.svg",
     widget: EmployeeTimeView(),
     ),
     (
-    name: "الامتحانات",
+    name: "الامتحانات".tr,
     img: "assets/icons/menu_task.svg",
     widget: ExamView(),
     ),
     (
-    name: "الرواتب",
+    name: "الرواتب".tr,
     img: "assets/icons/trip.svg",
     widget: SalaryView(),
     ),
     (
-    name: "الحافلات",
+    name: "الحافلات".tr,
     img: "assets/icons/menu_doc.svg",
     widget: BusesView(),
     ),
     (
-    name: "الرسوم الدراسية",
+    name: "الرسوم الدراسية".tr,
     img: "assets/icons/garage.svg",
     widget: StudyFeesView(),
     ),
     (
-    name: "اللأحداث",
+    name: "الأحداث".tr,
     img: "assets/icons/garage.svg",
     widget: EventViewScreen(),
     ),
     (
-    name: "المصاريف",
+    name: "المصاريف".tr,
     img: "assets/icons/menu_tran.svg",
     widget: ExpensesViewScreen(),
     ),
     (
-    name: "ادارة المنصة",
+    name: "ادارة المنصة".tr,
     img: "assets/icons/menu_setting.svg",
     widget: EmployeeView(),
     ),
     (
-    name: "المستودع",
+    name: "المستودع".tr,
     img: "assets/icons/garage.svg",
     widget: StoreView(),
     ),

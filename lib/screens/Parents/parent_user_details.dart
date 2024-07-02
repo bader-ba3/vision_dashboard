@@ -77,15 +77,15 @@ class _ParentInputFormState extends State<ParentInputForm> {
 
   // Function to validate form fields
   bool _validateFields() {
-    if (!validateNotEmpty(fullNameController.text, "الاسم الكامل")) return false;
-    if (!validateNumericField(numberController.text, "رقم الهاتف")) return false;
-    if (!validateNotEmpty(addressController.text, "العنوان")) return false;
-    if (!validateNotEmpty(nationalityController.text, "الجنسية")) return false;
-    if (!validateNumericField(ageController.text, "العمر")) return false;
-    if (!validateNumericField(motherPhoneNumberController.text, "رقم هاتف الأم")) return false;
-    if (!validateNumericField(emergencyPhoneController.text, "رقم الطوارئ")) return false;
-    if (!validateNotEmpty(workController.text, "العمل")) return false;
-    if (!validateNotEmpty(startDateController.text, "تاريخ البداية")) return false;
+    if (!validateNotEmpty(fullNameController.text, "الاسم الكامل".tr)) return false;
+    if (!validateNumericField(numberController.text, "رقم الهاتف".tr)) return false;
+    if (!validateNotEmpty(addressController.text, "العنوان".tr)) return false;
+    if (!validateNotEmpty(nationalityController.text, "الجنسية".tr)) return false;
+    if (!validateNumericField(ageController.text, "العمر".tr)) return false;
+    if (!validateNumericField(motherPhoneNumberController.text, "رقم هاتف الأم".tr)) return false;
+    if (!validateNumericField(emergencyPhoneController.text, "رقم الطوارئ".tr)) return false;
+    if (!validateNotEmpty(workController.text, "العمل".tr)) return false;
+    if (!validateNotEmpty(startDateController.text, "تاريخ البداية".tr)) return false;
     return true;
   }
 
@@ -114,20 +114,20 @@ class _ParentInputFormState extends State<ParentInputForm> {
                 runSpacing: 25,
                 spacing: 25,
                 children: [
-                  CustomTextField(controller: fullNameController, title: 'الاسم الكامل'),
-                  CustomTextField(controller: numberController, title: 'رقم الهاتف', keyboardType: TextInputType.number),
-                  CustomTextField(controller: addressController, title: 'العنوان'),
-                  CustomTextField(controller: nationalityController, title: 'الجنسية'),
-                  CustomTextField(controller: ageController, title: 'العمر', keyboardType: TextInputType.number),
-                  CustomTextField(controller: motherPhoneNumberController, title: 'رقم هاتف الام', keyboardType: TextInputType.number),
-                  CustomTextField(controller: emergencyPhoneController, title: 'رقم الطوارئ', keyboardType: TextInputType.number),
-                  CustomTextField(controller: workController, title: 'العمل'),
+                  CustomTextField(controller: fullNameController, title: 'الاسم الكامل'.tr),
+                  CustomTextField(controller: numberController, title: 'رقم الهاتف'.tr, keyboardType: TextInputType.number),
+                  CustomTextField(controller: addressController, title: 'العنوان'.tr),
+                  CustomTextField(controller: nationalityController, title: 'الجنسية'.tr),
+                  CustomTextField(controller: ageController, title: 'العمر'.tr, keyboardType: TextInputType.number),
+                  CustomTextField(controller: motherPhoneNumberController, title: 'رقم هاتف الام'.tr, keyboardType: TextInputType.number),
+                  CustomTextField(controller: emergencyPhoneController, title: 'رقم الطوارئ'.tr, keyboardType: TextInputType.number),
+                  CustomTextField(controller: workController, title: 'العمل'.tr),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomTextField(
                         controller: startDateController,
-                        title: 'تاريخ البداية',
+                        title: 'تاريخ البداية'.tr,
                         enable: false,
                         keyboardType: TextInputType.datetime,
                       ),
@@ -152,7 +152,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                   ),
 
                   AppButton(
-                    text: 'حفظ',
+                    text: 'حفظ'.tr,
                     onPressed: () {
                       if (_validateFields()) {
                           ParentModel parent = ParentModel(
@@ -207,7 +207,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                           )
                               .map((e) => e)
                               .toList(),
-                          label: "نوع الحدث",
+                          label: "نوع الحدث".tr,
                           onChange: (selectedWay) {
                             print(selectedWay);
                             if (selectedWay != null) {
@@ -220,13 +220,13 @@ class _ParentInputFormState extends State<ParentInputForm> {
                         SizedBox(width: 16.0),
                         CustomTextField(
                           controller: bodyEventController,
-                          title: 'الوصف',
+                          title: 'الوصف'.tr,
                           enable: true,
                           keyboardType: TextInputType.text,
                         ),
                         SizedBox(width: 16.0),
                         AppButton(
-                          text: 'إضافة سجل حدث',
+                          text: 'إضافة سجل حدث'.tr,
                           onPressed: () {
                             setState(() {
                               eventRecords.add(EventRecordModel(
@@ -243,7 +243,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
                     );
                   }),
                   SizedBox(height: defaultPadding * 2),
-                  Text('سجل الأحداث:', style: Styles.headLineStyle1),
+                  Text('سجل الأحداث:'.tr, style: Styles.headLineStyle1),
                   SizedBox(height: defaultPadding),
                   Container(
                     padding: EdgeInsets.all(0.0),

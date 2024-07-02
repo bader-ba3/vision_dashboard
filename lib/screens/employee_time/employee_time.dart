@@ -33,7 +33,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
   }
 
   bool isShowLogin = true;
-  List<String> data = ["اليوم","الدخول","الخروج","المجموع","تأخر بالدخول"," التأخير","عرض المبرر","خروج المبكر"," الخروج المبكر","عرض المبرر"];
+  List<String> data = ["اليوم","الدخول","الخروج","المجموع","تأخر بالدخول"," التأخير","عرض المبرر","خروج مبكر","وقت الخروج المبكر","عرض المبرر"];
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                   )),
                               child: Center(
                                   child: Text(
-                                "تسجيل دخول الموظف",
+                                "تسجيل دخول الموظف".tr,
                                 style: TextStyle(color: isShowLogin ? Colors.white : Colors.black),
                               )),
                             ),
@@ -97,7 +97,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                   )),
                               child: Center(
                                   child: Text(
-                                "عرض تفاصيل دوام الموظفين",
+                                "عرض تفاصيل دوام الموظفين".tr,
                                 style: TextStyle(color: isShowLogin ? Colors.black : Colors.white),
                               )),
                             ),
@@ -129,14 +129,14 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                 Column(
                                   children: [
                                     Text(
-                                      "تسجيل الدوام",
+                                      "تسجيل الدوام".tr,
                                       style: Styles.headLineStyle1,
                                     ),
                                     SizedBox(
                                       height: 50,
                                     ),
                                     Text(
-                                      "سجل الدخول باستخدام بطاقتك",
+                                      "سجل الدخول باستخدام بطاقتك".tr,
                                       style: TextStyle(fontSize: 22),
                                     )
                                   ],
@@ -148,7 +148,8 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                   padding: EdgeInsets.all(8),
                                   child: Center(
                                     child: Text(
-                                      "هذا الجهاز لا يحتوي قارئ NFC",
+                                      "هذا الجهاز لا يحتوي قارئ NFC".tr,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 22),
                                     ),
                                   ),
@@ -158,7 +159,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                     padding: EdgeInsets.all(8),
                                     child: Center(
                                       child: Text(
-                                        "لا يمكن تسجيل دوام اثناء عرض السنة المؤشفة",
+                                        "لا يمكن تسجيل دوام اثناء عرض السنة المؤشفة".tr,
                                         style: TextStyle(fontSize: 22),
                                       ),
                                     ),
@@ -186,14 +187,14 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               Container(
                                   width: Get.width * 0.125,
                                   child: Text(
-                                    "الموظف ",
+                                    "الموظف".tr,
                                     style: TextStyle(fontSize: Get.width < 700 ? 16 : 20),
                                     textAlign: TextAlign.center,
                                   )),
                               Container(
                                 width: Get.width * 0.125,
                                 child: Text(
-                                  "اجمالي التأخير ",
+                                  "اجمالي التأخير".tr,
                                   style: TextStyle(fontSize: Get.width < 700 ? 16 : 20),
                                   textAlign: TextAlign.center,
                                 ),
@@ -202,7 +203,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               Container(
                                 width: Get.width * 0.125,
                                 child: Text(
-                                  "اجمالي الخصم ",
+                                  "اجمالي الخصم".tr,
                                   style: TextStyle(fontSize: Get.width < 700 ? 16 : 20),
                                   textAlign: TextAlign.center,
                                 ),
@@ -210,7 +211,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               Container(
                                 width: Get.width * 0.125,
                                 child: Text(
-                                  "الراتب المقطوع ",
+                                  "الراتب المقطوع".tr,
                                   style: TextStyle(fontSize: Get.width < 700 ? 16 : 20),
                                   textAlign: TextAlign.center,
                                 ),
@@ -218,7 +219,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               Container(
                                 width: Get.width * 0.125,
                                 child: Text(
-                                  "الراتب المستحق ",
+                                  "الراتب المستحق".tr,
                                   style: TextStyle(fontSize: Get.width < 700 ? 16 : 20),
                                   textAlign: TextAlign.center,
                                 ),
@@ -321,7 +322,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                     content: SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(columnSpacing: 0, columns:
-                                      List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index]))))),
+                                      List.generate(data.length,(index)=> DataColumn(label: Container(width: size / data.length, child: Center(child: Text(data[index].toString().tr))))),
                                           rows: [
                                         for (var j in i.employeeTime.values)
                                           DataRow(cells: [
@@ -329,11 +330,11 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             dataRowItem(size / data.length, DateFun.dateToMinAndHour(j.startDate!)),
                                             dataRowItem(size / data.length, (j.endDate == null ? "" : DateFun.dateToMinAndHour(j.endDate!))),
                                             dataRowItem(size / data.length, DateFun.minutesToTime(j.totalDate ?? 0)),
-                                            dataRowItem(size / data.length, (j.isLateWithReason == null ? "" : (j.isLateWithReason! ? "مع مبرر" : "بدون مبرر"))),
+                                            dataRowItem(size / data.length, (j.isLateWithReason == null ? "" : (j.isLateWithReason! ? "مع مبرر".tr : "بدون مبرر".tr))),
                                             dataRowItem(size / data.length, j.totalLate == null || j.totalLate == 0 ? "" : DateFun.minutesToTime(j.totalLate!)),
-                                            dataRowItem(size / data.length, j.reasonOfLate != null && j.reasonOfLate != "" ? "عرض" : "", onTap: () {
+                                            dataRowItem(size / data.length, j.reasonOfLate != null && j.reasonOfLate != "" ? "عرض".tr : "", onTap: () {
                                               Get.defaultDialog(
-                                                  title: "المبرر",
+                                                  title: "المبرر".tr,
                                                   backgroundColor: Colors.white,
                                                   content: Container(
                                                     height: Get.height / 2,
@@ -341,11 +342,11 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                                     child: Text(j.reasonOfLate.toString()),
                                                   ));
                                             }, color: Colors.teal),
-                                            dataRowItem(size / data.length, (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر" : "بدون مبرر"))),
+                                            dataRowItem(size / data.length, (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر".tr : "بدون مبرر".tr))),
                                             dataRowItem(size / data.length, j.totalEarlier == null || j.totalEarlier == 0 ? "" : DateFun.minutesToTime(j.totalEarlier!)),
                                             dataRowItem(size / data.length, j.reasonOfEarlier != null && j.reasonOfEarlier != "" ? "عرض" : "", onTap: () {
                                               Get.defaultDialog(
-                                                  title: "المبرر",
+                                                  title: "المبرر".tr,
                                                   backgroundColor: Colors.white,
                                                   content: Container(
                                                     height: Get.height / 2,

@@ -27,7 +27,7 @@ class _StoreScreenState extends State<StoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'المستودع',
+        title: 'المستودع'.tr,middleText: 'تستخدم هذه الواجهة لعرض تفاصيل المواد داخل المستودع'.tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -66,7 +66,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                           label: Container(
                                               width: size / (data.length),
                                               child: Center(
-                                                  child: Text(data[index]))))),
+                                                  child: Text(data[index].toString().tr))))),
 
                                   rows: [
                                     for (var storeModel
@@ -78,7 +78,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                             storeModel.subQuantity.toString()),
                                         dataRowItem(size / (data.length),
                                             storeModel.subName.toString()),
-                                        dataRowItem(size / (data.length), "تعديل",
+                                        dataRowItem(size / (data.length), "تعديل".tr,
                                             color: Colors.teal, onTap: () {
                                           buildEditDialog(context, storeModel);
                                         }),
@@ -99,7 +99,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                                       color: checkIfPendingDelete(affectedId: storeModel.id!)? Colors.green:Colors.red,
                                                     ),
                                                  SizedBox(width: 5,),
-                                                    Text(checkIfPendingDelete(affectedId: storeModel.id!)?"استرجاع":"حذف"),
+                                                    Text(checkIfPendingDelete(affectedId: storeModel.id!)?"استرجاع".tr:"حذف".tr),
                                                     Spacer(),
                                                   ],
                                                 ))))

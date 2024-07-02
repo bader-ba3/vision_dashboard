@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 
 class EmployeeTimeChart extends StatefulWidget {
@@ -135,7 +136,7 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
       children: <Widget>[
         const SizedBox(height: 10),
         Text(
-          'دوام الموظفين',
+          'دوام الموظفين'.tr,
           style: TextStyle(
             color: widget.averageLineColor.withOpacity(1),
             fontWeight: FontWeight.bold,

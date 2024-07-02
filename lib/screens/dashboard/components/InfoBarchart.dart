@@ -52,7 +52,7 @@ localTouch = pieTouchResponse
                 },
               ),
               sectionsSpace: 1,
-              centerSpaceRadius: min(75, max(50, (Get.width/1000)*60)),
+              centerSpaceRadius: min(100, max(50, (Get.width/1000)*60)),
               startDegreeOffset: 0,
               sections: widget.paiChartSelectionData,
             ),

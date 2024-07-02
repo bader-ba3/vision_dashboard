@@ -46,7 +46,7 @@ class _StudentScreenState extends State<StudentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'الطلاب',
+        title: 'الطلاب'.tr,middleText: "تعرض هذه الواجهة معلومات عن الطلاب مع امكانية تعديل الطالب او حذفه او اضافة طالب جديد \n ملاحظة١ : عند حذف الطالب يتم حذفه من الاباء ومن الامتحانات التي قام بها ومن الباص المشترك فيه ان كان مشترك \n ملاحظة ٢ : لايمكن تعديل الاب الخاص بالطالب".tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -81,7 +81,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                     label: Container(
                                         width: size / data.length,
                                         child:
-                                            Center(child: Text(data[index]))))),
+                                            Center(child: Text(data[index].toString().tr))))),
                             rows: [
                               for (var student in controller.studentMap.values)
                                 DataRow(
@@ -131,7 +131,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                                   parentModel, student),
                                         );
                                       }),
-                                      dataRowItem(size / data.length, "عرض",
+                                      dataRowItem(size / data.length, "عرض".tr,
                                           color: Colors.teal, onTap: () {
                                         print(student.stdExam!.length);
                                         showDialog(
@@ -142,13 +142,13 @@ class _StudentScreenState extends State<StudentScreen> {
                                       }),
                                       dataRowItem(size / data.length,
                                           student.grade.toString()),
-                                      dataRowItem(size / data.length, "تعديل",
+                                      dataRowItem(size / data.length, "تعديل".tr,
                                           color: Colors.teal, onTap: () {
                                             if (enableUpdate == true)
                                               showStudentInputDialog(
                                                   context, student);
                                           }),
-                                      dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع": "حذف",
+                                      dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع".tr: "حذف".tr,
                                           color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
                                         if (enableUpdate)
                                           if (checkIfPendingDelete(affectedId: student.studentID!))

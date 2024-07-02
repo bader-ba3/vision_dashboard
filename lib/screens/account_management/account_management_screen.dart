@@ -43,13 +43,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     "سجل الاحداث",
     "العمليات"
   ];
-  List deleteData = ["الرمز التسلسلي", "التفاصيل", "الرمز التسلسلي المتأثر", "التصنيف المتأثر", "العمليات","الحذف"];
+  List deleteData = ["الرمز التسلسلي", "التفاصيل", "الرمز التسلسلي المتأثر", "التصنيف المتأثر", "العمليات",""];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'ادارة المنصة',
+        title: 'ادارة المنصة'.tr,
+        middleText: "تقوم هذه الواجهة بعرض الامور الاساسية في المنصة وهي المستخدمين وامكانية اضافة او تعديل او حذف كما تعرض السجلات الممطلوب حذفها للموافقة عليها او استرجاعها كما يمكن ارشفة بيانات السنة الحالية او حذف البيانات او العودة الى نسخة سابقة".tr
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -66,7 +67,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("سجلات الموظفين",style: Styles.headLineStyle1,),
+                  Text("سجلات الموظفين".tr,style: Styles.headLineStyle1,),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(
@@ -93,7 +94,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                             width: size / userData.length+10,
                                             child: Center(
                                                 child:
-                                                    Text(userData[index]))))),
+                                                    Text(userData[index].toString().tr))))),
                                 rows: [
                                   for (var accountModel in controller
                                       .allAccountManagement.values)
@@ -109,8 +110,8 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                       dataRowItem(
                                         size / userData.length,
                                         accountModel.isActive
-                                            ? "فعال"
-                                            : "ملغى",
+                                            ? "فعال".tr
+                                            : "ملغى".tr,
                                       ),
                                       dataRowItem(
                                           size / userData.length,
@@ -137,9 +138,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                           accountModel.startDate
                                               .toString()
                                               .split(" ")[0]),
-                                      dataRowItem(size / userData.length, "عرض",
+                                      dataRowItem(size / userData.length, "عرض".tr,
                                           color: Colors.teal, onTap: () {}),
-                                      dataRowItem(size / userData.length, "حذف",
+                                      dataRowItem(size / userData.length, "حذف".tr,
                                           color: Colors.red, onTap: () {
                                         if(enableUpdate)
                                         controller
@@ -153,7 +154,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                     ),
                   ),
                   SizedBox(height: defaultPadding,),
-                  Text("سجلات الحذف",style: Styles.headLineStyle1,),
+                  Text("سجلات الحذف".tr,style: Styles.headLineStyle1,),
                   Container(
                       padding: EdgeInsets.all(defaultPadding),
                       decoration: BoxDecoration(
@@ -170,21 +171,21 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                               scrollDirection: Axis.horizontal,
                               child: DataTable(columnSpacing: 0,
                                   dividerThickness: 0.3,
-                                  columns: List.generate(deleteData.length, (index) => DataColumn(label: Container(width: size / deleteData.length, child: Center(child: Text(deleteData[index]))))), rows: [
+                                  columns: List.generate(deleteData.length, (index) => DataColumn(label: Container(width: size / deleteData.length, child: Center(child: Text(deleteData[index].toString().tr))))), rows: [
                                     for (var deleteModel in controller.allDelete.values)
                                       DataRow(
                                           color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: deleteModel.id) ? Colors.red : Colors.transparent),
                                           cells: [
                                             dataRowItem(size / deleteData.length, deleteModel.id.toString()),
-                                            dataRowItem(size / deleteData.length, deleteModel.details??"لا يوجد"),
+                                            dataRowItem(size / deleteData.length, deleteModel.details??"لا يوجد".tr),
                                             dataRowItem(size / deleteData.length, deleteModel.affectedId.toString()),
                                             dataRowItem(size / deleteData.length, deleteModel.collectionName.toString()),
 
-                                            dataRowItem(size / deleteData.length, "استرجاع",color: Colors.teal,onTap: (){
+                                            dataRowItem(size / deleteData.length, "استرجاع".tr,color: Colors.teal,onTap: (){
                                               if(enableUpdate)
                                                 controller.undoTheDelete(deleteModel);
                                             }),
-                                            dataRowItem(size / deleteData.length, "حذف نهائي",color: Colors.red.shade700,onTap: (){
+                                            dataRowItem(size / deleteData.length, "حذف نهائي".tr,color: Colors.red.shade700,onTap: (){
                                               if(enableUpdate)
                                                 controller.doTheDelete(deleteModel);
                                             }),
@@ -199,7 +200,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   SizedBox(
                     height: defaultPadding*2,
                   ),
-                  Text("الارشفة وحذف البيانات",style: Styles.headLineStyle1,),
+                  Text("الارشفة وحذف البيانات".tr,style: Styles.headLineStyle1,),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(
@@ -210,11 +211,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                         builder: (controller) {
                           return Column(
                             children: [
-                              CustomDropDown(value: 'الافتراضي', listValue:controller.allArchive.map((e) => e.toString(),).toList(), label: "السنة المختارة", onChange: (value) {
+                              CustomDropDown(value: 'الافتراضي'.tr, listValue:controller.allArchive.map((e) => e.toString().tr,).toList(), label: "السنة المختارة".tr, onChange: (value) {
 
 
                                 if(value!=null)
-                                { if(value!="الافتراضي") {
+                                { if(value!="الافتراضي".tr) {
                                   controller.getOldData(value);
                                   enableUpdate = false;
                                   controller.update();
@@ -237,11 +238,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                 alignment: WrapAlignment.spaceEvenly,
                                 spacing: 50,
                                 children: [
-                                  AppButton(text: "ارشفة البيانات الحالية", onPressed: (){
+                                  AppButton(text: "ارشفة البيانات الحالية".tr, onPressed: (){
                                     controller.archive();
 
                                   }),
-                                  AppButton(text: "تصفير البيانات الحالية", onPressed: (){
+                                  AppButton(text: "تصفير البيانات الحالية".tr, onPressed: (){
                                     controller.archive();
 
                                   }),

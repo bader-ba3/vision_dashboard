@@ -83,26 +83,26 @@ class _StudentInputFormState extends State<StudentInputForm> {
   }
 
   bool _validateFields() {
-    if (!validateNotEmpty(studentNameController.text, "اسم الطالب"))
+    if (!validateNotEmpty(studentNameController.text, "اسم الطالب".tr))
       return false;
-    if (!validateNumericField(studentNumberController.text, "رقم الطالب"))
+    if (!validateNumericField(studentNumberController.text, "رقم الطالب".tr))
       return false;
-    if (!validateNumericField(totalPaymentController.text, "مبلغ التسجيل"))
+    if (!validateNumericField(totalPaymentController.text, "مبلغ التسجيل".tr))
       return false;
-    if (!validateNotEmpty(ageController.text, "التولد")) return false;
-    if (!validateNotEmpty(classController.text, "الصف")) return false;
-    if (!validateNotEmpty(_payWay, "طريقة الدفع")) return false;
-    if (!validateNotEmpty(sectionController.text, "الشعبة")) return false;
-    if (!validateNotEmpty(languageController.text, "اللغة")) return false;
-    if (!validateNotEmpty(busController.text, "الحافلة")) return false;
-    if (!validateNotEmpty(genderController.text, "الجنس")) return false;
+    if (!validateNotEmpty(ageController.text, "التولد".tr)) return false;
+    if (!validateNotEmpty(classController.text, "الصف".tr)) return false;
+    if (!validateNotEmpty(_payWay, "طريقة الدفع".tr)) return false;
+    if (!validateNotEmpty(sectionController.text, "الشعبة".tr)) return false;
+    if (!validateNotEmpty(languageController.text, "اللغة".tr)) return false;
+    if (!validateNotEmpty(busController.text, "الحافلة".tr)) return false;
+    if (!validateNotEmpty(genderController.text, "الجنس".tr)) return false;
     if (widget.studentModel == null) if (!validateNotEmpty(
-        guardianController.text, "الوالد")) return false;
+        guardianController.text, "الوالد".tr)) return false;
     if (_payWay == "") {
-      showErrorDialog("خطأ", "يرجى اختيار طريقة الدفع");
+      showErrorDialog("خطأ".tr, "يرجى اختيار طريقة الدفع".tr);
       return false;
     }
-    if (!validateNotEmpty(startDateController.text, "تاريخ البداية"))
+    if (!validateNotEmpty(startDateController.text, "تاريخ البداية".tr))
       return false;
     return true;
   }
@@ -200,15 +200,15 @@ class _StudentInputFormState extends State<StudentInputForm> {
                 spacing: 25,
                 children: <Widget>[
                   CustomTextField(
-                      controller: studentNameController, title: "اسم الطالب"),
+                      controller: studentNameController, title: "اسم الطالب".tr),
                   CustomTextField(
                       controller: studentNumberController,
-                      title: 'رقم الطالب',
+                      title: 'رقم الطالب'.tr,
                       keyboardType: TextInputType.phone),
                   CustomDropDown(
                     value: sectionController.text,
                     listValue: sectionsList,
-                    label: 'الشعبة',
+                    label: 'الشعبة'.tr,
                     onChange: (value) {
                       if (value != null) {
                         sectionController.text = value;
@@ -218,7 +218,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomDropDown(
                     value: genderController.text,
                     listValue: sexList,
-                    label: 'الجنس',
+                    label: 'الجنس'.tr,
                     onChange: (value) {
                       if (value != null) {
                         genderController.text = value;
@@ -228,7 +228,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomDropDown(
                     value: classController.text,
                     listValue: classNameList,
-                    label: 'الصف',
+                    label: 'الصف'.tr,
                     onChange: (value) {
                       if (value != null) {
                         classController.text = value;
@@ -238,7 +238,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomDropDown(
                     value: languageController.text,
                     listValue: languageList,
-                    label: 'اللغة',
+                    label: 'اللغة'.tr,
                     onChange: (value) {
                       if (value != null) {
                         languageController.text = value;
@@ -248,7 +248,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   CustomDropDown(
                     value: busController.text,
                     listValue: busesList,
-                    label: 'الحافلة',
+                    label: 'الحافلة'.tr,
                     onChange: (value) {
                       if (value != null) {
                         busController.text = value;
@@ -265,7 +265,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             (e) => e.fullName!,
                           )
                           .toList(),
-                      label: 'ولي الأمر',
+                      label: 'ولي الأمر'.tr,
                       onChange: (value) {
                         if (value != null) {
                           parentName = value;
@@ -282,15 +282,15 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     ),
                   CustomTextField(
                       controller: totalPaymentController,
-                      title: 'مبلغ التسجيل',
+                      title: 'مبلغ التسجيل'.tr,
                       keyboardType: TextInputType.phone),
                   CustomDropDown(
-                    value: _payWay,
-                    listValue: _payWays,
-                    label: "طرق الدفع",
+                    value: _payWay.tr,
+                    listValue: _payWays.map((e) => e.toString().tr,).toList(),
+                    label: "طريقة الدفع".tr,
                     onChange: (selectedWay) async {
                       if (selectedWay != null) {
-                        if (selectedWay == 'اقساط') {
+                        if (selectedWay == 'اقساط'.tr) {
                           _payWay = selectedWay;
 
                           await addInstalment();
@@ -311,7 +311,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     children: [
                       CustomTextField(
                           controller: startDateController,
-                          title: 'تاريخ البداية',
+                          title: 'تاريخ البداية'.tr,
                           enable: false,
                           keyboardType: TextInputType.datetime),
                       IconButton(
@@ -338,7 +338,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     children: [
                       CustomTextField(
                           controller: ageController,
-                          title: 'التولد',
+                          title: 'التولد'.tr,
                           enable: false,
                           keyboardType: TextInputType.datetime),
                       IconButton(
@@ -360,13 +360,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           ))
                     ],
                   ),
-                  if (_payWay == 'اقساط')
+                  if (_payWay == 'اقساط'.tr)
                     SizedBox(
                       width: Get.width / 2,
                       child: Column(
                         children: [
                           SizedBox(height: defaultPadding * 2),
-                          Text('سجل الدفعات:', style: Styles.headLineStyle1),
+                          Text('سجل الدفعات:'.tr, style: Styles.headLineStyle1),
                           SizedBox(
                             height: defaultPadding,
                           ),
@@ -377,11 +377,12 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               shrinkWrap: true,
                               itemCount: installmentCount,
                               itemBuilder: (context, index) {
-                                bool cantEdite = widget.studentModel!
+
+                                bool cantEdite = widget.studentModel!=null?  widget.studentModel!
                                         .installmentRecords!.values
                                         .toList()[index]
                                         .isPay ??
-                                    false;
+                                    false:false;
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
@@ -412,7 +413,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                                 .firstOrNull
                                                 ?.key ??
                                                 '',
-                                            title: "الشهر",
+                                            title: "الشهر".tr,
                                             size: Get.width / 5.5,
                                             keyboardType: TextInputType.number,
                                           ):
@@ -432,7 +433,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                             listValue: months.keys
                                                 .map((e) => e.toString())
                                                 .toList(),
-                                            label: "الشهر",
+                                            label: "الشهر".tr,
                                             size: Get.width / 5.5,
                                             isFullBorder: true,
                                             onChange: (value) {
@@ -446,7 +447,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                           CustomTextField(
                                             enable: !cantEdite,
                                             controller: costsController[index],
-                                            title: "الدفعة",
+                                            title: "الدفعة".tr,
                                             size: Get.width / 5.5,
                                             keyboardType: TextInputType.number,
                                           ),
@@ -471,7 +472,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                     color: Colors.blue,
                                   ),
                                   Text(
-                                    "اضافة",
+                                    "اضافة".tr,
                                     style: Styles.headLineStyle3,
                                   ),
                                 ],
@@ -481,7 +482,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           ),
                           GetBuilder<StudentViewModel>(builder: (controller) {
                             return AppButton(
-                              text: "حفظ",
+                              text: "حفظ".tr,
                               onPressed: () {
                                 if (_validateFields()) {
                                   for (int index = 0;
@@ -543,10 +544,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         ],
                       ),
                     ),
-                  if (_payWay != "اقساط")
+                  if (_payWay != "اقساط".tr)
                     GetBuilder<StudentViewModel>(builder: (controller) {
                       return AppButton(
-                        text: "حفظ",
+                        text: "حفظ".tr,
                         onPressed: () {
                           if (_validateFields()) {
                             String id = widget.studentModel == null
@@ -623,7 +624,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               )
                               .map((e) => e.name)
                               .toList(),
-                          label: "نوع الحدث",
+                          label: "نوع الحدث".tr,
                           onChange: (selectedWay) {
                             if (selectedWay != null) {
                               setState(() {});
@@ -634,12 +635,12 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         SizedBox(width: 16.0),
                         CustomTextField(
                             controller: bodyEvent,
-                            title: 'الوصف',
+                            title: 'الوصف'.tr,
                             enable: true,
                             keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
                         AppButton(
-                          text: 'إضافة سجل حدث',
+                          text: 'إضافة سجل حدث'.tr,
                           onPressed: () {
                             setState(() {
                               eventRecords.add(EventRecordModel(
@@ -658,7 +659,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     );
                   }),
                   SizedBox(height: defaultPadding * 2),
-                  Text('سجل الأحداث:', style: Styles.headLineStyle1),
+                  Text('سجل الأحداث'.tr, style: Styles.headLineStyle1),
                   SizedBox(
                     height: defaultPadding,
                   ),

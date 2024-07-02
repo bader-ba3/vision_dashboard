@@ -24,6 +24,14 @@ class ExpensesViewModel extends GetxController{
     },);
   }
 
+
+double  getAllExpensesMoney(){
+  double sub=0.0;
+    allExpenses.forEach((key, value) {
+      sub+=value.total;
+    },);
+    return sub;
+  }
   addExpenses(ExpensesModel expensesModel){
     expensesFireStore.doc(expensesModel.id).set(expensesModel);
   }

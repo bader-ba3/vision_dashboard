@@ -608,7 +608,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'الحافلات',
+        title: 'الحافلات'.tr,middleText: "تعرض معلومات الحافلات مع امكانية اضافة حافلة جديدة او اضافة مصروف الى حافلة موجودة سابقا".tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -647,7 +647,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                         label: Container(
                                             width: size / (data.length),
                                             child: Center(
-                                                child: Text(data[index]))))),
+                                                child: Text(data[index].toString().tr))))),
                                 rows: [
                                   ...List.generate(
                                     controller.busesMap.values.length,
@@ -750,7 +750,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                                   .split(" ")[0],
                                             ),
                                             dataRowItem(
-                                                size / (data.length), "تعديل",
+                                                size / (data.length), "تعديل".tr,
                                                 color: Colors.green),
                                             DataCell(Container(
                                                 width: size / (data.length),
@@ -795,8 +795,8 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                                                 affectedId:
                                                                     busModel
                                                                         .busId!)
-                                                            ? "استرجاع"
-                                                            : "حذف"),
+                                                            ? "استرجاع".tr
+                                                            : "حذف".tr),
                                                         Spacer(),
                                                       ],
                                                     ))))

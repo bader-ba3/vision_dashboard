@@ -67,8 +67,8 @@ class _StoreInputFormState extends State<StoreInputForm> {
                 // alignment: WrapAlignment.spaceAround,
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextField(controller: subNameController, title: 'اسم المادة'),
-                  CustomTextField(controller: subQuantityController, title: 'الكمية',keyboardType: TextInputType.number),
+                  CustomTextField(controller: subNameController, title: 'اسم المادة'.tr),
+                  CustomTextField(controller: subQuantityController, title: 'الكمية'.tr,keyboardType: TextInputType.number),
 
 
                 ],
@@ -76,7 +76,7 @@ class _StoreInputFormState extends State<StoreInputForm> {
             ),
 
             SizedBox(height: defaultPadding * 2),
-            AppButton(text: 'حفظ',   onPressed: () {
+            AppButton(text: 'حفظ'.tr,   onPressed: () {
 
               StoreModel store = StoreModel(
                 subName:  subNameController.text,

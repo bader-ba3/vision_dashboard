@@ -41,6 +41,7 @@ class AccountManagementViewModel extends GetxController {
 
   AccountManagementViewModel() {
   getAllEmployee();
+
   }
   late StreamSubscription<QuerySnapshot<AccountManagementModel>> listener;
 
@@ -458,6 +459,31 @@ class AccountManagementViewModel extends GetxController {
         update();
       },
     );
+  }
+
+
+  double  getAllSalaries(){
+double pay=0.0;
+    allAccountManagement.forEach((key, value) {
+      if(value.employeeTime.entries.where((element) => element.key.toString().split("-")[1]==DateTime.now().month.toString().padLeft(2,"0"),).isNotEmpty) {
+          AccountManagementModel accountModel = value;
+          int totalLate = accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values
+                  .map((e) => e.totalLate ?? 0)
+                  .reduce((value, element) => value + element);
+          int totalEarlier = accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values
+                  .map((e) => e.totalEarlier ?? 0)
+                  .reduce((value, element) => value + element);
+          int totalTime = totalLate + totalEarlier;
+          pay += ((accountModel.salary!) -
+              ((accountModel.salary! / accountModel.dayOfWork!) *
+                  ((totalTime / 60).floor() * 0.5)));
+        }
+      },);
+return pay;
   }
 }
 

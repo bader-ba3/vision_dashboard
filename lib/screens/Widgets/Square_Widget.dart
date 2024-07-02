@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../constants.dart';
 
@@ -23,7 +24,7 @@ class SquareWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(0.0),
                 child: Center(
                     child: Text(
-                      title,
+                      title.toString().tr,
                       textAlign: TextAlign.center,
                       style: Styles.headLineStyle2.copyWith(color:color==false?Colors.black: color),
                     )),

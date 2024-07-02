@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/responsive.dart';
+import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_info_Widget.dart';
@@ -18,11 +22,13 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int index = 2;
-
+StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
+  ExpensesViewModel _expensesViewModel=Get.find<ExpensesViewModel>();
+  AccountManagementViewModel _accountManagementViewModel=Get.find<AccountManagementViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  Header(title: 'الصفحة الرئيسية',),
+      appBar:  Header(title: 'الصفحة الرئيسية'.tr,middleText: "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر".tr),
       body: SingleChildScrollView(
         primary: false,
         padding: EdgeInsets.all(defaultPadding),
@@ -43,23 +49,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         index = 2;
                         setState(() {});
                       },
-                      child: SquareWidget("الاجمالي", "45,426.0",
+                      child: SquareWidget("الاجمالي",  (_studentViewModel.getAllTotalPay()-_expensesViewModel.getAllExpensesMoney()-_accountManagementViewModel.getAllSalaries()).toString(),
                           primaryColor, "assets/budget.png")),
-                  InkWell(
-                      onTap: () {
-                        index = 1;
-                        setState(() {});
-                      },
-                      child: SquareWidget("الايرادات", "101,110.0",
-                          Colors.cyan, "assets/profit.png")),
-                  InkWell(
-                      onTap: () {
-                        index = 0;
-                        setState(() {});
-                      },
-                      child: SquareWidget("المصروف", "55,684.0",
-                          blueColor, "assets/poor.png")),
-                  SquareWidget("الرواتب المستحقة", "57,920.0",
+                 InkWell(
+                          onTap: () {
+                            index = 1;
+                            setState(() {});
+                          },
+                          child: SquareWidget("الايرادات", _studentViewModel.getAllTotalPay().toString(),
+                              Colors.cyan, "assets/profit.png")
+
+                  ),
+                 InkWell(
+                          onTap: () {
+                            index = 0;
+                            setState(() {});
+                          },
+                          child: SquareWidget("المصروف", _expensesViewModel.getAllExpensesMoney().toString(),
+                              blueColor, "assets/poor.png")),
+
+
+                  SquareWidget("الرواتب المستحقة", _accountManagementViewModel.getAllSalaries().toString(),
                       Colors.black, "assets/money-bag.png"),
                 ],
               ),
@@ -87,7 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             EmployeeDetailsChart(),
                             SizedBox(height: defaultPadding,),
-                            StudentsDetailsChart(),
+                            StudentsDetailsChart(students: _studentViewModel.studentMap,),
                           ],
                         ),
                     ],
@@ -103,7 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         EmployeeDetailsChart(),
                         SizedBox(height: defaultPadding,),
-                        StudentsDetailsChart(),
+                        StudentsDetailsChart(students: _studentViewModel.studentMap,),
                       ],
                     ),
                   ),
@@ -131,7 +141,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.all(0.0),
                 child: Center(
                     child: Text(
-                  title,
+                  title.toString().tr,
                   textAlign: TextAlign.center,
                   style: Styles.headLineStyle2.copyWith(color:color==false?Colors.black: color),
                 )),

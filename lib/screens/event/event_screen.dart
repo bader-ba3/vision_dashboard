@@ -20,13 +20,13 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   final ScrollController _scrollController = ScrollController();
-  List data = ["الرمز التسلسلي", "الاسم", "المستهدف", "اللون", "الحذف"];
+  List data = ["الرمز التسلسلي", "الاسم", "المستهدف", "اللون", ""];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'الاحداث',
+        title: 'الأحداث'.tr,middleText: "تعرض الواجهة انماط الاحداث التي يمكن ان تطبق لكل فئة من المشتركين داخل المنصة بالاضافة الى امكانية عمل نمط حدث جديد".tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -63,7 +63,7 @@ class _EventScreenState extends State<EventScreen> {
                                     label: Container(
                                         width: size / data.length,
                                         child: Center(
-                                            child: Text(data[index]))))),
+                                            child: Text(data[index].toString().tr))))),
                             rows: [
                               for (var event in controller.allEvents.values)
                                 DataRow(
@@ -99,8 +99,8 @@ class _EventScreenState extends State<EventScreen> {
                                           size / data.length,
                                           checkIfPendingDelete(
                                                   affectedId: event.id)
-                                              ? "استرجاع"
-                                              : "حذف",
+                                              ? "استرجاع".tr
+                                              : "حذف".tr,
                                           color: checkIfPendingDelete(
                                                   affectedId: event.id)
                                               ? Colors.white

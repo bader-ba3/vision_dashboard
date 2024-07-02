@@ -37,7 +37,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'الرسوم الدراسية',
+        title: 'الرسوم الدراسية'.tr,middleText: "تعرض هذه الواجهة اجمالي ادفعات المستلمة من الطلاب و اجمالي الدفعات الخير مستلمة واجمالي الدفعات المتأخرة عن الدفع عن هذا الشهر مع جدول يوضح تفاصيل الدفعات لكل اب مع امكانية استلام دفعة او التراجع عنها".tr
       ),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
@@ -121,7 +121,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                         label: Container(
                                             width: size / data.length,
                                             child: Center(
-                                                child: Text(data[index]))))),
+                                                child: Text(data[index].toString().tr))))),
                                 rows: [
                                   ...List.generate(
                                     parentController.parentMap.values
@@ -193,8 +193,8 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                             dataRowItem(
                                                 size / data.length,
                                                 payment - totalPayment >= 0
-                                                    ? "تم استلام كامل المبلغ"
-                                                    : "اضافة دفعة",
+                                                    ? "تم استلام كامل المبلغ".tr
+                                                    : "اضافة دفعة".tr,
                                                 color: payment - totalPayment >=
                                                         0
                                                     ? blueColor

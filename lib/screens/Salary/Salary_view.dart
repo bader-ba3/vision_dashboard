@@ -56,7 +56,7 @@ class _SalaryViewState extends State<SalaryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'ادارة رواتب الموظفين',
+        title: 'ادارة رواتب الموظفين'.tr,middleText: 'تستخدم هذه الواجهة لعرض الرواتب المستحقة او المقبوضة لكل موظف حسب شهر معين مع امكانية تسليم رواتب للموظفين'.tr
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -80,7 +80,7 @@ class _SalaryViewState extends State<SalaryView> {
                           (e) => e.toString(),
                     )
                         .toList(),
-                    label: "اختر الشهر",
+                    label: "اختر الشهر".tr,
                     onChange: (value) {
                       if (value != null) {
                         selectedMonth = value;

@@ -35,6 +35,8 @@ class StudentViewModel extends GetxController {
 
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
+
+
   getAllStudent() async {
     listener=  await studentCollectionRef.snapshots().listen((value) {
       _studentMap.clear();
@@ -86,8 +88,10 @@ class StudentViewModel extends GetxController {
     update();
   }
 
-  int getAllTotalPay() {
-    int total = 0;
+
+
+  double getAllTotalPay() {
+    double total = 0.0;
     _studentMap.values.forEach(
       (element) {
         total += element.totalPayment!;

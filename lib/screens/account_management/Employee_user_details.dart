@@ -36,8 +36,8 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
   final bodyEvent = TextEditingController();
   final dayWorkController = TextEditingController();
   Map accountType = {
-    "user": "مستخدم",
-    "admin": "مدير",
+    "user": "مستخدم".tr,
+    "admin": "مدير".tr,
   };
   String? role;
   TextEditingController userNameController = TextEditingController();
@@ -104,8 +104,8 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
         !isNumeric(salaryController.text) ||
         !isNumeric(dayWorkController.text)) {
       showErrorDialog(
-          "خطأ",
-          "يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.");
+          "خطأ".tr,
+          "يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.".tr);
       return false;
     }
     return true;
@@ -114,7 +114,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        title: 'اضافة الموظفين',
+        title: 'اضافة الموظفين'.tr,middleText: "يمكنك من اضافة مستخجم جديد".tr
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -134,60 +134,60 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                 alignment: WrapAlignment.spaceEvenly,
                 children: <Widget>[
                   CustomTextField(
-                      controller: fullNameController, title: "الاسم الكامل"),
+                      controller: fullNameController, title: "الاسم الكامل".tr),
                   CustomTextField(
                       controller: mobileNumberController,
-                      title: 'رقم الموبايل',
+                      title: 'رقم الموبايل'.tr,
                       keyboardType: TextInputType.phone),
                   CustomTextField(
-                      controller: addressController, title: 'العنوان'),
+                      controller: addressController, title: 'العنوان'.tr),
                   CustomTextField(
-                      controller: nationalityController, title: 'الجنسية'),
+                      controller: nationalityController, title: 'الجنسية'.tr),
                   CustomDropDown(
                     value: '',
-                    listValue: sexList,
-                    label: 'الجنس',
+                    listValue: sexList.map((e) => e.tr,).toList(),
+                    label: 'الجنس'.tr,
                     onChange: (value) {
                       if (value != null) {
-                        genderController.text = value;
+                        genderController.text = value.tr;
                       }
                     },
                   ),
                   CustomTextField(
                       controller: ageController,
-                      title: 'العمر',
+                      title: 'العمر'.tr,
                       keyboardType: TextInputType.number),
                   CustomTextField(
                       controller: dayWorkController,
-                      title: 'عدد ايام العمل',
+                      title: 'عدد ايام العمل'.tr,
                       keyboardType: TextInputType.number),
                   CustomDropDown(
                       value: '',
-                      listValue: jobList,
-                      label: 'الوظيفة',
+                      listValue: jobList.map((e) => e.tr,).toList(),
+                      label: 'الوظيفة'.tr,
                       onChange: (value) {
                         if (value != null) {
-                          jobTitleController.text = value;
+                          jobTitleController.text = value.tr;
                         }
                       }),
                   CustomTextField(
                       controller: salaryController,
-                      title: 'الراتب',
+                      title: 'الراتب'.tr,
                       keyboardType: TextInputType.number),
                   CustomDropDown(
                     value: '',
-                    listValue: contractsList,
-                    label: 'العقد',
+                    listValue: contractsList.map((e) => e.tr,).toList(),
+                    label: 'العقد'.tr,
                     onChange: (value) {
                       if (value != null) {
-                        contractController.text = value;
+                        contractController.text = value.tr;
                       }
                     },
                   ),
                   CustomDropDown(
                     value: '',
-                    listValue: busesList,
-                    label: 'الحافلة',
+                    listValue: busesList.map((e) => e.tr,).toList(),
+                    label: 'الحافلة'.tr,
                     onChange: (value) {
                       if (value != null) {
                         busController.text = value;
@@ -199,7 +199,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                     children: [
                       CustomTextField(
                         controller: startDateController,
-                        title: 'تاريخ البداية',
+                        title: 'تاريخ البداية'.tr,
                         enable: false,
                         keyboardType: TextInputType.datetime,
                       ),
@@ -225,18 +225,18 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                   ),
                   CustomTextField(
                       controller: userNameController,
-                      title: 'اسم المستخدم',
+                      title: 'اسم المستخدم'.tr,
                       keyboardType: TextInputType.datetime),
                   CustomTextField(
                       controller: userPassController,
-                      title: 'كلمة المرور',
+                      title: 'كلمة المرور'.tr,
                       keyboardType: TextInputType.datetime),
                   CustomDropDown(
                     value: '',
                     listValue: accountType.entries
-                        .map((e) => e.value.toString())
+                        .map((e) => e.value.toString().tr)
                         .toList(),
-                    label: "الدور",
+                    label: "الدور".tr,
                     onChange: (_) {
                       role = _;
                       setState(() {});
@@ -268,12 +268,12 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                         SizedBox(width: 16.0),
                         CustomTextField(
                             controller: bodyEvent,
-                            title: 'الوصف',
+                            title: 'الوصف'.tr,
                             enable: true,
                             keyboardType: TextInputType.text),
                         SizedBox(width: 16.0),
                         AppButton(
-                          text: 'إضافة سجل حدث',
+                          text: 'إضافة سجل حدث'.tr,
                           onPressed: () {
                             setState(() {
                               eventRecords.add(EventRecordModel(
@@ -297,7 +297,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
             SizedBox(
               height: defaultPadding * 2,
             ),
-            Text('سجل الأحداث:', style: Styles.headLineStyle1),
+            Text('سجل الأحداث'.tr, style: Styles.headLineStyle1),
             SizedBox(
               height: defaultPadding,
             ),
@@ -354,7 +354,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
             SizedBox(height: 16.0),
             GetBuilder<AccountManagementViewModel>(builder: (controller) {
               return AppButton(
-                text: "حفظ",
+                text: "حفظ".tr,
                 onPressed: () async{
                   if(_validateFields()) {
                     role ??= accountType.keys.first;

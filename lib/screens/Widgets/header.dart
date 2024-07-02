@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 
 import '../../constants.dart';
 
@@ -37,7 +38,7 @@ import '../../constants.dart';
 //   }
 // }
 
-AppBar Header({title}) {
+AppBar Header({required String  title,required String middleText}) {
   return AppBar(
     toolbarHeight: 60,
     backgroundColor: Colors.transparent,
@@ -49,15 +50,34 @@ AppBar Header({title}) {
       },
     ),
     centerTitle: false,
-    title: Text(
-      title,
-      style: Get.textTheme.titleLarge,
+    title: Row(
+      children: [
+        Text(
+          title,
+          style: Get.textTheme.titleLarge,
+        ),
+        IconButton(
+            onPressed: () {
+              Get.defaultDialog(
+
+                  title: title,
+                  middleText: middleText,
+                  backgroundColor: secondaryColor,
+                  confirm: AppButton(
+                    text: "تم".tr,
+                    onPressed: () => Get.back(),
+                  ));
+            },
+            icon: Icon(Icons.info_outline))
+      ],
     ),
     actions: [
       Padding(
         padding: const EdgeInsets.only(left: 8, top: 8),
         child: Builder(builder: (context) {
-          return SizedBox(width: MediaQuery.sizeOf(context).width / 3, child: SearchField());
+          return SizedBox(
+              width: MediaQuery.sizeOf(context).width / 3,
+              child: SearchField());
         }),
       ),
     ],
