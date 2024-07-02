@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
@@ -31,8 +33,10 @@ class StudentViewModel extends GetxController {
     );
   }
 
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
+
   getAllStudent() async {
-    await studentCollectionRef.snapshots().listen((value) {
+    listener=  await studentCollectionRef.snapshots().listen((value) {
       _studentMap.clear();
 
       for (var element in value.docs) {
@@ -129,6 +133,7 @@ class StudentViewModel extends GetxController {
       print("Student :${_studentMap.keys.length}");
 
       examViewModel.getGrade(_studentMap);
+      listener.cancel();
       update();
     });
   }

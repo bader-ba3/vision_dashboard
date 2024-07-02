@@ -18,20 +18,18 @@ import '../Widgets/Custom_Text_Filed.dart';
 class StudentInputForm extends StatefulWidget {
   @override
   _StudentInputFormState createState() => _StudentInputFormState();
+
   StudentInputForm({this.studentModel});
- final StudentModel? studentModel;
+
+  final StudentModel? studentModel;
 }
 
 class _StudentInputFormState extends State<StudentInputForm> {
-
- 
-
   String _payWay = '';
   EventModel? selectedEvent;
   TextEditingController bodyEvent = TextEditingController();
 
   Map<String, InstallmentModel> instalmentMap = {};
-
 
   final List<String> _payWays = [
     'كاش',
@@ -45,7 +43,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final genderController = TextEditingController();
   final ageController = TextEditingController();
   final classController = TextEditingController();
-
 
   final startDateController = TextEditingController();
 
@@ -85,8 +82,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
     print(installmentCount);
   }
 
-
-
   bool _validateFields() {
     if (!validateNotEmpty(studentNameController.text, "اسم الطالب"))
       return false;
@@ -101,8 +96,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
     if (!validateNotEmpty(languageController.text, "اللغة")) return false;
     if (!validateNotEmpty(busController.text, "الحافلة")) return false;
     if (!validateNotEmpty(genderController.text, "الجنس")) return false;
-    if(widget.studentModel==null)
-    if (!validateNotEmpty(guardianController.text, "الوالد")) return false;
+    if (widget.studentModel == null) if (!validateNotEmpty(
+        guardianController.text, "الوالد")) return false;
     if (_payWay == "") {
       showErrorDialog("خطأ", "يرجى اختيار طريقة الدفع");
       return false;
@@ -112,7 +107,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
     return true;
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -120,8 +114,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
     init();
   }
 
-  init(){
-    if(widget.studentModel!=null) {
+  init() {
+    if (widget.studentModel != null) {
       _payWay = widget.studentModel!.paymentWay ?? '';
       instalmentMap = widget.studentModel!.installmentRecords ?? {};
       studentNameController.text = widget.studentModel!.studentName ?? '';
@@ -133,23 +127,28 @@ class _StudentInputFormState extends State<StudentInputForm> {
       startDateController.text = widget.studentModel!.startDate ?? '';
       busController.text = widget.studentModel!.bus ?? '';
 
-    guardianController.text=widget.studentModel!.parentId!;
+      guardianController.text = widget.studentModel!.parentId!;
       languageController.text = widget.studentModel!.stdLanguage ?? '';
       totalPaymentController.text =
-          widget.studentModel!.totalPayment.toString() ?? '';
-      installmentCount = widget.studentModel?.installmentRecords?.values.length ?? 0;
+          widget.studentModel!.totalPayment.toString();
+      installmentCount =
+          widget.studentModel?.installmentRecords?.values.length ?? 0;
 
       print(widget.studentModel?.installmentRecords?.values.length);
       monthsController = List.generate(
         widget.studentModel?.installmentRecords?.values.length ?? 0,
         (index) => TextEditingController()
-          ..text = widget.studentModel!.installmentRecords!.values.elementAt(index).installmentDate
+          ..text = widget.studentModel!.installmentRecords!.values
+              .elementAt(index)
+              .installmentDate
               .toString(),
       );
       costsController = List.generate(
         widget.studentModel?.installmentRecords?.length ?? 0,
         (index) => TextEditingController()
-          ..text = widget.studentModel!.installmentRecords!.values.elementAt(index).installmentCost
+          ..text = widget.studentModel!.installmentRecords!.values
+              .elementAt(index)
+              .installmentCost
               .toString(),
       );
       eventRecords = widget.studentModel!.eventRecords ?? [];
@@ -256,31 +255,31 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       }
                     },
                   ),
-                  if(widget.studentModel==null)
-                  CustomDropDown(
-                    value: parentName,
-                    listValue: Get.find<ParentsViewModel>()
-                        .parentMap
-                        .values
-                        .map(
-                          (e) => e.fullName!,
-                        )
-                        .toList(),
-                    label: 'ولي الأمر',
-                    onChange: (value) {
-                      if (value != null) {
-                        parentName = value;
-                        guardianController.text = Get.find<ParentsViewModel>()
-                            .parentMap
-                            .values
-                            .where(
-                              (element) => element.fullName == value,
-                            )
-                            .first
-                            .id!;
-                      }
-                    },
-                  ),
+                  if (widget.studentModel == null)
+                    CustomDropDown(
+                      value: parentName,
+                      listValue: Get.find<ParentsViewModel>()
+                          .parentMap
+                          .values
+                          .map(
+                            (e) => e.fullName!,
+                          )
+                          .toList(),
+                      label: 'ولي الأمر',
+                      onChange: (value) {
+                        if (value != null) {
+                          parentName = value;
+                          guardianController.text = Get.find<ParentsViewModel>()
+                              .parentMap
+                              .values
+                              .where(
+                                (element) => element.fullName == value,
+                              )
+                              .first
+                              .id!;
+                        }
+                      },
+                    ),
                   CustomTextField(
                       controller: totalPaymentController,
                       title: 'مبلغ التسجيل',
@@ -378,7 +377,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               shrinkWrap: true,
                               itemCount: installmentCount,
                               itemBuilder: (context, index) {
-                                print(monthsController[index]);
+                                bool cantEdite = widget.studentModel!
+                                        .installmentRecords!.values
+                                        .toList()[index]
+                                        .isPay ??
+                                    false;
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
@@ -394,8 +397,38 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                       child: Row(
                                         children: [
                                           Spacer(),
+                                          cantEdite?
+                                          CustomTextField(
+                                            enable: !cantEdite,
+                                            isFullBorder:!cantEdite ,
+                                            controller: TextEditingController()..text=months.entries
+                                                .where(
+                                                  (element) =>
+                                              element.value ==
+                                                  monthsController[
+                                                  index]
+                                                      .text,
+                                            )
+                                                .firstOrNull
+                                                ?.key ??
+                                                '',
+                                            title: "الشهر",
+                                            size: Get.width / 5.5,
+                                            keyboardType: TextInputType.number,
+                                          ):
+
                                           CustomDropDown(
-                                            value: months.entries.where((element) => element.value==monthsController[index].text,).firstOrNull?.key??'',
+                                            value: months.entries
+                                                    .where(
+                                                      (element) =>
+                                                          element.value ==
+                                                          monthsController[
+                                                                  index]
+                                                              .text,
+                                                    )
+                                                    .firstOrNull
+                                                    ?.key ??
+                                                '',
                                             listValue: months.keys
                                                 .map((e) => e.toString())
                                                 .toList(),
@@ -411,6 +444,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                           ),
                                           Spacer(),
                                           CustomTextField(
+                                            enable: !cantEdite,
                                             controller: costsController[index],
                                             title: "الدفعة",
                                             size: Get.width / 5.5,
@@ -450,24 +484,34 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               text: "حفظ",
                               onPressed: () {
                                 if (_validateFields()) {
-                                  instalmentMap.clear();
                                   for (int index = 0;
                                       index < monthsController.length;
                                       index++) {
-
-                                    String insId = generateId("INSTALLMENT");
+                                    String insId = widget.studentModel != null
+                                        ? widget.studentModel!
+                                            .installmentRecords!.values
+                                            .toList()[index]
+                                            .installmentId!
+                                        : generateId("INSTALLMENT");
                                     instalmentMap[insId] = InstallmentModel(
                                       installmentCost:
                                           costsController[index].text,
                                       installmentDate:
                                           monthsController[index].text,
-                                      installmentId:insId,
-                                      isPay: false,
+                                      installmentId: insId,
+                                      isPay: widget.studentModel != null
+                                          ? widget.studentModel!
+                                              .installmentRecords!.values
+                                              .toList()[index]
+                                              .isPay!
+                                          : false,
                                     );
                                   }
                                   final student = StudentModel(
-                                    studentID:widget.studentModel==null? generateId("STD"):widget.studentModel!.studentID!,
-                                    parentId:  guardianController.text,
+                                    studentID: widget.studentModel == null
+                                        ? generateId("STD")
+                                        : widget.studentModel!.studentID!,
+                                    parentId: guardianController.text,
                                     stdLanguage: languageController.text,
                                     stdExam: [],
                                     section: sectionController.text,
@@ -484,12 +528,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                     eventRecords: eventRecords,
                                     installmentRecords: instalmentMap,
                                   );
-                                  widget.studentModel!=null?controller.updateStudent(student): controller.addStudent(student);
+                                  widget.studentModel != null
+                                      ? controller.updateStudent(student)
+                                      : controller.addStudent(student);
 
                                   clearController();
                                   setState(() {});
-                                  if(widget.studentModel!=null)
-                                    Get.back();
+                                  if (widget.studentModel != null) Get.back();
                                   // print('بيانات الموظف: $student');
                                 }
                               },
@@ -504,7 +549,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         text: "حفظ",
                         onPressed: () {
                           if (_validateFields()) {
-                            String id =widget.studentModel==null? generateId("INSTALLMENT"):widget.studentModel!.installmentRecords!.keys.toList()[0] ;
+                            String id = widget.studentModel == null
+                                ? generateId("INSTALLMENT")
+                                : widget.studentModel!.installmentRecords!.keys
+                                    .toList()[0];
                             instalmentMap[id] = InstallmentModel(
                                 isPay: true,
                                 installmentId: id,
@@ -515,8 +563,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                 installmentCost: totalPaymentController.text,
                                 payTime: DateTime.now().toString());
                             final student = StudentModel(
-                              studentID:widget.studentModel==null? generateId("STD"):widget.studentModel!.studentID!,
-                             parentId:  guardianController.text,
+                              studentID: widget.studentModel == null
+                                  ? generateId("STD")
+                                  : widget.studentModel!.studentID!,
+                              parentId: guardianController.text,
                               stdLanguage: languageController.text,
                               stdExam: [],
                               section: sectionController.text,
@@ -533,10 +583,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               totalPayment:
                                   int.parse(totalPaymentController.text),
                             );
-                            widget.studentModel!=null?controller.updateStudent(student): controller.addStudent(student);
+                            widget.studentModel != null
+                                ? controller.updateStudent(student)
+                                : controller.addStudent(student);
                             clearController();
-                            if(widget.studentModel!=null)
-                              Get.back();
+                            if (widget.studentModel != null) Get.back();
                             // print('بيانات الموظف: $student');
                           }
                         },

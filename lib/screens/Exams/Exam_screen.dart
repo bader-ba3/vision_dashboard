@@ -67,7 +67,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                     dataRowItem(size / data.length, exam.date!.toString().split(" ")[0]),
                                     dataRowItem(size / data.length, exam.marks!.keys.length.toString()),
                                     dataRowItem(size / data.length, exam.examPassMark.toString()),
-                                    dataRowItem(size / data.length, exam.passRate!>0?"${exam.passRate}%".toString():"${exam.passRate}%"),
+                                    dataRowItem(size / data.length, exam.passRate!>0?"${exam.passRate}%".toString():"لم يصحح بعد"),
                                     dataRowItem(size / data.length, "عرض",color: Colors.blue,onTap: (){}),
                                     dataRowItem(size / data.length, "اضافة",color: Colors.teal,onTap: (){
                                       if(enableUpdate) {

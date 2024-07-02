@@ -25,15 +25,15 @@ Map<String,dynamic>? marks;
   });
 
   Map<String, dynamic> toJson() => {
-    'id':id,
-    'examPassMark':examPassMark,
-    'questionImage': questionImage!.toList(),
-    'subject': subject,
-    'professor': professor,
-    'date': date!.toIso8601String(),
-    'marks': marks,
-    'examMaxMark': examMaxMark,
-    'answerImage':answerImage!.toList(),
+   if(id!=null) 'id':id,
+    if(examPassMark!=null)    'examPassMark':examPassMark,
+    if(questionImage!=null)   'questionImage': questionImage!.toList(),
+    if(subject!=null)   'subject': subject,
+    if(professor!=null)    'professor': professor,
+    if(date!=null)    'date': date!.toIso8601String(),
+    if(marks!=null)    'marks': marks,
+    if(examMaxMark!=null)     'examMaxMark': examMaxMark,
+    if(answerImage!=null)    'answerImage':answerImage!.toList(),
   };
 
   factory ExamModel.fromJson(Map<String, dynamic> json) {

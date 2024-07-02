@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
@@ -17,8 +19,10 @@ class StoreViewModel extends GetxController{
 
   Map<String, StoreModel> get storeMap => _storeMap;
 
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
+
   getAllStore()async {
-    await   storeCollectionRef.snapshots().listen((value) {
+    listener=   await   storeCollectionRef.snapshots().listen((value) {
       _storeMap.clear();
       for (var element in value.docs) {
         _storeMap[element.id] = StoreModel.fromJson(element.data());
@@ -47,7 +51,9 @@ class StoreViewModel extends GetxController{
     update();
   }
 
-   getOldData(String value)async{
+
+
+  getOldData(String value)async{
 
     await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(storeCollection).get().then((value) {
 
@@ -56,6 +62,7 @@ class StoreViewModel extends GetxController{
         _storeMap[element.id] = StoreModel.fromJson(element.data());
       }
       print("StoreModel :${_storeMap.keys.length}");
+      listener.cancel();
       update();
     });
   }

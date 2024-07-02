@@ -24,7 +24,8 @@ class AccountManagementScreen extends StatefulWidget {
 
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
   final ScrollController _scrollController = ScrollController();
-  List data = [
+  final ScrollController _scrollDeleteController = ScrollController();
+  List userData = [
     "User Name",
     "الاسم الكامل",
     "كامة السر",
@@ -42,6 +43,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     "سجل الاحداث",
     "العمليات"
   ];
+  List deleteData = ["الرمز التسلسلي", "التفاصيل", "الرمز التسلسلي المتأثر", "التصنيف المتأثر", "العمليات","الحذف"];
 
   @override
   Widget build(BuildContext context) {
@@ -64,101 +66,140 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
+                  Text("سجلات الموظفين",style: Styles.headLineStyle1,),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(
                       color: secondaryColor,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: size + 60,
-                          child: Scrollbar(
-                            controller: _scrollController,
-                            child: SingleChildScrollView(
-                              controller: _scrollController,
-                              scrollDirection: Axis.horizontal,
-                              child: GetBuilder<DeleteManagementViewModel>(
-                                  builder: (_) {
-                                return DataTable(
-                                    columnSpacing: 10,
-                                    dividerThickness: 0.3,
+                    child: SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: GetBuilder<DeleteManagementViewModel>(
+                              builder: (_) {
+                            return DataTable(
+                                columnSpacing: 10,
+                                dividerThickness: 0.3,
 
-                                    columns: List.generate(
-                                        data.length,
-                                        (index) => DataColumn(
-                                            label: Container(
-                                                width: size / data.length+10,
-                                                child: Center(
-                                                    child:
-                                                        Text(data[index]))))),
-                                    rows: [
-                                      for (var accountModel in controller
-                                          .allAccountManagement.values)
-                                        DataRow(cells: [
-                                          dataRowItem(size / data.length,
-                                              accountModel.userName.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.fullName.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.password.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.type.toString()),
-                                          dataRowItem(
-                                            size / data.length,
-                                            accountModel.isActive
-                                                ? "فعال"
-                                                : "ملغى",
-                                          ),
-                                          dataRowItem(
-                                              size / data.length,
-                                              accountModel.mobileNumber
-                                                  .toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.address.toString()),
-                                          dataRowItem(
-                                              size / data.length,
-                                              accountModel.nationality
-                                                  .toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.gender.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.age.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.jobTitle.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.contract.toString()),
-                                          dataRowItem(size / data.length,
-                                              accountModel.bus.toString()),
-                                          dataRowItem(
-                                              size / data.length,
-                                              accountModel.startDate
-                                                  .toString()
-                                                  .split(" ")[0]),
-                                          dataRowItem(size / data.length, "عرض",
-                                              color: Colors.teal, onTap: () {}),
-                                          dataRowItem(size / data.length, "حذف",
-                                              color: Colors.red, onTap: () {
-                                            if(enableUpdate)
-                                            controller
-                                                .deleteAccount(accountModel);
-                                          }),
-                                        ]),
-                                    ]);
-                              }),
-                            ),
-                          ),
-                        )
-                      ],
+                                columns: List.generate(
+                                    userData.length,
+                                    (index) => DataColumn(
+                                        label: Container(
+                                            width: size / userData.length+10,
+                                            child: Center(
+                                                child:
+                                                    Text(userData[index]))))),
+                                rows: [
+                                  for (var accountModel in controller
+                                      .allAccountManagement.values)
+                                    DataRow(cells: [
+                                      dataRowItem(size / userData.length,
+                                          accountModel.userName.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.fullName.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.password.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.type.toString()),
+                                      dataRowItem(
+                                        size / userData.length,
+                                        accountModel.isActive
+                                            ? "فعال"
+                                            : "ملغى",
+                                      ),
+                                      dataRowItem(
+                                          size / userData.length,
+                                          accountModel.mobileNumber
+                                              .toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.address.toString()),
+                                      dataRowItem(
+                                          size / userData.length,
+                                          accountModel.nationality
+                                              .toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.gender.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.age.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.jobTitle.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.contract.toString()),
+                                      dataRowItem(size / userData.length,
+                                          accountModel.bus.toString()),
+                                      dataRowItem(
+                                          size / userData.length,
+                                          accountModel.startDate
+                                              .toString()
+                                              .split(" ")[0]),
+                                      dataRowItem(size / userData.length, "عرض",
+                                          color: Colors.teal, onTap: () {}),
+                                      dataRowItem(size / userData.length, "حذف",
+                                          color: Colors.red, onTap: () {
+                                        if(enableUpdate)
+                                        controller
+                                            .deleteAccount(accountModel);
+                                      }),
+                                    ]),
+                                ]);
+                          }),
+                        ),
+                      ),
                     ),
                   ),
+                  SizedBox(height: defaultPadding,),
+                  Text("سجلات الحذف",style: Styles.headLineStyle1,),
+                  Container(
+                      padding: EdgeInsets.all(defaultPadding),
+                      decoration: BoxDecoration(
+                        color: secondaryColor,
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: GetBuilder<DeleteManagementViewModel>(builder: (controller) {
+                        return SizedBox(
+                          width: size + 60,
+                          child: Scrollbar(
+                            controller: _scrollDeleteController,
+                            child: SingleChildScrollView(
+                              controller: _scrollDeleteController,
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(columnSpacing: 0,
+                                  dividerThickness: 0.3,
+                                  columns: List.generate(deleteData.length, (index) => DataColumn(label: Container(width: size / deleteData.length, child: Center(child: Text(deleteData[index]))))), rows: [
+                                    for (var deleteModel in controller.allDelete.values)
+                                      DataRow(
+                                          color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: deleteModel.id) ? Colors.red : Colors.transparent),
+                                          cells: [
+                                            dataRowItem(size / deleteData.length, deleteModel.id.toString()),
+                                            dataRowItem(size / deleteData.length, deleteModel.details??"لا يوجد"),
+                                            dataRowItem(size / deleteData.length, deleteModel.affectedId.toString()),
+                                            dataRowItem(size / deleteData.length, deleteModel.collectionName.toString()),
+
+                                            dataRowItem(size / deleteData.length, "استرجاع",color: Colors.teal,onTap: (){
+                                              if(enableUpdate)
+                                                controller.undoTheDelete(deleteModel);
+                                            }),
+                                            dataRowItem(size / deleteData.length, "حذف نهائي",color: Colors.red.shade700,onTap: (){
+                                              if(enableUpdate)
+                                                controller.doTheDelete(deleteModel);
+                                            }),
+                                          ]),
+                                  ]),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
 
                   SizedBox(
                     height: defaultPadding*2,
                   ),
+                  Text("الارشفة وحذف البيانات",style: Styles.headLineStyle1,),
                   Container(
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(

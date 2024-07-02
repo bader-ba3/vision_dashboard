@@ -74,8 +74,7 @@ class _StudentScreenState extends State<StudentScreen> {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                             columnSpacing: 0,
-                            dividerThickness: 0.3,
-
+                            dividerThickness: 0,
                             columns: List.generate(
                                 data.length,
                                 (index) => DataColumn(
@@ -146,18 +145,18 @@ class _StudentScreenState extends State<StudentScreen> {
                                       dataRowItem(size / data.length, "تعديل",
                                           color: Colors.teal, onTap: () {
                                             if (enableUpdate == true)
-                                              showParentInputDialog(
+                                              showStudentInputDialog(
                                                   context, student);
                                           }),
                                       dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع": "حذف",
                                           color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
-                                        if (/*student.stdExam!.length > 1&&*/enableUpdate)
+                                        if (enableUpdate)
                                           if (checkIfPendingDelete(affectedId: student.studentID!))
                                             returnPendingDelete(
                                                 affectedId: student.studentID!);
                                           else
-                                            controller.deleteStudent(
-                                                student.studentID!);
+                                            addDeleteOperation(affectedId:
+                                                student.studentID!,collectionName: studentCollection,relatedId: student.parentId!,relatedList:student.stdExam);
 
                                       }),
                                     ]),
@@ -327,9 +326,8 @@ class _StudentScreenState extends State<StudentScreen> {
       ],
     );
   }
-  void showParentInputDialog(BuildContext context, dynamic student) {
+  void showStudentInputDialog(BuildContext context, dynamic student) {
     showDialog(
-
       context: context,
       builder: (BuildContext context) {
         return Dialog(

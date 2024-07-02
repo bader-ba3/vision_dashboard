@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/models/Salary_Model.dart';
-import 'package:vision_dashboard/screens/Salary/Salary_view.dart';
 
 import '../../../controller/delete_management_view_model.dart';
 
@@ -17,9 +18,9 @@ class SalaryViewModel extends GetxController{
   Map<String, SalaryModel> _salaryMap = {};
 
   Map<String, SalaryModel> get salaryMap => _salaryMap;
-
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
   getAllSalary()async {
-    await   salaryCollectionRef.snapshots().listen((value) {
+    listener=  await   salaryCollectionRef.snapshots().listen((value) {
       _salaryMap.clear();
       for (var element in value.docs) {
         _salaryMap[element.id] = SalaryModel.fromJson(element.data());
@@ -48,7 +49,9 @@ class SalaryViewModel extends GetxController{
     update();
   }
 
-   getOldData(String value)async {
+
+
+  getOldData(String value)async {
 
     await  FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(salaryCollection).get().then((value) {
       _salaryMap.clear();
@@ -56,6 +59,7 @@ class SalaryViewModel extends GetxController{
         _salaryMap[element.id] = SalaryModel.fromJson(element.data());
       }
       print("salaries :${_salaryMap.keys.length}");
+      listener.cancel();
       update();
     });
   }

@@ -1,20 +1,19 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/controller/event_view_model.dart';
-import 'package:vision_dashboard/controller/expenses_view_model.dart';
+
 import 'package:vision_dashboard/models/Salary_Model.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
-import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
-import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
+
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
-import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart';
-import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
-import 'package:vision_dashboard/utils/const.dart';
+
 import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../constants.dart';
 import '../models/account_management_model.dart';
@@ -43,9 +42,10 @@ class AccountManagementViewModel extends GetxController {
   AccountManagementViewModel() {
   getAllEmployee();
   }
+  late StreamSubscription<QuerySnapshot<AccountManagementModel>> listener;
 
   getAllEmployee(){
-    accountManagementFireStore.snapshots().listen(
+    listener= accountManagementFireStore.snapshots().listen(
           (event) {
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
             event.docs
@@ -256,10 +256,11 @@ class AccountManagementViewModel extends GetxController {
                 (e) => e.totalLate ?? 0,
               )
               .toList();
+
           int AllTotalLate = listOfTotalLate.isEmpty
               ? 0
-              : listOfTotalLate.reduce(
-                    (value, element) => value + element,
+              :listOfTotalLate.length>2?listOfTotalLate[0]: listOfTotalLate.reduce(
+                    (value, element) => int.parse(value) + int.parse(element),
                   ) +
                   totalLate.toInt();
           await Get.defaultDialog(
@@ -453,6 +454,7 @@ class AccountManagementViewModel extends GetxController {
             event.docs
                 .toList()
                 .map((i) => MapEntry(i.id.toString(),AccountManagementModel.fromJson(i.data())  ))).obs;
+        listener.cancel();
         update();
       },
     );

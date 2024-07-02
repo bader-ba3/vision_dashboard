@@ -40,20 +40,19 @@ class ParentModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'startDate':startDate,
-      'fullName': fullName,
-      'parentID': parentID,
-      'address': address,
-      'nationality':nationality,
-      'phoneNumber': phoneNumber,
-      'motherPhone': motherPhone,
-      'emergencyPhone': emergencyPhone,
-      'work': work,
-      'id':id,
-      'age':age,
-      'children':children,
-
-      'eventRecords': eventRecords?.map((event) => event.toJson()).toList()??[],
+      if(startDate!=null)   'startDate':startDate,
+      if(fullName!=null)   'fullName': fullName,
+      if(parentID!=null)    'parentID': parentID,
+      if(address!=null)  'address': address,
+      if(nationality!=null)  'nationality':nationality,
+      if(phoneNumber!=null)   'phoneNumber': phoneNumber,
+      if(motherPhone!=null)    'motherPhone': motherPhone,
+      if(emergencyPhone!=null)    'emergencyPhone': emergencyPhone,
+      if(work!=null)    'work': work,
+      if(id!=null)      'id':id,
+      if(age!=null)     'age':age,
+      if(children!=null)    'children':children,
+      if(eventRecords!=null)   'eventRecords': eventRecords?.map((event) => event.toJson()).toList()??[],
     };
   }
 

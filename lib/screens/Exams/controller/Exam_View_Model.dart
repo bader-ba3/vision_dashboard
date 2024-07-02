@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
@@ -30,9 +32,10 @@ class ExamViewModel extends GetxController {
         .set({"marks": marks}, SetOptions(merge: true));
     update();
   }
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
   getAllExam() async {
-    await examCollectionRef.snapshots().listen((value) {
+    listener=   await examCollectionRef.snapshots().listen((value) {
       _examMap.clear();
       for (var element in value.docs) {
         _examMap[element.id] = ExamModel.fromJson(element.data());
@@ -112,6 +115,7 @@ class ExamViewModel extends GetxController {
       }
       print("Exams :${_examMap.keys.length}");
       getPassRate();
+      listener.cancel();
       update();
     });
   }

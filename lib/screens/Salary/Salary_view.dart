@@ -113,7 +113,7 @@ class _SalaryViewState extends State<SalaryView> {
                             scrollController:_scrollControllerPayed
                         ),
                         SalaryTable(
-                          size: size,
+                          size: enableUpdate?size:size*2,
                           selectedMonth: selectedMonth,
                           type: TableType.Received,
                           signatureGlobalKey: signatureGlobalKey,

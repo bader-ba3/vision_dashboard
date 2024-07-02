@@ -125,7 +125,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (controller.isSupportNfc)
+                              if (controller.isSupportNfc&&enableUpdate)
                                 Column(
                                   children: [
                                     Text(

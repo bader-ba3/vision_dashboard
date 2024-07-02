@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import 'package:vision_dashboard/screens/Parents/parent_users_screen.dart';
 

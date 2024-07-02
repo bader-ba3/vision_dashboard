@@ -78,14 +78,13 @@ final  ScrollController scrollController;
 
   List<DataRow> _buildDataRows(AccountManagementViewModel accountController,
       SalaryViewModel salaryController,context) {
+
     List<MapEntry<String, AccountManagementModel>> employees = accountController
         .allAccountManagement.entries
         .where((element) =>
-    element.value.employeeTime.keys
-        .toString()
-        .split("-")[0] ==
-        months[selectedMonth]&&element.value.salaryReceived!.where((element) {
-          return element.toString() .split(" ")[0] ==
+    element.value.employeeTime.keys.where((element0) => element0.toString().split("-")[1]=='${months[selectedMonth]}',).isNotEmpty
+        &&element.value.salaryReceived!.where((element) {
+          return element.toString().split(" ")[0] ==
               '${DateTime.now().year}-${months[selectedMonth]}';
         },).isEmpty)
         .toList();
@@ -106,7 +105,6 @@ final  ScrollController scrollController;
                 .map((e) => e.totalEarlier ?? 0)
                 .reduce((value, element) => value + element);
             int totalTime = totalLate + totalEarlier;
-
             return DataRow(cells: [
               _buildDataCell(size / 2.5 / 4, accountModel.fullName.toString()),
               _buildDataCell(

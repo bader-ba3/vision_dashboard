@@ -12,6 +12,7 @@ class CustomDropDown extends StatelessWidget {
     return  SizedBox(
       width:size?? Get.width/4.5,
       child: DropdownButtonFormField<String>(
+
         decoration:  InputDecoration(
           labelText: label,
           labelStyle: TextStyle(color: primaryColor),

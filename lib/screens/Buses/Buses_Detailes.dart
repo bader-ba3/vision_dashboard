@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/account_management_model.dart';
+import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import '../../constants.dart';
 import '../../models/Bus_Model.dart';
@@ -17,80 +20,39 @@ class _BusInputFormState extends State<BusInputForm> {
   final nameController = TextEditingController();
   final numberController = TextEditingController();
   final typeController = TextEditingController();
-  final employeeController = TextEditingController();
+
   final startDateController = TextEditingController();
   final expenseController = TextEditingController();
-  List<String> students = [];
-  List<String> selectedStudents = [];
+  List<String> selectedEmployee = [];
   List<EventRecordModel> eventRecords = [];
-  List<String> _students = [];
+  List<String> selectedStudent = [];
 
-  final Map<String, List<StudentModel>> _allSection = {
-    "الشعبة الاولى": [
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-    ],
-    "الشعبة الثانية": [
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-    ],
-    "الشعبة الثالثة": [
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-      generateRandomStudents(1).first,
-    ]
-  };
-  final Map<String, List<AccountManagementModel>> _allEmployee = {
-    "الاساتذة": [
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-
-    ],
-    "الاداريين": [
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-
-    ],
-    "الموظفين": [
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-      AccountManagementModel(id: "id", userName: "userName,", password: "password", type: "type", serialNFC: "serialNFC", isActive: true, salary: 50, dayOfWork: 20),
-
-    ],
-  };
+   Map<String, StudentModel> allSection =
+      Get.find<StudentViewModel>().studentMap;
+   Map<String, AccountManagementModel> allEmployee =
+      Get.find<AccountManagementViewModel>().allAccountManagement;
 
   @override
   void dispose() {
     nameController.dispose();
     numberController.dispose();
     typeController.dispose();
-    employeeController.dispose();
     startDateController.dispose();
     expenseController.dispose();
     super.dispose();
+  }
+  clearControl(){
+    nameController.clear();
+    numberController.clear();
+    typeController.clear();
+    startDateController.clear();
+    expenseController.clear();
+    allSection.values.forEach((element) {
+      element.available=false;
+    },);
+    allEmployee.values.forEach((element) {
+      element.available=false;
+    },);
   }
 
   @override
@@ -119,186 +81,126 @@ class _BusInputFormState extends State<BusInputForm> {
                         controller: numberController, title: 'رقم الحافلة'),
                     CustomTextField(
                         controller: typeController, title: 'نوع الحافلة'),
-                    CustomTextField(
-                        controller: employeeController, title: 'الموظف'),
-                    CustomTextField(
-                        controller: expenseController,
-                        title: 'المصروفات',
-                        keyboardType: TextInputType.number),
-                    CustomTextField(
-                        controller: startDateController,
-                        title: 'تاريخ البداية',
-                        keyboardType: TextInputType.datetime),
 
-                    /*    SizedBox(
-                    width: Get.width / 3.5,
-                    child: DropdownButtonFormField<String>(
-                      value: null,
-                      hint: Text('اختر الطلاب', style: Styles.headLineStyle3),
-                      onChanged: (selectedStudent) {
-                        if (selectedStudent != null) {
-                          setState(() {
-                            _students.addIf(
-                                !_students.contains(selectedStudent),
-                                selectedStudent);
-                          });
-                        }
-                      },
-                      items: _allStudents.map((student) {
-                        return DropdownMenuItem(
-                          value: student,
-                          child: Text(student),
-                        );
-                      }).toList(),
+
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomTextField(
+                          controller: startDateController,
+                          title: 'تاريخ البداية',
+                          enable: false,
+                          keyboardType: TextInputType.datetime,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showDatePicker(
+                              context: context,
+                              firstDate: DateTime(2010),
+                              lastDate: DateTime(2100),
+                            ).then((date) {
+                              if (date != null) {
+                                startDateController.text = date.toString().split(" ")[0];
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            Icons.date_range_outlined,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(height: 16.0),
+                    GetBuilder<BusViewModel>(
+                      builder: (busController) {
+                        return AppButton(
+                          text: 'حفظ',
+                          onPressed: () {
+                            BusModel bus = BusModel(
+                              name: nameController.text,
+                              busId: generateId("BUS"),
+                              number: numberController.text,
+                              type: typeController.text,
+                              employees: selectedEmployee,
+                              students: selectedStudent,
+                              startDate: DateTime.parse(startDateController.text),
+                              eventRecords: [],
+                            );
+                            busController.addBus(bus);
+                            clearControl();
+                            setState(() {
 
-                  // عرض الطلاب المحددين
-                  Text(
-                    'الطلاب المحددين:',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 8.0),
-                  Wrap(
-                    spacing: 8.0,
-                    children: _students.map((student) {
-                      return Chip(
-                        backgroundColor: Colors.white,
-                        label: Text(student, style: Styles.headLineStyle2),
-                        onDeleted: () {
-                          setState(() {
-                            _students.remove(student);
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),*/
+                            });
+                            // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
+                            print('Bus Model: $bus');
+                          },
+                        );
+                      }
+                    ),
 
                   ],
                 ),
               ),
-                  SizedBox(
-                    height: defaultPadding,
-                  ),
-                  ListView.separated(
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: defaultPadding*2,
-                      ),
-                      itemCount: _allSection.keys.length,
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemBuilder: (context, parentIndex) {
-                        return Container(
-                          padding: EdgeInsets.all(16.0),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: secondaryColor,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _allSection.keys.toList()[parentIndex],
-                                style: Styles.headLineStyle1,
-                              ),
-                              SizedBox(
-                                height: defaultPadding,
-                              ),
-                              SizedBox(
-                                width: Get.width,
-                                child: DataTable(
-                                  clipBehavior: Clip.hardEdge,
-                                  columns: [
-                                    DataColumn(label: Text("اسم الطالب")),
-                                    DataColumn(label: Text("رقم الطالب")),
-                                    DataColumn(label: Text("تاريخ البداية")),
-                                    DataColumn(label: Text("ولي الأمر")),
-                                    DataColumn(label: Text("موجود")),
-                                  ],
-                                  rows: _allSection[_allSection.keys
-                                      .toList()[parentIndex]]!
-                                      .map(
-                                        (e) => studentDataRow(e),
-                                  )
-                                      .toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                  SizedBox(
-                    height: defaultPadding,
-                  ),
-                  ListView.separated(
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: defaultPadding*2,
-                      ),
-                      itemCount: _allEmployee.keys.length,
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemBuilder: (context, parentIndex) {
-                        return Container(
-                          padding: EdgeInsets.all(16.0),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: secondaryColor,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _allEmployee.keys.toList()[parentIndex],
-                                style: Styles.headLineStyle1,
-                              ),
-                              SizedBox(
-                                height: defaultPadding,
-                              ),
-                              SizedBox(
-                                width: Get.width,
-                                child: DataTable(
-                                  clipBehavior: Clip.hardEdge,
-                                  columns: [
-                                    DataColumn(label: Text("اسم الموظف")),
-                                    DataColumn(label: Text("العنوان")),
-                                    DataColumn(label: Text("تاريخ البداية")),
-                                    DataColumn(label: Text("الجنس")),
-                                    DataColumn(label: Text("موجود")),
-                                  ],
-                                  rows: _allEmployee.values.toList()[parentIndex]
-                                      .map(
-                                        (e) => employeeDataRow(e),
-                                  )
-                                      .toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                  SizedBox(height: 16.0),
-                  AppButton(text: 'حفظ',     onPressed: () {
-                    BusModel bus = BusModel(
-                      name: nameController.text,
-                      number: numberController.text,
-                      type: typeController.text,
-                      employee: employeeController.text,
-                      students: _students,
-                      startDate: DateTime.parse(startDateController.text),
-                      expense:
-                      double.tryParse(expenseController.text) ?? 0.0,
-                      eventRecords: eventRecords,
-                    );
-                    // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                    print('Bus Model: $bus');
-                  },)
 
+              SizedBox(
+                height: defaultPadding,
+              ),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: SizedBox(
+                  width: Get.width,
+                  child: DataTable(
+                    clipBehavior: Clip.hardEdge,
+                    columns: [
+                      DataColumn(label: Text("اسم الطالب")),
+                      DataColumn(label: Text("رقم الطالب")),
+                      DataColumn(label: Text("تاريخ البداية")),
+                      DataColumn(label: Text("ولي الأمر")),
+                      DataColumn(label: Text("موجود")),
+                    ],
+                    rows: allSection.values
+                        .map(
+                          (e) => studentDataRow(e),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: defaultPadding,
+              ),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: SizedBox(
+                  width: Get.width,
+                  child: DataTable(
+                    clipBehavior: Clip.hardEdge,
+                    columns: [
+                      DataColumn(label: Text("اسم الموظف")),
+                      DataColumn(label: Text("العنوان")),
+                      DataColumn(label: Text("تاريخ البداية")),
+                      DataColumn(label: Text("الجنس")),
+                      DataColumn(label: Text("موجود")),
+                    ],
+                    rows: allEmployee.values
+                        .map(
+                          (e) => employeeDataRow(e),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
 
             ])));
   }
@@ -308,8 +210,8 @@ class _BusInputFormState extends State<BusInputForm> {
       cells: [
         DataCell(Text(student.studentName.toString())),
         DataCell(Text(student.studentNumber.toString())),
-        DataCell(Text(student.startDate!)),
-        DataCell(Text(student.parentId!)),
+        DataCell(Text(student.startDate.toString())),
+        DataCell(Text(student.parentId.toString())),
         DataCell(Checkbox(
           fillColor: WidgetStateProperty.all(primaryColor),
           checkColor: Colors.white,
@@ -317,6 +219,8 @@ class _BusInputFormState extends State<BusInputForm> {
           onChanged: (v) {
             print(v);
             student.available = v ?? false;
+            selectedStudent.contains(student.studentID) ?selectedStudent.remove(student.studentID):selectedStudent.add(student.studentID.toString());
+
             setState(() {});
           },
           value: student.available,
@@ -324,12 +228,13 @@ class _BusInputFormState extends State<BusInputForm> {
       ],
     );
   }
+
   DataRow employeeDataRow(AccountManagementModel employee) {
     return DataRow(
       cells: [
         DataCell(Text(employee.userName.toString())),
         DataCell(Text(employee.address.toString())),
-        DataCell(Text(employee.startDate!.toString())),
+        DataCell(Text(employee.startDate.toString())),
         DataCell(Text(employee.gender.toString())),
         DataCell(Checkbox(
           fillColor: WidgetStateProperty.all(primaryColor),
@@ -338,6 +243,7 @@ class _BusInputFormState extends State<BusInputForm> {
           onChanged: (v) {
             print(v);
             employee.available = v ?? false;
+            selectedEmployee.contains(employee.id) ?selectedEmployee.remove(employee.id):selectedEmployee.add(employee.id.toString());
             setState(() {});
           },
           value: employee.available,

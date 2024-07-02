@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:tab_container/tab_container.dart';
 
 import '../account_management/Employee_View.dart';
-import '../delete_management/delete_management_view.dart';
+
 import '../employee_time/employee_time.dart';
 import '../event/event_view_screen.dart';
 
@@ -81,11 +81,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     name: "المصاريف",
     img: "assets/icons/menu_tran.svg",
     widget: ExpensesViewScreen(),
-    ),
-    (
-    name: "منصة الحذف",
-    img: "assets/icons/menu_setting.svg",
-    widget: DeleteManagementView(),
     ),
     (
     name: "ادارة المنصة",

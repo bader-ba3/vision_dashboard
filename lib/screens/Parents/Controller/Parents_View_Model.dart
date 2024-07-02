@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
@@ -18,9 +20,10 @@ class ParentsViewModel extends GetxController {
   Map<String, ParentModel> _parentMap = {};
 
   Map<String, ParentModel> get parentMap => _parentMap;
+  late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
   getAllParent()async {
-    await   parentCollectionRef.snapshots().listen((value) {
+    listener=   await   parentCollectionRef.snapshots().listen((value) {
       _parentMap.clear();
       for (var element in value.docs) {
         _parentMap[element.id] = ParentModel.fromJson(element.data());
@@ -57,6 +60,7 @@ class ParentsViewModel extends GetxController {
 
       }
       print("Parents :${_parentMap.values.length}");
+      listener.cancel();
       update();
     });
 

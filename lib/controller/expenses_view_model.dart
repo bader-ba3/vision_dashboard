@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
@@ -14,9 +16,9 @@ class ExpensesViewModel extends GetxController{
   ExpensesViewModel(){
     getAllExpenses();
   }
-
+  late StreamSubscription<QuerySnapshot<ExpensesModel>> listener;
   getAllExpenses(){
-    expensesFireStore.snapshots().listen((event) {
+    listener=  expensesFireStore.snapshots().listen((event) {
       allExpenses = Map<String,ExpensesModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(), i.data()))).obs;
       update();
     },);
@@ -34,6 +36,7 @@ class ExpensesViewModel extends GetxController{
 
     await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(Const.expensesCollection).get().then((value) {
       allExpenses = Map<String,ExpensesModel>.fromEntries(value.docs.toList().map((i)=>MapEntry(i.id.toString(),ExpensesModel.fromJson(i.data()) ))).obs;
+      listener.cancel();
       update();
     },);
   }

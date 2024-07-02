@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:get/get.dart';
@@ -19,8 +21,10 @@ class EventViewModel extends GetxController{
   EventViewModel(){
     getAllEventRecord();
   }
-getAllEventRecord(){
-  eventFireStore.snapshots().listen((event) {
+  late StreamSubscription<QuerySnapshot<EventModel>> listener;
+
+  getAllEventRecord(){
+    listener= eventFireStore.snapshots().listen((event) {
     allEvents = Map<String,EventModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(), i.data()))).obs;
     update();
   },);
@@ -40,6 +44,7 @@ getAllEventRecord(){
    getOldData(String value) {
     FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(Const.eventCollection).get().then((event) {
       allEvents = Map<String,EventModel>.fromEntries(event.docs.toList().map((i)=>MapEntry(i.id.toString(),EventModel.fromJson(i.data())))).obs;
+     listener.cancel();
       update();
     },);
   }

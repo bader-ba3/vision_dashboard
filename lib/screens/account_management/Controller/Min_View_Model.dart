@@ -7,6 +7,7 @@ import '../../../constants.dart';
 import '../../../controller/event_view_model.dart';
 import '../../../controller/expenses_view_model.dart';
 import '../../../utils/const.dart';
+import '../../Buses/Controller/Bus_View_Model.dart';
 import '../../Exams/controller/Exam_View_Model.dart';
 import '../../Parents/Controller/Parents_View_Model.dart';
 import '../../Salary/controller/Salary_View_Model.dart';
@@ -24,6 +25,8 @@ class MinViewModel extends GetxController {
   ExpensesViewModel _expensesViewModel = Get.find<ExpensesViewModel>();
   StoreViewModel _storeViewModel = Get.find<StoreViewModel>();
   DeleteManagementViewModel _deleteManagementViewModel = Get.find<DeleteManagementViewModel>();
+  BusViewModel _busViewModel = Get.find<BusViewModel>();
+
 
   final fireStoreInstance = FirebaseFirestore.instance;
 
@@ -133,6 +136,15 @@ class MinViewModel extends GetxController {
           .set(arr.toJson());
       print("Finished deleteManagementCollection");
     }
+    for (var arr in _busViewModel.busesMap.values.toList()) {
+      await fireStoreInstance
+          .collection(archiveCollection)
+          .doc(DateTime.now().year.toString())
+          .collection(busesCollection)
+          .doc(arr.busId)
+          .set(arr.toJson());
+      print("Finished busesCollection");
+    }
   }
 
   void deleteCurrentData() async {
@@ -187,6 +199,10 @@ class MinViewModel extends GetxController {
       await fireStoreInstance.collection(storeCollection).doc(arr.id).delete();
       print("Finished StoreViewModel");
     }
+    for (var arr in _busViewModel.busesMap.values.toList()) {
+      await fireStoreInstance.collection(storeCollection).doc(arr.busId).delete();
+      print("Finished storeCollection");
+    }
   }
 
   void getOldData(String value) async {
@@ -199,6 +215,7 @@ class MinViewModel extends GetxController {
     await _expensesViewModel.getOldData(value);
     await _storeViewModel.getOldData(value);
     await _deleteManagementViewModel.getOldData(value);
+    await _busViewModel.getOldData(value);
   }
 
   void getDefaultData() async {
@@ -211,5 +228,6 @@ class MinViewModel extends GetxController {
     await _expensesViewModel.getAllExpenses();
     await _storeViewModel.getAllStore();
     await _deleteManagementViewModel.getAllDeleteModel();
+    await _busViewModel.getAllBuse();
   }
 }

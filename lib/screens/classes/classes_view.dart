@@ -114,7 +114,7 @@ class _ClassesViewState extends State<ClassesView> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Center(child: Text(listStudent[index].studentName! ,style: Styles.headLineStyle3.copyWith(color: blueColor))),
                                     ),
-                                    Container(height: 5,color: secondaryColor,),
+                                    Container(height: 3,color: secondaryColor,),
                                   ],
                                 );
                               },),
@@ -134,7 +134,7 @@ class _ClassesViewState extends State<ClassesView> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(child: Text(listStudent[index].studentName! ,style: Styles.headLineStyle3.copyWith(color: blueColor))),
                                       ),
-                                      Container(height: 5,color: secondaryColor,),
+                                      Container(height: 3,color: secondaryColor,),
                       
                                     ],
                                   );

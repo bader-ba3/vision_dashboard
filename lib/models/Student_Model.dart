@@ -20,7 +20,7 @@ class StudentModel {
   int? totalPayment;
   double? grade;
   List<String>? stdExam;
-  bool? available = true;
+  bool? available = false;
 
   Map<String, InstallmentModel>? installmentRecords = {};
   List<EventRecordModel>? eventRecords;
@@ -101,7 +101,7 @@ class StudentModel {
     bus = json['bus'] ?? '';
     totalPayment = json['totalPayment'] ?? 0;
     paymentWay = json['paymentWay'] ?? '';
-    available = true;
+    available = false;
   }
 
   @override

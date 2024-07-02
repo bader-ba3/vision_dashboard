@@ -1,18 +1,28 @@
+import 'dart:math';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
+import 'package:vision_dashboard/models/expenses_model.dart';
+import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
+import 'package:vision_dashboard/screens/expenses/expenses_input_form.dart';
 import '../../constants.dart';
 
+import '../../controller/delete_management_view_model.dart';
 import '../../models/Bus_Model.dart';
-import '../../models/RecentFile.dart';
-import 'line_chart_bus.dart';
+import '../Student/Controller/Student_View_Model.dart';
+import '../Widgets/AppButton.dart';
 
-class BusesScreen extends StatelessWidget {
-  final List<BusModel> buses = generateRandomBuses(10);
-  final ScrollController _scrollController = ScrollController();
+class BusesScreen extends StatefulWidget {
+  @override
+  State<BusesScreen> createState() => _BusesScreenState();
+}
+
+class _BusesScreenState extends State<BusesScreen> {
+  /*final ScrollController _scrollController = ScrollController();
 
   DataRow busDataRow(BusModel bus) {
     return DataRow(
@@ -20,14 +30,15 @@ class BusesScreen extends StatelessWidget {
         DataCell(Text(bus.name)),
         DataCell(Text(bus.number)),
         DataCell(Text(bus.type)),
-        DataCell(Text(bus.employee)),
-        DataCell(Text(bus.students.join(', '))),
-        DataCell(Text(bus.startDate.toIso8601String())),
+        DataCell(Text(bus.employees.length.toString())),
+        DataCell(Text(bus.students.length.toString())),
+        DataCell(Text(bus.startDate.toString())),
         DataCell(Text(bus.expense.toStringAsFixed(2))),
-        DataCell(Text(bus.eventRecords.map((event) => event.body).join(', '))),
+        DataCell(Text(bus.eventRecords.length.toString())),
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -318,7 +329,7 @@ class BusesScreen extends StatelessWidget {
                                 DataColumn(label: Text("مصروف")),
                                 DataColumn(label: Text("سجل الأحداث")),
                               ],
-                              rows: buses.map((bus) => busDataRow(bus)).toList(),
+                              rows: [],
                             ),
                           ),
                         ),
@@ -326,7 +337,7 @@ class BusesScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                /* SizedBox(
+                */ /* SizedBox(
                   height: 25,
                 ),
                 Container(
@@ -372,7 +383,7 @@ class BusesScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),*/
+                ),*/ /*
               ],
             );
           }),
@@ -576,5 +587,447 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
       showTitle: false,
       radius: 20,
     ),
+  ];*/
+
+  final ScrollController _scrollController = ScrollController();
+  List data = [
+    "رقم الحافلة",
+    "اسم الحافلة",
+    "النوع",
+    "عدد الطلاب",
+    "عدد الموظفين",
+    "المصروف",
+    "تاريخ البداية",
+    "الخيارات",
+    ""
   ];
+  final TextEditingController subNameController = TextEditingController();
+  final TextEditingController subQuantityController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: Header(
+        title: 'الحافلات',
+      ),
+      body: SingleChildScrollView(
+        child: GetBuilder<HomeViewModel>(builder: (controller) {
+          double size = max(
+                  MediaQuery.sizeOf(context).width -
+                      (controller.isDrawerOpen ? 240 : 120),
+                  1000) -
+              60;
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              padding: EdgeInsets.all(defaultPadding),
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GetBuilder<BusViewModel>(builder: (controller) {
+                    return SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: GetBuilder<DeleteManagementViewModel>(
+                              builder: (_) {
+                            return DataTable(
+                                columnSpacing: 0,
+                                dividerThickness: 0.3,
+                                columns: List.generate(
+                                    data.length,
+                                    (index) => DataColumn(
+                                        label: Container(
+                                            width: size / (data.length),
+                                            child: Center(
+                                                child: Text(data[index]))))),
+                                rows: [
+                                  ...List.generate(
+                                    controller.busesMap.values.length,
+                                    (index) {
+                                      int expenses = 0;
+                                      BusModel busModel = controller
+                                          .busesMap.values
+                                          .elementAt(index);
+                                      for (var ex in busModel.expense ?? []) {
+                                        expenses +=
+                                            Get.find<ExpensesViewModel>()
+                                                .allExpenses[ex]!
+                                                .total;
+                                      }
+                                      return DataRow(
+                                          color: WidgetStatePropertyAll(
+                                              checkIfPendingDelete(
+                                                      affectedId:
+                                                          busModel.busId!)
+                                                  ? Colors.red
+                                                  : Colors.transparent),
+                                          cells: [
+                                            dataRowItem(size / (data.length),
+                                                busModel.number.toString()),
+                                            dataRowItem(size / (data.length),
+                                                busModel.name.toString()),
+                                            dataRowItem(size / (data.length),
+                                                busModel.type.toString()),
+                                            dataRowItem(
+                                                size / (data.length),
+                                                busModel.students!.length
+                                                    .toString(), onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (builder) =>
+                                                      buildStudentDialog(
+                                                          busModel.students!));
+                                            }),
+                                            dataRowItem(
+                                                size / (data.length),
+                                                busModel.employees!.length
+                                                    .toString(), onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (builder) =>
+                                                      buildEmployeeDialog(
+                                                          busModel.employees!));
+                                            }),
+                                            DataCell(
+                                                GetBuilder<ExpensesViewModel>(
+                                                    builder:
+                                                        (expensesController) {
+                                              return Container(
+                                                width: size / (data.length),
+                                                alignment: Alignment.center,
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    InkWell(
+                                                        onTap: () {
+                                                          List<ExpensesModel>
+                                                              expenses = [];
+                                                          for (var expen
+                                                              in busModel
+                                                                      .expense ??
+                                                                  []) {
+                                                            expenses.add(
+                                                                expensesController
+                                                                        .allExpenses[
+                                                                    expen]!);
+                                                          }
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) =>
+                                                                buildExpensesDialog(
+                                                                    expenses),
+                                                          );
+                                                        },
+                                                        child: Text(expenses
+                                                            .toString())),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          showExpensesInputDialog(
+                                                              context,
+                                                              busModel.busId!);
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.add,
+                                                          color: blueColor,
+                                                        ))
+                                                  ],
+                                                ),
+                                              );
+                                            })),
+                                            dataRowItem(
+                                              size / (data.length),
+                                              busModel.startDate
+                                                  .toString()
+                                                  .split(" ")[0],
+                                            ),
+                                            dataRowItem(
+                                                size / (data.length), "تعديل",
+                                                color: Colors.green),
+                                            DataCell(Container(
+                                                width: size / (data.length),
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      checkIfPendingDelete(
+                                                              affectedId:
+                                                                  busModel
+                                                                      .busId!)
+                                                          ? returnPendingDelete(
+                                                              affectedId:
+                                                                  busModel
+                                                                      .busId!)
+                                                          : addDeleteOperation(
+                                                              collectionName:
+                                                                  busesCollection,
+                                                              affectedId:
+                                                                  busModel
+                                                                      .busId!);
+                                                    },
+                                                    icon: Row(
+                                                      children: [
+                                                        Spacer(),
+                                                        Icon(
+                                                          checkIfPendingDelete(
+                                                                  affectedId:
+                                                                      busModel
+                                                                          .busId!)
+                                                              ? Icons.check
+                                                              : Icons.delete,
+                                                          color: checkIfPendingDelete(
+                                                                  affectedId:
+                                                                      busModel
+                                                                          .busId!)
+                                                              ? Colors.green
+                                                              : Colors.red,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(checkIfPendingDelete(
+                                                                affectedId:
+                                                                    busModel
+                                                                        .busId!)
+                                                            ? "استرجاع"
+                                                            : "حذف"),
+                                                        Spacer(),
+                                                      ],
+                                                    ))))
+                                          ]);
+                                    },
+                                  )
+                                ]);
+                          }),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  void showExpensesInputDialog(BuildContext context, String busId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: secondaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height / 2,
+            width: Get.width / 1.5,
+            child: ExpensesInputForm(busId: busId),
+          ),
+        );
+      },
+    );
+  }
+
+  AlertDialog buildStudentDialog(List<String> student) {
+    return AlertDialog(
+      backgroundColor: secondaryColor,
+      actions: [
+        Column(
+          children: [
+            Container(
+              width: Get.width / 3,
+              height: Get.height / 3.5,
+              child: ListView.builder(
+                itemCount: student.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("الاسم الكامل: "),
+                      Text(
+                        Get.find<StudentViewModel>()
+                                .studentMap[student[index]]
+                                ?.studentName
+                                .toString() ??
+                            'sd',
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AppButton(
+              text: "تم",
+              onPressed: () {
+                Get.back();
+              },
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  AlertDialog buildExpensesDialog(List<ExpensesModel> expenses) {
+    return AlertDialog(
+      backgroundColor: secondaryColor,
+      actions: [
+        Column(
+          children: [
+            Container(
+              width: Get.width / 2.5,
+              height: Get.height / 3.5,
+              child: ListView.builder(padding: EdgeInsets.all(15),
+                itemCount: expenses.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      SizedBox(
+                        width: (Get.width / 2) / 2.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text("العنوان: ", style: Styles.headLineStyle3),
+                            Spacer(),
+                            Text(
+                              expenses[index].title.toString(),
+                              style: Styles.headLineStyle2,
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                         SizedBox(
+                        width: (Get.width / 2) / 3.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+
+                          children: [
+                            Text(
+                              "القيمة: ",
+                              style: Styles.headLineStyle3,
+                            ),
+                            Spacer(),
+                            Text(
+                              expenses[index].total.toString(),
+                              style: Styles.headLineStyle2,
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AppButton(
+              text: "تم",
+              onPressed: () {
+                Get.back();
+              },
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  AlertDialog buildEmployeeDialog(List<String> employee) {
+    return AlertDialog(
+      backgroundColor: secondaryColor,
+      actions: [
+        SizedBox(
+          height: Get.height / 2,
+          child: Column(
+            children: [
+              Spacer(),
+              Container(
+                width: Get.width / 3,
+                height: Get.height / 3.5,
+                child: ListView.builder(
+                  itemCount: employee.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("الاسم الكامل: "),
+                        Text(
+                          Get.find<AccountManagementViewModel>()
+                                  .allAccountManagement[employee[index]]
+                                  ?.fullName
+                                  .toString() ??
+                              'sd',
+                          style: Styles.headLineStyle2,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Spacer(),
+              AppButton(
+                text: "تم",
+                onPressed: () {
+                  Get.back();
+                },
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Future<dynamic> buildEditDialog(BuildContext context, BusModel busModel) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: secondaryColor,
+        title: Text("تعديل المادة"),
+      ),
+    );
+  }
+
+  dataRowItem(size, text, {onTap, color}) {
+    return DataCell(
+      Container(
+        width: size,
+        child: InkWell(
+            onTap: onTap,
+            child: Center(
+                child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: color == null ? null : TextStyle(color: color),
+            ))),
+      ),
+    );
+  }
 }
