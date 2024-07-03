@@ -25,11 +25,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
       translationsKeys: AppTranslation.translationKes,
-      locale: Get.deviceLocale,
-      fallbackLocale: const Locale("en","US"),
-      textDirection: TextDirection.rtl,
+      locale: /*Get.deviceLocale*/const Locale("ar","ar"),
+      fallbackLocale: const Locale("ar","ar"),
+      textDirection:Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
       initialBinding: GetBinding(),
       scrollBehavior: AppScrollBehavior(),
       debugShowCheckedModeBanner: false,

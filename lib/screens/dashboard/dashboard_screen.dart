@@ -28,7 +28,9 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  Header(title: 'الصفحة الرئيسية'.tr,middleText: "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر".tr),
+      appBar:  Header(
+          context: context,
+          title: 'الصفحة الرئيسية'.tr,middleText: "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر".tr),
       body: SingleChildScrollView(
         primary: false,
         padding: EdgeInsets.all(defaultPadding),

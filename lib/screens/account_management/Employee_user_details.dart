@@ -114,6 +114,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'اضافة الموظفين'.tr,middleText: "يمكنك من اضافة مستخجم جديد".tr
       ),
       body: SingleChildScrollView(

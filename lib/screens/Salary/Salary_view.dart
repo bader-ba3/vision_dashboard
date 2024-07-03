@@ -56,6 +56,7 @@ class _SalaryViewState extends State<SalaryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'ادارة رواتب الموظفين'.tr,middleText: 'تستخدم هذه الواجهة لعرض الرواتب المستحقة او المقبوضة لكل موظف حسب شهر معين مع امكانية تسليم رواتب للموظفين'.tr
       ),
       body: SingleChildScrollView(

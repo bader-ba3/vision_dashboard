@@ -6,7 +6,7 @@ class ExamModel {
   String? subject,professor,id,examPassMark,examMaxMark;
   DateTime? date;
   double? passRate;
-
+bool? isDone;
   List<String>? questionImage,answerImage;
 Map<String,dynamic>? marks;
 
@@ -21,6 +21,7 @@ Map<String,dynamic>? marks;
     this.answerImage,
     this.examPassMark,
     this.examMaxMark,
+    this.isDone,
 
   });
 
@@ -33,6 +34,7 @@ Map<String,dynamic>? marks;
     if(date!=null)    'date': date!.toIso8601String(),
     if(marks!=null)    'marks': marks,
     if(examMaxMark!=null)     'examMaxMark': examMaxMark,
+    if(isDone!=null)     'isDone': isDone,
     if(answerImage!=null)    'answerImage':answerImage!.toList(),
   };
 
@@ -43,6 +45,7 @@ Map<String,dynamic>? marks;
       answerImage:  List<String>.from(json['answerImage']??[]),
       passRate:0.0,
       subject: json['subject']??'',
+      isDone: json['isDone']??false,
       examPassMark: json['examPassMark']??'0',
       examMaxMark: json['examMaxMark']??'0',
       professor: json['professor']??'',

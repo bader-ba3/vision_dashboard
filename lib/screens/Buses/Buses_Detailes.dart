@@ -12,8 +12,12 @@ import '../../models/event_record_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class BusInputForm extends StatefulWidget {
+
+  BusInputForm({this.busModel,});
   @override
   _BusInputFormState createState() => _BusInputFormState();
+
+  late final BusModel? busModel;
 }
 
 class _BusInputFormState extends State<BusInputForm> {
@@ -22,7 +26,7 @@ class _BusInputFormState extends State<BusInputForm> {
   final typeController = TextEditingController();
 
   final startDateController = TextEditingController();
-  final expenseController = TextEditingController();
+
   List<String> selectedEmployee = [];
   List<EventRecordModel> eventRecords = [];
   List<String> selectedStudent = [];
@@ -32,13 +36,43 @@ class _BusInputFormState extends State<BusInputForm> {
    Map<String, AccountManagementModel> allEmployee =
       Get.find<AccountManagementViewModel>().allAccountManagement;
 
+   initBus(){
+     if(widget.busModel!=null)
+       {
+         nameController.text=widget.busModel!.name.toString();
+         numberController.text=widget.busModel!.number.toString();
+         typeController.text=widget.busModel!.type.toString();
+         startDateController.text=widget.busModel!.startDate.toString().split(" ")[0];
+
+         allEmployee.forEach((key, value) {
+         if(widget.busModel!.employees!.contains(key))
+           {
+             value.available=true;
+             selectedEmployee.add(key);
+           }
+         },);
+         allSection.forEach((key, value) {
+           if(widget.busModel!.students!.contains(key))
+           {
+             value.available=true;
+             selectedStudent.add(key);
+           }
+         },);
+       }
+   }
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initBus();
+  }
+
   @override
   void dispose() {
     nameController.dispose();
     numberController.dispose();
     typeController.dispose();
     startDateController.dispose();
-    expenseController.dispose();
     super.dispose();
   }
   clearControl(){
@@ -46,7 +80,6 @@ class _BusInputFormState extends State<BusInputForm> {
     numberController.clear();
     typeController.clear();
     startDateController.clear();
-    expenseController.clear();
     allSection.values.forEach((element) {
       element.available=false;
     },);
@@ -118,19 +151,23 @@ class _BusInputFormState extends State<BusInputForm> {
                           onPressed: () {
                             BusModel bus = BusModel(
                               name: nameController.text,
-                              busId: generateId("BUS"),
+                              busId:widget.busModel==null? generateId("BUS"):widget.busModel!.busId!,
                               number: numberController.text,
                               type: typeController.text,
                               employees: selectedEmployee,
                               students: selectedStudent,
                               startDate: DateTime.parse(startDateController.text),
-                              eventRecords: [],
+
                             );
                             busController.addBus(bus);
                             clearControl();
                             setState(() {
 
                             });
+                            if(widget.busModel!=null)
+                              {
+                                Get.back();
+                              }
                             // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
                             print('Bus Model: $bus');
                           },

@@ -27,6 +27,7 @@ class _StoreScreenState extends State<StoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'المستودع'.tr,middleText: 'تستخدم هذه الواجهة لعرض تفاصيل المواد داخل المستودع'.tr
       ),
       body: SingleChildScrollView(

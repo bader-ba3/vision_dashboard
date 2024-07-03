@@ -36,7 +36,10 @@ class _AddMarksState extends State<AddMarks> {
   Widget build(BuildContext context) {
     maxMark = int.parse(widget.examModel.examMaxMark ?? "0");
     return Scaffold(
-      appBar: Header(title: 'اضافة علامات للطلاب',middleText: 'تتمكن في هذه الواجهة من اضافة علامات للطلاب المشتركين في هذا الامتحان (يجب ان يكون ارقاما فقط)'),
+      appBar: Header(
+          context: context,
+
+          title: 'اضافة علامات للطلاب',middleText: 'تتمكن في هذه الواجهة من اضافة علامات للطلاب المشتركين في هذا الامتحان (يجب ان يكون ارقاما فقط)'),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
           double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;

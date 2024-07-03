@@ -37,6 +37,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'الرسوم الدراسية'.tr,middleText: "تعرض هذه الواجهة اجمالي ادفعات المستلمة من الطلاب و اجمالي الدفعات الخير مستلمة واجمالي الدفعات المتأخرة عن الدفع عن هذا الشهر مع جدول يوضح تفاصيل الدفعات لكل اب مع امكانية استلام دفعة او التراجع عنها".tr
       ),
       body: SingleChildScrollView(

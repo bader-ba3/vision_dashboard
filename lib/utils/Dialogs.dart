@@ -1,10 +1,26 @@
 
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 
 import '../screens/Widgets/AppButton.dart';
 
+
+Future<List<String>> uploadImages(List ImagesTempData,String folderName) async{
+
+  List<String> imageLinkList = [];
+  for (var i in ImagesTempData) {
+    final storageRef = FirebaseStorage.instance.ref().child(
+        'images/$folderName/${DateTime.now().millisecondsSinceEpoch}.png');
+    await storageRef.putFile(File(i));
+    final imageLink = await storageRef.getDownloadURL();
+    imageLinkList.add(imageLink);
+  }
+  return imageLinkList;
+}
 void showErrorDialog(String title, String message) {
   Get.defaultDialog(
     title: title,

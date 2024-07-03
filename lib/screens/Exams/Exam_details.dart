@@ -15,14 +15,38 @@ import '../../models/Exam_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ExamInputForm extends StatefulWidget {
+  ExamInputForm({super.key, this.examModel});
+
   @override
   _ExamInputFormState createState() => _ExamInputFormState();
+
+  late final ExamModel? examModel;
 }
 
 class _ExamInputFormState extends State<ExamInputForm> {
   List<String> _selectedSection = [];
   Map<String, String> _selectedStudent = {};
+
   String _selectedClass = "";
+
+  initExam() {
+    if (widget.examModel != null) {
+      subjectController.text = widget.examModel!.subject ?? '';
+      professorController.text = widget.examModel!.professor ?? '';
+      dateController.text = widget.examModel!.date.toString() ?? '';
+      examPassMarkController.text =
+          widget.examModel!.examPassMark.toString() ?? '';
+      examMaxMarkController.text = widget.examModel!.examMaxMark ?? '';
+      examId = widget.examModel!.id!;
+      _questionImageFile=widget.examModel!.questionImage;
+      _answerImageFile=widget.examModel!.answerImage;
+      widget.examModel!.marks?.forEach(
+        (key, value) {
+          _selectedStudent[key] = value;
+        },
+      );
+    }
+  }
 
   final Map<String, List<StudentModel>> _allSection = {};
   StudentViewModel studentViewModel = Get.find<StudentViewModel>();
@@ -31,8 +55,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
     for (var a in sectionsList) {
       _allSection[a] = studentViewModel.studentMap.values
           .where(
-            (element) => element.section == a && element.stdClass == _selectedClass,
-      )
+            (element) =>
+                element.section == a && element.stdClass == _selectedClass,
+          )
           .toList();
 
       if (_allSection[a]!.isEmpty) {
@@ -46,15 +71,18 @@ class _ExamInputFormState extends State<ExamInputForm> {
   void initState() {
     super.initState();
     examId = generateId("Exam");
+    initExam();
   }
 
-  List<String>? _questionImageFile = [], _answerImageFile = [];
+  List<String>? _questionImageFile = [],
+      _answerImageFile = [],
+      _answerImageFileTemp = [],
+      _questionImageFileTemp = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
   final dateController = TextEditingController();
   final examPassMarkController = TextEditingController();
   final examMaxMarkController = TextEditingController();
-  final studentsController = TextEditingController();
   String examId = "";
 
   @override
@@ -62,10 +90,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
     subjectController.dispose();
     professorController.dispose();
     dateController.dispose();
-    studentsController.dispose();
     super.dispose();
   }
-
 
   bool _validateFields() {
     if (subjectController.text.isEmpty ||
@@ -75,12 +101,12 @@ class _ExamInputFormState extends State<ExamInputForm> {
         examMaxMarkController.text.isEmpty ||
         !isNumeric(examPassMarkController.text) ||
         !isNumeric(examMaxMarkController.text)) {
-      showErrorDialog("خطأ","يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.");
+      showErrorDialog("خطأ",
+          "يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.");
       return false;
     }
     return true;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +134,11 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   CustomTextField(
                       controller: professorController, title: 'الاستاذ'.tr),
                   CustomTextField(
-                      controller: examPassMarkController, title: 'علامة النجاح'.tr),
+                      controller: examPassMarkController,
+                      title: 'علامة النجاح'.tr),
                   CustomTextField(
-                      controller: examMaxMarkController, title: 'العلامة الكاملة'.tr),
+                      controller: examMaxMarkController,
+                      title: 'العلامة الكاملة'.tr),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -123,13 +151,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       IconButton(
                           onPressed: () {
                             showDatePicker(
-                                context: context,
-                                firstDate: DateTime(2010),
-                                lastDate: DateTime(2100))
+                                    context: context,
+                                    firstDate: DateTime(2010),
+                                    lastDate: DateTime(2100))
                                 .then((date) {
                               if (date != null) {
                                 dateController.text =
-                                date.toString().split(" ")[0];
+                                    date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -177,12 +205,12 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               onTap: () async {
                                 FilePickerResult? _ = await FilePicker.platform
                                     .pickFiles(
-                                    type: FileType.image,
-                                    allowMultiple: true);
+                                        type: FileType.image,
+                                        allowMultiple: true);
                                 if (_ != null) {
                                   _.xFiles.forEach(
-                                        (element) async {
-                                      _questionImageFile!
+                                    (element) async {
+                                      _questionImageFileTemp!
                                           .add(await element.path);
                                     },
                                   );
@@ -191,7 +219,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               },
                               child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -203,8 +231,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               ),
                             ),
                             ...List.generate(
-                              _questionImageFile!.length,
-                                  (index) {
+                              _questionImageFileTemp!.length,
+                              (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -213,18 +241,41 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                       decoration: BoxDecoration(
                                           color: Colors.grey,
                                           borderRadius:
-                                          BorderRadius.circular(15)),
+                                              BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.file(
-                                        File(_questionImageFile![index]),
+                                        File(_questionImageFileTemp![index]),
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,
                                       )),
                                 );
                               },
-                            )
+                            ),
+                            ...List.generate(
+                              _questionImageFile!.length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.network(
+                                        _questionImageFile![index],
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -246,12 +297,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               onTap: () async {
                                 FilePickerResult? _ = await FilePicker.platform
                                     .pickFiles(
-                                    type: FileType.image,
-                                    allowMultiple: true);
+                                        type: FileType.image,
+                                        allowMultiple: true);
                                 if (_ != null) {
                                   _.xFiles.forEach(
-                                        (element) async {
-                                      _answerImageFile!.add(await element.path);
+                                    (element) async {
+                                      _answerImageFileTemp!
+                                          .add(await element.path);
                                     },
                                   );
                                   setState(() {});
@@ -259,7 +311,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               },
                               child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -271,8 +323,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               ),
                             ),
                             ...List.generate(
-                              _answerImageFile!.length,
-                                  (index) {
+                              _answerImageFileTemp!.length,
+                              (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -281,18 +333,41 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                       decoration: BoxDecoration(
                                           color: Colors.grey,
                                           borderRadius:
-                                          BorderRadius.circular(15)),
+                                              BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.file(
-                                        File(_answerImageFile![index]),
+                                        File(_answerImageFileTemp![index]),
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,
                                       )),
                                 );
                               },
-                            )
+                            ),
+                            ...List.generate(
+                              _answerImageFile!.length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.network(
+                                        _answerImageFile![index],
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -301,10 +376,20 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   GetBuilder<ExamViewModel>(builder: (examController) {
                     return AppButton(
                       text: 'حفظ'.tr,
-                      onPressed: () {
+                      onPressed: () async {
+                        await uploadImages(_answerImageFileTemp!, "Exam_answer")
+                            .then(
+                          (value) => _answerImageFile!.addAll(value),
+                        );
+                        await uploadImages(
+                                _questionImageFileTemp!, "Exam_question")
+                            .then(
+                          (value) => _questionImageFile!.addAll(value),
+                        );
                         if (_validateFields()) {
                           final exam = ExamModel(
                             id: examId,
+                            isDone: false,
                             questionImage: _questionImageFile ?? [],
                             answerImage: _answerImageFile,
                             subject: subjectController.text,
@@ -315,9 +400,14 @@ class _ExamInputFormState extends State<ExamInputForm> {
                             marks: _selectedStudent,
                           );
                           print(_selectedStudent.length);
-                          studentViewModel
-                              .addExamToStudent(_selectedStudent.keys.toList(), examId);
+                          studentViewModel.addExamToStudent(
+                              _selectedStudent.keys.toList(), examId);
                           examController.addExam(exam);
+
+                          if(widget.examModel!=null)
+                            {
+                              Get.back();
+                            }
                         }
                       },
                     );
@@ -330,8 +420,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
             ),
             ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(
-                  height: defaultPadding,
-                ),
+                      height: defaultPadding,
+                    ),
                 itemCount: _selectedSection.length,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -365,10 +455,14 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               DataColumn(label: Text("موجود")),
                             ],
                             rows:
-                            _allSection[_selectedSection[parentIndex]]!.map(
-                                  (e) {
-                                if (e.available == true)
-                                  _selectedStudent[e.studentID!] = "0.0";
+                                _allSection[_selectedSection[parentIndex]]!.map(
+                              (e) {
+                                if (_selectedStudent.keys
+                                    .where(
+                                      (element) => element == e.studentID,
+                                    )
+                                    .isNotEmpty) e.available = true;
+
                                 return studentDataRow(e);
                               },
                             ).toList(),
@@ -381,7 +475,44 @@ class _ExamInputFormState extends State<ExamInputForm> {
             SizedBox(
               height: defaultPadding,
             ),
-
+            if (_selectedStudent.isNotEmpty)
+              Container(
+                padding: EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "الطلاب المختارين",
+                      style: Styles.headLineStyle1,
+                    ),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    SizedBox(
+                      width: Get.width,
+                      child: DataTable(clipBehavior: Clip.hardEdge, columns: [
+                        DataColumn(label: Text("اسم الطالب")),
+                        DataColumn(label: Text("رقم الطالب")),
+                        DataColumn(label: Text("تاريخ البداية")),
+                        DataColumn(label: Text("ولي الأمر")),
+                        DataColumn(label: Text("")),
+                      ], rows: [
+                        ...List.generate(
+                          _selectedStudent.length,
+                          (index) => studentSelectedDataRow(
+                              studentViewModel.studentMap[
+                                  _selectedStudent.keys.elementAt(index)]!),
+                        )
+                      ]),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -401,14 +532,41 @@ class _ExamInputFormState extends State<ExamInputForm> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           onChanged: (v) {
             print(v);
-            student.available = v ?? false;
             if (v == false) {
+              student.available = v;
               _selectedStudent.remove(student.studentID);
               print(_selectedStudent.length);
+            } else {
+              student.available = v;
+              _selectedStudent[student.studentID!] = '0.0';
             }
+
             setState(() {});
           },
           value: student.available,
+        )),
+      ],
+    );
+  }
+
+  DataRow studentSelectedDataRow(StudentModel student) {
+    return DataRow(
+      cells: [
+        DataCell(Text(student.studentName.toString())),
+        DataCell(Text(student.studentNumber.toString())),
+        DataCell(Text(student.startDate.toString())),
+        DataCell(Text(student.parentId!)),
+        DataCell(IconButton(
+          onPressed: () {
+            student.available = false;
+
+            _selectedStudent.remove(student.studentID);
+            setState(() {});
+          },
+          icon: Icon(
+            Icons.delete_forever_outlined,
+            color: Colors.red,
+          ),
         )),
       ],
     );

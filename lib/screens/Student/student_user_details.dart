@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
@@ -74,6 +77,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
     guardianController.dispose();
     super.dispose();
   }
+
+  List<String> _contracts = [], _contractsTemp = [];
 
   addInstalment() {
     installmentCount++;
@@ -152,6 +157,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
               .toString(),
       );
       eventRecords = widget.studentModel!.eventRecords ?? [];
+      _contracts = widget.studentModel!.contractsImage ?? [];
     }
   }
 
@@ -200,7 +206,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                 spacing: 25,
                 children: <Widget>[
                   CustomTextField(
-                      controller: studentNameController, title: "اسم الطالب".tr),
+                      controller: studentNameController,
+                      title: "اسم الطالب".tr),
                   CustomTextField(
                       controller: studentNumberController,
                       title: 'رقم الطالب'.tr,
@@ -286,7 +293,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       keyboardType: TextInputType.phone),
                   CustomDropDown(
                     value: _payWay.tr,
-                    listValue: _payWays.map((e) => e.toString().tr,).toList(),
+                    listValue: _payWays
+                        .map(
+                          (e) => e.toString().tr,
+                        )
+                        .toList(),
                     label: "طريقة الدفع".tr,
                     onChange: (selectedWay) async {
                       if (selectedWay != null) {
@@ -377,12 +388,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               shrinkWrap: true,
                               itemCount: installmentCount,
                               itemBuilder: (context, index) {
-
-                                bool cantEdite = widget.studentModel!=null?  widget.studentModel!
-                                        .installmentRecords!.values
-                                        .toList()[index]
-                                        .isPay ??
-                                    false:false;
+                                bool cantEdite = widget.studentModel != null
+                                    ? widget.studentModel!.installmentRecords!
+                                            .values
+                                            .toList()[index]
+                                            .isPay ??
+                                        false
+                                    : false;
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
@@ -398,51 +410,55 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                       child: Row(
                                         children: [
                                           Spacer(),
-                                          cantEdite?
-                                          CustomTextField(
-                                            enable: !cantEdite,
-                                            isFullBorder:!cantEdite ,
-                                            controller: TextEditingController()..text=months.entries
-                                                .where(
-                                                  (element) =>
-                                              element.value ==
-                                                  monthsController[
-                                                  index]
-                                                      .text,
-                                            )
-                                                .firstOrNull
-                                                ?.key ??
-                                                '',
-                                            title: "الشهر".tr,
-                                            size: Get.width / 5.5,
-                                            keyboardType: TextInputType.number,
-                                          ):
-
-                                          CustomDropDown(
-                                            value: months.entries
-                                                    .where(
-                                                      (element) =>
-                                                          element.value ==
-                                                          monthsController[
-                                                                  index]
-                                                              .text,
-                                                    )
-                                                    .firstOrNull
-                                                    ?.key ??
-                                                '',
-                                            listValue: months.keys
-                                                .map((e) => e.toString())
-                                                .toList(),
-                                            label: "الشهر".tr,
-                                            size: Get.width / 5.5,
-                                            isFullBorder: true,
-                                            onChange: (value) {
-                                              if (value != null) {
-                                                monthsController[index].text =
-                                                    months[value]!;
-                                              }
-                                            },
-                                          ),
+                                          cantEdite
+                                              ? CustomTextField(
+                                                  enable: !cantEdite,
+                                                  isFullBorder: !cantEdite,
+                                                  controller:
+                                                      TextEditingController()
+                                                        ..text = months.entries
+                                                                .where(
+                                                                  (element) =>
+                                                                      element
+                                                                          .value ==
+                                                                      monthsController[
+                                                                              index]
+                                                                          .text,
+                                                                )
+                                                                .firstOrNull
+                                                                ?.key ??
+                                                            '',
+                                                  title: "الشهر".tr,
+                                                  size: Get.width / 5.5,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                )
+                                              : CustomDropDown(
+                                                  value: months.entries
+                                                          .where(
+                                                            (element) =>
+                                                                element.value ==
+                                                                monthsController[
+                                                                        index]
+                                                                    .text,
+                                                          )
+                                                          .firstOrNull
+                                                          ?.key ??
+                                                      '',
+                                                  listValue: months.keys
+                                                      .map((e) => e.toString())
+                                                      .toList(),
+                                                  label: "الشهر".tr,
+                                                  size: Get.width / 5.5,
+                                                  isFullBorder: true,
+                                                  onChange: (value) {
+                                                    if (value != null) {
+                                                      monthsController[index]
+                                                              .text =
+                                                          months[value]!;
+                                                    }
+                                                  },
+                                                ),
                                           Spacer(),
                                           CustomTextField(
                                             enable: !cantEdite,
@@ -483,7 +499,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           GetBuilder<StudentViewModel>(builder: (controller) {
                             return AppButton(
                               text: "حفظ".tr,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_validateFields()) {
                                   for (int index = 0;
                                       index < monthsController.length;
@@ -508,18 +524,25 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                           : false,
                                     );
                                   }
+
+                                  await uploadImages(
+                                          _contractsTemp, "contracts")
+                                      .then(
+                                    (value) => _contracts.addAll(value),
+                                  );
                                   final student = StudentModel(
                                     studentID: widget.studentModel == null
                                         ? generateId("STD")
                                         : widget.studentModel!.studentID!,
                                     parentId: guardianController.text,
                                     stdLanguage: languageController.text,
-                                    stdExam: [],
+
                                     section: sectionController.text,
                                     studentNumber: studentNumberController.text,
                                     StudentBirthDay: ageController.text,
                                     studentName: studentNameController.text,
                                     stdClass: classController.text,
+                                    contractsImage: _contracts,
                                     paymentWay: _payWay,
                                     totalPayment:
                                         int.parse(totalPaymentController.text),
@@ -544,11 +567,102 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         ],
                       ),
                     ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("صورة العقد".tr),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                FilePickerResult? _ = await FilePicker.platform
+                                    .pickFiles(
+                                        type: FileType.image,
+                                        allowMultiple: true);
+                                if (_ != null) {
+                                  _.xFiles.forEach(
+                                    (element) async {
+                                      _contractsTemp.add(await element.path);
+                                    },
+                                  );
+                                  setState(() {});
+                                }
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  height: 200,
+                                  width: 200,
+                                  child: Icon(Icons.add),
+                                ),
+                              ),
+                            ),
+                            ...List.generate(
+                              _contractsTemp.length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.file(
+                                        File(_contractsTemp[index]),
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            ),
+                            ...List.generate(
+                              _contracts.length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.network(
+                                        _contracts[index],
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                   if (_payWay != "اقساط".tr)
                     GetBuilder<StudentViewModel>(builder: (controller) {
                       return AppButton(
                         text: "حفظ".tr,
-                        onPressed: () {
+                        onPressed: () async {
                           if (_validateFields()) {
                             String id = widget.studentModel == null
                                 ? generateId("INSTALLMENT")
@@ -563,13 +677,18 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                     .padLeft(2, "0"),
                                 installmentCost: totalPaymentController.text,
                                 payTime: DateTime.now().toString());
+
+                            await uploadImages(_contractsTemp, "contracts")
+                                .then(
+                              (value) => _contracts.addAll(value),
+                            );
                             final student = StudentModel(
                               studentID: widget.studentModel == null
                                   ? generateId("STD")
                                   : widget.studentModel!.studentID!,
                               parentId: guardianController.text,
                               stdLanguage: languageController.text,
-                              stdExam: [],
+                              contractsImage: _contracts,
                               section: sectionController.text,
                               studentNumber: studentNumberController.text,
                               StudentBirthDay: ageController.text,

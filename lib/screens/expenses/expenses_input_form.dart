@@ -8,24 +8,27 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/utils/Dialogs.dart';
 
 import '../../constants.dart';
 import '../../controller/account_management_view_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ExpensesInputForm extends StatefulWidget {
-  const ExpensesInputForm({super.key, this.busId});
+  const ExpensesInputForm({super.key, this.busId,this.expensesModel});
 
   @override
   _ExpensesInputFormState createState() => _ExpensesInputFormState();
 
   final String? busId;
+  final ExpensesModel? expensesModel;
 }
 
 class _ExpensesInputFormState extends State<ExpensesInputForm> {
   final titleController = TextEditingController();
   final totalController = TextEditingController();
   final bodyController = TextEditingController();
+  List imageLinkList = [];
   List<String> ImagesTempData = [];
 
   @override
@@ -83,7 +86,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                         ),
                       ),
                       ...List.generate(
-                        ImagesTempData.length,
+                        widget.expensesModel == null?  ImagesTempData.length:imageLinkList.length,
                         (index) {
                           return Padding(
                             padding:
@@ -95,7 +98,12 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                                     borderRadius: BorderRadius.circular(15)),
                                 width: 200,
                                 height: 200,
-                                child: Image.file(
+                                child:  widget.expensesModel == null?  Image.file(
+                                  File(ImagesTempData[index]),
+                                  height: 200,
+                                  width: 200,
+                                  fit: BoxFit.fitHeight,
+                                ): Image.file(
                                   File(ImagesTempData[index]),
                                   height: 200,
                                   width: 200,
@@ -112,14 +120,8 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
             AppButton(
               text: "حفظ".tr,
               onPressed: () async {
-                List imageLinkList = [];
-                for (var i in ImagesTempData) {
-                  final storageRef = FirebaseStorage.instance.ref().child(
-                      'images/expenses/${DateTime.now().millisecondsSinceEpoch}.png');
-                  await storageRef.putFile(File(i));
-                  final imageLink = await storageRef.getDownloadURL();
-                  imageLinkList.add(imageLink);
-                }
+             if( widget.expensesModel == null)
+                uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
                 String expId = generateId("ExP");
 
                 BusViewModel busController = Get.find<BusViewModel>();

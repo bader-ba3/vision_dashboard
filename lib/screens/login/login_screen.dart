@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
       child: Scaffold(
         backgroundColor: secondaryColor,
         body: GetBuilder<AccountManagementViewModel>(builder: (controller) {

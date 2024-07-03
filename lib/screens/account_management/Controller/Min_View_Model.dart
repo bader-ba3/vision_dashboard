@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/home_controller.dart';
+import 'package:vision_dashboard/screens/main/main_screen.dart';
 
 import '../../../constants.dart';
 import '../../../controller/event_view_model.dart';
@@ -36,6 +40,24 @@ class MinViewModel extends GetxController {
 
   List allArchive = [];
 
+
+  changeLanguage(String lan)async{
+
+    HomeViewModel homeViewModel =Get.find<HomeViewModel>();
+    homeViewModel.changeIsLoading();
+
+    if(lan=='عربي')
+      {
+      await  Get.updateLocale(Locale("ar",'ar'));
+
+      }else{
+    await  Get.updateLocale(Locale("en",'US'));
+
+    }
+    homeViewModel.changeIsLoading();
+    homeViewModel.changeIndex(0);
+
+  }
   getAllArchive() {
     fireStoreInstance.collection(archiveCollection).get().then(
       (event) {

@@ -47,7 +47,7 @@ class _FilteringDataGridState<T> extends State<FilteringDataGrid<T>> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection:Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
         child: infoDataGridSource == null
             ? Center(
           child: CircularProgressIndicator(),
@@ -93,7 +93,7 @@ class _FilteringDataGridState<T> extends State<FilteringDataGrid<T>> {
                                   children: [
                                     Text(
                                       constructor.affectedKey().toString() + tab,
-                                      textDirection: isArabic.hasMatch(constructor.affectedKey().toString()) ? TextDirection.rtl : TextDirection.ltr,
+                                      textDirection:Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
                                       style: TextStyle(fontSize: 16),
                                       maxLines: null,
                                     ),
@@ -119,7 +119,7 @@ class _FilteringDataGridState<T> extends State<FilteringDataGrid<T>> {
                                       children: [
                                         Text(
                                           e.key.toString() == constructor.toAR().entries.last.key ? e.key.toString() + '\n' : e.key.toString() + tab,
-                                          textDirection: isArabic.hasMatch(e.toString()) ? TextDirection.rtl : TextDirection.ltr,
+                                          textDirection: Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
                                           style: TextStyle(fontSize: 14),
                                           maxLines: null,
                                         ),
@@ -204,7 +204,7 @@ class InfoDataGridSource extends DataGridSource {
                 children: [
                   Text(
                     row.getCells().last.columnName == row.getCells()[index].columnName ? row.getCells()[index].value.toString() + '\n' : row.getCells()[index].value.toString() + tab,
-                    textDirection: isArabic.hasMatch(row.getCells()[index].value.toString()) ? TextDirection.rtl : TextDirection.ltr,
+                    textDirection:Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
                     style: TextStyle(fontSize: 12, color: Colors.black),
                     maxLines: null,
                   ),

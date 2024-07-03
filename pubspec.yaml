@@ -54,6 +54,7 @@ dependencies:
   accordion:
   syncfusion_flutter_datagrid:
   syncfusion_flutter_signaturepad: ^26.1.39
+  quickalert: ^1.1.0
 
 
 dev_dependencies:

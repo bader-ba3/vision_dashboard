@@ -19,7 +19,7 @@ class StudentModel {
   String? studentNumber;
   int? totalPayment;
   double? grade;
-  List<String>? stdExam;
+  List<String>? stdExam,contractsImage;
   bool? available = false;
 
   Map<String, InstallmentModel>? installmentRecords = {};
@@ -48,6 +48,7 @@ class StudentModel {
 
     this.totalPayment,
     this.paymentWay,
+    this.contractsImage,
   });
 
   Map<String, dynamic> toJson() => {
@@ -62,6 +63,7 @@ class StudentModel {
         if (stdExam != null) 'stdExam': stdExam,
         if (section != null) 'section': section,
         if (startDate != null) 'startDate': startDate!,
+        if (contractsImage != null) 'contractsImage': contractsImage!,
         if (eventRecords != null)
           'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
         if (installmentRecords != null)
@@ -81,6 +83,7 @@ class StudentModel {
     studentID = json['studentID'] ?? '';
     parentId = json['parentId'] ?? '';
     section = json['section'] ?? '';
+    contractsImage =List.from(json['contractsImage'] ?? []) ;
     stdLanguage = json['stdLanguage'] ?? '';
     stdExam = (json['stdExam'] as List<dynamic>?)
             ?.map((item) => item as String)
@@ -110,28 +113,3 @@ class StudentModel {
   }
 }
 
-List<StudentModel> generateRandomStudents(int count) {
-  var faker = Faker();
-  var random = Random();
-  List<StudentModel> students = [];
-
-  for (int i = 0; i < count; i++) {
-    students.add(StudentModel(
-      studentName: faker.person.name(),
-      studentNumber: faker.randomGenerator.integer(100000).toString(),
-      studentID: faker.randomGenerator.integer(100000).toString(),
-      section: "الشعبة${random.nextInt(5)}",
-      gender: random.nextBool() ? 'Male' : 'Female',
-      parentId: faker.person.name(),
-      StudentBirthDay: (random.nextInt(10) + 10).toString(),
-      grade: random.nextDouble(),
-      available: true,
-      startDate: faker.date.dateTime(minYear: 2020, maxYear: 2023).toString(),
-      eventRecords: [],
-      bus: 'Bus ${random.nextInt(10) > 5 ? 'Yes' : 'NO'}',
-      // guardian: faker.person.name(),
-    ));
-  }
-
-  return students;
-}

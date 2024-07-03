@@ -7,6 +7,12 @@ class HomeViewModel extends GetxController {
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   int menuIndex = 0;
   bool isDrawerOpen= true;
+  bool isLoading=false;
+
+  changeIsLoading(){
+    isLoading=!isLoading;
+    update();
+  }
   void changeIndex(_) {
     menuIndex = _;
     update();

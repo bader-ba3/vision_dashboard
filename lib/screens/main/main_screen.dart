@@ -28,67 +28,67 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   List<({String name, String img, Widget widget})> allData = [
     (
-    name: "لوحة التحكم".tr,
+    name: "لوحة التحكم",
     img: "assets/icons/menu_dashboard.svg",
     widget: DashboardScreen(),
     ),
     (
-    name: "أولياء الامور".tr,
+    name: "أولياء الامور",
     img: "assets/icons/menu_profile.svg",
     widget: ParentsView(),
     ),
     (
-    name: "الطلاب".tr,
+    name: "الطلاب",
     img: "assets/icons/menu_profile.svg",
     widget: StudentView(),
     ),
     (
-    name: "الصفوف".tr,
+    name: "الصفوف",
     img: "assets/icons/menu_tran.svg",
     widget: ClassesView(),
     ),
     (
-    name: "الدوام".tr,
+    name: "الدوام",
     img: "assets/icons/menu_task.svg",
     widget: EmployeeTimeView(),
     ),
     (
-    name: "الامتحانات".tr,
+    name: "الامتحانات",
     img: "assets/icons/menu_task.svg",
     widget: ExamView(),
     ),
     (
-    name: "الرواتب".tr,
+    name: "الرواتب",
     img: "assets/icons/trip.svg",
     widget: SalaryView(),
     ),
     (
-    name: "الحافلات".tr,
+    name: "الحافلات",
     img: "assets/icons/menu_doc.svg",
     widget: BusesView(),
     ),
     (
-    name: "الرسوم الدراسية".tr,
+    name: "الرسوم الدراسية",
     img: "assets/icons/garage.svg",
     widget: StudyFeesView(),
     ),
     (
-    name: "الأحداث".tr,
+    name: "الأحداث",
     img: "assets/icons/garage.svg",
     widget: EventViewScreen(),
     ),
     (
-    name: "المصاريف".tr,
+    name: "المصاريف",
     img: "assets/icons/menu_tran.svg",
     widget: ExpensesViewScreen(),
     ),
     (
-    name: "ادارة المنصة".tr,
+    name: "ادارة المنصة",
     img: "assets/icons/menu_setting.svg",
     widget: EmployeeView(),
     ),
     (
-    name: "المستودع".tr,
+    name: "المستودع",
     img: "assets/icons/garage.svg",
     widget: StoreView(),
     ),
@@ -99,6 +99,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
+
     tabController = TabController(length: allData.length, vsync: this);
     pageController = PageController();
     tabController.addListener(() {
@@ -110,56 +111,55 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: GetBuilder<HomeViewModel>(builder: (controller) {
-        return Scaffold(
-          backgroundColor: secondaryColor,
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TabContainer(
-              textDirection: TextDirection.rtl,
-              controller: tabController,
-              tabEdge: TabEdge.right,
-              tabsEnd: 1,
-              tabsStart: 0,
-              tabMaxLength: controller.isDrawerOpen ? 60 : 60,
-              tabExtent: controller.isDrawerOpen ? 180 : 60,
-              borderRadius: BorderRadius.circular(10),
-              tabBorderRadius: BorderRadius.circular(20),
-              childPadding: const EdgeInsets.all(0.0),
-              selectedTextStyle: const TextStyle(
-                color: Color(0xff00308F),
-                fontSize: 15.0,
-              ),
-              unselectedTextStyle: Styles.headLineStyle1.copyWith(
-                color: Colors.black,
-                fontSize: 13.0,
-              ),
-              colors: List.generate(allData.length, (index) => bgColor),
-              tabs: List.generate(
-                allData.length,
-                    (index) {
-                  return DrawerListTile(
-                    index: index,
-                    title: allData[index].name,
-                    svgSrc: allData[index].img,
-                    press: () {
-                      setState(() {});
-                    },
-                  );
-                },
-              ),
-              child: PageView(
-                physics: NeverScrollableScrollPhysics(),
-                controller: pageController,
-                children: List.generate(allData.length, (index) => allData[index].widget),
-              ),
+
+    return GetBuilder<HomeViewModel>(builder: (controller) {
+
+      return Scaffold(
+        backgroundColor: secondaryColor,
+        body: controller.isLoading?Center(child: CircularProgressIndicator(),): Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TabContainer(
+            textDirection: Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
+            controller: tabController,
+            tabEdge:Get.locale.toString()=="ar_ar"? TabEdge.right:TabEdge.left,
+            tabsEnd: 1,
+            tabsStart: 0.0,
+            tabMaxLength: controller.isDrawerOpen ? 60 : 60,
+            tabExtent: controller.isDrawerOpen ? 180 : 60,
+            borderRadius: BorderRadius.circular(10),
+            tabBorderRadius: BorderRadius.circular(20),
+            childPadding: const EdgeInsets.all(0.0),
+            selectedTextStyle: const TextStyle(
+              color: Color(0xff00308F),
+              fontSize: 15.0,
+            ),
+            unselectedTextStyle: Styles.headLineStyle1.copyWith(
+              color: Colors.black,
+              fontSize: 13.0,
+            ),
+            colors: List.generate(allData.length, (index) => bgColor),
+            tabs: List.generate(
+              allData.length,
+                  (index) {
+                return DrawerListTile(
+                  index: index,
+                  title: allData[index].name.toString().tr,
+                  svgSrc: allData[index].img,
+                  press: () {
+                    setState(() {});
+                  },
+                );
+              },
+            ),
+            child: PageView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: pageController,
+              children: List.generate(allData.length, (index) => allData[index].widget),
             ),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }
 
@@ -180,7 +180,7 @@ class DrawerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (controller) {
       return Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
         child: controller.isDrawerOpen
             ? Center(child: Row(
           children: [

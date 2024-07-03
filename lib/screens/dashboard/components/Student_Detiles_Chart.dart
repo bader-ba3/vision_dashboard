@@ -94,7 +94,7 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
           return PieChartSectionData(
             color: Colors.blue,
             value: widget.students.values.where((element) => element.gender=='ذكر'.tr,).length*1.0,
-            title: '${((widget.students.values.where((element) => element.gender=='ذكر'.tr,).length / widget.students.length)*100).round()}%',
+            title: widget.students.isEmpty?'':'${((widget.students.values.where((element) => element.gender=='ذكر'.tr,).length / widget.students.length)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -107,7 +107,7 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
           return PieChartSectionData(
             color: Colors.pink,
             value: widget.students.values.where((element) => element.gender=='انثى'.tr,).length*1.0,
-            title: '${((widget.students.values.where((element) => element.gender=='انثى'.tr,).length / widget.students.length)*100).round()}%',
+            title:  widget.students.isEmpty?'':'${((widget.students.values.where((element) => element.gender=='انثى'.tr,).length / widget.students.length)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

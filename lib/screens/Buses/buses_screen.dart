@@ -6,6 +6,7 @@ import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
+import 'package:vision_dashboard/screens/Buses/Buses_Detailes.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/header.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_input_form.dart';
@@ -608,6 +609,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'الحافلات'.tr,middleText: "تعرض معلومات الحافلات مع امكانية اضافة حافلة جديدة او اضافة مصروف الى حافلة موجودة سابقا".tr
       ),
       body: SingleChildScrollView(
@@ -751,7 +753,9 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                             ),
                                             dataRowItem(
                                                 size / (data.length), "تعديل".tr,
-                                                color: Colors.green),
+                                                color: Colors.green,onTap: (){
+                                              showParentInputDialog(context, busModel);
+                                            }),
                                             DataCell(Container(
                                                 width: size / (data.length),
                                                 child: IconButton(
@@ -1005,15 +1009,32 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
     );
   }
 
-  Future<dynamic> buildEditDialog(BuildContext context, BusModel busModel) {
-    return showDialog(
+
+
+  void showParentInputDialog(BuildContext context, dynamic bus) {
+    showDialog(
+
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: secondaryColor,
-        title: Text("تعديل المادة"),
-      ),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height / 2,
+            width: Get.width/1.5,
+            child: BusInputForm(busModel: bus),
+          ),
+        );
+      },
     );
   }
+
 
   dataRowItem(size, text, {onTap, color}) {
     return DataCell(

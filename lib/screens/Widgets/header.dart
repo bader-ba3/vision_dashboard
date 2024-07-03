@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,7 +39,7 @@ import '../../constants.dart';
 //   }
 // }
 
-AppBar Header({required String  title,required String middleText}) {
+AppBar Header({required String  title,required String middleText,required BuildContext context}) {
   return AppBar(
     toolbarHeight: 60,
     backgroundColor: Colors.transparent,
@@ -58,7 +59,14 @@ AppBar Header({required String  title,required String middleText}) {
         ),
         IconButton(
             onPressed: () {
-              Get.defaultDialog(
+              QuickAlert.show(
+                  width: Get.width/2,
+                  context: context,
+                  type: QuickAlertType.info,
+                title: middleText,
+                confirmBtnText: "تم".tr
+              );
+          /*    Get.defaultDialog(
 
                   title: title,
                   middleText: middleText,
@@ -66,7 +74,7 @@ AppBar Header({required String  title,required String middleText}) {
                   confirm: AppButton(
                     text: "تم".tr,
                     onPressed: () => Get.back(),
-                  ));
+                  ));*/
             },
             icon: Icon(Icons.info_outline))
       ],
@@ -93,7 +101,7 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: "ابحث",
+        hintText: "ابحث".tr,
         fillColor: secondaryColor,
         filled: true,
         border: OutlineInputBorder(

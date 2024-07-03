@@ -36,6 +36,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'المصاريف'.tr,middleText: "تعرض هذه الواجهة معلومات عن مصاريف هذه السنة مع امكانية اضافة مصروف جديد \n ملاحظة : مصاريف الحافلات تتم اضافتها من واجهة الحافلات".tr
       ),
       body: SingleChildScrollView(

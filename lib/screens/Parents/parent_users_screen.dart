@@ -35,6 +35,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'اولياء الامور'.tr,middleText: 'تقوم هذه الواجه بعرض معلومات تفصيلية عن الاباء ويمكن من خلالها اضافة اب جديد او تعديل اب موجود سابقا او حذفه'.tr
       ),
       body: SingleChildScrollView(

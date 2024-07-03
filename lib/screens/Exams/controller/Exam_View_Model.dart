@@ -29,29 +29,29 @@ class ExamViewModel extends GetxController {
   addMarkExam(Map marks, String examId) async {
     await examCollectionRef
         .doc(examId)
-        .set({"marks": marks}, SetOptions(merge: true));
+        .set({"marks": marks,"isDone":true}, SetOptions(merge: true));
     update();
   }
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
   getAllExam() async {
-    listener=   await examCollectionRef.snapshots().listen((value) {
+    listener=   await examCollectionRef.snapshots().listen((value) async{
       _examMap.clear();
       for (var element in value.docs) {
         _examMap[element.id] = ExamModel.fromJson(element.data());
       }
       print("Exams :${_examMap.keys.length}");
-      getPassRate();
+      await getPassRate();
       update();
     });
   }getAllExamWithOutListen() async {
-    await examCollectionRef.get().then((value) {
+    await examCollectionRef.get().then((value)async {
       _examMap.clear();
       for (var element in value.docs) {
         _examMap[element.id] = ExamModel.fromJson(element.data());
       }
       print("Exams :${_examMap.keys.length}");
-      getPassRate();
+    await  getPassRate();
       update();
     });
   }
@@ -75,10 +75,12 @@ class ExamViewModel extends GetxController {
   }
 
   getPassRate() {
+
     examMap.forEach(
       (key, value) {
         int numOfPass = 0;
-        value.marks?.forEach(
+        print(value.marks!.length);
+        value.marks!.forEach(
           (_, value0) {
             double studentPercentage = double.parse(value0);
             int examMaxMark = int.parse(examMap[key]!.examMaxMark!);
@@ -89,6 +91,7 @@ class ExamViewModel extends GetxController {
             }
           },
         );
+
         examMap[key]!.passRate = (numOfPass / value.marks!.length) * 100;
       },
     );

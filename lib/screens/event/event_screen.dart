@@ -26,6 +26,7 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+          context: context,
         title: 'الأحداث'.tr,middleText: "تعرض الواجهة انماط الاحداث التي يمكن ان تطبق لكل فئة من المشتركين داخل المنصة بالاضافة الى امكانية عمل نمط حدث جديد".tr
       ),
       body: SingleChildScrollView(
