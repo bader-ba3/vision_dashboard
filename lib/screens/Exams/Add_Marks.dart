@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
@@ -106,9 +107,17 @@ class _AddMarksState extends State<AddMarks> {
                 GetBuilder<ExamViewModel>(
                   builder: (controller) {
                     return AppButton(text:'حفظ' ,   onPressed: () async {
+                      QuickAlert.show(
+                          width: Get.width / 2,
+                          context: context,
+                          type: QuickAlertType.loading,
+                          title: 'جاري التحميل'.tr,
+                          text: 'يتم العمل على الطلب'.tr,
+                          barrierDismissible: false);
                       await controller.addMarkExam(widget.examModel.marks!, widget.examModel.id!);
                       controller.changeExamScreen();
                       Get.find<StudentViewModel>().getAllStudentWithOutListen();
+                      Get.back();
                     },);
                   },
                 ),

@@ -61,6 +61,7 @@ AlertDialog buildSignViewDialog(String text, AccountManagementModel account,
               AppButton(
                   text: "حفظ",
                   onPressed: () {
+
                     handleSaveButtonPressed(
                         salaryReceived.text, account.id, date, account.salary.toString(), text);
                   }),

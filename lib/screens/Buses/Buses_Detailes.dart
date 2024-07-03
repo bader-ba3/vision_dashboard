@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/account_management_model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
@@ -148,7 +149,14 @@ class _BusInputFormState extends State<BusInputForm> {
                       builder: (busController) {
                         return AppButton(
                           text: 'حفظ'.tr,
-                          onPressed: () {
+                          onPressed: ()async {
+                            QuickAlert.show(
+                                width: Get.width / 2,
+                                context: context,
+                                type: QuickAlertType.loading,
+                                title: 'جاري التحميل'.tr,
+                                text: 'يتم العمل على الطلب'.tr,
+                                barrierDismissible: false);
                             BusModel bus = BusModel(
                               name: nameController.text,
                               busId:widget.busModel==null? generateId("BUS"):widget.busModel!.busId!,
@@ -159,17 +167,14 @@ class _BusInputFormState extends State<BusInputForm> {
                               startDate: DateTime.parse(startDateController.text),
 
                             );
-                            busController.addBus(bus);
+                         await   busController.addBus(bus);
                             clearControl();
                             setState(() {
-
                             });
                             if(widget.busModel!=null)
-                              {
                                 Get.back();
-                              }
-                            // يمكنك تنفيذ الإجراءات التالية مثل إرسال البيانات إلى قاعدة البيانات
-                            print('Bus Model: $bus');
+                                Get.back();
+
                           },
                         );
                       }

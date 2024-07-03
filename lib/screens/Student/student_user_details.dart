@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
 
 import 'package:vision_dashboard/models/Student_Model.dart';
@@ -501,6 +503,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               text: "حفظ".tr,
                               onPressed: () async {
                                 if (_validateFields()) {
+                                  QuickAlert.show(
+                                      width: Get.width / 2,
+                                      context: context,
+                                      type: QuickAlertType.loading,
+                                      title: 'جاري التحميل'.tr,
+                                      text: 'يتم العمل على الطلب'.tr,
+                                      barrierDismissible: false);
                                   for (int index = 0;
                                       index < monthsController.length;
                                       index++) {
@@ -536,7 +545,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                         : widget.studentModel!.studentID!,
                                     parentId: guardianController.text,
                                     stdLanguage: languageController.text,
-
                                     section: sectionController.text,
                                     studentNumber: studentNumberController.text,
                                     StudentBirthDay: ageController.text,
@@ -553,13 +561,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                     installmentRecords: instalmentMap,
                                   );
                                   widget.studentModel != null
-                                      ? controller.updateStudent(student)
-                                      : controller.addStudent(student);
+                                      ? await controller.updateStudent(student)
+                                      : await controller.addStudent(student);
 
                                   clearController();
                                   setState(() {});
                                   if (widget.studentModel != null) Get.back();
-                                  // print('بيانات الموظف: $student');
+                                  Get.back();
                                 }
                               },
                             );
@@ -664,6 +672,13 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         text: "حفظ".tr,
                         onPressed: () async {
                           if (_validateFields()) {
+                            QuickAlert.show(
+                                width: Get.width / 2,
+                                context: context,
+                                type: QuickAlertType.loading,
+                                title: 'جاري التحميل'.tr,
+                                text: 'يتم العمل على الطلب'.tr,
+                                barrierDismissible: false);
                             String id = widget.studentModel == null
                                 ? generateId("INSTALLMENT")
                                 : widget.studentModel!.installmentRecords!.keys
@@ -704,10 +719,11 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                   int.parse(totalPaymentController.text),
                             );
                             widget.studentModel != null
-                                ? controller.updateStudent(student)
-                                : controller.addStudent(student);
+                                ? await controller.updateStudent(student)
+                                : await controller.addStudent(student);
                             clearController();
                             if (widget.studentModel != null) Get.back();
+                            Get.back();
                             // print('بيانات الموظف: $student');
                           }
                         },

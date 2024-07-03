@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down_with_value.dart';
@@ -153,8 +154,16 @@ class _ParentInputFormState extends State<ParentInputForm> {
 
                   AppButton(
                     text: 'حفظ'.tr,
-                    onPressed: () {
+                    onPressed: () async{
                       if (_validateFields()) {
+                        QuickAlert.show(
+                          width: Get.width/2,
+                          context: context,
+                          type: QuickAlertType.loading,
+                          title: 'جاري التحميل'.tr,
+                          text: 'يتم العمل على الطلب'.tr,
+barrierDismissible: false
+                        );
                           ParentModel parent = ParentModel(
                             age: ageController.text,
                             nationality: nationalityController.text,
@@ -171,11 +180,18 @@ class _ParentInputFormState extends State<ParentInputForm> {
                             eventRecords: eventRecords,
                             startDate: startDateController.text,
                           );
-                          Get.find<ParentsViewModel>().addParent(parent);
+
+                         await Future.delayed(Durations.extralong4);
+                       await   Get.find<ParentsViewModel>().addParent(parent);
+
+                       // clearController();
                           print('Parent Model: $parent');
                     if(widget.parent!=null)
                       Get.back();
+                         Get.back();
+
                       }
+
                     },
                   ),
                 ],
@@ -297,5 +313,20 @@ class _ParentInputFormState extends State<ParentInputForm> {
         ),
       ),
     );
+  }
+
+  void clearController() {
+
+    fullNameController.clear();
+    numberController.clear();
+    addressController.clear();
+    nationalityController.clear();
+    ageController.clear();
+    startDateController.clear();
+    motherPhoneNumberController.clear();
+    bodyEventController.clear();
+    emergencyPhoneController.clear();
+    workController.clear();
+    eventRecords.clear();
   }
 }

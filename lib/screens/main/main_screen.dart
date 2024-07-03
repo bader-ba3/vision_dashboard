@@ -130,11 +130,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             tabBorderRadius: BorderRadius.circular(20),
             childPadding: const EdgeInsets.all(0.0),
             selectedTextStyle: const TextStyle(
-              color: Color(0xff00308F),
+              color: secondaryColor,
               fontSize: 15.0,
             ),
             unselectedTextStyle: Styles.headLineStyle1.copyWith(
-              color: Colors.black,
+              color: primaryColor,
               fontSize: 13.0,
             ),
             colors: List.generate(allData.length, (index) => bgColor),
@@ -142,6 +142,8 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               allData.length,
                   (index) {
                 return DrawerListTile(
+
+
                   index: index,
                   title: allData[index].name.toString().tr,
                   svgSrc: allData[index].img,
@@ -187,12 +189,12 @@ class DrawerListTile extends StatelessWidget {
             SizedBox(width: 30,),
             SvgPicture.asset(
               svgSrc,
-              colorFilter: ColorFilter.mode(Color(0xff00308F), BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
               height: 20,
             ),
             SizedBox(width: 10,),
 
-            Text(title, style: TextStyle(color: Color(0xff00308F)),),
+            Text(title,),
           ],
         ))
             : Center(child: Row(

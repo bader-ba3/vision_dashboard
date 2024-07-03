@@ -71,7 +71,7 @@ class MinViewModel extends GetxController {
     );
   }
 
-  void archive() async {
+   archive() async {
     fireStoreInstance
         .collection(archiveCollection)
         .doc(DateTime.now().year.toString())

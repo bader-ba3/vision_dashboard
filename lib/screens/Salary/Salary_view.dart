@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../../constants.dart';
@@ -29,11 +30,20 @@ class _SalaryViewState extends State<SalaryView> {
 
   void _handleSaveButtonPressed(String paySalary, String id, String date,
       String constSalary, String dilaySalary) async {
+
+    QuickAlert.show(
+        width: Get.width / 2,
+        context: context,
+        type: QuickAlertType.loading,
+        title: 'جاري التحميل'.tr,
+        text: 'يتم العمل على الطلب'.tr,
+        barrierDismissible: false);
     final data =
     await signatureGlobalKey.currentState!.toImage(pixelRatio: 3.0);
     final bytes = await data.toByteData(format: ui.ImageByteFormat.png);
     await Get.find<AccountManagementViewModel>()
         .adReceiveSalary(id, paySalary, date, constSalary, dilaySalary, bytes);
+    Get.back();
     Get.back();
   }
 

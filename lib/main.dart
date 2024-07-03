@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.transparent,
         textTheme: GoogleFonts.cairoTextTheme(
           Theme.of(context).textTheme.apply(
-            bodyColor: Color(0xff00308F),
-            displayColor: Color(0xff00308F),
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
           ),
         ),
         canvasColor: secondaryColor,

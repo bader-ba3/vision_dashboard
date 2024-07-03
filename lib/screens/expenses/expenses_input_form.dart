@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
@@ -120,6 +121,14 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
             AppButton(
               text: "حفظ".tr,
               onPressed: () async {
+
+                QuickAlert.show(
+                    width: Get.width / 2,
+                    context: context,
+                    type: QuickAlertType.loading,
+                    title: 'جاري التحميل'.tr,
+                    text: 'يتم العمل على الطلب'.tr,
+                    barrierDismissible: false);
              if( widget.expensesModel == null)
                 uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
                 String expId = generateId("ExP");
@@ -144,7 +153,9 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                 totalController.clear();
                 ImagesTempData.clear();
                 setState(() {});
-                if (widget.busId != null) Get.back();
+                if (widget.busId != null)
+                  Get.back();
+                  Get.back();
               },
             )
           ],

@@ -381,6 +381,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                             .elementAt(
                                                                 parentIndex),
                                                         true);
+                                                Get.back();
                                               },
                                               icon: Row(
                                                 children: [
@@ -411,6 +412,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                             .elementAt(
                                                                 parentIndex),
                                                         false);
+                                                Get.back();
                                               },
                                             ),
                                           )

@@ -326,13 +326,29 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                             children: [
                               AppButton(
                                   text: "ارشفة البيانات الحالية".tr,
-                                  onPressed: () {
-                                    controller.archive();
+                                  onPressed: ()async {
+                                    QuickAlert.show(
+                                        width: Get.width / 2,
+                                        context: context,
+                                        type: QuickAlertType.loading,
+                                        title: 'جاري التحميل'.tr,
+                                        text: 'يتم العمل على الطلب'.tr,
+                                        barrierDismissible: false);
+                                  await  controller.archive();
+                                  Get.back();
                                   }),
                               AppButton(
                                   text: "تصفير البيانات الحالية".tr,
-                                  onPressed: () {
-                                    controller.archive();
+                                  onPressed: ()async {
+                                    QuickAlert.show(
+                                        width: Get.width / 2,
+                                        context: context,
+                                        type: QuickAlertType.loading,
+                                        title: 'جاري التحميل'.tr,
+                                        text: 'يتم العمل على الطلب'.tr,
+                                        barrierDismissible: false);
+                                    await  controller.archive();
+                                    Get.back();
                                   }),
                             ],
                           ),

@@ -754,7 +754,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                             dataRowItem(
                                                 size / (data.length), "تعديل".tr,
                                                 color: Colors.green,onTap: (){
-                                              showParentInputDialog(context, busModel);
+                                              showBusnputDialog(context, busModel);
                                             }),
                                             DataCell(Container(
                                                 width: size / (data.length),
@@ -1011,7 +1011,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
 
 
 
-  void showParentInputDialog(BuildContext context, dynamic bus) {
+  void showBusnputDialog(BuildContext context, dynamic bus) {
     showDialog(
 
       context: context,

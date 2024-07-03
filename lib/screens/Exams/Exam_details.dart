@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -387,6 +388,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                           (value) => _questionImageFile!.addAll(value),
                         );
                         if (_validateFields()) {
+                          QuickAlert.show(
+                              width: Get.width / 2,
+                              context: context,
+                              type: QuickAlertType.loading,
+                              title: 'جاري التحميل'.tr,
+                              text: 'يتم العمل على الطلب'.tr,
+                              barrierDismissible: false);
                           final exam = ExamModel(
                             id: examId,
                             isDone: false,
@@ -402,12 +410,12 @@ class _ExamInputFormState extends State<ExamInputForm> {
                           print(_selectedStudent.length);
                           studentViewModel.addExamToStudent(
                               _selectedStudent.keys.toList(), examId);
-                          examController.addExam(exam);
-
+                       await   examController.addExam(exam);
                           if(widget.examModel!=null)
-                            {
+
                               Get.back();
-                            }
+
+                          Get.back();
                         }
                       },
                     );
