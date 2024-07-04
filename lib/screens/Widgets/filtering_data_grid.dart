@@ -186,7 +186,7 @@ class InfoDataGridSource extends DataGridSource {
     if ((rowIndex % 2) == 0) {
       backgroundColor = Colors.white38;
     }
-    RegExp isArabic = RegExp(r"[\u0600-\u06FF]");
+
     String tab = "	";
 
     return DataGridRowAdapter(

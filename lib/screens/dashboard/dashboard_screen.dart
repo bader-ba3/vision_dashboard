@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/responsive.dart';
-import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';

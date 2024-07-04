@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
-import 'package:vision_dashboard/screens/main/main_screen.dart';
 
 import '../../../constants.dart';
 import '../../../controller/event_view_model.dart';

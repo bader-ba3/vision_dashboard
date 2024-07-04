@@ -12,24 +12,17 @@ import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import '../models/delete_management_model.dart';
 import '../screens/Exams/controller/Exam_View_Model.dart';
 import '../screens/Parents/Controller/Parents_View_Model.dart';
-import '../screens/Salary/controller/Salary_View_Model.dart';
-import '../screens/Store/Controller/Store_View_Model.dart';
-import '../screens/Student/Controller/Student_View_Model.dart';
+
 import '../utils/const.dart';
-import 'account_management_view_model.dart';
-import 'event_view_model.dart';
-import 'expenses_view_model.dart';
+
 
 class DeleteManagementViewModel extends GetxController {
-  AccountManagementViewModel _accountManagementViewModel =
-      Get.find<AccountManagementViewModel>();
-  EventViewModel _eventViewModel = Get.find<EventViewModel>();
-  SalaryViewModel _salaryViewModel = Get.find<SalaryViewModel>();
+
+
   ExamViewModel _examViewModel = Get.find<ExamViewModel>();
-  StudentViewModel _studentViewModel = Get.find<StudentViewModel>();
+
   ParentsViewModel _parentsViewModel = Get.find<ParentsViewModel>();
-  ExpensesViewModel _expensesViewModel = Get.find<ExpensesViewModel>();
-  StoreViewModel _storeViewModel = Get.find<StoreViewModel>();
+
   BusViewModel _busViewModel = Get.find<BusViewModel>();
   RxMap<String, DeleteManagementModel> allDelete =
       <String, DeleteManagementModel>{}.obs;

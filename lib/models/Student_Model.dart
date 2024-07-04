@@ -1,6 +1,4 @@
-import 'dart:math';
 
-import 'package:faker/faker.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
 
 import 'event_record_model.dart';

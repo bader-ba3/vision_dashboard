@@ -34,9 +34,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
     if (widget.examModel != null) {
       subjectController.text = widget.examModel!.subject ?? '';
       professorController.text = widget.examModel!.professor ?? '';
-      dateController.text = widget.examModel!.date.toString() ?? '';
+      dateController.text = widget.examModel!.date.toString() ;
       examPassMarkController.text =
-          widget.examModel!.examPassMark.toString() ?? '';
+          widget.examModel!.examPassMark.toString();
       examMaxMarkController.text = widget.examModel!.examMaxMark ?? '';
       examId = widget.examModel!.id!;
       _questionImageFile=widget.examModel!.questionImage;

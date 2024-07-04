@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   List<({String name, String img, Widget widget})> allData = [
     (
     name: "لوحة التحكم",
-    img: "assets/icons/menu_dashboard.svg",
+    img: "assets/dashIcon/dash.png",
     widget: DashboardScreen(),
     ),
     (
@@ -85,7 +85,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     ),
     (
     name: "ادارة المنصة",
-    img: "assets/icons/menu_setting.svg",
+    img: "assets/dashIcon/setting.png",
     widget: EmployeeView(),
     ),
     (
@@ -188,17 +188,18 @@ class DrawerListTile extends StatelessWidget {
             ? Center(child: Row(
           children: [
             SizedBox(width: 30,),
-            if(title=='لوحة التحكم'.tr||title=='ادارة المنصة'.tr)
+           /* if(title=='لوحة التحكم'.tr||title=='ادارة المنصة'.tr)
             SvgPicture.asset(
               svgSrc,
 
               colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
               height: 20,
-            )else
+            )else*/
         Image.asset(
         svgSrc,
-color: primaryColor,
-        height: 22,
+// color: primaryColor,
+        height: 25,
+
       ),
 
             SizedBox(width: 10,),
@@ -218,7 +219,7 @@ color: primaryColor,
               )else
               Image.asset(
                 svgSrc,
-                color: primaryColor,
+                // color: primaryColor,
                 // colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 height: 22,
               ),
