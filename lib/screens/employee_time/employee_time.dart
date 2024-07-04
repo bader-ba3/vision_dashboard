@@ -69,7 +69,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               height: 50,
                               width: MediaQuery.sizeOf(context).width * 0.35,
                               decoration: BoxDecoration(
-                                  color: isShowLogin ? Colors.blueAccent.shade700 : Colors.transparent,
+                                  color: isShowLogin ? primaryColor : Colors.white,
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(15),
                                     bottomRight: Radius.circular(15),
@@ -174,6 +174,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
+
                       decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
                       child: ListView(
                         // crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,9 +242,10 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                             child: Accordion(
                               paddingListTop: 0,
                               disableScrolling: true,
-                              headerBackgroundColor: Colors.white,
+                              headerBackgroundColor: primaryColor,
                               headerBackgroundColorOpened: Colors.grey,
-                              contentBorderColor: Colors.white,
+                              contentBorderColor: primaryColor,
+                              contentBackgroundColor: secondaryColor,
                               paddingListHorizontal: 0,
                               rightIcon: Icon(
                                 Icons.keyboard_arrow_down,

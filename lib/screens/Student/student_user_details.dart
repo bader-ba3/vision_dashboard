@@ -746,8 +746,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GetBuilder<EventViewModel>(builder: (eventController) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    return Wrap(
+                      runAlignment: WrapAlignment.spaceAround,
+                      runSpacing: 25,
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CustomDropDown(
                           value: '',

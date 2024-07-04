@@ -253,7 +253,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
               borderRadius: BorderRadius.circular(25.0),
             ),
             child: Container(
-              width: Get.width / 2,
+              width: Get.width / 1.5,
               child: ListView(
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
@@ -307,7 +307,9 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                         height: defaultPadding,
                                       ),
                                     Row(
+
                                       children: [
+                                        Spacer(),
                                         Container(
                                           clipBehavior: Clip.hardEdge,
                                           width: Get.width / 2.5,
@@ -415,7 +417,8 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                 Get.back();
                                               },
                                             ),
-                                          )
+                                          ),
+                                        Spacer(),
                                       ],
                                     ),
                                   ],

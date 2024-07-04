@@ -50,7 +50,7 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
               });
             },
             title: "ذكر".tr,
-            amountOfEmployee: widget.students.values.where((element) => element.gender=='ذكر'.tr,).length.toString(),
+            amountOfEmployee: widget.students.values.where((element) => element.gender=='ذكر',).length.toString(),
             color: Colors.blue,
           ),
           InfoCard(
@@ -62,7 +62,7 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
               });
             },
             title: "انثى".tr,
-            amountOfEmployee: widget.students.values.where((element) => element.gender=='انثى'.tr,).length.toString(),
+            amountOfEmployee: widget.students.values.where((element) => element.gender=='انثى',).length.toString(),
             color: Colors.pink,
           ),
           InfoCard(
@@ -93,8 +93,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
         case 0:
           return PieChartSectionData(
             color: Colors.blue,
-            value: widget.students.values.where((element) => element.gender=='ذكر'.tr,).length*1.0,
-            title: widget.students.isEmpty?'':'${((widget.students.values.where((element) => element.gender=='ذكر'.tr,).length / widget.students.length)*100).round()}%',
+            value: widget.students.values.where((element) => element.gender=='ذكر',).length*1.0,
+            title: widget.students.isEmpty?'':'${((widget.students.values.where((element) => element.gender=='ذكر',).length / widget.students.length)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -106,8 +106,8 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
         case 1:
           return PieChartSectionData(
             color: Colors.pink,
-            value: widget.students.values.where((element) => element.gender=='انثى'.tr,).length*1.0,
-            title:  widget.students.isEmpty?'':'${((widget.students.values.where((element) => element.gender=='انثى'.tr,).length / widget.students.length)*100).round()}%',
+            value: widget.students.values.where((element) => element.gender=='انثى',).length*1.0,
+            title:  widget.students.isEmpty?'':'${((widget.students.values.where((element) => element.gender=='انثى',).length / widget.students.length)*100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

@@ -17,7 +17,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
   ]);
   runApp(MyApp());
 }
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       translationsKeys: AppTranslation.translationKes,
       locale: /*Get.deviceLocale*/const Locale("ar","ar"),
       fallbackLocale: const Locale("ar","ar"),
-      textDirection:Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
+      textDirection:Get.locale.toString()!="en_US"?TextDirection.rtl:TextDirection.ltr,
       initialBinding: GetBinding(),
       scrollBehavior: AppScrollBehavior(),
       debugShowCheckedModeBanner: false,

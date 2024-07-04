@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
@@ -7,6 +9,7 @@ import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import '../../constants.dart';
+import '../../controller/home_controller.dart';
 import '../../models/Bus_Model.dart';
 import '../../models/Student_Model.dart';
 import '../../models/event_record_model.dart';
@@ -31,11 +34,15 @@ class _BusInputFormState extends State<BusInputForm> {
   List<String> selectedEmployee = [];
   List<EventRecordModel> eventRecords = [];
   List<String> selectedStudent = [];
+  List dataStu=["اسم الطالب","الرقم","الوالد","موجود"];
+  List dataEMP=['اسم الموظف',"العنوان","الجنس","موجود"];
 
    Map<String, StudentModel> allSection =
       Get.find<StudentViewModel>().studentMap;
    Map<String, AccountManagementModel> allEmployee =
       Get.find<AccountManagementViewModel>().allAccountManagement;
+
+  final ScrollController _scrollControllerStd = ScrollController();
 
    initBus(){
      if(widget.busModel!=null)
@@ -93,6 +100,7 @@ class _BusInputFormState extends State<BusInputForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
             padding: EdgeInsets.all(16.0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -194,23 +202,39 @@ class _BusInputFormState extends State<BusInputForm> {
                   color: secondaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: SizedBox(
-                  width: Get.width,
-                  child: DataTable(
-                    clipBehavior: Clip.hardEdge,
-                    columns: [
-                      DataColumn(label: Text("اسم الطالب".tr)),
-                      DataColumn(label: Text("رقم الطالب".tr)),
-                      DataColumn(label: Text("تاريخ البداية".tr)),
-                      DataColumn(label: Text("ولي الأمر".tr)),
-                      DataColumn(label: Text("موجود".tr)),
-                    ],
-                    rows: allSection.values
-                        .map(
-                          (e) => studentDataRow(e),
-                        )
-                        .toList(),
-                  ),
+                child: GetBuilder<HomeViewModel>(
+                  builder: (controller) {
+                    double size = max(
+                        MediaQuery.sizeOf(context).width -
+                            (controller.isDrawerOpen ? 240 : 120),
+                        1000) -
+                        60;
+                    return SizedBox(
+                      width: size+60,
+                      child:  Scrollbar(
+                        controller: _scrollControllerStd,
+                        child: SingleChildScrollView(
+                        controller: _scrollControllerStd,
+                          scrollDirection: Axis.horizontal,
+
+                          child: DataTable(
+                          clipBehavior: Clip.hardEdge,
+                          columns:List.generate(
+                              dataStu.length,
+                                  (index) => DataColumn(
+                                  label: Container(
+                                      width: size / (dataStu.length),
+                                      child: Center(
+                                          child: Text(dataStu[index].toString().tr))))),
+                          rows: allSection.values
+                              .map(
+                                (e) => studentDataRow(e, size / (dataStu.length),),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ));
+                  }
                 ),
               ),
               SizedBox(
@@ -223,72 +247,110 @@ class _BusInputFormState extends State<BusInputForm> {
                   color: secondaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: SizedBox(
-                  width: Get.width,
-                  child: DataTable(
-                    clipBehavior: Clip.hardEdge,
-                    columns: [
-                      DataColumn(label: Text("اسم الموظف".tr)),
-                      DataColumn(label: Text("العنوان".tr)),
-                      DataColumn(label: Text("تاريخ البداية".tr)),
-                      DataColumn(label: Text("الجنس".tr)),
-                      DataColumn(label: Text("موجود".tr)),
-                    ],
-                    rows: allEmployee.values
-                        .map(
-                          (e) => employeeDataRow(e),
-                        )
-                        .toList(),
-                  ),
+                child: GetBuilder<HomeViewModel>(
+                    builder: (controller) {
+                      double size = max(
+                          MediaQuery.sizeOf(context).width -
+                              (controller.isDrawerOpen ? 240 : 120),
+                          1000) -
+                          60;
+                      return SizedBox(
+                          width: size+60,
+                          child:  Scrollbar(
+                          controller: _scrollControllerStd,
+                          child: SingleChildScrollView(
+                          controller: _scrollControllerStd,
+                          scrollDirection: Axis.horizontal,
+
+                          child: DataTable(
+                        clipBehavior: Clip.hardEdge,
+                        columns:List.generate(
+                            dataStu.length,
+                                (index) => DataColumn(
+                                label: Container(
+                                    width: size / (dataEMP.length),
+                                    child: Center(
+                                        child: Text(dataEMP[index].toString().tr))))),
+                        rows: allEmployee.values
+                            .map(
+                              (e) => employeeDataRow(e,size / (dataEMP.length),),
+                            )
+                            .toList(),
+                      ),
+                    )));
+                  }
                 ),
               ),
               SizedBox(height: 16.0),
 
             ])));
+
   }
 
-  DataRow studentDataRow(StudentModel student) {
+  DataRow studentDataRow(StudentModel student,size) {
     return DataRow(
       cells: [
-        DataCell(Text(student.studentName.toString())),
-        DataCell(Text(student.studentNumber.toString())),
-        DataCell(Text(student.startDate.toString())),
-        DataCell(Text(student.parentId.toString())),
-        DataCell(Checkbox(
-          fillColor: WidgetStateProperty.all(primaryColor),
-          checkColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          onChanged: (v) {
-            print(v);
-            student.available = v ?? false;
-            selectedStudent.contains(student.studentID) ?selectedStudent.remove(student.studentID):selectedStudent.add(student.studentID.toString());
+        DataCell(Container(
+          alignment: Alignment.center,
+            width: size,
+            child: Text(student.studentName.toString()))),
+        DataCell(Container(
+            alignment: Alignment.center,
+    width: size,child: Text(student.studentNumber.toString()))),
 
-            setState(() {});
-          },
-          value: student.available,
+        DataCell(Container(
+            alignment: Alignment.center,width: size,child: Text(student.parentId.toString()))),
+        DataCell(Container(
+          alignment: Alignment.center,width: size,
+          child: Checkbox(
+            fillColor: WidgetStateProperty.all(primaryColor),
+            checkColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            onChanged: (v) {
+              print(v);
+              student.available = v ?? false;
+              selectedStudent.contains(student.studentID) ?selectedStudent.remove(student.studentID):selectedStudent.add(student.studentID.toString());
+
+              setState(() {});
+            },
+            value: student.available,
+          ),
         )),
       ],
     );
   }
 
-  DataRow employeeDataRow(AccountManagementModel employee) {
+  DataRow employeeDataRow(AccountManagementModel employee,size) {
     return DataRow(
       cells: [
-        DataCell(Text(employee.userName.toString())),
-        DataCell(Text(employee.address.toString())),
-        DataCell(Text(employee.startDate.toString())),
-        DataCell(Text(employee.gender.toString())),
-        DataCell(Checkbox(
-          fillColor: WidgetStateProperty.all(primaryColor),
-          checkColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          onChanged: (v) {
-            print(v);
-            employee.available = v ?? false;
-            selectedEmployee.contains(employee.id) ?selectedEmployee.remove(employee.id):selectedEmployee.add(employee.id.toString());
-            setState(() {});
-          },
-          value: employee.available,
+        DataCell(Container(
+            alignment: Alignment.center,
+            width: size,
+            child: Text(employee.userName.toString()))),
+        DataCell(Container(
+    alignment: Alignment.center,
+    width: size,
+    child: Text(employee.address.toString()))),
+        DataCell(Container(
+            alignment: Alignment.center,
+            width: size,
+            child: Text(employee.startDate.toString()))),
+
+        DataCell(Container(
+          alignment: Alignment.center,
+          width: size,
+          child: Checkbox(
+            fillColor: WidgetStateProperty.all(primaryColor),
+            checkColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            onChanged: (v) {
+              print(v);
+              employee.available = v ?? false;
+              selectedEmployee.contains(employee.id) ?selectedEmployee.remove(employee.id):selectedEmployee.add(employee.id.toString());
+              setState(() {});
+            },
+            value: employee.available,
+          ),
         )),
       ],
     );

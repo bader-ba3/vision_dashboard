@@ -37,7 +37,7 @@ class _EventInputFormState extends State<EventInputForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                    width: 500,
+                    width: Get.width/2.5,
                     height: 50,
                     child: TextField(
                       controller: name,

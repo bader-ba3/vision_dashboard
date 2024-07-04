@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const primaryColor = Color(0xff2C5D9A);
-const secondaryColor = Color(0xff78808D);
+const primaryColor = Color(0xff3E96F4);
+const secondaryColor = Color(0xffCCC7BF);
 const blueColor = Color(0xffBC9F88);
-const bgColor = Color(0xffCAD9E5); // تخفيف لون الخلفية
+const bgColor = Color(0xffF6F6F4); // تخفيف لون الخلفية
 //Color(0xff3d0312)CCC7BF
 //Color(0xff7e0303)F6F6F4
 //Color(0xffc89665) 3E96F4

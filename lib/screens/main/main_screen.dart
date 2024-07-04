@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
@@ -34,52 +35,52 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     ),
     (
     name: "أولياء الامور",
-    img: "assets/icons/menu_profile.svg",
+    img: "assets/dashIcon/family (1).png",
     widget: ParentsView(),
     ),
     (
     name: "الطلاب",
-    img: "assets/icons/menu_profile.svg",
+    img: "assets/dashIcon/student.png",
     widget: StudentView(),
     ),
     (
     name: "الصفوف",
-    img: "assets/icons/menu_tran.svg",
+    img: "assets/dashIcon/class.png",
     widget: ClassesView(),
     ),
     (
     name: "الدوام",
-    img: "assets/icons/menu_task.svg",
+    img: "assets/dashIcon/time.png",
     widget: EmployeeTimeView(),
     ),
     (
     name: "الامتحانات",
-    img: "assets/icons/menu_task.svg",
+    img: "assets/dashIcon/checklist.png",
     widget: ExamView(),
     ),
     (
     name: "الرواتب",
-    img: "assets/icons/trip.svg",
+    img: "assets/dashIcon/salary.png",
     widget: SalaryView(),
     ),
     (
     name: "الحافلات",
-    img: "assets/icons/menu_doc.svg",
+    img: "assets/dashIcon/bus.png",
     widget: BusesView(),
     ),
     (
     name: "الرسوم الدراسية",
-    img: "assets/icons/garage.svg",
+    img: "assets/dashIcon/accounting.png",
     widget: StudyFeesView(),
     ),
     (
     name: "الأحداث",
-    img: "assets/icons/garage.svg",
+    img: "assets/dashIcon/events.png",
     widget: EventViewScreen(),
     ),
     (
     name: "المصاريف",
-    img: "assets/icons/menu_tran.svg",
+    img: "assets/dashIcon/audit.png",
     widget: ExpensesViewScreen(),
     ),
     (
@@ -89,7 +90,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     ),
     (
     name: "المستودع",
-    img: "assets/icons/garage.svg",
+    img: "assets/dashIcon/groceries.png",
     widget: StoreView(),
     ),
   ];
@@ -114,49 +115,49 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
     return GetBuilder<HomeViewModel>(builder: (controller) {
 
-      return Scaffold(
-        backgroundColor: secondaryColor,
-        body: controller.isLoading?Center(child: CircularProgressIndicator(),): Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TabContainer(
-            textDirection: Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
-            controller: tabController,
-            tabEdge:Get.locale.toString()=="ar_ar"? TabEdge.right:TabEdge.left,
-            tabsEnd: 1,
-            tabsStart: 0.0,
-            tabMaxLength: controller.isDrawerOpen ? 60 : 60,
-            tabExtent: controller.isDrawerOpen ? 180 : 60,
-            borderRadius: BorderRadius.circular(10),
-            tabBorderRadius: BorderRadius.circular(20),
-            childPadding: const EdgeInsets.all(0.0),
-            selectedTextStyle: const TextStyle(
-              color: secondaryColor,
-              fontSize: 15.0,
-            ),
-            unselectedTextStyle: Styles.headLineStyle1.copyWith(
-              color: primaryColor,
-              fontSize: 13.0,
-            ),
-            colors: List.generate(allData.length, (index) => bgColor),
-            tabs: List.generate(
-              allData.length,
-                  (index) {
-                return DrawerListTile(
-
-
-                  index: index,
-                  title: allData[index].name.toString().tr,
-                  svgSrc: allData[index].img,
-                  press: () {
-                    setState(() {});
-                  },
-                );
-              },
-            ),
-            child: PageView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: pageController,
-              children: List.generate(allData.length, (index) => allData[index].widget),
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: secondaryColor,
+          body: controller.isLoading?Center(child: CircularProgressIndicator(),): Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabContainer(
+              textDirection: Get.locale.toString()!="en_US"?TextDirection.rtl:TextDirection.ltr,
+              controller: tabController,
+              tabEdge:Get.locale.toString()=="ar_ar"? TabEdge.right:TabEdge.left,
+              tabsEnd: 1,
+              tabsStart: 0.0,
+              tabMaxLength: controller.isDrawerOpen ? 60 : 60,
+              tabExtent: controller.isDrawerOpen ? 180 : 60,
+              borderRadius: BorderRadius.circular(10),
+              tabBorderRadius: BorderRadius.circular(20),
+              childPadding: const EdgeInsets.all(0.0),
+              selectedTextStyle: const TextStyle(
+                color: secondaryColor,
+                fontSize: 15.0,
+              ),
+              unselectedTextStyle: Styles.headLineStyle1.copyWith(
+                color: primaryColor,
+                fontSize: 13.0,
+              ),
+              colors: List.generate(allData.length, (index) => bgColor),
+              tabs: List.generate(
+                allData.length,
+                    (index) {
+                  return DrawerListTile(
+                    index: index,
+                    title: allData[index].name.toString().tr,
+                    svgSrc: allData[index].img,
+                    press: () {
+                      setState(() {});
+                    },
+                  );
+                },
+              ),
+              child: PageView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: pageController,
+                children: List.generate(allData.length, (index) => allData[index].widget),
+              ),
             ),
           ),
         ),
@@ -182,16 +183,24 @@ class DrawerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (controller) {
       return Directionality(
-        textDirection: Get.locale.toString()=="ar_ar"?TextDirection.rtl:TextDirection.ltr,
+        textDirection: Get.locale.toString()!="en_US"?TextDirection.rtl:TextDirection.ltr,
         child: controller.isDrawerOpen
             ? Center(child: Row(
           children: [
             SizedBox(width: 30,),
+            if(title=='لوحة التحكم'.tr||title=='ادارة المنصة'.tr)
             SvgPicture.asset(
               svgSrc,
-              colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+
+              colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
               height: 20,
-            ),
+            )else
+        Image.asset(
+        svgSrc,
+color: primaryColor,
+        height: 22,
+      ),
+
             SizedBox(width: 10,),
 
             Text(title,),
@@ -200,11 +209,19 @@ class DrawerListTile extends StatelessWidget {
             : Center(child: Row(
           children: [
             SizedBox(width: 20,),
-            SvgPicture.asset(
-              svgSrc,
-              colorFilter: ColorFilter.mode(Color(0xff00308F), BlendMode.srcIn),
-              height: 20,
-            ),
+            if(title=='لوحة التحكم'.tr||title=='ادارة المنصة'.tr)
+              SvgPicture.asset(
+                svgSrc,
+
+                colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                height: 20,
+              )else
+              Image.asset(
+                svgSrc,
+                color: primaryColor,
+                // colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                height: 22,
+              ),
           ],
         ),),
       );

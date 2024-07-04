@@ -210,8 +210,9 @@ barrierDismissible: false
                 children: [
 
                   GetBuilder<EventViewModel>(builder: (eventController) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    return  Wrap(
+                      runAlignment: WrapAlignment.spaceAround,
+                      runSpacing: 25,
                       children: [
                         CustomDropDownWithValue(
                           value: '',
