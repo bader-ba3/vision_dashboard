@@ -388,7 +388,7 @@ date=date0;
                         await Future.delayed(Durations.extralong4);
                         await Get.find<ParentsViewModel>().addParent(parent);
 
-                        // clearController();
+                        clearController();
                         print('Parent Model: $parent');
                         if (widget.parent != null) Get.back();
                         Get.back();
