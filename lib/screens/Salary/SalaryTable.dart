@@ -7,6 +7,7 @@ import '../../../controller/account_management_view_model.dart';
 import '../../../controller/delete_management_view_model.dart';
 import '../../../models/account_management_model.dart';
 import '../../../models/Salary_Model.dart';
+import '../Widgets/Data_Row.dart';
 import 'SignViewDialog.dart';
 import 'controller/Salary_View_Model.dart';
 
@@ -106,16 +107,16 @@ final  ScrollController scrollController;
                 .reduce((value, element) => value + element);
             int totalTime = totalLate + totalEarlier;
             return DataRow(cells: [
-              _buildDataCell(size / 2.5 / 4, accountModel.fullName.toString()),
-              _buildDataCell(
+              dataRowItem(size / 2.5 / 4, accountModel.fullName.toString()),
+              dataRowItem(
                 size / 2.5 / 4,
                 ((accountModel.salary!) -
                     ((accountModel.salary! / accountModel.dayOfWork!) *
                         ((totalTime / 60).floor() * 0.5)))
                     .toString(),
               ),
-              _buildDataCell(size / 2.5 / 4, accountModel.salary.toString()),
-              _buildDataCell(
+              dataRowItem(size / 2.5 / 4, accountModel.salary.toString()),
+              dataRowItem(
                 size / 2.5 / 4,
                 "تسليم الراتب".tr,
                 color: Colors.green,
@@ -149,33 +150,19 @@ final  ScrollController scrollController;
                 .toList()[index];
 
             return DataRow(cells: [
-              _buildDataCell(
+              dataRowItem(
                   size / 2.5 / 4,
                   accountController.allAccountManagement[
                   salaryEmp.employeeId.toString()]!
                       .fullName
                       .toString()),
-              _buildDataCell(size / 2.5 / 4, salaryEmp.dilaySalary.toString()),
-              _buildDataCell(size / 2.5 / 4, salaryEmp.constSalary.toString()),
-              _buildDataCell(size / 2.5 / 4, salaryEmp.paySalary.toString()),
+              dataRowItem(size / 2.5 / 4, salaryEmp.dilaySalary.toString()),
+              dataRowItem(size / 2.5 / 4, salaryEmp.constSalary.toString()),
+              dataRowItem(size / 2.5 / 4, salaryEmp.paySalary.toString()),
             ]);
           });
     }
   }
 
-  DataCell _buildDataCell(double size, String text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: color == null ? null : TextStyle(color: color),
-                ))),
-      ),
-    );
-  }
+
 }

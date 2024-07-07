@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:flutter/services.dart';
 import 'package:vision_dashboard/Translate/App_Translation.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/core/binding.dart';
@@ -9,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
 
-import 'package:vision_dashboard/screens/main/main_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -17,9 +15,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  SystemChrome.setPreferredOrientations([
+/*  SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
-  ]);
+  ]);*/
   runApp(MyApp());
 }
 

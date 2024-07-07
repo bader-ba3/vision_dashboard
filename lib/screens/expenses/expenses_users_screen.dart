@@ -9,6 +9,7 @@ import '../../controller/delete_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../utils/const.dart';
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
 class ExpensesScreen extends StatefulWidget {
@@ -36,8 +37,10 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     return Scaffold(
       appBar: Header(
           context: context,
-        title: 'المصاريف'.tr,middleText: "تعرض هذه الواجهة معلومات عن مصاريف هذه السنة مع امكانية اضافة مصروف جديد \n ملاحظة : مصاريف الحافلات تتم اضافتها من واجهة الحافلات".tr
-      ),
+          title: 'المصاريف'.tr,
+          middleText:
+              "تعرض هذه الواجهة معلومات عن مصاريف هذه السنة مع امكانية اضافة مصروف جديد \n ملاحظة : مصاريف الحافلات تتم اضافتها من واجهة الحافلات"
+                  .tr),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
           double size = max(
@@ -71,8 +74,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                 (index) => DataColumn(
                                     label: Container(
                                         width: size / data.length,
-                                        child:
-                                            Center(child: Text(data[index].toString().tr))))),
+                                        child: Center(
+                                            child: Text(
+                                                data[index].toString().tr))))),
                             rows: [
                               for (var expense in controller.allExpenses.values)
                                 DataRow(
@@ -92,50 +96,52 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                           expense.userId.toString()),
                                       dataRowItem(size / data.length,
                                           expense.body.toString(), onTap: () {
-                                            Get.defaultDialog(
-                                                backgroundColor: Colors.white,
-                                                title: "التفاصيل".tr,
-                                                content: SizedBox(
-                                                    width: Get.height / 2,
-                                                    height: Get.height / 2,
-                                                    child: Center(
-                                                      child: Text(
-                                                        expense.body.toString(),
-                                                        style:
-                                                        TextStyle(fontSize: 20,color: blueColor),
-                                                      ),
-                                                    )));
-                                          }),
-                          /*            dataRowItem(
+                                        Get.defaultDialog(
+                                            backgroundColor: Colors.white,
+                                            title: "التفاصيل".tr,
+                                            content: SizedBox(
+                                                width: Get.height / 2,
+                                                height: Get.height / 2,
+                                                child: Center(
+                                                  child: Text(
+                                                    expense.body.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: blueColor),
+                                                  ),
+                                                )));
+                                      }),
+                                      /*            dataRowItem(
                                           size / data.length, "عرض التفاصيل".tr,
                                           color: Colors.teal),*/
                                       dataRowItem(size / data.length,
-                                          expense.images.length.toString(), onTap: () {
-                            Get.defaultDialog(
-                            backgroundColor: Colors.white,
-                            title: "الصور".tr,
-                            content: Container(
-                            color: Colors.white,
-                            width: Get.height / 1.5,
-                            height: Get.height / 1.5,
-                            child: PageView.builder(
-                            itemCount:
-                            expense.images.length,
-                            scrollDirection:
-                            Axis.horizontal,
-                            itemBuilder:
-                            (context, index) {
-                            return SizedBox(
-                            width: Get.height / 1.5,
-                            child: Image.network(
-                            expense.images[index],
-                            fit: BoxFit.fitWidth,
-                            ));
-                            },
-                            )));
-                            }),
+                                          expense.images.length.toString(),
+                                          onTap: () {
+                                        Get.defaultDialog(
+                                            backgroundColor: Colors.white,
+                                            title: "الصور".tr,
+                                            content: Container(
+                                                color: Colors.white,
+                                                width: Get.height / 1.5,
+                                                height: Get.height / 1.5,
+                                                child: PageView.builder(
+                                                  itemCount:
+                                                      expense.images.length,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return SizedBox(
+                                                        width: Get.height / 1.5,
+                                                        child: Image.network(
+                                                          expense.images[index],
+                                                          fit: BoxFit.fitWidth,
+                                                        ));
+                                                  },
+                                                )));
+                                      }),
                                       dataRowItem(
-                                          size / data.length,expense.date,
+                                          size / data.length, expense.date,
                                           color: Colors.teal),
                                       dataRowItem(
                                           size / data.length,
@@ -176,23 +182,6 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
             ),
           );
         }),
-      ),
-    );
-  }
-
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
       ),
     );
   }

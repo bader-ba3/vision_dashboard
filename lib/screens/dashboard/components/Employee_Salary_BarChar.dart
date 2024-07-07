@@ -63,7 +63,7 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
       physics: ClampingScrollPhysics(),
       child: SizedBox(
         // aspectRatio: 1.66,
-        width:Get.width,
+        width:max(1200,Get.width),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final barsSpace = 24.0 * constraints.maxWidth / 400;

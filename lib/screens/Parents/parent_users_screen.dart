@@ -5,6 +5,7 @@ import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import '../../constants.dart';
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 import 'Controller/Parents_View_Model.dart';
 
@@ -175,7 +176,6 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
 
   void showEventDialog(BuildContext context, dynamic eventRecords) {
     showDialog(
-
       context: context,
       builder: (BuildContext context) {
         return Dialog(
@@ -246,19 +246,5 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
     );
   }
 
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
-    );
-  }
+
 }

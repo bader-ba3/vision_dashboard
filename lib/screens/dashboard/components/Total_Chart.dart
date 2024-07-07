@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -95,7 +97,7 @@ class TotalBarChartState extends State<TotalBarChart> {
         physics: ClampingScrollPhysics(),
         reverse: true,
         child: SizedBox(
-          width: Get.width,
+          width:max(1200,Get.width),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final barsSpace = 24.0 * constraints.maxWidth / 400;

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -200,11 +202,9 @@ else {
           child: Container(
             padding: EdgeInsets.all(15),
             height: 500,
-            width:Get.width,
+            width:max(1200,Get.width),
             child: LineChart(
               LineChartData(
-
-
                 lineTouchData: LineTouchData(
                   getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
                     return spotIndexes.map((spotIndex) {

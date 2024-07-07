@@ -1,6 +1,4 @@
-import 'dart:math';
 
-import 'package:faker/faker.dart';
 
 
 import 'event_record_model.dart';

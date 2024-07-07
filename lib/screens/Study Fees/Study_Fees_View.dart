@@ -308,13 +308,13 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                       SizedBox(
                                         height: defaultPadding,
                                       ),
-                                    Row(
-
+                                    Wrap(
+                                      alignment: WrapAlignment.spaceEvenly,
                                       children: [
-                                        Spacer(),
+
                                         Container(
                                           clipBehavior: Clip.hardEdge,
-                                          width: Get.width / 2.5,
+                                          width: Get.width / 1.5,
                                           decoration: BoxDecoration(
                                               color:
                                                   Colors.white.withOpacity(0.5),
@@ -373,7 +373,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                             ),
                                           ),
                                         ),
-                                        Spacer(),
+
                                         if (installment[index].isPay != true)
                                           IconButton(
                                               onPressed: () {
@@ -433,7 +433,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                               );
                                             }
                                           ),
-                                        Spacer(),
+
                                       ],
                                     ),
                                   ],

@@ -11,6 +11,7 @@ import '../../constants.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Exam_model.dart';
 
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 import 'Exam_details.dart';
 
@@ -132,19 +133,5 @@ class _ExamScreenState extends State<ExamScreen> {
       },
     );
   }
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size ,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: color == null ? null : TextStyle(color: color),
-                ))),
-      ),
-    );
-  }
+
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:faker/faker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +43,7 @@ class _ParentInputFormState extends State<ParentInputForm> {
   List<EventRecordModel> eventRecords = [];
   EventModel? selectedEvent;
   List<String> _contracts = [], _contractsTemp = [];
-DateTime _selectedDate=DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -146,7 +145,7 @@ DateTime _selectedDate=DateTime.now();
                   CustomTextField(
                       controller: workController, title: 'العمل'.tr),
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       showDatePicker(
                         context: context,
                         firstDate: DateTime(2010),
@@ -158,20 +157,15 @@ DateTime _selectedDate=DateTime.now();
                         }
                       });
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CustomTextField(
-                          controller: startDateController,
-                          title: 'تاريخ البداية'.tr,
-                          enable: false,
-                          keyboardType: TextInputType.datetime,
-                        ),
-                        Icon(
-                          Icons.date_range_outlined,
-                          color: primaryColor,
-                        ),
-                      ],
+                    child: CustomTextField(
+                      controller: startDateController,
+                      title: 'تاريخ البداية'.tr,
+                      enable: false,
+                      keyboardType: TextInputType.datetime,
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: primaryColor,
+                      ) ,
                     ),
                   ),
                  /* SizedBox(

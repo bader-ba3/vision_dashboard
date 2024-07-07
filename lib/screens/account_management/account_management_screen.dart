@@ -8,11 +8,13 @@ import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import 'package:vision_dashboard/screens/account_management/Controller/Min_View_Model.dart';
+import 'package:vision_dashboard/screens/account_management/Employee_user_details.dart';
 
 import '../../constants.dart';
 import '../../controller/delete_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
 class AccountManagementScreen extends StatefulWidget {
@@ -51,7 +53,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     "الرمز التسلسلي المتأثر",
     "التصنيف المتأثر",
     "العمليات",
-
   ];
   List logData = [
     "نوع العملية",
@@ -61,12 +62,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     "الحالة",
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        context: context,
+          context: context,
           title: 'ادارة المنصة'.tr,
           middleText:
               "تقوم هذه الواجهة بعرض الامور الاساسية في المنصة وهي المستخدمين وامكانية اضافة او تعديل او حذف كما تعرض السجلات الممطلوب حذفها للموافقة عليها او استرجاعها كما يمكن ارشفة بيانات السنة الحالية او حذف البيانات او العودة الى نسخة سابقة"
@@ -112,7 +112,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                     userData.length,
                                     (index) => DataColumn(
                                         label: Container(
-                                            width: size / userData.length + 10,
+                                            width: index != userData.length - 1
+                                                ? size / userData.length + 10
+                                                : (size / userData.length +
+                                                        10) *
+                                                    2,
                                             child: Center(
                                                 child: Text(userData[index]
                                                     .toString()
@@ -156,17 +160,38 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                           accountModel.startDate
                                               .toString()
                                               .split(" ")[0]),
-
                                       dataRowItem(
                                           size / userData.length, "عرض".tr,
                                           color: Colors.teal, onTap: () {}),
-                                      dataRowItem(
-                                          size / userData.length, "حذف".tr,
-                                          color: Colors.red, onTap: () {
-                                        if (enableUpdate)
-                                          controller
-                                              .deleteAccount(accountModel);
-                                      }),
+                                      DataCell(SizedBox(
+                                        width: (size / (userData.length)) * 2,
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              IconButton(
+                                                  onPressed: () {
+                                                    if (enableUpdate)
+                                                      controller.deleteAccount(
+                                                          accountModel);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons
+                                                        .delete_forever_outlined,
+                                                    color: Colors.red,
+                                                  )),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    showParentInputDialog(
+                                                        context, accountModel);
+                                                  },
+                                                  icon: Icon(Icons
+                                                      .remove_red_eye_outlined)),
+                                            ],
+                                          ),
+                                        ),
+                                      ))
                                     ]),
                                 ]);
                           }),
@@ -177,112 +202,148 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   SizedBox(
                     height: defaultPadding,
                   ),
-                  if(getMyUserId().type=="مالك")
-                  Text(
-                    "تأكيد العمليات".tr,
-                    style: Styles.headLineStyle1,
-                  ),
-                  if(getMyUserId().type=="مالك")
-                  Container(
-                    padding: EdgeInsets.all(defaultPadding),
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  if (getMyUserId().type == "مالك")
+                    Text(
+                      "تأكيد العمليات".tr,
+                      style: Styles.headLineStyle1,
                     ),
-                    child: GetBuilder<DeleteManagementViewModel>(
-                        builder: (controller) {
-                      return SizedBox(
-                        width: size + 60,
-                        child: Scrollbar(
-                          controller: _scrollDeleteController,
-                          child: SingleChildScrollView(
+                  if (getMyUserId().type == "مالك")
+                    Container(
+                      padding: EdgeInsets.all(defaultPadding),
+                      decoration: BoxDecoration(
+                        color: secondaryColor,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: GetBuilder<DeleteManagementViewModel>(
+                          builder: (controller) {
+                        return SizedBox(
+                          width: size + 60,
+                          child: Scrollbar(
                             controller: _scrollDeleteController,
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                                columnSpacing: 0,
-                                dividerThickness: 0.3,
-                                columns: List.generate(
-                                    deleteData.length,
-                                    (index) => DataColumn(
-                                        label: Container(
-                                            width: size / deleteData.length,
-                                            child: Center(
-                                                child: Text(deleteData[index]
-                                                    .toString()
-                                                    .tr))))),
-                                rows: [
-                                  for (var deleteModel
-                                      in controller.allDelete.values.where((element) => element.isAccepted==null,))
-                                    DataRow(
-                                 /*       color: WidgetStatePropertyAll(
+                            child: SingleChildScrollView(
+                              controller: _scrollDeleteController,
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                  columnSpacing: 0,
+                                  dividerThickness: 0.3,
+                                  columns: List.generate(
+                                      deleteData.length,
+                                      (index) => DataColumn(
+                                          label: Container(
+                                              width: size / deleteData.length,
+                                              child: Center(
+                                                  child: Text(deleteData[index]
+                                                      .toString()
+                                                      .tr))))),
+                                  rows: [
+                                    for (var deleteModel
+                                        in controller.allDelete.values.where(
+                                      (element) => element.isAccepted == null,
+                                    ))
+                                      DataRow(
+                                          /*       color: WidgetStatePropertyAll(
                                             checkIfPendingDelete(
                                                     affectedId: deleteModel.id)
                                                 ? Colors.red
                                                 : Colors.transparent),*/
-                                        cells: [
-                                          dataRowItem(size / deleteData.length,
-                                              deleteModel.collectionName.toString()!=installmentCollection?"حذف":"ارجاع قسط"),
-                                          dataRowItem(
-                                              size / deleteData.length,
-                                              deleteModel.details ??
-                                                  "لا يوجد".tr),
-                                          dataRowItem(
-                                              size / deleteData.length,
-                                              deleteModel.affectedId
-                                                  .toString()),
-                                          dataRowItem(
-                                              size / deleteData.length,
-                                              deleteModel.collectionName
-                                                  .toString()),
-
-                                          DataCell(Container(
-                                            width:size / deleteData.length ,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(onPressed: (){
-                                                  if (enableUpdate)
-
-                                                    QuickAlert.show(
-                                                        context: context,
-                                                        type: QuickAlertType.confirm,
-                                                        text: 'حذف هذا العنصر بشكل نهائي'.tr,
-                                                        title: 'هل انت متأكد ؟'.tr,
-                                                        onConfirmBtnTap: () =>
-                                                        {
-                                                          controller.doTheDelete(
-                                                              deleteModel),Get.back()
-                                                        },
-                                                        onCancelBtnTap: () => Get.back(),
-                                                        confirmBtnText: 'نعم'.tr,
-                                                        cancelBtnText: 'لا'.tr,
-                                                        confirmBtnColor: Colors.redAccent,
-                                                        showCancelBtn: true
-                                                    );
-                                                }, icon: Row(
-                                                  children: [
-
-                                                    Icon(Icons.check_circle_outline,color: Colors.green,),
-                                                    SizedBox(width: 5,),
-                                                    Text("قبول".tr),
-                                                  ],
-                                                )),
-                                                IconButton(onPressed: (){
-
-                                                  if (enableUpdate)
-                                                    controller
-                                                        .undoTheDelete(deleteModel);
-                                                }, icon: Row(
-                                                  children: [
-                                                    Icon(Icons.remove_circle_outline,color: Colors.redAccent,),
-                                                    SizedBox(width: 5,),
-                                                    Text("رفض".tr),
-                                                  ],
-                                                )),
-                                              ],
-                                            ),
-                                          )),
-                                        /*  dataRowItem(
+                                          cells: [
+                                            dataRowItem(
+                                                size / deleteData.length,
+                                                deleteModel.collectionName
+                                                            .toString() !=
+                                                        installmentCollection
+                                                    ? "حذف"
+                                                    : "ارجاع قسط"),
+                                            dataRowItem(
+                                                size / deleteData.length,
+                                                deleteModel.details ??
+                                                    "لا يوجد".tr),
+                                            dataRowItem(
+                                                size / deleteData.length,
+                                                deleteModel.affectedId
+                                                    .toString()),
+                                            dataRowItem(
+                                                size / deleteData.length,
+                                                deleteModel.collectionName
+                                                    .toString()),
+                                            DataCell(Container(
+                                              width: size / deleteData.length,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        if (enableUpdate)
+                                                          QuickAlert.show(
+                                                              context: context,
+                                                              type:
+                                                                  QuickAlertType
+                                                                      .confirm,
+                                                              text:
+                                                                  'حذف هذا العنصر بشكل نهائي'
+                                                                      .tr,
+                                                              title:
+                                                                  'هل انت متأكد ؟'
+                                                                      .tr,
+                                                              onConfirmBtnTap:
+                                                                  () => {
+                                                                        controller
+                                                                            .doTheDelete(deleteModel),
+                                                                        Get.back()
+                                                                      },
+                                                              onCancelBtnTap:
+                                                                  () => Get
+                                                                      .back(),
+                                                              confirmBtnText:
+                                                                  'نعم'.tr,
+                                                              cancelBtnText:
+                                                                  'لا'.tr,
+                                                              confirmBtnColor:
+                                                                  Colors
+                                                                      .redAccent,
+                                                              showCancelBtn:
+                                                                  true);
+                                                      },
+                                                      icon: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .check_circle_outline,
+                                                            color: Colors.green,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Text("قبول".tr),
+                                                        ],
+                                                      )),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        if (enableUpdate)
+                                                          controller
+                                                              .undoTheDelete(
+                                                                  deleteModel);
+                                                      },
+                                                      icon: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .remove_circle_outline,
+                                                            color: Colors
+                                                                .redAccent,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Text("رفض".tr),
+                                                        ],
+                                                      )),
+                                                ],
+                                              ),
+                                            )),
+                                            /*  dataRowItem(
                                               size / deleteData.length,
                                               deleteModel.collectionName
                                                   .toString()),
@@ -319,13 +380,13 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                               );
 
                                           }),*/
-                                        ]),
-                                ]),
+                                          ]),
+                                  ]),
+                            ),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
+                        );
+                      }),
+                    ),
                   SizedBox(
                     height: defaultPadding,
                   ),
@@ -341,58 +402,66 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                     ),
                     child: GetBuilder<DeleteManagementViewModel>(
                         builder: (controller) {
-                          return SizedBox(
-                            width: size + 60,
-                            child: Scrollbar(
-                              controller: _scrollLogController,
-                              child: SingleChildScrollView(
-                                controller: _scrollLogController,
-                                scrollDirection: Axis.horizontal,
-                                child: DataTable(
-                                    columnSpacing: 0,
-                                    dividerThickness: 0.3,
-                                    columns: List.generate(
-                                        logData.length,
-                                            (index) => DataColumn(
-                                            label: Container(
-                                                width: size / logData.length,
-                                                child: Center(
-                                                    child: Text(logData[index]
-                                                        .toString()
-                                                        .tr))))),
-                                    rows: [
-                                      for (var deleteModel
-                                      in controller.allDelete.values.where((element) => element.isAccepted!=null,))
-                                        DataRow(
-                                          /*  color: WidgetStatePropertyAll(
-                                                checkIfPendingDelete(
-                                                    affectedId: deleteModel.id)
-                                                    ? Colors.red
-                                                    : Colors.transparent),*/
-                                            cells: [
-                                              dataRowItem(size / logData.length,
-                                                  deleteModel.collectionName.toString()!=installmentCollection?"حذف":"ارجاع قسط"),
-                                              dataRowItem(
-                                                  size / logData.length,
-                                                  deleteModel.details ??
-                                                      "لا يوجد".tr),
-                                              dataRowItem(
-                                                  size / logData.length,
-                                                  deleteModel.affectedId
-                                                      .toString()),
-                                              dataRowItem(
-                                                  size / logData.length,
-                                                  deleteModel.collectionName
-                                                      .toString()),
-                                              dataRowItem(size / logData.length,
-                                                deleteModel.isAccepted!?'مقبول'.tr:'مرفوض'.tr, color:deleteModel.isAccepted!? Colors.green:Colors.red,
-                                                ),
-                                            ]),
-                                    ]),
-                              ),
-                            ),
-                          );
-                        }),
+                      return SizedBox(
+                        width: size + 60,
+                        child: Scrollbar(
+                          controller: _scrollLogController,
+                          child: SingleChildScrollView(
+                            controller: _scrollLogController,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                                columnSpacing: 0,
+                                dividerThickness: 0.3,
+                                columns: List.generate(
+                                    logData.length,
+                                    (index) => DataColumn(
+                                        label: Container(
+                                            width: size / logData.length,
+                                            child: Center(
+                                                child: Text(logData[index]
+                                                    .toString()
+                                                    .tr))))),
+                                rows: [
+                                  for (var deleteModel
+                                      in controller.allDelete.values.where(
+                                    (element) => element.isAccepted != null,
+                                  ))
+                                    DataRow(
+                                        cells: [
+                                          dataRowItem(
+                                              size / logData.length,
+                                              deleteModel.collectionName
+                                                          .toString() !=
+                                                      installmentCollection
+                                                  ? "حذف"
+                                                  : "ارجاع قسط"),
+                                          dataRowItem(
+                                              size / logData.length,
+                                              deleteModel.details ??
+                                                  "لا يوجد".tr),
+                                          dataRowItem(
+                                              size / logData.length,
+                                              deleteModel.affectedId
+                                                  .toString()),
+                                          dataRowItem(
+                                              size / logData.length,
+                                              deleteModel.collectionName
+                                                  .toString()),
+                                          dataRowItem(
+                                            size / logData.length,
+                                            deleteModel.isAccepted!
+                                                ? 'مقبول'.tr
+                                                : 'مرفوض'.tr,
+                                            color: deleteModel.isAccepted!
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                        ]),
+                                ]),
+                          ),
+                        ),
+                      );
+                    }),
                   ),
                   SizedBox(
                     height: defaultPadding * 2,
@@ -402,6 +471,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                     style: Styles.headLineStyle1,
                   ),
                   Container(
+                    width: Get.width,
                     padding: EdgeInsets.all(defaultPadding),
                     decoration: BoxDecoration(
                       color: secondaryColor,
@@ -442,8 +512,8 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                 listValue: ['عربي', 'English'],
                                 label: 'اختر اللغة'.tr,
                                 onChange: (value) {
-                                  Get.find<MinViewModel>().changeLanguage(value!);
-
+                                  Get.find<MinViewModel>()
+                                      .changeLanguage(value!);
                                 },
                               )
                             ],
@@ -458,7 +528,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                             children: [
                               AppButton(
                                   text: "ارشفة البيانات الحالية".tr,
-                                  onPressed: ()async {
+                                  onPressed: () async {
                                     QuickAlert.show(
                                         width: Get.width / 2,
                                         context: context,
@@ -466,12 +536,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                         title: 'جاري التحميل'.tr,
                                         text: 'يتم العمل على الطلب'.tr,
                                         barrierDismissible: false);
-                                  await  controller.archive();
-                                  Get.back();
+                                    await controller.archive();
+                                    Get.back();
                                   }),
                               AppButton(
                                   text: "تصفير البيانات الحالية".tr,
-                                  onPressed: ()async {
+                                  onPressed: () async {
                                     QuickAlert.show(
                                         width: Get.width / 2,
                                         context: context,
@@ -479,7 +549,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                         title: 'جاري التحميل'.tr,
                                         text: 'يتم العمل على الطلب'.tr,
                                         barrierDismissible: false);
-                                    await  controller.archive();
+                                    await controller.archive();
                                     Get.back();
                                   }),
                             ],
@@ -488,7 +558,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       );
                     }),
                   ),
-
                 ],
               );
             }),
@@ -498,19 +567,29 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     );
   }
 
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
+  void showParentInputDialog(
+      BuildContext context, dynamic accountManagementModel) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height / 2,
+            width: Get.width / 1.5,
+            child: EmployeeInputForm(
+                accountManagementModel: accountManagementModel),
+          ),
+        );
+      },
     );
   }
+
+
 }

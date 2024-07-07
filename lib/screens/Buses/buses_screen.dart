@@ -16,6 +16,7 @@ import '../../controller/delete_management_view_model.dart';
 import '../../models/Bus_Model.dart';
 import '../Student/Controller/Student_View_Model.dart';
 import '../Widgets/AppButton.dart';
+import '../Widgets/Data_Row.dart';
 
 class BusesScreen extends StatefulWidget {
   @override
@@ -1036,19 +1037,5 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
   }
 
 
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
-    );
-  }
+
 }

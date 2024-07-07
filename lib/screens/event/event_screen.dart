@@ -9,6 +9,7 @@ import '../../controller/delete_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../utils/const.dart';
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
 class EventScreen extends StatefulWidget {
@@ -136,19 +137,4 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
-    );
-  }
 }

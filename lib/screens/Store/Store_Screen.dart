@@ -8,6 +8,7 @@ import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 import '../../constants.dart';
 import '../../models/Store_Model.dart';
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
 class StoreScreen extends StatefulWidget {
@@ -155,19 +156,5 @@ class _StoreScreenState extends State<StoreScreen> {
     );
   }
 
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
-    );
-  }
+
 }

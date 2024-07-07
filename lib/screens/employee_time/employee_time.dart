@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';
 import '../../utils/minutesToTime.dart';
+import '../Widgets/Data_Row.dart';
 
 class EmployeeTimeView extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
 
   @override
   void initState() {
-    accountManagementViewModel.initNFC(false);
+    accountManagementViewModel.initNFC(typeNFC.time);
     super.initState();
   }
 
@@ -242,9 +243,9 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                             child: Accordion(
                               paddingListTop: 0,
                               disableScrolling: true,
-                              headerBackgroundColor: primaryColor,
+                              headerBackgroundColor: secondaryColor,
                               headerBackgroundColorOpened: Colors.grey,
-                              contentBorderColor: primaryColor,
+                              contentBorderColor: secondaryColor,
                               contentBackgroundColor: secondaryColor,
                               paddingListHorizontal: 0,
                               rightIcon: Icon(
@@ -281,7 +282,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Container(
-                                                  width: Get.width * 0.125,
+                                                  width: Get.width * 0.122,
                                                   child: Text(
                                                     i.userName,
                                                     style: TextStyle(fontSize: Get.width < 700 ? 16 : 20),
@@ -349,7 +350,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             dataRowItem(size / data.length, j.reasonOfEarlier != null && j.reasonOfEarlier != "" ? "عرض" : "", onTap: () {
                                               Get.defaultDialog(
                                                   title: "المبرر".tr,
-                                                  backgroundColor: Colors.white,
+                                                  backgroundColor: secondaryColor,
                                                   content: Container(
                                                     height: Get.height / 2,
                                                     width: Get.height / 2,
@@ -375,19 +376,5 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
     });
   }
 
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size ,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
-    );
-  }
+
 }

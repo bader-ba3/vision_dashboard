@@ -52,34 +52,29 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
           children: [
             CustomTextField(controller: titleController, title: 'العنوان'.tr),
             CustomTextField(controller: totalController, title: 'القيمة'.tr),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextField(
-                  controller: dateController,
-                  title: 'تاريخ البداية'.tr,
-                  enable: false,
-                  keyboardType: TextInputType.datetime,
-                ),
-                IconButton(
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2010),
-                      lastDate: DateTime(2100),
-                    ).then((date) {
-                      if (date != null) {
-                        dateController.text =
-                        date.toString().split(" ")[0];
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    Icons.date_range_outlined,
-                    color: primaryColor,
-                  ),
-                ),
-              ],
+            InkWell(
+              onTap: () {
+                showDatePicker(
+                  context: context,
+                  firstDate: DateTime(2010),
+                  lastDate: DateTime(2100),
+                ).then((date) {
+                  if (date != null) {
+                    dateController.text =
+                    date.toString().split(" ")[0];
+                  }
+                });
+              },
+              child: CustomTextField(
+                controller: dateController,
+                title: 'تاريخ البداية'.tr,
+                enable: false,
+                keyboardType: TextInputType.datetime,
+                icon: Icon(
+                  Icons.date_range_outlined,
+                  color: primaryColor,
+                ) ,
+              ),
             ),
             multiLineCustomTextField(
                 controller: bodyController, title: 'تاريخ البداية'.tr),

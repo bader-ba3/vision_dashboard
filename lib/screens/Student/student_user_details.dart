@@ -319,34 +319,55 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       }
                     },
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextField(
-                          controller: startDateController,
-                          title: 'تاريخ البداية'.tr,
-                          enable: false,
-                          keyboardType: TextInputType.datetime),
-                      IconButton(
-                          onPressed: () {
-                            showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(2010),
-                                    lastDate: DateTime(2100))
-                                .then((date) {
-                              if (date != null) {
-                                startDateController.text =
-                                    date.toString().split(" ")[0];
-                              }
-                            });
-                          },
-                          icon: Icon(
-                            Icons.date_range_outlined,
-                            color: primaryColor,
-                          ))
-                    ],
+                  InkWell(
+                    onTap: () {
+                      showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2100),
+                      ).then((date) {
+                        if (date != null) {
+                          startDateController.text =
+                          date.toString().split(" ")[0];
+                        }
+                      });
+                    },
+                    child: CustomTextField(
+                      controller: startDateController,
+                      title: 'تاريخ البداية'.tr,
+                      enable: false,
+                      keyboardType: TextInputType.datetime,
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: primaryColor,
+                      ) ,
+                    ),
                   ),
-                  Row(
+                  InkWell(
+                    onTap: () {
+                      showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2100),
+                      ).then((date) {
+                        if (date != null) {
+                          ageController.text =
+                          date.toString().split(" ")[0];
+                        }
+                      });
+                    },
+                    child: CustomTextField(
+                      controller: ageController,
+                      title: 'التولد'.tr,
+                      enable: false,
+                      keyboardType: TextInputType.datetime,
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: primaryColor,
+                      ) ,
+                    ),
+                  ),
+            /*      Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomTextField(
@@ -372,7 +393,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                             color: primaryColor,
                           ))
                     ],
-                  ),
+                  ),*/
                   if (_payWay == 'اقساط'.tr)
                     SizedBox(
                       width: Get.width / 2,

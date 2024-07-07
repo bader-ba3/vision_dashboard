@@ -26,8 +26,10 @@ enum UserManagementStatus {
   block,
   auth,
 }
+enum typeNFC{login,time,add}
 
 class AccountManagementViewModel extends GetxController {
+  TextEditingController nfcController=TextEditingController();
   RxMap<String, AccountManagementModel> allAccountManagement =
       <String, AccountManagementModel>{}.obs;
   final accountManagementFireStore = FirebaseFirestore.instance
@@ -116,8 +118,8 @@ class AccountManagementViewModel extends GetxController {
 
   bool isSupportNfc = false;
 
-  initNFC(bool isLogin) async {
-    initNFCWorker(isLogin).then(
+  initNFC(typeNFC type) async {
+    initNFCWorker(type).then(
       (value) {
         if (value) {
           isSupportNfc = value;
@@ -536,6 +538,11 @@ allAccountManagement.forEach((key, value) {
 },);
 
     return time;
+  }
+
+  void addCard({required String cardId}) {
+    nfcController.text=cardId;
+print("------${cardId}");
   }
 
 

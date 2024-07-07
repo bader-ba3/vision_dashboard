@@ -1,4 +1,5 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_Chart.dart';
@@ -34,7 +35,7 @@ class _TotalBarChartWidgetState extends State<TotalBarChartWidget> {
           ),
           SizedBox(
               height: 400,
-              width: double.infinity,
+              // width:max(1200,Get.width),
               child: TotalBarChart(
                 index: widget.index,
               )),

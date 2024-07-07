@@ -13,6 +13,7 @@ import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Student_Model.dart';
+import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
 class StudentScreen extends StatefulWidget {
@@ -349,19 +350,5 @@ class _StudentScreenState extends State<StudentScreen> {
       },
     );
   }
-  dataRowItem(size, text, {onTap, color}) {
-    return DataCell(
-      Container(
-        width: size,
-        child: InkWell(
-            onTap: onTap,
-            child: Center(
-                child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: color == null ? null : TextStyle(color: color),
-            ))),
-      ),
-    );
-  }
+
 }

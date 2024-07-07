@@ -4,11 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
-import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/Bus_Model.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
-import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 

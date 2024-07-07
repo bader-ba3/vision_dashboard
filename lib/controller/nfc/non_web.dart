@@ -5,7 +5,7 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 
 
-Future<bool> initNFCWorker(bool isLogin) async {
+Future<bool> initNFCWorker(typeNFC type) async {
   bool isNfcAvailable = false;
   if(!Platform.isAndroid &&!Platform.isIOS){
     return false;
@@ -24,10 +24,12 @@ Future<bool> initNFCWorker(bool isLogin) async {
       }
       var cardId=id.toUpperCase();
       AccountManagementViewModel accountManagementViewModel = Get.find<AccountManagementViewModel>();
-      if(isLogin){
+      if(type==typeNFC.login){
         accountManagementViewModel.signInUsingNFC(cardId);
-      }else{
+      }else if(type==typeNFC.time){
         accountManagementViewModel.addTime(cardId: cardId);
+      }else{
+        accountManagementViewModel.addCard(cardId: cardId);
       }
     });
   }
