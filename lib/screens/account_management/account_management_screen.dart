@@ -112,11 +112,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                     userData.length,
                                     (index) => DataColumn(
                                         label: Container(
-                                            width: index != userData.length - 1
-                                                ? size / userData.length + 10
-                                                : (size / userData.length +
-                                                        10) *
-                                                    2,
+                                            width: size / userData.length,
                                             child: Center(
                                                 child: Text(userData[index]
                                                     .toString()
@@ -163,33 +159,32 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                       dataRowItem(
                                           size / userData.length, "عرض".tr,
                                           color: Colors.teal, onTap: () {}),
-                                      DataCell(SizedBox(
-                                        width: (size / (userData.length)) * 2,
-                                        child: Center(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {
-                                                    if (enableUpdate)
-                                                      controller.deleteAccount(
-                                                          accountModel);
-                                                  },
-                                                  icon: Icon(
-                                                    Icons
-                                                        .delete_forever_outlined,
-                                                    color: Colors.red,
-                                                  )),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    showParentInputDialog(
-                                                        context, accountModel);
-                                                  },
-                                                  icon: Icon(Icons
-                                                      .remove_red_eye_outlined)),
-                                            ],
-                                          ),
+                                      DataCell(
+                                          Container(
+                                            width: max(100,size / userData.length),
+                                            child: Wrap(
+                                             alignment: WrapAlignment.center,
+
+                                              children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  if (enableUpdate)
+                                                    controller.deleteAccount(
+                                                        accountModel);
+                                                },
+                                                icon: Icon(
+                                                  Icons
+                                                      .delete_forever_outlined,
+                                                  color: Colors.red,
+                                                )),
+                                            IconButton(
+                                                onPressed: () {
+                                                  showParentInputDialog(
+                                                      context, accountModel);
+                                                },
+                                                icon: Icon(Icons
+                                                    .remove_red_eye_outlined)),
+                                          ],
                                         ),
                                       ))
                                     ]),
@@ -267,7 +262,8 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                                 size / deleteData.length,
                                                 deleteModel.collectionName
                                                     .toString()),
-                                            DataCell(Container(
+                                            DataCell(
+                                                Container(
                                               width: size / deleteData.length,
                                               child: Row(
                                                 mainAxisAlignment:
