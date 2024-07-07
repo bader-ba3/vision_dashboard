@@ -251,7 +251,7 @@ class AccountManagementViewModel extends GetxController {
               .difference(
                   DateTime.now().copyWith(hour: 7, minute: 30, second: 0))
               .inMinutes;
-          print(totalLate);
+
           List listOfTotalLate = user.employeeTime.values
               .map(
                 (e) => e.totalLate ?? 0,
@@ -347,7 +347,7 @@ class AccountManagementViewModel extends GetxController {
               .copyWith(hour: 14, minute: 30, second: 0)
               .difference(DateTime.now())
               .inMinutes;
-          print(totalEarlier);
+
           int AllTotalEarlier = (user.employeeTime.values
                       .map(
                         (e) => e.totalEarlier ?? 0,
@@ -462,10 +462,10 @@ class AccountManagementViewModel extends GetxController {
   }
 
 
-  double  getAllSalaries(){
+  double  getAllSalariesAtMonth(String month){
 double pay=0.0;
     allAccountManagement.forEach((key, value) {
-      if(value.employeeTime.entries.where((element) => element.key.toString().split("-")[1]==DateTime.now().month.toString().padLeft(2,"0"),).isNotEmpty) {
+      if(value.employeeTime.entries.where((element) => element.key.toString().split("-")[1]==month.padLeft(2,"0"),).isNotEmpty) {
           AccountManagementModel accountModel = value;
           int totalLate = accountModel.employeeTime.isEmpty
               ? 0
@@ -485,9 +485,64 @@ double pay=0.0;
       },);
 return pay;
   }
+
+  double  getUserSalariesAtMonth(String month,String user){
+
+    double pay=0.0;
+      if( allAccountManagement[user]!.employeeTime.entries.where((element) => element.key.toString().split("-")[1]==month.padLeft(2,"0").toString(),).isNotEmpty) {
+        AccountManagementModel accountModel = allAccountManagement[user]!;
+        int totalLate = accountModel.employeeTime.isEmpty
+            ? 0
+            : accountModel.employeeTime.values
+            .map((e) => e.totalLate ?? 0)
+            .reduce((value, element) => value + element);
+        int totalEarlier = accountModel.employeeTime.isEmpty
+            ? 0
+            : accountModel.employeeTime.values
+            .map((e) => e.totalEarlier ?? 0)
+            .reduce((value, element) => value + element);
+        int totalTime = totalLate + totalEarlier;
+        pay += ((accountModel.salary!) -
+            ((accountModel.salary! / accountModel.dayOfWork!) *
+                ((totalTime / 60).floor() * 0.5)));
+      }
+
+    return pay;
+  }
+  List<double>  getUserTimeToday(){
+String day=/*DateTime.now().day.toString()*/"12";
+    List<double> time=[0.0];
+allAccountManagement.forEach((key, value) {
+  if(value.employeeTime.entries.where((element) => element.key.toString().substring(8)==day.padLeft(2,"0"),).isNotEmpty) {
+    AccountManagementModel accountModel = value;
+    int totalLate = accountModel.employeeTime.isEmpty
+        ? 0
+        : accountModel.employeeTime.values
+        .map((e) => e.totalLate ?? 0)
+        .reduce((value, element) => value + element);
+    int totalEarlier = accountModel.employeeTime.isEmpty
+        ? 0
+        : accountModel.employeeTime.values
+        .map((e) => e.totalEarlier ?? 0)
+        .reduce((value, element) => value + element);
+    double totalTime = totalLate + totalEarlier*1.0;
+    if(totalTime>8)
+      time .add(8) ;
+    else
+    time .add(totalTime / 60) ;
+  }
+  else
+    time.add(0.0);
+},);
+
+    return time;
+  }
+
+
+
 }
 
-String getMyUserId() {
-  return "a";
-  // return Get.find<AccountManagementViewModel>().myUserModel!.id;
+AccountManagementModel getMyUserId() {
+  // return "a";
+  return Get.find<AccountManagementViewModel>().myUserModel!;
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,13 +11,15 @@ class CustomDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
-      width:size?? Get.width/4.5,
-      child: DropdownButtonFormField<String>(
 
+    return  SizedBox(
+      width:size?? max(140,Get.width/4.5),
+      child: DropdownButtonFormField<String>(
         decoration:  InputDecoration(
+          hintStyle:TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis) ,
+          
           labelText: label,
-          labelStyle: TextStyle(color: primaryColor),
+          labelStyle: TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis),
           enabledBorder:isFullBorder!=null? OutlineInputBorder(
             borderSide: BorderSide(color: primaryColor,width: 2),
             borderRadius: BorderRadius.circular(10),
@@ -34,12 +38,12 @@ class CustomDropDown extends StatelessWidget {
         value:value==''? null:value,
         iconEnabledColor: Colors.blue,
 
-        hint: Text(label,style: Styles.headLineStyle4.copyWith(color: blueColor.withOpacity(0.7)),),
+        hint: Text(label,style: Styles.headLineStyle4.copyWith(color: blueColor.withOpacity(0.7)),overflow: TextOverflow.ellipsis),
         onChanged: onChange,
         items: listValue.map((e) {
           return DropdownMenuItem(
             value: e,
-            child: Text(e),
+            child: Text(e,overflow: TextOverflow.ellipsis),
           );
         }).toList(),
       ),

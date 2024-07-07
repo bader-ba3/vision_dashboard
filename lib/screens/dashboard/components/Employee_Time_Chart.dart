@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 
 class EmployeeTimeChart extends StatefulWidget {
   EmployeeTimeChart({
@@ -17,10 +18,13 @@ class EmployeeTimeChart extends StatefulWidget {
     Color? tooltipBgColor,
     Color? tooltipTextColor,
   })  : lineColor = lineColor ?? primaryColor,
-        indicatorLineColor = indicatorLineColor ?? primaryColor.withOpacity(0.2),
+        indicatorLineColor =
+            indicatorLineColor ?? primaryColor.withOpacity(0.2),
         indicatorTouchedLineColor = indicatorTouchedLineColor ?? primaryColor,
-        indicatorSpotStrokeColor = indicatorSpotStrokeColor ?? primaryColor.withOpacity(0.5),
-        indicatorTouchedSpotStrokeColor = indicatorTouchedSpotStrokeColor ?? primaryColor,
+        indicatorSpotStrokeColor =
+            indicatorSpotStrokeColor ?? primaryColor.withOpacity(0.5),
+        indicatorTouchedSpotStrokeColor =
+            indicatorTouchedSpotStrokeColor ?? primaryColor,
         bottomTextColor = bottomTextColor ?? primaryColor.withOpacity(0.2),
         bottomTouchedTextColor = bottomTouchedTextColor ?? primaryColor,
         averageLineColor = averageLineColor ?? primaryColor.withOpacity(0.8),
@@ -38,12 +42,33 @@ class EmployeeTimeChart extends StatefulWidget {
   final Color tooltipBgColor;
   final Color tooltipTextColor;
 
+ /* List<double> get yValues => [
+        6.0,
+        8.0,
+        7.9,
+        8.0,
+        7.4,
+        8.0,
+        8.0,
+        7.7,
+        8.0,
+        8.0,
+        7.9,
+        7.9,
+        7.1,
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        7.0,
+        8.0,
+        8.0,
+        8.0,
+        6.0,
+        8.0
+      ];*/
 
-  List<double> get yValues => [
-    6.0, 8.0, 7.9, 8.0, 7.4, 8.0, 8.0, 7.7, 8.0, 8.0,
-    7.9, 7.9, 7.1, 8.0, 8.0, 8.0, 8.0, 8.0, 7.0, 8.0,
-    8.0, 8.0, 6.0, 8.0
-  ];
   @override
   State createState() => _EmployeeTimeChartState();
 }
@@ -60,40 +85,44 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
     super.initState();
   }
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
 
+  AccountManagementViewModel accountManagementViewModel =
+  Get.find<AccountManagementViewModel>();
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
     final style = TextStyle(
       color: Colors.white,
       fontSize: 14,
     );
     String text;
     switch (value) {
-
-      case 6.0:
+      case 0:
         text = '';
+      case 1:
+        text = '١';
+      case 2:
+        text = '٢';
+      case 3:
+        text = '٣';
         break;
-      case 6.5:
-        text = '٦٫٥';
+      case 4:
+        text = '٤';
         break;
-      case 7.0:
-        text = '٧٫٠';
+      case 5:
+        text = '٥';
         break;
-      case 7.5:
-        text = '٧٫٥';
+      case 6:
+        text = '٦';
         break;
-      case 8.0:
-        text = '٨٫٠';
+      case 7:
+        text = '7';
         break;
-      case 8.5:
-        text = '٨٫٥';
+      case 8:
+        text = '٨';
         break;
       case 9.0:
-        text = '٩٫٠';
+        text = '٩';
         break;
-      case 9.5:
-        text = '٩٫٥ ';
-        break;
-      case 10.0:
+   case 10.0:
         text = '';
         break;
       default:
@@ -103,30 +132,48 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 8,
-      fitInside: fitInsideLeftTitle ? SideTitleFitInsideData.fromTitleMeta(meta) : SideTitleFitInsideData.disable(),
+      fitInside: fitInsideLeftTitle
+          ? SideTitleFitInsideData.fromTitleMeta(meta)
+          : SideTitleFitInsideData.disable(),
       child: Text(text, style: style, textAlign: TextAlign.center),
     );
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    final isTouched = value == touchedValue;
+
+    final isTouched = double.parse(meta.formattedValue).toInt() == touchedValue;
     final style = TextStyle(
-      color: isTouched ? widget.bottomTouchedTextColor : Colors.white.withOpacity(0.6),
+      color: isTouched
+          ? widget.bottomTouchedTextColor
+          : Colors.white.withOpacity(0.6),
       fontWeight: FontWeight.bold,
     );
-
-    if (value % 1 != 0) {
-      return Container();
+  if (double.parse(meta.formattedValue)% 1 != 0||double.parse(meta.formattedValue)== 0) {
+    return Container(/*height: 10,width: 10,color: Colors.red,*/);
     }
-    return SideTitleWidget(
-      space: 4,
-      axisSide: meta.axisSide,
-      fitInside: fitInsideBottomTitle ? SideTitleFitInsideData.fromTitleMeta(meta, distanceFromEdge: 0) : SideTitleFitInsideData.disable(),
-      child: Text(
-        employeeName[value.round()].toString(),
-        style: style,
-      ),
-    );
+else if(double.parse(meta.formattedValue).toInt()> accountManagementViewModel.allAccountManagement.length)
+
+      return Container(/*color: Colors.green,height: 10,width: 10,*/);
+
+else {
+      return SideTitleWidget(
+        space: 8,
+        axisSide: meta.axisSide,
+        fitInside: fitInsideBottomTitle
+            ? SideTitleFitInsideData.fromTitleMeta(meta, distanceFromEdge: 0)
+            : SideTitleFitInsideData.disable(),
+        child: Text(
+          accountManagementViewModel.allAccountManagement.values
+              .elementAt(double.parse(meta.formattedValue).toInt()-1 )
+              .fullName
+              .toString()
+              .split(" ")[0],
+          style: style,
+        ),
+      );
+    }
+
+
   }
 
   @override
@@ -148,20 +195,21 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
         ),
         SingleChildScrollView(
           physics: ClampingScrollPhysics(),
-
           reverse: true,
           scrollDirection: Axis.horizontal,
           child: Container(
             padding: EdgeInsets.all(15),
             height: 500,
-            width: 90 * 24,
+            width:Get.width,
             child: LineChart(
               LineChartData(
+
+
                 lineTouchData: LineTouchData(
                   getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
                     return spotIndexes.map((spotIndex) {
                       final spot = barData.spots[spotIndex];
-                      if (spot.x == 0 || spot.x == 24) {
+                      if (spot.x == 0 || spot.x == accountManagementViewModel.allAccountManagement.length+1) {
                         return null;
                       }
                       return TouchedSpotIndicatorData(
@@ -171,20 +219,21 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                         ),
                         FlDotData(
                           getDotPainter: (spot, percent, barData, index) {
-                            if (spot.y>=8.0) {
-
+                            if (spot.y >= 8.0) {
                               return FlDotCirclePainter(
                                 radius: 8,
                                 color: Colors.white,
                                 strokeWidth: 5,
-                                strokeColor: widget.indicatorTouchedSpotStrokeColor,
+                                strokeColor:
+                                    widget.indicatorTouchedSpotStrokeColor,
                               );
                             } else {
                               return FlDotCirclePainter(
                                 // size: 16,
                                 color: Colors.redAccent,
                                 strokeWidth: 5,
-                                strokeColor: widget.indicatorTouchedSpotStrokeColor,
+                                strokeColor:
+                                    widget.indicatorTouchedSpotStrokeColor,
                               );
                             }
                           },
@@ -193,30 +242,32 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                     }).toList();
                   },
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (touchedSpot) =>touchedSpot.y<8.0? Colors.redAccent:widget.tooltipBgColor,
+                    getTooltipColor: (touchedSpot) => touchedSpot.y < 8.0
+                        ? Colors.redAccent
+                        : widget.tooltipBgColor,
                     getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {
+
                         final flSpot = barSpot;
-                        if (flSpot.x == 0 || flSpot.x == 24) {
+                        if (flSpot.x == 0 || flSpot.x == accountManagementViewModel.allAccountManagement.length+1) {
                           return null;
                         }
                         return LineTooltipItem(
-
-                          "${employeeName[flSpot.x.toInt() ]} ".toString(),
+                          "${accountManagementViewModel.allAccountManagement.values.elementAt(flSpot.x.toInt()-1).fullName} ".toString(),
                           TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                           children: [
-                            if(flSpot.y>=8)
-                            TextSpan(
-                              text: " على الوقت المحدد",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900,
+                            if (flSpot.y >= 8)
+                              TextSpan(
+                                text: " على الوقت المحدد",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
                               ),
-                            ),
-                            if(flSpot.y<8)
+                            if (flSpot.y < 8)
                               TextSpan(
                                 text: "داوم ${flSpot.y} ساعة",
                                 style: TextStyle(
@@ -226,13 +277,15 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                               ),
                           ],
                           textAlign: TextAlign.center,
-
                         );
                       }).toList();
                     },
                   ),
-                  touchCallback: (FlTouchEvent event, LineTouchResponse? lineTouch) {
-                    if (!event.isInterestedForInteractions || lineTouch == null || lineTouch.lineBarSpots == null) {
+                  touchCallback:
+                      (FlTouchEvent event, LineTouchResponse? lineTouch) {
+                    if (!event.isInterestedForInteractions ||
+                        lineTouch == null ||
+                        lineTouch.lineBarSpots == null) {
                       setState(() {
                         touchedValue = -1;
                       });
@@ -240,7 +293,7 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                     }
                     final value = lineTouch.lineBarSpots![0].x;
 
-                    if (value == 0 || value == 24) {
+                    if (value == 0 || value == accountManagementViewModel.allAccountManagement.length+1) {
                       setState(() {
                         touchedValue = -1;
                       });
@@ -265,9 +318,18 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                 lineBarsData: [
                   LineChartBarData(
                     isStepLineChart: true,
-                    spots: widget.yValues.asMap().entries.map((e) {
+                    spots: List.generate(
+                      accountManagementViewModel.getUserTimeToday().length,
+                          (index) => accountManagementViewModel.getUserTimeToday().asMap().entries.map((e) {
+                        return FlSpot(index*1.0, e.value);
+                      }).toList()[index],
+                    ),
+
+                /*    accountManagementViewModel.getUserTimeToday().asMap().entries.map((e) {
+          
+
                       return FlSpot(e.key.toDouble(), e.value);
-                    }).toList(),
+                    }).toList(),*/
                     isCurved: false,
                     barWidth: 4,
                     color: widget.lineColor,
@@ -289,7 +351,7 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                           strokeWidth: 2,
                         ),
                         checkToShowSpotLine: (spot) {
-                          if (spot.x == 0 || spot.x == 25) {
+                          if (spot.x == 0 || spot.x == accountManagementViewModel.allAccountManagement.length+1) {
                             return false;
                           }
 
@@ -300,7 +362,7 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                     dotData: FlDotData(
                       show: true,
                       getDotPainter: (spot, percent, barData, index) {
-                        if (spot.y>=2) {
+                        if (spot.y >= 8) {
                           return FlDotCirclePainter(
                             radius: 6,
                             color: Colors.white,
@@ -317,15 +379,15 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                         }
                       },
                       checkToShowDot: (spot, barData) {
-                        return spot.x != 0 && spot.x != 25;
+                        return spot.x != 0 && spot.x != 10;
                       },
                     ),
                   ),
                 ],
-                minY: 6,
+                minY: 0,
                 maxY: 10,
                 minX: 0,
-                maxX: 24,
+                maxX: accountManagementViewModel.allAccountManagement.length+1,
                 borderData: FlBorderData(
                   show: true,
                   border: Border.all(
@@ -339,7 +401,8 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                   checkToShowHorizontalLine: (value) => value % 0.5 == 0,
                   checkToShowVerticalLine: (value) => value % 0 == 0,
                   getDrawingHorizontalLine: (value) {
-                    if (value % 0.15 == 0) { // تغيير القيمة هنا لتكون 0.15 بدلاً من 0.5
+                    if (value % 0.15 == 0) {
+                      // تغيير القيمة هنا لتكون 0.15 بدلاً من 0.5
                       return const FlLine(
                         color: primaryColor,
                         strokeWidth: 2,
@@ -383,7 +446,7 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      reservedSize: 40,
+                      reservedSize: 50,
                       getTitlesWidget: bottomTitleWidgets,
                     ),
                   ),

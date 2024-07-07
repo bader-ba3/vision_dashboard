@@ -20,6 +20,7 @@ import '../account_management/Employee_View.dart';
 
 import '../employee_time/employee_time.dart';
 import '../event/event_view_screen.dart';
+import '../login/login_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -92,6 +93,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     name: "المستودع",
     img: "assets/dashIcon/groceries.png",
     widget: StoreView(),
+    ), (
+    name: "تسجيل الخروج",
+    img: "assets/dashIcon/logout.png",
+    widget: Container(),
     ),
   ];
 
@@ -104,6 +109,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     tabController = TabController(length: allData.length, vsync: this);
     pageController = PageController();
     tabController.addListener(() {
+      if(tabController.index==13)
+        Get.offAll(() => LoginScreen());
+      // print(tabController.index);
       pageController.jumpToPage(tabController.index);
       setState(() {});
     });
@@ -123,7 +131,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             child: TabContainer(
               textDirection: Get.locale.toString()!="en_US"?TextDirection.rtl:TextDirection.ltr,
               controller: tabController,
-              tabEdge:Get.locale.toString()=="ar_ar"? TabEdge.right:TabEdge.left,
+              tabEdge:Get.locale.toString()!="en_US"? TabEdge.right:TabEdge.left,
               tabsEnd: 1,
               tabsStart: 0.0,
               tabMaxLength: controller.isDrawerOpen ? 60 : 60,
@@ -198,7 +206,7 @@ class DrawerListTile extends StatelessWidget {
         Image.asset(
         svgSrc,
 // color: primaryColor,
-        height: 25,
+        height: 30,
 
       ),
 
@@ -207,24 +215,12 @@ class DrawerListTile extends StatelessWidget {
             Text(title,),
           ],
         ))
-            : Center(child: Row(
-          children: [
-            SizedBox(width: 20,),
-            if(title=='لوحة التحكم'.tr||title=='ادارة المنصة'.tr)
-              SvgPicture.asset(
-                svgSrc,
-
-                colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
-                height: 20,
-              )else
-              Image.asset(
-                svgSrc,
-                // color: primaryColor,
-                // colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                height: 22,
-              ),
-          ],
-        ),),
+            : Center(child: Image.asset(
+              svgSrc,
+              // color: primaryColor,
+              // colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              height: 30,
+            ),),
       );
     });
   }

@@ -63,4 +63,16 @@ class SalaryViewModel extends GetxController{
       update();
     });
   }
+
+  int getAllSalaryPay() {
+
+    int total=0;
+    _salaryMap.forEach((key, value) {
+
+      total+=double.parse(value.dilaySalary!).toInt();
+    },);
+
+    return total;
+
+  }
 }

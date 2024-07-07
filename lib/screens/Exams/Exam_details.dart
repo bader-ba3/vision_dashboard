@@ -64,7 +64,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
       if (_allSection[a]!.isEmpty) {
         _allSection.remove(a);
       }
-      print(_allSection.length);
+
     }
   }
 
@@ -173,7 +173,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     listValue: classNameList,
                     label: 'اختر الصف'.tr,
                     onChange: (value) {
-                      print(value);
+
                       if (value != null) _selectedClass = value;
                       getSectionStudent();
                       setState(() {});
@@ -184,7 +184,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     listValue: _allSection.keys.toList(),
                     label: 'اختر الشعب للأضافة'.tr,
                     onChange: (value) {
-                      print(value);
+
                       _selectedSection.addIf(
                           !_selectedSection.contains(value), value!);
                       setState(() {});
@@ -539,11 +539,11 @@ class _ExamInputFormState extends State<ExamInputForm> {
           checkColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           onChanged: (v) {
-            print(v);
+
             if (v == false) {
               student.available = v;
               _selectedStudent.remove(student.studentID);
-              print(_selectedStudent.length);
+
             } else {
               student.available = v;
               _selectedStudent[student.studentID!] = '0.0';

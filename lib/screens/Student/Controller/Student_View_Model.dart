@@ -35,10 +35,8 @@ class StudentViewModel extends GetxController {
 
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
-
-
   getAllStudent() async {
-    listener=  await studentCollectionRef.snapshots().listen((value) {
+    listener = await studentCollectionRef.snapshots().listen((value) {
       _studentMap.clear();
 
       for (var element in value.docs) {
@@ -69,13 +67,13 @@ class StudentViewModel extends GetxController {
     await studentCollectionRef
         .doc(studentModel.studentID)
         .set(studentModel.toJson());
-    if(studentModel.parentId!=null)
-    await FirebaseFirestore.instance
-        .collection(parentsCollection)
-        .doc(studentModel.parentId)
-        .set({
-      "children": FieldValue.arrayUnion([studentModel.studentID])
-    }, SetOptions(merge: true));
+    if (studentModel.parentId != null)
+      await FirebaseFirestore.instance
+          .collection(parentsCollection)
+          .doc(studentModel.parentId)
+          .set({
+        "children": FieldValue.arrayUnion([studentModel.studentID])
+      }, SetOptions(merge: true));
 
     update();
   }
@@ -88,8 +86,6 @@ class StudentViewModel extends GetxController {
     update();
   }
 
-
-
   double getAllTotalPay() {
     double total = 0.0;
     _studentMap.values.forEach(
@@ -100,8 +96,8 @@ class StudentViewModel extends GetxController {
     return total;
   }
 
-  int getAllReceivePay() {
-    int total = 0;
+  double getAllReceivePay() {
+    double total = 0;
     _studentMap.values.forEach(
       (element) {
         element.installmentRecords!.values.forEach(
@@ -166,8 +162,6 @@ class StudentViewModel extends GetxController {
           (element0) {
             if (int.parse(element0.installmentDate!) <= DateTime.now().month &&
                 element0.isPay != true) {
-
-
               total += int.parse(element0.installmentCost!);
             }
           },
@@ -177,16 +171,51 @@ class StudentViewModel extends GetxController {
     return total;
   }
 
-
-  setInstallmentPay(String installmentId,String studentId, bool isPay){
-    Map<String, InstallmentModel>? installmentRecords =_studentMap[studentId]!.installmentRecords;
-    installmentRecords![installmentId]!.isPay=isPay;
-    installmentRecords[installmentId]!.payTime=DateTime.now().toString();
-    studentCollectionRef.doc(studentId).set(StudentModel(installmentRecords:installmentRecords ).toJson(),SetOptions(merge: true));
+  double getAllReceiveMaxPay() {
+    double total = 0;
+    _studentMap.values.forEach(
+      (element) {
+        element.installmentRecords!.values.forEach(
+          (element0) {
+            if (element0.isPay == true) {
+              if (int.parse(element0.installmentCost!) > total)
+                total = int.parse(element0.installmentCost!) * 1.0;
+            }
+          },
+        );
+      },
+    );
+    return total + 50000;
   }
-  bool chekaIfHaveLateInstallment(String parentId) {
 
-    bool isLate=false;
+  double getAllReceivePayAtMonth(String month) {
+    double total = 0;
+    _studentMap.values.forEach(
+      (element) {
+        element.installmentRecords!.values.forEach(
+          (element0) {
+            if (element0.installmentDate! == month && element0.isPay == true) {
+              total += int.parse(element0.installmentCost!);
+            }
+          },
+        );
+      },
+    );
+    return total;
+  }
+
+  setInstallmentPay(String installmentId, String studentId, bool isPay) {
+    Map<String, InstallmentModel>? installmentRecords =
+        _studentMap[studentId]!.installmentRecords;
+    installmentRecords![installmentId]!.isPay = isPay;
+    installmentRecords[installmentId]!.payTime = DateTime.now().toString();
+    studentCollectionRef.doc(studentId).set(
+        StudentModel(installmentRecords: installmentRecords).toJson(),
+        SetOptions(merge: true));
+  }
+
+  bool chekaIfHaveLateInstallment(String parentId) {
+    bool isLate = false;
     _studentMap.values
         .where(
       (element) => element.parentId == parentId,
@@ -197,8 +226,7 @@ class StudentViewModel extends GetxController {
           (element0) {
             if (int.parse(element0.installmentDate!) <= DateTime.now().month &&
                 element0.isPay != true) {
-
-              isLate= true;
+              isLate = true;
             }
           },
         );

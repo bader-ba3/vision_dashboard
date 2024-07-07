@@ -79,7 +79,7 @@ class ExamViewModel extends GetxController {
     examMap.forEach(
       (key, value) {
         int numOfPass = 0;
-        print(value.marks!.length);
+
         value.marks!.forEach(
           (_, value0) {
             double studentPercentage = double.parse(value0);

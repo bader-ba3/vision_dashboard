@@ -134,7 +134,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                       }),
                                       dataRowItem(size / data.length, "عرض".tr,
                                           color: Colors.teal, onTap: () {
-                                        print(student.stdExam!.length);
+
                                         showDialog(
                                           context: context,
                                           builder: (context) =>

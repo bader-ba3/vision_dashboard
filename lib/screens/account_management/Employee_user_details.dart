@@ -38,6 +38,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
   Map accountType = {
     "user": "مستخدم".tr,
     "admin": "مدير".tr,
+    "superAdmin": "مالك".tr,
   };
   String? role;
   TextEditingController userNameController = TextEditingController();

@@ -24,7 +24,27 @@ class ExpensesViewModel extends GetxController{
     },);
   }
 
+double getMaxExpenses(){
+  double sub=0.0;
+  allExpenses.forEach((key, value) {
+    if(sub<value.total)
+      sub=value.total*1.0;
+  },);
 
+  return sub+5000;
+}
+
+  double getExpensesAtMonth(String month){
+
+    double sub=0.0;
+    allExpenses.forEach((key, value) {
+
+      if(value.date.split("-")[1]==month.padLeft(2,"0"))
+      sub+=value.total;
+    },);
+
+    return sub;
+  }
 double  getAllExpensesMoney(){
   double sub=0.0;
     allExpenses.forEach((key, value) {

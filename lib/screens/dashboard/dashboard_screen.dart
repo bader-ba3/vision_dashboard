@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/responsive.dart';
+import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';
@@ -9,6 +10,7 @@ import 'package:vision_dashboard/screens/dashboard/components/Total_info_Widget.
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/header.dart';
 
 import 'components/Employee_Time_Box.dart';
@@ -24,6 +26,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
 StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
   ExpensesViewModel _expensesViewModel=Get.find<ExpensesViewModel>();
   AccountManagementViewModel _accountManagementViewModel=Get.find<AccountManagementViewModel>();
+  SalaryViewModel _salaryViewModel=Get.find<SalaryViewModel>();
+
+  String selectedMonth = '';
+bool isAll=false;
+  @override
+  void initState() {
+    super.initState();
+
+    selectedMonth = months.entries
+        .where(
+          (element) =>
+      element.value == DateTime.now().month.toString().padLeft(2, "0"),
+    )
+        .first
+        .key;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +52,32 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
         primary: false,
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            CustomDropDown(
+              value: selectedMonth.toString(),
+              listValue: (months.keys
+                  .map(
+                    (e) => e.toString(),
+              )
+                  .toList())+["الكل"],
+              label: "اختر الشهر".tr,
+              onChange: (value) {
+                if (value != null&&value !="الكل") {
+                  selectedMonth = value;
+
+isAll=false;
+                } else{
+
+                  isAll=true;
+                }
+                setState(() {
+
+                });
+              },
+              isFullBorder: true,
+            ),
+            SizedBox(height: defaultPadding,),
             SizedBox(
               width: Get.width,
               child: Wrap(
@@ -50,15 +93,15 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
                         index = 2;
                         setState(() {});
                       },
-                      child: SquareWidget("الاجمالي",  (_studentViewModel.getAllTotalPay()-_expensesViewModel.getAllExpensesMoney()-_accountManagementViewModel.getAllSalaries()).toString(),
-                          primaryColor, "assets/budget.png")),
+                      child: SquareWidget("الاجمالي", isAll?(_studentViewModel.getAllReceivePay()-_expensesViewModel.getAllExpensesMoney()-_salaryViewModel.getAllSalaryPay()): (_studentViewModel.getAllReceivePayAtMonth(months[ selectedMonth]!)-_expensesViewModel.getExpensesAtMonth(months[ selectedMonth]!)-_accountManagementViewModel.getAllSalariesAtMonth(months[ selectedMonth]!/*DateTime.now().month.toString()*/)).toString(),
+                          primaryColor, "assets/budget.png",true)),
                  InkWell(
                           onTap: () {
                             index = 1;
                             setState(() {});
                           },
-                          child: SquareWidget("الايرادات", _studentViewModel.getAllTotalPay().toString(),
-                              Colors.cyan, "assets/profit.png")
+                          child: SquareWidget("الايرادات", isAll?_studentViewModel.getAllReceivePay():_studentViewModel.getAllReceivePayAtMonth(months[ selectedMonth]!).toString(),
+                              Colors.cyan, "assets/profit.png",true)
 
                   ),
                  InkWell(
@@ -66,12 +109,12 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
                             index = 0;
                             setState(() {});
                           },
-                          child: SquareWidget("المصروف", _expensesViewModel.getAllExpensesMoney().toString(),
-                              blueColor, "assets/poor.png")),
+                          child: SquareWidget("المصروف",isAll?_expensesViewModel.getAllExpensesMoney():_expensesViewModel.getExpensesAtMonth(months[ selectedMonth]!).toString(),
+                              blueColor, "assets/poor.png",true)),
 
 
-                  SquareWidget("الرواتب المستحقة", _accountManagementViewModel.getAllSalaries().toString(),
-                      Colors.black, "assets/money-bag.png"),
+                  SquareWidget("الرواتب المستحقة", _accountManagementViewModel.getAllSalariesAtMonth(DateTime.now().month.toString()).toString(),
+                      Colors.black, "assets/money-bag.png",false),
                 ],
               ),
             ),
@@ -81,6 +124,7 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
               children: [
                 Expanded(
                   flex: 5,
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -126,7 +170,7 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
     );
   }
 
-  Widget SquareWidget(title, body, color, png) {
+  Widget SquareWidget(title, body, color, png,bool) {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
@@ -149,7 +193,7 @@ StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
               ),
             ),
             Text(
-              body,
+              body.toString(),
               style: Styles.headLineStyle1.copyWith(color: color==false?Colors.black: color, fontSize: 40),
             ),
             SizedBox(

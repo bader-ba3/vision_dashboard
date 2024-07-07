@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vision_dashboard/screens/login/login_screen.dart';
 
 import 'package:vision_dashboard/screens/main/main_screen.dart';
 import 'firebase_options.dart';
@@ -39,14 +40,14 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.transparent,
         textTheme: GoogleFonts.cairoTextTheme(
           Theme.of(context).textTheme.apply(
-            bodyColor: Colors.white,
-            displayColor: Colors.white,
+            bodyColor: Colors.blue,
+            displayColor: Colors.blue,
           ),
         ),
         canvasColor: secondaryColor,
       ),
-      home: MainScreen(),
-      // home: LoginScreen(),
+      // home: MainScreen(),
+      home: LoginScreen(),
       // home: LoginScreen(),
     );
   }

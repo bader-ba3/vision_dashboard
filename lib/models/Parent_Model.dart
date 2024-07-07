@@ -17,7 +17,7 @@ class ParentModel {
   nationality,startDate,
       work;
 
-  List<dynamic>? children;
+  List<dynamic>? children,contract;
   List<EventRecordModel>? eventRecords;
 
   ParentModel({
@@ -33,6 +33,7 @@ class ParentModel {
     this.parentID,
     this.eventRecords,
     this.nationality,
+    this.contract,
 
     this.children,
   });
@@ -51,6 +52,7 @@ class ParentModel {
       if(work!=null)    'work': work,
       if(id!=null)      'id':id,
       if(age!=null)     'age':age,
+      if(contract!=null)     'contract':contract,
       if(children!=null)    'children':children,
       if(eventRecords!=null)   'eventRecords': eventRecords?.map((event) => event.toJson()).toList()??[],
     };
@@ -70,6 +72,7 @@ class ParentModel {
       emergencyPhone: json['emergencyPhone']??'',
       work: json['work']??'',
       id: json['id']??'',
+      contract: json['contract']??[],
       children: json['children']??[],
       eventRecords: (json['eventRecords'] as List<dynamic>?)
           ?.map((event) => EventRecordModel.fromJson(event))
@@ -83,29 +86,4 @@ class ParentModel {
   }
 }
 
-// Generate random parents
-List<ParentModel> generateRandomParents(int count) {
-  var faker = Faker();
-  List<ParentModel> parents = [];
 
-  for (int i = 0; i < count; i++) {
-    parents.add(ParentModel(
-      fullName: faker.person.name(),
-      address: faker.address.streetAddress(),
-      work: faker.conference.name(),
-      age: Random().nextInt(99).toString(),
-      nationality: faker.address.country(),
-      startDate: faker.date.dateTimeBetween(DateTime(2010), DateTime.now()).toString(),
-      emergencyPhone:
-          "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
-      phoneNumber:
-          "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
-      motherPhone:
-          "05${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}-${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}${Random().nextInt(9)}",
-      parentID: faker.randomGenerator.integer(1000000).toString(),
-      eventRecords: [],
-    ));
-  }
-
-  return parents;
-}

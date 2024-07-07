@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
@@ -401,22 +403,35 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                 ],
                                               ))
                                         else
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: AppButton(
-                                              text: "تراجع",
-                                              onPressed: () {
-                                                studentController
-                                                    .setInstallmentPay(
-                                                        installment[index]
-                                                            .installmentId!,
-                                                        installmentStudent.keys
-                                                            .elementAt(
-                                                                parentIndex),
-                                                        false);
-                                                Get.back();
-                                              },
-                                            ),
+                                          GetBuilder<DeleteManagementViewModel>(
+                                            builder: (deleteController) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: AppButton(
+                                                  text:checkIfPendingDelete(affectedId: installment[index]
+                                                      .installmentId!)?'في انتظار الموفقة..': "تراجع",
+                                                  onPressed: () {
+                                                    if(checkIfPendingDelete(affectedId: installment[index]
+                                                        .installmentId!))
+                                                      QuickAlert.show(context: context, type:QuickAlertType.info,width: Get.width/2,title: "مراجعة المسؤول".tr,text: "يرجى مراجعة مسؤول المنصة".tr);
+                                                      else
+                                                   addDeleteOperation(collectionName: installmentCollection, affectedId: installment[index]
+                                                       .installmentId!,relatedId:installmentStudent.keys
+                                                       .elementAt(
+                                                       parentIndex) );
+                                         /*           studentController
+                                                        .setInstallmentPay(
+                                                            installment[index]
+                                                                .installmentId!,
+                                                            installmentStudent.keys
+                                                                .elementAt(
+                                                                    parentIndex),
+                                                            false);*/
+
+                                                  },
+                                                ),
+                                              );
+                                            }
                                           ),
                                         Spacer(),
                                       ],

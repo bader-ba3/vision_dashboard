@@ -4,10 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/Bus_Model.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
+import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
+import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 
 import '../models/delete_management_model.dart';
 import '../screens/Exams/controller/Exam_View_Model.dart';
@@ -51,11 +54,18 @@ class DeleteManagementViewModel extends GetxController {
   }
 
   doTheDelete(DeleteManagementModel deleteModel) {
+    if(deleteModel.collectionName!=installmentCollection)
     FirebaseFirestore.instance
         .collection(deleteModel.collectionName)
         .doc(deleteModel.affectedId)
         .delete();
-    deleteDeleteOperation(deleteModel);
+    else
+      Get.find<StudentViewModel>()
+          .setInstallmentPay(
+          deleteModel.affectedId,
+          deleteModel.relatedId.toString(),
+          false);
+    deleteDeleteOperation(deleteModel,true);
     switch (deleteModel.collectionName) {
       case Const.expensesCollection:
         if (deleteModel.relatedId != null) {
@@ -70,15 +80,11 @@ class DeleteManagementViewModel extends GetxController {
     }
     update();
   }
-
   deleteStudentFromParentsAndExam(String studentId, String relatedId,List<String> exams)async {
     for( var examId in exams)
       {
         Map<String,dynamic> marks=_examViewModel.examMap[examId]!.marks!;
         marks .remove(studentId);
-        marks.forEach((key, value) {
-          print("key$key---------------$value");
-        },);
         await    _examViewModel.updateExam(ExamModel(
             id: examId, marks: {}));
 
@@ -99,11 +105,12 @@ class DeleteManagementViewModel extends GetxController {
   }
 
   undoTheDelete(DeleteManagementModel deleteModel) {
-    deleteDeleteOperation(deleteModel);
+    deleteDeleteOperation(deleteModel,false);
     update();
   }
 
   addDeleteOperation(DeleteManagementModel deleteModel) {
+
     deleteManagementFireStore.doc(deleteModel.id).set(deleteModel);
     update();
   }
@@ -112,8 +119,11 @@ class DeleteManagementViewModel extends GetxController {
     deleteManagementFireStore.doc(deleteModel.id).update(deleteModel.toJson());
   }
 
-  deleteDeleteOperation(DeleteManagementModel deleteModel) {
-    deleteManagementFireStore.doc(deleteModel.id).delete();
+  deleteDeleteOperation(DeleteManagementModel deleteModel,bool isAccepted) {
+    if(isAccepted)
+      deleteManagementFireStore.doc(deleteModel.id).set(deleteModel..isAccepted=true);
+    else
+    deleteManagementFireStore.doc(deleteModel.id).set(deleteModel..isAccepted=false);
   }
 
 
@@ -163,7 +173,7 @@ bool checkIfPendingDelete({required String affectedId}) {
           .allDelete
           .values
           .where(
-            (element) => element.affectedId == affectedId,
+            (element) => element.affectedId == affectedId&&!(element.isAccepted != null&&element.isAccepted == false),
           )
           .length >
       0;

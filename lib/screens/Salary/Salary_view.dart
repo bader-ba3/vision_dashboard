@@ -13,7 +13,6 @@ import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/header.dart';
 import 'SalaryTable.dart';
 
-
 class SalaryView extends StatefulWidget {
   const SalaryView({super.key});
 
@@ -30,7 +29,6 @@ class _SalaryViewState extends State<SalaryView> {
 
   void _handleSaveButtonPressed(String paySalary, String id, String date,
       String constSalary, String dilaySalary) async {
-
     QuickAlert.show(
         width: Get.width / 2,
         context: context,
@@ -39,7 +37,7 @@ class _SalaryViewState extends State<SalaryView> {
         text: 'يتم العمل على الطلب'.tr,
         barrierDismissible: false);
     final data =
-    await signatureGlobalKey.currentState!.toImage(pixelRatio: 3.0);
+        await signatureGlobalKey.currentState!.toImage(pixelRatio: 3.0);
     final bytes = await data.toByteData(format: ui.ImageByteFormat.png);
     await Get.find<AccountManagementViewModel>()
         .adReceiveSalary(id, paySalary, date, constSalary, dilaySalary, bytes);
@@ -56,8 +54,8 @@ class _SalaryViewState extends State<SalaryView> {
     selectedMonth = months.entries
         .where(
           (element) =>
-      element.value == DateTime.now().month.toString().padLeft(2, "0"),
-    )
+              element.value == DateTime.now().month.toString().padLeft(2, "0"),
+        )
         .first
         .key;
   }
@@ -67,20 +65,22 @@ class _SalaryViewState extends State<SalaryView> {
     return Scaffold(
       appBar: Header(
           context: context,
-        title: 'ادارة رواتب الموظفين'.tr,middleText: 'تستخدم هذه الواجهة لعرض الرواتب المستحقة او المقبوضة لكل موظف حسب شهر معين مع امكانية تسليم رواتب للموظفين'.tr
-      ),
+          title: 'ادارة رواتب الموظفين'.tr,
+          middleText:
+              'تستخدم هذه الواجهة لعرض الرواتب المستحقة او المقبوضة لكل موظف حسب شهر معين مع امكانية تسليم رواتب للموظفين'
+                  .tr),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: GetBuilder<HomeViewModel>(builder: (controller) {
           double size = max(
-              MediaQuery.sizeOf(context).width -
-                  (controller.isDrawerOpen ? 240 : 120),
-              1000) -
+                  MediaQuery.sizeOf(context).width -
+                      (controller.isDrawerOpen ? 240 : 120),
+                  1000) -
               60;
           return Padding(
             padding: const EdgeInsets.all(8),
             child:
-            GetBuilder<AccountManagementViewModel>(builder: (controller) {
+                GetBuilder<AccountManagementViewModel>(builder: (controller) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -89,7 +89,7 @@ class _SalaryViewState extends State<SalaryView> {
                     listValue: months.keys
                         .map(
                           (e) => e.toString(),
-                    )
+                        )
                         .toList(),
                     label: "اختر الشهر".tr,
                     onChange: (value) {
@@ -113,25 +113,24 @@ class _SalaryViewState extends State<SalaryView> {
                       runSpacing: 25,
                       spacing: 0,
                       children: [
-                        if(enableUpdate)
+                        if (enableUpdate)
+                          SalaryTable(
+                              size: enableUpdate ? size : size * 2,
+                              selectedMonth: selectedMonth,
+                              type: TableType.Payable,
+                              signatureGlobalKey: signatureGlobalKey,
+                              handleSaveButtonPressed: _handleSaveButtonPressed,
+                              handleClearButtonPressed:
+                                  _handleClearButtonPressed,
+                              scrollController: _scrollControllerPayed),
                         SalaryTable(
-                          size: enableUpdate?size:size*2,
-                          selectedMonth: selectedMonth,
-                          type: TableType.Payable,
-                          signatureGlobalKey: signatureGlobalKey,
-                          handleSaveButtonPressed: _handleSaveButtonPressed,
-                          handleClearButtonPressed: _handleClearButtonPressed,
-                            scrollController:_scrollControllerPayed
-                        ),
-                        SalaryTable(
-                          size: enableUpdate?size:size*2,
-                          selectedMonth: selectedMonth,
-                          type: TableType.Received,
-                          signatureGlobalKey: signatureGlobalKey,
-                          handleSaveButtonPressed: _handleSaveButtonPressed,
-                          handleClearButtonPressed: _handleClearButtonPressed,
-                            scrollController:_scrollController
-                        ),
+                            size: enableUpdate ? size : size * 2,
+                            selectedMonth: selectedMonth,
+                            type: TableType.Received,
+                            signatureGlobalKey: signatureGlobalKey,
+                            handleSaveButtonPressed: _handleSaveButtonPressed,
+                            handleClearButtonPressed: _handleClearButtonPressed,
+                            scrollController: _scrollController),
                       ],
                     ),
                   ),
@@ -143,7 +142,7 @@ class _SalaryViewState extends State<SalaryView> {
       ),
     );
   }
+
   final ScrollController _scrollController = ScrollController();
   final ScrollController _scrollControllerPayed = ScrollController();
-
 }

@@ -28,8 +28,15 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
   final titleController = TextEditingController();
   final totalController = TextEditingController();
   final bodyController = TextEditingController();
+  final dateController = TextEditingController();
   List imageLinkList = [];
   List<String> ImagesTempData = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dateController.text=DateTime.now().toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +52,35 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
           children: [
             CustomTextField(controller: titleController, title: 'العنوان'.tr),
             CustomTextField(controller: totalController, title: 'القيمة'.tr),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(
+                  controller: dateController,
+                  title: 'تاريخ البداية'.tr,
+                  enable: false,
+                  keyboardType: TextInputType.datetime,
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDatePicker(
+                      context: context,
+                      firstDate: DateTime(2010),
+                      lastDate: DateTime(2100),
+                    ).then((date) {
+                      if (date != null) {
+                        dateController.text =
+                        date.toString().split(" ")[0];
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    Icons.date_range_outlined,
+                    color: primaryColor,
+                  ),
+                ),
+              ],
+            ),
             multiLineCustomTextField(
                 controller: bodyController, title: 'تاريخ البداية'.tr),
             Column(
@@ -120,7 +156,6 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
             AppButton(
               text: "حفظ".tr,
               onPressed: () async {
-
                 QuickAlert.show(
                     width: Get.width / 2,
                     context: context,
@@ -131,9 +166,9 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
              if( widget.expensesModel == null)
                 uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
                 String expId = generateId("ExP");
-
                 BusViewModel busController = Get.find<BusViewModel>();
                 ExpensesModel model = ExpensesModel(
+                  date: dateController.text,
                   id: expId,
                   busId: widget.busId,
                   title: titleController.text,
@@ -141,7 +176,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                       ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
                       : bodyController.text,
                   total: int.parse(totalController.text),
-                  userId: getMyUserId(),
+                  userId: getMyUserId().id,
                   images: imageLinkList,
                 );
                 if (widget.busId != null)

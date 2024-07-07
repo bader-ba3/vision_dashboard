@@ -307,7 +307,7 @@ class _BusInputFormState extends State<BusInputForm> {
             checkColor: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onChanged: (v) {
-              print(v);
+
               student.available = v ?? false;
               selectedStudent.contains(student.studentID) ?selectedStudent.remove(student.studentID):selectedStudent.add(student.studentID.toString());
 
@@ -344,7 +344,7 @@ class _BusInputFormState extends State<BusInputForm> {
             checkColor: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onChanged: (v) {
-              print(v);
+
               employee.available = v ?? false;
               selectedEmployee.contains(employee.id) ?selectedEmployee.remove(employee.id):selectedEmployee.add(employee.id.toString());
               setState(() {});

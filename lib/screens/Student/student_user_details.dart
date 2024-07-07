@@ -86,7 +86,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     installmentCount++;
     monthsController.add(TextEditingController());
     costsController.add(TextEditingController());
-    print(installmentCount);
+
   }
 
   bool _validateFields() {

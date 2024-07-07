@@ -26,10 +26,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     "المبلغ",
     "اسم الموظف",
     "الوصف",
-    "كامل الوصف",
-    "عدد الفواتير المدخلة",
-    "الصور",
-    "العمليات"
+    "الفواتير المدخلة",
+    "تاريخ",
+    "العمليات",
   ];
 
   @override
@@ -92,50 +91,52 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                       dataRowItem(size / data.length,
                                           expense.userId.toString()),
                                       dataRowItem(size / data.length,
-                                          expense.body.toString()),
-                                      dataRowItem(
+                                          expense.body.toString(), onTap: () {
+                                            Get.defaultDialog(
+                                                backgroundColor: Colors.white,
+                                                title: "التفاصيل".tr,
+                                                content: SizedBox(
+                                                    width: Get.height / 2,
+                                                    height: Get.height / 2,
+                                                    child: Center(
+                                                      child: Text(
+                                                        expense.body.toString(),
+                                                        style:
+                                                        TextStyle(fontSize: 20,color: blueColor),
+                                                      ),
+                                                    )));
+                                          }),
+                          /*            dataRowItem(
                                           size / data.length, "عرض التفاصيل".tr,
-                                          color: Colors.teal, onTap: () {
-                                        Get.defaultDialog(
-                                            backgroundColor: Colors.white,
-                                            title: "التفاصيل".tr,
-                                            content: SizedBox(
-                                                width: Get.height / 2,
-                                                height: Get.height / 2,
-                                                child: Text(
-                                                  expense.body.toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 20),
-                                                )));
-                                      }),
+                                          color: Colors.teal),*/
                                       dataRowItem(size / data.length,
-                                          expense.images.length.toString()),
+                                          expense.images.length.toString(), onTap: () {
+                            Get.defaultDialog(
+                            backgroundColor: Colors.white,
+                            title: "الصور".tr,
+                            content: Container(
+                            color: Colors.white,
+                            width: Get.height / 1.5,
+                            height: Get.height / 1.5,
+                            child: PageView.builder(
+                            itemCount:
+                            expense.images.length,
+                            scrollDirection:
+                            Axis.horizontal,
+                            itemBuilder:
+                            (context, index) {
+                            return SizedBox(
+                            width: Get.height / 1.5,
+                            child: Image.network(
+                            expense.images[index],
+                            fit: BoxFit.fitWidth,
+                            ));
+                            },
+                            )));
+                            }),
                                       dataRowItem(
-                                          size / data.length, "عرض الصور".tr,
-                                          color: Colors.teal, onTap: () {
-                                        Get.defaultDialog(
-                                            backgroundColor: Colors.white,
-                                            title: "الصور".tr,
-                                            content: Container(
-                                                color: Colors.white,
-                                                width: Get.height / 1.5,
-                                                height: Get.height / 1.5,
-                                                child: PageView.builder(
-                                                  itemCount:
-                                                      expense.images.length,
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return SizedBox(
-                                                        width: Get.height / 1.5,
-                                                        child: Image.network(
-                                                          expense.images[index],
-                                                          fit: BoxFit.fitWidth,
-                                                        ));
-                                                  },
-                                                )));
-                                      }),
+                                          size / data.length,expense.date,
+                                          color: Colors.teal),
                                       dataRowItem(
                                           size / data.length,
                                           checkIfPendingDelete(

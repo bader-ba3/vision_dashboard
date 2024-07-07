@@ -3,28 +3,37 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
+import 'package:vision_dashboard/models/account_management_model.dart';
+
+import '../../../controller/account_management_view_model.dart';
 
 class EmployeeSalaryBarChart extends StatefulWidget {
-  EmployeeSalaryBarChart({super.key});
+  EmployeeSalaryBarChart({super.key,required this.selectedMonth});
 
   final Color dark = Colors.black.withBlue(100);
   final Color normal = primaryColor.withAlpha(1);
   final Color light = primaryColor;
+  final String selectedMonth;
 
   @override
   State<StatefulWidget> createState() => EmployeeSalaryBarChartState();
 }
 
 class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
+
+  AccountManagementViewModel accountManageVM =
+  Get.find<AccountManagementViewModel>();
+
   Widget bottomTitles(double value, TitleMeta meta) {
     final style = Styles.headLineStyle4;
     String text;
 
-    if (value > 0 && value < employeeName.length-1) {
-      text = employeeName[value.toInt()];
+    if (value < accountManageVM.allAccountManagement.length) {
+      text = accountManageVM.allAccountManagement.values.elementAt(value.toInt()).fullName!.split(" ")[0];
     } else {
-      text = '';
+      text = 's';
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -54,21 +63,21 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
       physics: ClampingScrollPhysics(),
       child: SizedBox(
         // aspectRatio: 1.66,
-        height: 400,
-        width: 90*24,
+        width:Get.width,
         child: LayoutBuilder(
           builder: (context, constraints) {
             final barsSpace = 24.0 * constraints.maxWidth / 400;
             final barsWidth = 8.0 * constraints.maxWidth / 400;
             return BarChart(
               BarChartData(
-                alignment: BarChartAlignment.center,
+
+                maxY: 3500,
                 barTouchData: BarTouchData(
                   enabled: true,
                   touchTooltipData: BarTouchTooltipData(
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
-                        '${employeeName[group.x.toInt()]}: ',
+                        '${accountManageVM.allAccountManagement.values.elementAt(group.x.toInt()).fullName}: ',
                         const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -90,6 +99,7 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
 
                   show: true,
                   bottomTitles: AxisTitles(
+
                     sideTitles: SideTitles(
                       showTitles: true,
 
@@ -134,35 +144,37 @@ class EmployeeSalaryBarChartState extends State<EmployeeSalaryBarChart> {
   }
 
   List<BarChartGroupData> getData(double barsWidth, double barsSpace) {
-    int salary=0;
+
     List<BarChartGroupData> getBarChartData() {
 
-      List<BarChartGroupData> data = [];
+      List<BarChartGroupData> data = List.generate(accountManageVM.allAccountManagement.length, (index) {
+        AccountManagementModel account=accountManageVM.allAccountManagement.values.elementAt(index);
+        return   BarChartGroupData(
+          x: index,
+          barsSpace: barsSpace,
 
-      for (int i = 1; i <= 24; i++) {
-        salary=Random().nextInt(2500);
-        data.add(
-          BarChartGroupData(
-            x: i,
-            barsSpace: barsSpace,
-            barRods: [
-              BarChartRodData(
-                toY:i==24?3500: 2500,
-                rodStackItems: [
-                  if(i!=24)
-                  BarChartRodStackItem(0, i==24?3500:salary.toDouble(), widget.dark),
-                  if(i!=24)
-                  BarChartRodStackItem(i==24?3500:salary.toDouble(), i==24?3500:2500, widget.light),
-                  if(i==24)
-                    BarChartRodStackItem(0, 3500,secondaryColor,BorderSide(color: secondaryColor)),
-                ],
-                borderRadius: BorderRadius.circular(4),
-                width: barsWidth,
-              ),
-            ],
-          ),
+          barRods: [
+            BarChartRodData(
+              toY:account.salary!*1.0,
+              rodStackItems: [
+
+                  BarChartRodStackItem(0, accountManageVM.getUserSalariesAtMonth(widget.selectedMonth, account.id), widget.dark,),
+                  BarChartRodStackItem(accountManageVM.getUserSalariesAtMonth(widget.selectedMonth, account.id),account.salary!*1.0, widget.light),
+
+              ],
+              borderRadius: BorderRadius.circular(4),
+              width: barsWidth,
+            ),
+          ],
         );
-      }
+      },);
+
+/*      for (int i = 0; i <= accountManageVM.allAccountManagement.length+20; i++) {
+
+        data.add(
+
+        );
+      }*/
 
       return data;
     }

@@ -22,9 +22,12 @@ AppBar Header({required String  title,required String middleText,required BuildC
     centerTitle: false,
     title: Row(
       children: [
-        Text(
-          title,
-          style: Styles.headLineStyle1.copyWith(color: primaryColor),
+        Flexible(
+          child: Text(
+            title,
+            style: Styles.headLineStyle1.copyWith(color: primaryColor),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         IconButton(
             onPressed: () {

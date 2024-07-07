@@ -49,6 +49,7 @@ const String examsCollection = 'Exams';
 const String salaryCollection = 'Salaries';
 const String archiveCollection = 'Archive';
 const String busesCollection = 'Buses';
+const String installmentCollection = 'Installment';
 List<String> classNameList = [
   "KG 1",
   "KG 2",

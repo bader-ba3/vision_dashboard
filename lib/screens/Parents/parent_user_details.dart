@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:faker/faker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
@@ -36,9 +40,11 @@ class _ParentInputFormState extends State<ParentInputForm> {
   final bodyEventController = TextEditingController();
   final emergencyPhoneController = TextEditingController();
   final workController = TextEditingController();
+
   List<EventRecordModel> eventRecords = [];
   EventModel? selectedEvent;
-
+  List<String> _contracts = [], _contractsTemp = [];
+DateTime _selectedDate=DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -72,25 +78,25 @@ class _ParentInputFormState extends State<ParentInputForm> {
     super.dispose();
   }
 
-
-
-
-
   // Function to validate form fields
   bool _validateFields() {
-    if (!validateNotEmpty(fullNameController.text, "الاسم الكامل".tr)) return false;
-    if (!validateNumericField(numberController.text, "رقم الهاتف".tr)) return false;
+    if (!validateNotEmpty(fullNameController.text, "الاسم الكامل".tr))
+      return false;
+    if (!validateNumericField(numberController.text, "رقم الهاتف".tr))
+      return false;
     if (!validateNotEmpty(addressController.text, "العنوان".tr)) return false;
-    if (!validateNotEmpty(nationalityController.text, "الجنسية".tr)) return false;
+    if (!validateNotEmpty(nationalityController.text, "الجنسية".tr))
+      return false;
     if (!validateNumericField(ageController.text, "العمر".tr)) return false;
-    if (!validateNumericField(motherPhoneNumberController.text, "رقم هاتف الأم".tr)) return false;
-    if (!validateNumericField(emergencyPhoneController.text, "رقم الطوارئ".tr)) return false;
+    if (!validateNumericField(
+        motherPhoneNumberController.text, "رقم هاتف الأم".tr)) return false;
+    if (!validateNumericField(emergencyPhoneController.text, "رقم الطوارئ".tr))
+      return false;
     if (!validateNotEmpty(workController.text, "العمل".tr)) return false;
-    if (!validateNotEmpty(startDateController.text, "تاريخ البداية".tr)) return false;
+    if (!validateNotEmpty(startDateController.text, "تاريخ البداية".tr))
+      return false;
     return true;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -115,83 +121,284 @@ class _ParentInputFormState extends State<ParentInputForm> {
                 runSpacing: 25,
                 spacing: 25,
                 children: [
-                  CustomTextField(controller: fullNameController, title: 'الاسم الكامل'.tr),
-                  CustomTextField(controller: numberController, title: 'رقم الهاتف'.tr, keyboardType: TextInputType.number),
-                  CustomTextField(controller: addressController, title: 'العنوان'.tr),
-                  CustomTextField(controller: nationalityController, title: 'الجنسية'.tr),
-                  CustomTextField(controller: ageController, title: 'العمر'.tr, keyboardType: TextInputType.number),
-                  CustomTextField(controller: motherPhoneNumberController, title: 'رقم هاتف الام'.tr, keyboardType: TextInputType.number),
-                  CustomTextField(controller: emergencyPhoneController, title: 'رقم الطوارئ'.tr, keyboardType: TextInputType.number),
-                  CustomTextField(controller: workController, title: 'العمل'.tr),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextField(
-                        controller: startDateController,
-                        title: 'تاريخ البداية'.tr,
-                        enable: false,
-                        keyboardType: TextInputType.datetime,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          showDatePicker(
-                            context: context,
-                            firstDate: DateTime(2010),
-                            lastDate: DateTime(2100),
-                          ).then((date) {
-                            if (date != null) {
-                              startDateController.text = date.toString().split(" ")[0];
-                            }
-                          });
-                        },
-                        icon: Icon(
+                  CustomTextField(
+                      controller: fullNameController, title: 'الاسم الكامل'.tr),
+                  CustomTextField(
+                      controller: numberController,
+                      title: 'رقم الهاتف'.tr,
+                      keyboardType: TextInputType.number),
+                  CustomTextField(
+                      controller: addressController, title: 'العنوان'.tr),
+                  CustomTextField(
+                      controller: nationalityController, title: 'الجنسية'.tr),
+                  CustomTextField(
+                      controller: ageController,
+                      title: 'العمر'.tr,
+                      keyboardType: TextInputType.number),
+                  CustomTextField(
+                      controller: motherPhoneNumberController,
+                      title: 'رقم هاتف الام'.tr,
+                      keyboardType: TextInputType.number),
+                  CustomTextField(
+                      controller: emergencyPhoneController,
+                      title: 'رقم الطوارئ'.tr,
+                      keyboardType: TextInputType.number),
+                  CustomTextField(
+                      controller: workController, title: 'العمل'.tr),
+                  InkWell(
+                    onTap: (){
+                      showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2100),
+                      ).then((date) {
+                        if (date != null) {
+                          startDateController.text =
+                          date.toString().split(" ")[0];
+                        }
+                      });
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomTextField(
+                          controller: startDateController,
+                          title: 'تاريخ البداية'.tr,
+                          enable: false,
+                          keyboardType: TextInputType.datetime,
+                        ),
+                        Icon(
                           Icons.date_range_outlined,
                           color: primaryColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                 /* SizedBox(
+                      width: Get.width / 4,
+                      child: EasyInfiniteDateTimeLine(
+                          selectionMode: const SelectionMode.autoCenter(),
+                          headerBuilder: (context, date) {
+                            return InkWell(
+                              onTap: (){
+                                showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(2024),
+                                  // focusDate: _selectedDate,
+                                  lastDate: DateTime(2024, 12, 31),
+                                ).then((date0) {
+                                  if (date0 != null) {
+                                    setState(() {
+                                      startDateController.text =
+                                      date0.toString().split(" ")[0];
+                                      _selectedDate=date0;
+date=date0;
+                                    });
+
+                                  }
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text("تاريخ البداية"),
+                                  Text(date.toIso8601String().split("T")[0])
+                                ],
+                              ),
+                            );
+                          },
+                          firstDate: DateTime(2024),
+                          focusDate: _selectedDate,
+                          lastDate: DateTime(2024, 12, 31),
+
+                          onDateChange: (selectedDate) {
+                            setState(() {
+                              _selectedDate=selectedDate;
+                              startDateController.text=selectedDate.toString();
+                              // _focusDate = selectedDate;
+                            });
+                          },
+                          dayProps: const EasyDayProps(
+                            width: 64.0,
+                            height: 64.0,
+                          ),
+                          itemBuilder: (
+                            BuildContext context,
+                            DateTime date,
+                            bool isSelected,
+                            VoidCallback onTap,
+                          ) {
+                            return InkResponse(
+                              // You can use `InkResponse` to make your widget clickable.
+                              // The `onTap` callback responsible for triggering the `onDateChange`
+                              // callback and animating to the selected date if the `selectionMode` is
+                              // SelectionMode.autoCenter() or SelectionMode.alwaysFirst().
+                              onTap: onTap,
+                              child: CircleAvatar(
+                                // use `isSelected` to specify whether the widget is selected or not.
+                                backgroundColor: isSelected
+                                    ? primaryColor
+                                    : secondaryColor,
+                                radius: 32.0,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        date.day.toString(),
+                                        style: TextStyle(
+                                          color:
+                                              isSelected ? Colors.white : primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        EasyDateFormatter.shortDayName(
+                                            date, "ar_ar"),
+                                        style: TextStyle(
+                                          color:
+                                              isSelected ? Colors.white : primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })),*/
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("صورة العقد".tr),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                FilePickerResult? _ = await FilePicker.platform
+                                    .pickFiles(
+                                        type: FileType.image,
+                                        allowMultiple: true);
+                                if (_ != null) {
+                                  _.xFiles.forEach(
+                                    (element) async {
+                                      _contractsTemp.add(await element.path);
+                                    },
+                                  );
+                                  setState(() {});
+                                }
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  height: 200,
+                                  width: 200,
+                                  child: Icon(Icons.add),
+                                ),
+                              ),
+                            ),
+                            ...List.generate(
+                              _contractsTemp.length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.file(
+                                        File(_contractsTemp[index]),
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            ),
+                            ...List.generate(
+                              _contracts.length,
+                              (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.network(
+                                        _contracts[index],
+                                        height: 200,
+                                        width: 200,
+                                        fit: BoxFit.fitHeight,
+                                      )),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-
                   AppButton(
                     text: 'حفظ'.tr,
-                    onPressed: () async{
+                    onPressed: () async {
                       if (_validateFields()) {
                         QuickAlert.show(
-                          width: Get.width/2,
-                          context: context,
-                          type: QuickAlertType.loading,
-                          title: 'جاري التحميل'.tr,
-                          text: 'يتم العمل على الطلب'.tr,
-barrierDismissible: false
+                            width: Get.width / 2,
+                            context: context,
+                            type: QuickAlertType.loading,
+                            title: 'جاري التحميل'.tr,
+                            text: 'يتم العمل على الطلب'.tr,
+                            barrierDismissible: false);
+                        await uploadImages(_contractsTemp, "contracts").then(
+                          (value) => _contracts.addAll(value),
                         );
-                          ParentModel parent = ParentModel(
-                            age: ageController.text,
-                            nationality: nationalityController.text,
-                            parentID: faker.randomGenerator
-                                .integer(1000000)
-                                .toString(),
-                            id: widget.parent==null?generateId("PARENT"):widget.parent!.id.toString(),
-                            fullName: fullNameController.text,
-                            address: addressController.text,
-                            work: workController.text,
-                            emergencyPhone: emergencyPhoneController.text,
-                            motherPhone: motherPhoneNumberController.text,
-                            phoneNumber: numberController.text,
-                            eventRecords: eventRecords,
-                            startDate: startDateController.text,
-                          );
+                        ParentModel parent = ParentModel(
+                          age: ageController.text,
+                          nationality: nationalityController.text,
+                          contract: _contracts,
+                          parentID:
+                              faker.randomGenerator.integer(1000000).toString(),
+                          id: widget.parent == null
+                              ? generateId("PARENT")
+                              : widget.parent!.id.toString(),
+                          fullName: fullNameController.text,
+                          address: addressController.text,
+                          work: workController.text,
+                          emergencyPhone: emergencyPhoneController.text,
+                          motherPhone: motherPhoneNumberController.text,
+                          phoneNumber: numberController.text,
+                          eventRecords: eventRecords,
+                          startDate: startDateController.text,
+                        );
 
-                         await Future.delayed(Durations.extralong4);
-                       await   Get.find<ParentsViewModel>().addParent(parent);
+                        await Future.delayed(Durations.extralong4);
+                        await Get.find<ParentsViewModel>().addParent(parent);
 
-                       // clearController();
-                          print('Parent Model: $parent');
-                    if(widget.parent!=null)
-                      Get.back();
-                         Get.back();
-
+                        // clearController();
+                        print('Parent Model: $parent');
+                        if (widget.parent != null) Get.back();
+                        Get.back();
                       }
-
                     },
                   ),
                 ],
@@ -208,9 +415,8 @@ barrierDismissible: false
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   GetBuilder<EventViewModel>(builder: (eventController) {
-                    return  Wrap(
+                    return Wrap(
                       runAlignment: WrapAlignment.spaceAround,
                       runSpacing: 25,
                       children: [
@@ -220,17 +426,17 @@ barrierDismissible: false
                               .toList()
                               .where(
                                 (element) =>
-                            element.role == Const.eventTypeParent,
-                          )
+                                    element.role == Const.eventTypeParent,
+                              )
                               .map((e) => e)
                               .toList(),
                           label: "نوع الحدث".tr,
                           onChange: (selectedWay) {
-                            print(selectedWay);
+
                             if (selectedWay != null) {
                               setState(() {});
-                              selectedEvent=  eventController.allEvents[selectedWay] ;
-
+                              selectedEvent =
+                                  eventController.allEvents[selectedWay];
                             }
                           },
                         ),
@@ -275,21 +481,25 @@ barrierDismissible: false
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(int.parse(record.color)).withOpacity(0.2),
+                              color: Color(int.parse(record.color))
+                                  .withOpacity(0.2),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 14.0, horizontal: 10),
                               child: Row(
                                 children: [
                                   Text(
                                     record.type,
-                                    style: Styles.headLineStyle1.copyWith(color: Colors.black),
+                                    style: Styles.headLineStyle1
+                                        .copyWith(color: Colors.black),
                                   ),
                                   SizedBox(width: 10),
                                   Text(
                                     record.body,
-                                    style: Styles.headLineStyle1.copyWith(color: Colors.black),
+                                    style: Styles.headLineStyle1
+                                        .copyWith(color: Colors.black),
                                   ),
                                   SizedBox(width: 50),
                                   Text(
@@ -308,8 +518,6 @@ barrierDismissible: false
                 ],
               ),
             )
-
-
           ],
         ),
       ),
@@ -317,7 +525,6 @@ barrierDismissible: false
   }
 
   void clearController() {
-
     fullNameController.clear();
     numberController.clear();
     addressController.clear();
