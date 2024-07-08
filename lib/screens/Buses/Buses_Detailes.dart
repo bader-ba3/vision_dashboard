@@ -94,6 +94,9 @@ class _BusInputFormState extends State<BusInputForm> {
     allEmployee.values.forEach((element) {
       element.available=false;
     },);
+    setState(() {
+
+    });
   }
 
   @override
@@ -177,8 +180,7 @@ class _BusInputFormState extends State<BusInputForm> {
                             );
                          await   busController.addBus(bus);
                             clearControl();
-                            setState(() {
-                            });
+
                             if(widget.busModel!=null)
                                 Get.back();
                                 Get.back();

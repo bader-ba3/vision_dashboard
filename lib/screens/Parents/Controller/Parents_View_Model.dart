@@ -45,10 +45,11 @@ class ParentsViewModel extends GetxController {
     update();
   }
 
-  deleteParent(String parentId)async {
+  deleteParent(String parentId,List studentList)async {
    await addDeleteOperation(
         collectionName: parentsCollection,
-        affectedId: parentId);
+        affectedId: parentId,
+   relatedList: studentList.map((e) => e.toString(),).toList());
     update();
   }
 

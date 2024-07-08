@@ -85,7 +85,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                           checkIfPendingDelete(
                                                   affectedId:
                                                       parent.id.toString())
-                                              ? Colors.redAccent
+                                              ? Colors.redAccent.withOpacity(0.2).withOpacity(0.2)
                                               : Colors.transparent,
                                         ),
                                         cells: [
@@ -127,11 +127,11 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                               if (checkIfPendingDelete(
                                                   affectedId:
                                                       parent.id.toString()))
-                                                returnPendingDelete(
+                                                _.returnDeleteOperation(
                                                     affectedId: parent.id!);
                                               else
                                                 controller.deleteParent(
-                                                    parent.id.toString());
+                                                    parent.id.toString(),parent.children??[]);
                                             }
                                           }),
                                         ]),

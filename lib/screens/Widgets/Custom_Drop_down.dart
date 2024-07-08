@@ -17,7 +17,7 @@ class CustomDropDown extends StatelessWidget {
       child: DropdownButtonFormField<String>(
         decoration:  InputDecoration(
           hintStyle:TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis) ,
-          
+          hintText: label,
           labelText: label,
           labelStyle: TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis),
           enabledBorder:isFullBorder!=null? OutlineInputBorder(
@@ -38,7 +38,7 @@ class CustomDropDown extends StatelessWidget {
         value:value==''? null:value,
         iconEnabledColor: Colors.blue,
 
-        hint: Text(label,style: Styles.headLineStyle4.copyWith(color: blueColor.withOpacity(0.7)),overflow: TextOverflow.ellipsis),
+        hint: Text(label,style: Styles.headLineStyle4.copyWith(color: primaryColor.withOpacity(0.4)),overflow: TextOverflow.ellipsis),
         onChanged: onChange,
         items: listValue.map((e) {
           return DropdownMenuItem(

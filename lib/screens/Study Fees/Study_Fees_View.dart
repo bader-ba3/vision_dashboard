@@ -82,7 +82,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                 title: "الدفعات المتأخرة",
                                 body:
                                     "${studentController.getAllNunReceivePayThisMonth()}",
-                                color: Colors.redAccent,
+                                color: Colors.redAccent.withOpacity(0.2),
                                 png: "assets/late-payment.png")),
                         InkWell(
                             child: SquareWidget(
@@ -173,7 +173,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                               studentController
                                                       .chekaIfHaveLateInstallment(
                                                           parent.id!)
-                                                  ? Colors.red.shade100
+                                                  ? Colors.redAccent.withOpacity(0.2)
                                                   : Colors.transparent),
                                           cells: [
                                             dataRowItem(size / data.length,

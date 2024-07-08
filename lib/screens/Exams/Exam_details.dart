@@ -34,13 +34,12 @@ class _ExamInputFormState extends State<ExamInputForm> {
     if (widget.examModel != null) {
       subjectController.text = widget.examModel!.subject ?? '';
       professorController.text = widget.examModel!.professor ?? '';
-      dateController.text = widget.examModel!.date.toString() ;
-      examPassMarkController.text =
-          widget.examModel!.examPassMark.toString();
+      dateController.text = widget.examModel!.date.toString();
+      examPassMarkController.text = widget.examModel!.examPassMark.toString();
       examMaxMarkController.text = widget.examModel!.examMaxMark ?? '';
       examId = widget.examModel!.id!;
-      _questionImageFile=widget.examModel!.questionImage;
-      _answerImageFile=widget.examModel!.answerImage;
+      _questionImageFile = widget.examModel!.questionImage;
+      _answerImageFile = widget.examModel!.answerImage;
       widget.examModel!.marks?.forEach(
         (key, value) {
           _selectedStudent[key] = value;
@@ -49,7 +48,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
     }
   }
 
-  final Map<String, List<StudentModel>> _allSection = {};
+  Map<String, List<StudentModel>> _allSection = {};
   StudentViewModel studentViewModel = Get.find<StudentViewModel>();
 
   getSectionStudent() {
@@ -64,14 +63,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
       if (_allSection[a]!.isEmpty) {
         _allSection.remove(a);
       }
-
     }
   }
 
   @override
   void initState() {
     super.initState();
-    examId = generateId("Exam");
+    examId = generateId("EXAM");
     initExam();
   }
 
@@ -148,8 +146,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                         lastDate: DateTime(2100),
                       ).then((date) {
                         if (date != null) {
-                          dateController.text =
-                          date.toString().split(" ")[0];
+                          dateController.text = date.toString().split(" ")[0];
                         }
                       });
                     },
@@ -161,15 +158,14 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       icon: Icon(
                         Icons.date_range_outlined,
                         color: primaryColor,
-                      ) ,
+                      ),
                     ),
                   ),
                   CustomDropDown(
-                    value: '',
+                    value: _selectedClass,
                     listValue: classNameList,
                     label: 'اختر الصف'.tr,
                     onChange: (value) {
-
                       if (value != null) _selectedClass = value;
                       getSectionStudent();
                       setState(() {});
@@ -180,7 +176,6 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     listValue: _allSection.keys.toList(),
                     label: 'اختر الشعب للأضافة'.tr,
                     onChange: (value) {
-
                       _selectedSection.addIf(
                           !_selectedSection.contains(value), value!);
                       setState(() {});
@@ -372,9 +367,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   ),
                   GetBuilder<ExamViewModel>(builder: (examController) {
                     return AppButton(
-                      text: 'حفظ'.tr,
-                      onPressed: () async {
-                        await uploadImages(_answerImageFileTemp!, "Exam_answer")
+                        text: 'حفظ'.tr,
+                        onPressed: () async {
+                                  await uploadImages(_answerImageFileTemp!, "Exam_answer")
                             .then(
                           (value) => _answerImageFile!.addAll(value),
                         );
@@ -408,13 +403,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               _selectedStudent.keys.toList(), examId);
                        await   examController.addExam(exam);
                           if(widget.examModel!=null)
-
                               Get.back();
-
+                          clearController();
                           Get.back();
                         }
                       },
-                    );
+
+                        );
                   }),
                 ],
               ),
@@ -535,11 +530,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
           checkColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           onChanged: (v) {
-
             if (v == false) {
               student.available = v;
               _selectedStudent.remove(student.studentID);
-
             } else {
               student.available = v;
               _selectedStudent[student.studentID!] = '0.0';
@@ -574,5 +567,23 @@ class _ExamInputFormState extends State<ExamInputForm> {
         )),
       ],
     );
+  }
+
+   clearController() {
+    _questionImageFile = [];
+    _answerImageFile = [];
+    _answerImageFileTemp = [];
+    _questionImageFileTemp = [];
+    subjectController.clear();
+    professorController.clear();
+    dateController.clear();
+    examPassMarkController.clear();
+    examMaxMarkController.clear();
+    examId = generateId("EXAM");
+    _selectedSection = [];
+    _selectedStudent = {};
+    _allSection = {};
+    _selectedClass = '';
+    setState(() {});
   }
 }

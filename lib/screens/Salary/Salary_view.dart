@@ -85,16 +85,16 @@ class _SalaryViewState extends State<SalaryView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomDropDown(
-                    value: selectedMonth.toString(),
+                    value: selectedMonth.toString().tr,
                     listValue: months.keys
                         .map(
-                          (e) => e.toString(),
+                          (e) => e.toString().tr,
                         )
                         .toList(),
                     label: "اختر الشهر".tr,
                     onChange: (value) {
                       if (value != null) {
-                        selectedMonth = value;
+                        selectedMonth = value.tr;
                         controller.update();
                       }
                     },

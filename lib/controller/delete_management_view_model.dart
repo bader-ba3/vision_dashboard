@@ -75,6 +75,9 @@ class DeleteManagementViewModel extends GetxController {
         deleteStudentFromParentsAndExam(
             deleteModel.affectedId, deleteModel.relatedId!,deleteModel.relatedList??[]);
         break;
+      case parentsCollection:
+        deleteStudentWithParent(deleteModel.affectedId,deleteModel.relatedList??[]);
+        break;
     }
     update();
   }
@@ -108,8 +111,7 @@ class DeleteManagementViewModel extends GetxController {
   }
 
   addDeleteOperation(DeleteManagementModel deleteModel) {
-
-    deleteManagementFireStore.doc(deleteModel.id).set(deleteModel);
+    deleteManagementFireStore.doc(deleteModel.id).set(deleteModel..date=  DateTime.now().toString(),);
     update();
   }
 
@@ -117,11 +119,22 @@ class DeleteManagementViewModel extends GetxController {
     deleteManagementFireStore.doc(deleteModel.id).update(deleteModel.toJson());
   }
 
+
   deleteDeleteOperation(DeleteManagementModel deleteModel,bool isAccepted) {
+    print(isAccepted);
     if(isAccepted)
       deleteManagementFireStore.doc(deleteModel.id).set(deleteModel..isAccepted=true);
     else
     deleteManagementFireStore.doc(deleteModel.id).set(deleteModel..isAccepted=false);
+  }
+
+  returnDeleteOperation({required String affectedId}) {
+    DeleteManagementViewModel controller = Get.find<DeleteManagementViewModel>();
+    DeleteManagementModel deleteManagementModel =
+    controller.allDelete.values.lastWhere(
+          (element) => element.affectedId == affectedId,
+    );
+      deleteManagementFireStore.doc(deleteManagementModel.id).delete();
   }
 
 
@@ -144,6 +157,14 @@ class DeleteManagementViewModel extends GetxController {
     listener.cancel();
     update();
   }
+
+   deleteStudentWithParent(String affectedId, List<String> listStudent) async{
+
+
+    listStudent.forEach((element)async {
+    await FirebaseFirestore.instance.collection(studentCollection).doc(element).delete();
+    } );
+   }
 }
 
 addDeleteOperation(
@@ -167,11 +188,12 @@ addDeleteOperation(
 }
 
 bool checkIfPendingDelete({required String affectedId}) {
+
   return Get.find<DeleteManagementViewModel>()
           .allDelete
           .values
           .where(
-            (element) => element.affectedId == affectedId&&!(element.isAccepted != null&&element.isAccepted == false),
+            (element) => element.affectedId == affectedId&&element.isAccepted != false/*||(element.isAccepted == null||element.isAccepted == false)*/,
           )
           .length >
       0;
@@ -180,7 +202,7 @@ bool checkIfPendingDelete({required String affectedId}) {
 returnPendingDelete({required String affectedId}) {
   DeleteManagementViewModel controller = Get.find<DeleteManagementViewModel>();
   DeleteManagementModel deleteManagementModel =
-      controller.allDelete.values.firstWhere(
+      controller.allDelete.values.lastWhere(
     (element) => element.affectedId == affectedId,
   );
   controller.undoTheDelete(deleteManagementModel);

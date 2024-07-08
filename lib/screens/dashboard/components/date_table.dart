@@ -41,7 +41,7 @@ class _DateTablesState extends State<DateTables> {
         calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
           weekendTextStyle: TextStyle(
-            color: Colors.redAccent,
+            color: Colors.redAccent.withOpacity(0.2),
           ),
           selectedDecoration: BoxDecoration(
             color: primaryColor, // قم بتحديد اللون الذي تريده

@@ -56,6 +56,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   ];
   List logData = [
     "نوع العملية",
+    "التاريخ",
     "التفاصيل",
     "الرمز التسلسلي المتأثر",
     "التصنيف المتأثر",
@@ -159,13 +160,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                       dataRowItem(
                                           size / userData.length, "عرض".tr,
                                           color: Colors.teal, onTap: () {}),
-                                      DataCell(
-                                          Container(
-                                            width: max(100,size / userData.length),
-                                            child: Wrap(
-                                             alignment: WrapAlignment.center,
-
-                                              children: [
+                                      DataCell(Container(
+                                        width: max(100, size / userData.length),
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          children: [
                                             IconButton(
                                                 onPressed: () {
                                                   if (enableUpdate)
@@ -173,8 +172,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                                         accountModel);
                                                 },
                                                 icon: Icon(
-                                                  Icons
-                                                      .delete_forever_outlined,
+                                                  Icons.delete_forever_outlined,
                                                   color: Colors.red,
                                                 )),
                                             IconButton(
@@ -236,110 +234,125 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                         in controller.allDelete.values.where(
                                       (element) => element.isAccepted == null,
                                     ))
-                                      DataRow(
-                                          /*       color: WidgetStatePropertyAll(
-                                            checkIfPendingDelete(
-                                                    affectedId: deleteModel.id)
-                                                ? Colors.red
-                                                : Colors.transparent),*/
-                                          cells: [
-                                            dataRowItem(
-                                                size / deleteData.length,
-                                                deleteModel.collectionName
-                                                            .toString() !=
-                                                        installmentCollection
-                                                    ? "حذف"
-                                                    : "ارجاع قسط"),
-                                            dataRowItem(
-                                                size / deleteData.length,
-                                                deleteModel.details ??
-                                                    "لا يوجد".tr),
-                                            dataRowItem(
-                                                size / deleteData.length,
-                                                deleteModel.affectedId
-                                                    .toString()),
-                                            dataRowItem(
-                                                size / deleteData.length,
-                                                deleteModel.collectionName
-                                                    .toString()),
-                                            DataCell(
-                                                Container(
-                                              width: size / deleteData.length,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        if (enableUpdate)
-                                                          QuickAlert.show(
-                                                              context: context,
-                                                              type:
-                                                                  QuickAlertType
-                                                                      .confirm,
-                                                              text:
-                                                                  'حذف هذا العنصر بشكل نهائي'
-                                                                      .tr,
-                                                              title:
-                                                                  'هل انت متأكد ؟'
-                                                                      .tr,
-                                                              onConfirmBtnTap:
-                                                                  () => {
-                                                                        controller
-                                                                            .doTheDelete(deleteModel),
-                                                                        Get.back()
-                                                                      },
-                                                              onCancelBtnTap:
-                                                                  () => Get
-                                                                      .back(),
-                                                              confirmBtnText:
-                                                                  'نعم'.tr,
-                                                              cancelBtnText:
-                                                                  'لا'.tr,
-                                                              confirmBtnColor:
-                                                                  Colors
-                                                                      .redAccent,
-                                                              showCancelBtn:
-                                                                  true);
-                                                      },
-                                                      icon: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .check_circle_outline,
-                                                            color: Colors.green,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Text("قبول".tr),
-                                                        ],
-                                                      )),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        if (enableUpdate)
-                                                          controller
-                                                              .undoTheDelete(
-                                                                  deleteModel);
-                                                      },
-                                                      icon: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .remove_circle_outline,
-                                                            color: Colors
-                                                                .redAccent,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Text("رفض".tr),
-                                                        ],
-                                                      )),
-                                                ],
-                                              ),
-                                            )),
-                                            /*  dataRowItem(
+                                      DataRow(cells: [
+                                        dataRowItem(
+                                            size / deleteData.length,
+                                            deleteModel.collectionName
+                                                        .toString() !=
+                                                    installmentCollection
+                                                ? "حذف"
+                                                : "ارجاع قسط"),
+                                        dataRowItem(
+                                            size / deleteData.length,
+                                            deleteModel.details ??
+                                                "لا يوجد".tr),
+                                        dataRowItem(size / deleteData.length,
+                                            deleteModel.affectedId.toString()),
+                                        dataRowItem(
+                                            size / deleteData.length,
+                                            deleteModel.collectionName
+                                                .toString()),
+                                        DataCell(Container(
+                                          width: size / deleteData.length,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              IconButton(
+                                                  onPressed: () {
+                                                    if (enableUpdate)
+                                                      QuickAlert.show(
+                                                          context: context,
+                                                          type: QuickAlertType
+                                                              .confirm,
+                                                          text:
+                                                              'حذف هذا العنصر بشكل نهائي'
+                                                                  .tr,
+                                                          title: deleteModel
+                                                                      .collectionName ==
+                                                                  parentsCollection
+                                                              ? 'عند حذف ولي الامر سوف يتم حذف الاولاد الخاصة به'
+                                                                  .tr
+                                                              : 'هل انت متأكد ؟'
+                                                                  .tr
+                                                                  .tr,
+                                                          onConfirmBtnTap: () =>
+                                                              {
+                                                                controller
+                                                                    .doTheDelete(
+                                                                        deleteModel),
+                                                                Get.back()
+                                                              },
+                                                          onCancelBtnTap: () =>
+                                                              Get.back(),
+                                                          confirmBtnText:
+                                                              'نعم'.tr,
+                                                          cancelBtnText:
+                                                              'لا'.tr,
+                                                          confirmBtnColor:
+                                                              Colors.redAccent.withOpacity(0.2),
+                                                          showCancelBtn: true);
+                                                  },
+                                                  icon: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .check_circle_outline,
+                                                        color: Colors.green,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text("قبول".tr),
+                                                    ],
+                                                  )),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    if (enableUpdate)
+                                                      QuickAlert.show(
+                                                          context: context,
+                                                          type: QuickAlertType
+                                                              .confirm,
+                                                          text:
+                                                              'استرجاع هذه العنصر'
+                                                                  .tr,
+                                                          title:
+                                                              'هل انت متأكد ؟'
+                                                                  .tr,
+                                                          onConfirmBtnTap: () =>
+                                                              {
+                                                                controller
+                                                                    .undoTheDelete(
+                                                                        deleteModel),
+                                                                Get.back()
+                                                              },
+                                                          onCancelBtnTap: () =>
+                                                              Get.back(),
+                                                          confirmBtnText:
+                                                              'نعم'.tr,
+                                                          cancelBtnText:
+                                                              'لا'.tr,
+                                                          confirmBtnColor:
+                                                              Colors.redAccent.withOpacity(0.2),
+                                                          showCancelBtn: true);
+                                                  },
+                                                  icon: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color: Colors.red,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text("رفض".tr),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
+                                        /*  dataRowItem(
                                               size / deleteData.length,
                                               deleteModel.collectionName
                                                   .toString()),
@@ -371,12 +384,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                                 onCancelBtnTap: () => Get.back(),
                                                 confirmBtnText: 'نعم'.tr,
                                                 cancelBtnText: 'لا'.tr,
-                                                confirmBtnColor: Colors.redAccent,
+                                                confirmBtnColor: Colors.redAccent.withOpacity(0.2),
                                                 showCancelBtn: true
                                               );
 
                                           }),*/
-                                          ]),
+                                      ]),
                                   ]),
                             ),
                           ),
@@ -422,37 +435,41 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                       in controller.allDelete.values.where(
                                     (element) => element.isAccepted != null,
                                   ))
-                                    DataRow(
-                                        cells: [
-                                          dataRowItem(
-                                              size / logData.length,
-                                              deleteModel.collectionName
-                                                          .toString() !=
-                                                      installmentCollection
-                                                  ? "حذف"
-                                                  : "ارجاع قسط"),
-                                          dataRowItem(
-                                              size / logData.length,
-                                              deleteModel.details ??
-                                                  "لا يوجد".tr),
-                                          dataRowItem(
-                                              size / logData.length,
-                                              deleteModel.affectedId
+                                    DataRow(cells: [
+                                      dataRowItem(
+                                          size / logData.length,
+                                          deleteModel.collectionName
+                                                      .toString() !=
+                                                  installmentCollection
+                                              ? "حذف"
+                                              : "ارجاع قسط"),
+                                      dataRowItem(
+                                          size / logData.length,
+                                          deleteModel.date!
+                                                  .split(" ")[1]
+                                                  .split(".")[0] +
+                                              " " +
+                                              deleteModel.date!
+                                                  .split(" ")[0]
                                                   .toString()),
-                                          dataRowItem(
-                                              size / logData.length,
-                                              deleteModel.collectionName
-                                                  .toString()),
-                                          dataRowItem(
-                                            size / logData.length,
-                                            deleteModel.isAccepted!
-                                                ? 'مقبول'.tr
-                                                : 'مرفوض'.tr,
-                                            color: deleteModel.isAccepted!
-                                                ? Colors.green
-                                                : Colors.red,
-                                          ),
-                                        ]),
+                                      dataRowItem(size / logData.length,
+                                          deleteModel.details ?? "لا يوجد".tr),
+                                      dataRowItem(size / logData.length,
+                                          deleteModel.affectedId.toString()),
+                                      dataRowItem(
+                                          size / logData.length,
+                                          deleteModel.collectionName
+                                              .toString()),
+                                      dataRowItem(
+                                        size / logData.length,
+                                        deleteModel.isAccepted!
+                                            ? 'مقبول'.tr
+                                            : 'مرفوض'.tr,
+                                        color: deleteModel.isAccepted!
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                                    ]),
                                 ]),
                           ),
                         ),
@@ -504,7 +521,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                 },
                               ),
                               CustomDropDown(
-                                value: '',
+                                value:Get.locale.toString()!="en_US"?'عربي': 'English',
                                 listValue: ['عربي', 'English'],
                                 label: 'اختر اللغة'.tr,
                                 onChange: (value) {
@@ -586,6 +603,4 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       },
     );
   }
-
-
 }

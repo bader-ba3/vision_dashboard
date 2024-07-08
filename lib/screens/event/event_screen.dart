@@ -72,7 +72,7 @@ class _EventScreenState extends State<EventScreen> {
                                     color: WidgetStatePropertyAll(
                                         checkIfPendingDelete(
                                                 affectedId: event.id)
-                                            ? Colors.red
+                                            ? Colors.redAccent.withOpacity(0.2)
                                             : Colors.transparent),
                                     cells: [
                                       dataRowItem(size / data.length,
@@ -112,7 +112,7 @@ class _EventScreenState extends State<EventScreen> {
                                                     if (checkIfPendingDelete(
                                                         affectedId:
                                                             event.id))
-                                                      returnPendingDelete(
+                                                      _.returnDeleteOperation(
                                                           affectedId:
                                                               event.id);
                                                     else

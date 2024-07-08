@@ -43,16 +43,16 @@ class _EmployeeSalaryChartBoxState extends State<EmployeeSalaryChartBox> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CustomDropDown(
-            value: selectedMonth.toString(),
+            value: selectedMonth.toString().tr,
             listValue: months.keys
                 .map(
-                  (e) => e.toString(),
+                  (e) => e.toString().tr,
                 )
                 .toList(),
             label: "اختر الشهر".tr,
             onChange: (value) {
               if (value != null) {
-                selectedMonth = value;
+                selectedMonth = value.tr;
                 setState(() {});
               }
             },

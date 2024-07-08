@@ -230,7 +230,7 @@ else {
                             } else {
                               return FlDotCirclePainter(
                                 // size: 16,
-                                color: Colors.redAccent,
+                                color: Colors.redAccent.withOpacity(0.2),
                                 strokeWidth: 5,
                                 strokeColor:
                                     widget.indicatorTouchedSpotStrokeColor,
@@ -243,7 +243,7 @@ else {
                   },
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipColor: (touchedSpot) => touchedSpot.y < 8.0
-                        ? Colors.redAccent
+                        ? Colors.redAccent.withOpacity(0.2)
                         : widget.tooltipBgColor,
                     getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {

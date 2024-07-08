@@ -91,7 +91,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                     color: WidgetStatePropertyAll(
                                         checkIfPendingDelete(
                                                 affectedId: student.studentID!)
-                                            ? Colors.redAccent
+                                            ? Colors.redAccent.withOpacity(0.2)
                                             : Colors.transparent),
                                     cells: [
                                       dataRowItem(size / data.length,
@@ -154,7 +154,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                           color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
                                         if (enableUpdate)
                                           if (checkIfPendingDelete(affectedId: student.studentID!))
-                                            returnPendingDelete(
+                                            _.returnDeleteOperation(
                                                 affectedId: student.studentID!);
                                           else
                                             addDeleteOperation(affectedId:

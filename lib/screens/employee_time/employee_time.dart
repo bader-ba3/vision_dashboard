@@ -34,7 +34,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
   }
 
   bool isShowLogin = true;
-  List<String> data = ["اليوم","الدخول","الخروج","المجموع","تأخر بالدخول"," التأخير","عرض المبرر","خروج مبكر","وقت الخروج المبكر","عرض المبرر"];
+  List<String> data = ["اليوم","الدخول","الخروج","المجموع"," التأخير","عرض المبرر","وقت الخروج المبكر","عرض المبرر"];
 
   @override
   Widget build(BuildContext context) {
@@ -333,28 +333,36 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             dataRowItem(size / data.length, DateFun.dateToMinAndHour(j.startDate!)),
                                             dataRowItem(size / data.length, (j.endDate == null ? "" : DateFun.dateToMinAndHour(j.endDate!))),
                                             dataRowItem(size / data.length, DateFun.minutesToTime(j.totalDate ?? 0)),
-                                            dataRowItem(size / data.length, (j.isLateWithReason == null ? "" : (j.isLateWithReason! ? "مع مبرر".tr : "بدون مبرر".tr))),
+                                            // dataRowItem(size / data.length, (j.isLateWithReason == null ? "" : (j.isLateWithReason! ? "مع مبرر".tr : "بدون مبرر".tr))),
                                             dataRowItem(size / data.length, j.totalLate == null || j.totalLate == 0 ? "" : DateFun.minutesToTime(j.totalLate!)),
-                                            dataRowItem(size / data.length, j.reasonOfLate != null && j.reasonOfLate != "" ? "عرض".tr : "", onTap: () {
-                                              Get.defaultDialog(
+                                            dataRowItem(size / data.length,(j.isLateWithReason == null ? "" : (j.isLateWithReason! ? "مع مبرر".tr : "بدون مبرر".tr)), onTap: () {
+                                              if(j.isLateWithReason != false&&j.isLateWithReason != null)
+                                                Get.defaultDialog(
                                                   title: "المبرر".tr,
                                                   backgroundColor: Colors.white,
-                                                  content: Container(
-                                                    height: Get.height / 2,
-                                                    width: Get.height / 2,
-                                                    child: Text(j.reasonOfLate.toString()),
+                                                  content: Center(
+                                                    child: Container(
+                                                      // height: Get.height / 2,
+                                                      alignment: Alignment.center,
+                                                      width: Get.height / 2,
+                                                      child: Text(j.reasonOfLate.toString(),style: Styles.headLineStyle2.copyWith(color: Colors.white),),
+                                                    ),
                                                   ));
                                             }, color: Colors.teal),
-                                            dataRowItem(size / data.length, (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر".tr : "بدون مبرر".tr))),
+                                            // dataRowItem(size / data.length, (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر".tr : "بدون مبرر".tr))),
                                             dataRowItem(size / data.length, j.totalEarlier == null || j.totalEarlier == 0 ? "" : DateFun.minutesToTime(j.totalEarlier!)),
-                                            dataRowItem(size / data.length, j.reasonOfEarlier != null && j.reasonOfEarlier != "" ? "عرض" : "", onTap: () {
+                                            dataRowItem(size / data.length, (j.isEarlierWithReason == null ? "" : (j.isEarlierWithReason! ? "مع مبرر".tr : "بدون مبرر".tr)), onTap: () {
+                                              if(j.isEarlierWithReason != false&&j.isEarlierWithReason != null)
+                                                print(j.reasonOfEarlier);
                                               Get.defaultDialog(
                                                   title: "المبرر".tr,
                                                   backgroundColor: secondaryColor,
-                                                  content: Container(
-                                                    height: Get.height / 2,
-                                                    width: Get.height / 2,
-                                                    child: Text(j.reasonOfEarlier.toString()),
+                                                  content: Center(
+                                                    child: Container(
+alignment: Alignment.center,
+                                                      width: Get.height / 2,
+                                                      child: Text(j.reasonOfEarlier.toString(),style: Styles.headLineStyle2.copyWith(color: Colors.white),),
+                                                    ),
                                                   ));
                                             }, color: Colors.teal),
                                           ]),

@@ -23,13 +23,15 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int index = 2;
-StudentViewModel _studentViewModel=Get.find<StudentViewModel>();
-  ExpensesViewModel _expensesViewModel=Get.find<ExpensesViewModel>();
-  AccountManagementViewModel _accountManagementViewModel=Get.find<AccountManagementViewModel>();
-  SalaryViewModel _salaryViewModel=Get.find<SalaryViewModel>();
+  StudentViewModel _studentViewModel = Get.find<StudentViewModel>();
+  ExpensesViewModel _expensesViewModel = Get.find<ExpensesViewModel>();
+  AccountManagementViewModel _accountManagementViewModel =
+      Get.find<AccountManagementViewModel>();
+  SalaryViewModel _salaryViewModel = Get.find<SalaryViewModel>();
 
   String selectedMonth = '';
-bool isAll=false;
+  bool isAll = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,17 +39,21 @@ bool isAll=false;
     selectedMonth = months.entries
         .where(
           (element) =>
-      element.value == DateTime.now().month.toString().padLeft(2, "0"),
-    )
+              element.value == DateTime.now().month.toString().padLeft(2, "0"),
+        )
         .first
         .key;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  Header(
+      appBar: Header(
           context: context,
-          title: 'الصفحة الرئيسية'.tr,middleText: "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر".tr),
+          title: 'الصفحة الرئيسية'.tr,
+          middleText:
+              "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر"
+                  .tr),
       body: SingleChildScrollView(
         primary: false,
         padding: EdgeInsets.all(defaultPadding),
@@ -55,66 +61,103 @@ bool isAll=false;
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomDropDown(
-              value: selectedMonth.toString(),
+              value: selectedMonth.toString().tr,
               listValue: (months.keys
-                  .map(
-                    (e) => e.toString(),
-              )
-                  .toList())+["الكل"],
+                      .map(
+                        (e) => e.toString().tr,
+                      )
+                      .toList()) +
+                  ["الكل".tr],
               label: "اختر الشهر".tr,
               onChange: (value) {
-                if (value != null&&value !="الكل") {
-                  selectedMonth = value;
+                if (value != null && value != "الكل") {
+                  // print(value.tr);
+                  selectedMonth = value.tr;
 
-isAll=false;
-                } else{
-
-                  isAll=true;
+                  isAll = false;
+                } else {
+                  isAll = true;
                 }
-                setState(() {
-
-                });
+                setState(() {});
               },
               isFullBorder: true,
             ),
-            SizedBox(height: defaultPadding,),
+            SizedBox(
+              height: defaultPadding,
+            ),
             SizedBox(
               width: Get.width,
               child: Wrap(
                 direction: Axis.horizontal,
-                alignment: MediaQuery.sizeOf(context).width < 800 ?WrapAlignment.center:WrapAlignment.spaceEvenly,
+                alignment: MediaQuery.sizeOf(context).width < 800
+                    ? WrapAlignment.center
+                    : WrapAlignment.spaceEvenly,
                 runSpacing: 25,
                 spacing: 0,
                 children: [
                   InkWell(
-                      onHover: (value) {
-                      },
+                      onHover: (value) {},
                       onTap: () {
                         index = 2;
                         setState(() {});
                       },
-                      child: SquareWidget("الاجمالي", isAll?(_studentViewModel.getAllReceivePay()-_expensesViewModel.getAllExpensesMoney()-_salaryViewModel.getAllSalaryPay()): (_studentViewModel.getAllReceivePayAtMonth(months[ selectedMonth]!)-_expensesViewModel.getExpensesAtMonth(months[ selectedMonth]!)-_accountManagementViewModel.getAllSalariesAtMonth(months[ selectedMonth]!/*DateTime.now().month.toString()*/)).toString(),
-                          primaryColor, "assets/budget.png",true)),
-                 InkWell(
-                          onTap: () {
-                            index = 1;
-                            setState(() {});
-                          },
-                          child: SquareWidget("الايرادات", isAll?_studentViewModel.getAllReceivePay():_studentViewModel.getAllReceivePayAtMonth(months[ selectedMonth]!).toString(),
-                              Colors.cyan, "assets/profit.png",true)
-
-                  ),
-                 InkWell(
-                          onTap: () {
-                            index = 0;
-                            setState(() {});
-                          },
-                          child: SquareWidget("المصروف",isAll?_expensesViewModel.getAllExpensesMoney():_expensesViewModel.getExpensesAtMonth(months[ selectedMonth]!).toString(),
-                              blueColor, "assets/poor.png",true)),
-
-
-                  SquareWidget("الرواتب المستحقة", _accountManagementViewModel.getAllSalariesAtMonth(DateTime.now().month.toString()).toString(),
-                      Colors.black, "assets/money-bag.png",false),
+                      child: SquareWidget(
+                          "الاجمالي",
+                          isAll
+                              ? (_studentViewModel.getAllReceivePay() -
+                                  _expensesViewModel.getAllExpensesMoney() -
+                                  _salaryViewModel.getAllSalaryPay())
+                              : (_studentViewModel.getAllReceivePayAtMonth(
+                                          months[selectedMonth]!) -
+                                      _expensesViewModel.getExpensesAtMonth(
+                                          months[selectedMonth]!) -
+                                      _accountManagementViewModel
+                                          .getAllSalariesAtMonth(months[
+                                              selectedMonth]! /*DateTime.now().month.toString()*/))
+                                  .toString(),
+                          primaryColor,
+                          "assets/budget.png",
+                          true)),
+                  InkWell(
+                      onTap: () {
+                        index = 1;
+                        setState(() {});
+                      },
+                      child: SquareWidget(
+                          "الايرادات",
+                          isAll
+                              ? _studentViewModel.getAllReceivePay()
+                              : _studentViewModel
+                                  .getAllReceivePayAtMonth(
+                                      months[selectedMonth]!)
+                                  .toString(),
+                          Colors.cyan,
+                          "assets/profit.png",
+                          true)),
+                  InkWell(
+                      onTap: () {
+                        index = 0;
+                        setState(() {});
+                      },
+                      child: SquareWidget(
+                          "المصروف",
+                          isAll
+                              ? _expensesViewModel.getAllExpensesMoney()
+                              : _expensesViewModel
+                                  .getExpensesAtMonth(months[selectedMonth]!)
+                                  .toString(),
+                          blueColor,
+                          "assets/poor.png",
+                          true)),
+                  SquareWidget(
+                      "الرواتب المستحقة",
+                      _accountManagementViewModel
+                          .getAllSalariesAtMonth(
+                              DateTime.now().month.toString())
+                          .toString(),
+                      Colors.black,
+                      "assets/money-bag.png",
+                      false),
                 ],
               ),
             ),
@@ -124,7 +167,6 @@ isAll=false;
               children: [
                 Expanded(
                   flex: 5,
-
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -141,8 +183,12 @@ isAll=false;
                         Column(
                           children: [
                             EmployeeDetailsChart(),
-                            SizedBox(height: defaultPadding,),
-                            StudentsDetailsChart(students: _studentViewModel.studentMap,),
+                            SizedBox(
+                              height: defaultPadding,
+                            ),
+                            StudentsDetailsChart(
+                              students: _studentViewModel.studentMap,
+                            ),
                           ],
                         ),
                     ],
@@ -157,8 +203,12 @@ isAll=false;
                     child: Column(
                       children: [
                         EmployeeDetailsChart(),
-                        SizedBox(height: defaultPadding,),
-                        StudentsDetailsChart(students: _studentViewModel.studentMap,),
+                        SizedBox(
+                          height: defaultPadding,
+                        ),
+                        StudentsDetailsChart(
+                          students: _studentViewModel.studentMap,
+                        ),
                       ],
                     ),
                   ),
@@ -170,7 +220,7 @@ isAll=false;
     );
   }
 
-  Widget SquareWidget(title, body, color, png,bool) {
+  Widget SquareWidget(title, body, color, png, bool) {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
@@ -188,27 +238,30 @@ isAll=false;
                     child: Text(
                   title.toString().tr,
                   textAlign: TextAlign.center,
-                  style: Styles.headLineStyle2.copyWith(color:color==false?Colors.black: color),
+                  style: Styles.headLineStyle2
+                      .copyWith(color: color == false ? Colors.black : color),
                 )),
               ),
             ),
             Text(
               body.toString(),
-              style: Styles.headLineStyle1.copyWith(color: color==false?Colors.black: color, fontSize: 40),
+              style: Styles.headLineStyle1.copyWith(
+                  color: color == false ? Colors.black : color, fontSize: 40),
             ),
             SizedBox(
               height: 20,
             ),
-            color==false?
-            Image.asset(
-              png,
-              height: 100,
-              // color: color==false?Colors.transparent: color,
-            ):Image.asset(
-              png,
-              height: 70,
-              color: color,
-            ),
+            color == false
+                ? Image.asset(
+                    png,
+                    height: 100,
+                    // color: color==false?Colors.transparent: color,
+                  )
+                : Image.asset(
+                    png,
+                    height: 70,
+                    color: color,
+                  ),
             SizedBox(
               height: 20,
             ),

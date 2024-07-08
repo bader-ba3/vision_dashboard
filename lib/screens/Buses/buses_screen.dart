@@ -670,7 +670,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                               checkIfPendingDelete(
                                                       affectedId:
                                                           busModel.busId!)
-                                                  ? Colors.red
+                                                  ? Colors.redAccent.withOpacity(0.2)
                                                   : Colors.transparent),
                                           cells: [
                                             dataRowItem(size / (data.length),
@@ -765,7 +765,7 @@ final  List<({String driverName, String a, String b, String status})> listWorkin
                                                               affectedId:
                                                                   busModel
                                                                       .busId!)
-                                                          ? returnPendingDelete(
+                                                          ? _.returnDeleteOperation(
                                                               affectedId:
                                                                   busModel
                                                                       .busId!)

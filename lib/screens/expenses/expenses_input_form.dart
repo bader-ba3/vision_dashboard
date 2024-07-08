@@ -35,159 +35,174 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    dateController.text=DateTime.now().toString();
+    dateController.text=DateTime.now().toString().split(" ")[0];
   }
+clearController(){
+   titleController.clear();
+   totalController.clear();
+   bodyController.clear();
+   dateController.clear();
+   imageLinkList = [];
+   ImagesTempData = [];
+   setState(() {
 
+   });
+}
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ExpensesViewModel>(builder: (controller) {
       return SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
-        child: Wrap(
-          clipBehavior: Clip.hardEdge,
-          direction: Axis.horizontal,
-          runSpacing: 25,
-          spacing: 25,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextField(controller: titleController, title: 'العنوان'.tr),
-            CustomTextField(controller: totalController, title: 'القيمة'.tr),
-            InkWell(
-              onTap: () {
-                showDatePicker(
-                  context: context,
-                  firstDate: DateTime(2010),
-                  lastDate: DateTime(2100),
-                ).then((date) {
-                  if (date != null) {
-                    dateController.text =
-                    date.toString().split(" ")[0];
-                  }
-                });
-              },
-              child: CustomTextField(
-                controller: dateController,
-                title: 'تاريخ البداية'.tr,
-                enable: false,
-                keyboardType: TextInputType.datetime,
-                icon: Icon(
-                  Icons.date_range_outlined,
-                  color: primaryColor,
-                ) ,
-              ),
-            ),
-            multiLineCustomTextField(
-                controller: bodyController, title: 'تاريخ البداية'.tr),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("صورة الفاتورة".tr),
-                SizedBox(
-                  height: 15,
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: secondaryColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Wrap(
+            clipBehavior: Clip.hardEdge,
+            direction: Axis.horizontal,
+            runSpacing: 25,
+            spacing: 25,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextField(controller: titleController, title: 'العنوان'.tr),
+              CustomTextField(controller: totalController, title: 'القيمة'.tr),
+              InkWell(
+                onTap: () {
+                  showDatePicker(
+                    context: context,
+                    firstDate: DateTime(2010),
+                    lastDate: DateTime(2100),
+                  ).then((date) {
+                    if (date != null) {
+                      dateController.text =
+                      date.toString().split(" ")[0];
+                    }
+                  });
+                },
+                child: CustomTextField(
+                  controller: dateController,
+                  title: 'تاريخ البداية'.tr,
+                  enable: false,
+                  keyboardType: TextInputType.datetime,
+                  icon: Icon(
+                    Icons.date_range_outlined,
+                    color: primaryColor,
+                  ) ,
                 ),
-                SizedBox(
-                  height: 200,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          FilePickerResult? _ = await FilePicker.platform
-                              .pickFiles(
-                                  type: FileType.image, allowMultiple: true);
-                          if (_ != null) {
-                            _.xFiles.forEach(
-                              (element) async {
-                                ImagesTempData.add(await element.path);
-                              },
-                            );
-                            setState(() {});
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(15)),
-                            height: 200,
-                            width: 200,
-                            child: Icon(Icons.add),
+              ),
+              multiLineCustomTextField(
+                  controller: bodyController, title: 'تاريخ البداية'.tr),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("صورة الفاتورة".tr),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            FilePickerResult? _ = await FilePicker.platform
+                                .pickFiles(
+                                    type: FileType.image, allowMultiple: true);
+                            if (_ != null) {
+                              _.xFiles.forEach(
+                                (element) async {
+                                  ImagesTempData.add(await element.path);
+                                },
+                              );
+                              setState(() {});
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(15)),
+                              height: 200,
+                              width: 200,
+                              child: Icon(Icons.add),
+                            ),
                           ),
                         ),
-                      ),
-                      ...List.generate(
-                        widget.expensesModel == null?  ImagesTempData.length:imageLinkList.length,
-                        (index) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Container(
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(15)),
-                                width: 200,
-                                height: 200,
-                                child:  widget.expensesModel == null?  Image.file(
-                                  File(ImagesTempData[index]),
-                                  height: 200,
+                        ...List.generate(
+                          widget.expensesModel == null?  ImagesTempData.length:imageLinkList.length,
+                          (index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(15)),
                                   width: 200,
-                                  fit: BoxFit.fitHeight,
-                                ): Image.file(
-                                  File(ImagesTempData[index]),
                                   height: 200,
-                                  width: 200,
-                                  fit: BoxFit.fitHeight,
-                                )),
-                          );
-                        },
-                      )
-                    ],
+                                  child:  widget.expensesModel == null?  Image.file(
+                                    File(ImagesTempData[index]),
+                                    height: 200,
+                                    width: 200,
+                                    fit: BoxFit.fitHeight,
+                                  ): Image.file(
+                                    File(ImagesTempData[index]),
+                                    height: 200,
+                                    width: 200,
+                                    fit: BoxFit.fitHeight,
+                                  )),
+                            );
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            AppButton(
-              text: "حفظ".tr,
-              onPressed: () async {
-                QuickAlert.show(
-                    width: Get.width / 2,
-                    context: context,
-                    type: QuickAlertType.loading,
-                    title: 'جاري التحميل'.tr,
-                    text: 'يتم العمل على الطلب'.tr,
-                    barrierDismissible: false);
-             if( widget.expensesModel == null)
-                uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
-                String expId = generateId("ExP");
-                BusViewModel busController = Get.find<BusViewModel>();
-                ExpensesModel model = ExpensesModel(
-                  date: dateController.text,
-                  id: expId,
-                  busId: widget.busId,
-                  title: titleController.text,
-                  body: widget.busId != null
-                      ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
-                      : bodyController.text,
-                  total: int.parse(totalController.text),
-                  userId: getMyUserId().id,
-                  images: imageLinkList,
-                );
-                if (widget.busId != null)
-                  await busController.addExpenses(widget.busId!, expId);
-                controller.addExpenses(model);
-                bodyController.clear();
-                titleController.clear();
-                totalController.clear();
-                ImagesTempData.clear();
-                setState(() {});
-                if (widget.busId != null)
-                  Get.back();
-                  Get.back();
-              },
-            )
-          ],
+                ],
+              ),
+              AppButton(
+                text: "حفظ".tr,
+                onPressed: () async {
+                  QuickAlert.show(
+                      width: Get.width / 2,
+                      context: context,
+                      type: QuickAlertType.loading,
+                      title: 'جاري التحميل'.tr,
+                      text: 'يتم العمل على الطلب'.tr,
+                      barrierDismissible: false);
+               if( widget.expensesModel == null)
+                  uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
+                  String expId = generateId("ExP");
+                  BusViewModel busController = Get.find<BusViewModel>();
+                  ExpensesModel model = ExpensesModel(
+                    date: dateController.text,
+                    id: expId,
+                    busId: widget.busId,
+                    title: titleController.text,
+                    body: widget.busId != null
+                        ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
+                        : bodyController.text,
+                    total: int.parse(totalController.text),
+                    userId: getMyUserId().id,
+                    images: imageLinkList,
+                  );
+                  if (widget.busId != null)
+                    await busController.addExpenses(widget.busId!, expId);
+                  controller.addExpenses(model);
+                  clearController();
+
+                  if (widget.busId != null)
+                    Get.back();
+                    Get.back();
+                },
+              )
+            ],
+          ),
         ),
       );
     });

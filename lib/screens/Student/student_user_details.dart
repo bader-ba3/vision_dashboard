@@ -169,7 +169,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
     eventRecords.clear();
     studentNameController.clear();
     studentNumberController.clear();
-
     sectionController.clear();
     genderController.text = '';
     _payWay = '';
@@ -183,6 +182,9 @@ class _StudentInputFormState extends State<StudentInputForm> {
     totalPaymentController.clear();
     parentName = '';
     languageController.text = '';
+    setState(() {
+
+    });
   }
 
   @override
@@ -367,33 +369,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ) ,
                     ),
                   ),
-            /*      Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextField(
-                          controller: ageController,
-                          title: 'التولد'.tr,
-                          enable: false,
-                          keyboardType: TextInputType.datetime),
-                      IconButton(
-                          onPressed: () {
-                            showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2024))
-                                .then((date) {
-                              if (date != null) {
-                                ageController.text =
-                                    date.toString().split(" ")[0];
-                              }
-                            });
-                          },
-                          icon: Icon(
-                            Icons.date_range_outlined,
-                            color: primaryColor,
-                          ))
-                    ],
-                  ),*/
+
                   if (_payWay == 'اقساط'.tr)
                     SizedBox(
                       width: Get.width / 2,

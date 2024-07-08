@@ -46,7 +46,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
             },
             title: "اداري".tr,
             amountOfEmployee: "١٠",
-            color: Colors.redAccent,
+            color: Colors.redAccent.withOpacity(0.2),
           ),
           InfoCard(
             onTap: (){
@@ -88,7 +88,7 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: Colors.redAccent,
+            color: Colors.redAccent.withOpacity(0.2),
             value: 10,
             title: '${((10 / 60)*100).round()}%',
             radius: radius,

@@ -74,7 +74,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                     for (var storeModel
                                         in controller.storeMap.values.toList())
                                       DataRow(
-                                          color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: storeModel.id!)?Colors.red:Colors.transparent),
+                                          color: WidgetStatePropertyAll(checkIfPendingDelete(affectedId: storeModel.id!)?Colors.red.withOpacity(0.2):Colors.transparent),
                                           cells: [
                                         dataRowItem(size / (data.length),
                                             storeModel.subQuantity.toString()),
@@ -90,7 +90,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                             child: IconButton(
                                                 onPressed: () {
                                                   checkIfPendingDelete(affectedId: storeModel.id!)?
-                                                      returnPendingDelete(affectedId:  storeModel.id!):
+                                                      _.returnDeleteOperation(affectedId:  storeModel.id!):
                                                       addDeleteOperation(collectionName: storeCollection, affectedId:  storeModel.id!);
                                                 },
                                                 icon: Row(

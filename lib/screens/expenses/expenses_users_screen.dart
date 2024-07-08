@@ -83,7 +83,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                     color: WidgetStatePropertyAll(
                                         checkIfPendingDelete(
                                                 affectedId: expense.id)
-                                            ? Colors.red
+                                            ? Colors.redAccent.withOpacity(0.2)
                                             : Colors.transparent),
                                     cells: [
                                       dataRowItem(size / data.length,
@@ -156,7 +156,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                         if (enableUpdate) {
                                           if (checkIfPendingDelete(
                                               affectedId: expense.id))
-                                            returnPendingDelete(
+                                            _.returnDeleteOperation(
                                                 affectedId: expense.id);
                                           else if (expense.busId != null) {
                                             addDeleteOperation(

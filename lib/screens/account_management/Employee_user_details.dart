@@ -13,6 +13,7 @@ import '../../models/account_management_model.dart';
 import '../../models/event_record_model.dart';
 import '../../utils/Dialogs.dart';
 import '../../utils/const.dart';
+import '../Widgets/Custom_Drop_down_with_value.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/header.dart';
 
@@ -358,123 +359,115 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
               padding: EdgeInsets.all(16.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: BorderRadius.circular(15)),
-
+                color: secondaryColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+                children: [
+                  GetBuilder<EventViewModel>(builder: (eventController) {
+                    return Wrap(
+                      runAlignment: WrapAlignment.spaceAround,
+                      runSpacing: 25,
+                      children: [
+                        CustomDropDownWithValue(
+                          value: '',
+                          mapValue: eventController.allEvents.values
+                              .toList()
+                              .where(
+                                (element) =>
+                            element.role == Const.eventTypeEmployee,
+                          )
+                              .map((e) => e)
+                              .toList(),
+                          label: "نوع الحدث".tr,
+                          onChange: (selectedWay) {
 
-                GetBuilder<EventViewModel>(builder: (eventController) {
-                  return Wrap(
-                    clipBehavior: Clip.hardEdge,
-                    direction: Axis.horizontal,
-                    runSpacing: 50,
-                    spacing: 25,
-                    alignment: WrapAlignment.spaceEvenly,
-                    children: [
-                      CustomDropDown(
-                        value: '',
-                        listValue: eventController.allEvents.values
-                            .toList()
-                            .where(
-                              (element) =>
-                          element.role == Const.eventTypeEmployee,
-                        )
-                            .map((e) => e.name)
-                            .toList(),
-                        label: "نوع الحدث",
-                        onChange: (selectedWay) {
-                          if (selectedWay != null) {
-                            setState(() {});
-                            selectedEvent?.name = selectedWay;
-                          }
-                        },
-                      ),
-                      CustomTextField(
+                            if (selectedWay != null) {
+                              setState(() {});
+                              selectedEvent =
+                              eventController.allEvents[selectedWay];
+                            }
+                          },
+                        ),
+                        SizedBox(width: 16.0),
+                        CustomTextField(
                           controller: bodyEvent,
                           title: 'الوصف'.tr,
                           enable: true,
-                          keyboardType: TextInputType.text),
-                      AppButton(
-                        text: 'إضافة سجل حدث'.tr,
-                        onPressed: () {
-                          setState(() {
-                            eventRecords.add(EventRecordModel(
+                          keyboardType: TextInputType.text,
+                        ),
+                        SizedBox(width: 16.0),
+                        AppButton(
+                          text: 'إضافة سجل حدث'.tr,
+                          onPressed: () {
+                            setState(() {
+                              eventRecords.add(EventRecordModel(
                                 body: bodyEvent.text,
                                 type: selectedEvent!.name,
-                                date: DateTime.now()
-                                    .toString()
-                                    .split(" ")[0]
-                                    .toString(),
-                                color: selectedEvent!.color.toString()));
-                            bodyEvent.clear();
-                          });
-                        },
-                      )
-                    ],
-                  );
-                }),
-                SizedBox(
-                  height: defaultPadding * 2,
-                ),
-                Text('سجل الأحداث'.tr, style: Styles.headLineStyle1),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Container(
-                  padding: EdgeInsets.all(0.0),
-                  alignment: Alignment.center,
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: eventRecords.length,
-                    itemBuilder: (context, index) {
-                      final record = eventRecords[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color:
-                              Color(int.parse(record.color)).withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 14.0, horizontal: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  record.type,
-                                  style: Styles.headLineStyle1
-                                      .copyWith(color: Colors.black),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  record.body,
-                                  style: Styles.headLineStyle1
-                                      .copyWith(color: Colors.black),
-                                ),
-                                SizedBox(
-                                  width: 50,
-                                ),
-                                Text(
-                                  record.date,
-                                  style: Styles.headLineStyle3,
-                                ),
-                                Spacer(),
-                              ],
+                                date: DateTime.now().toString().split(".")[0],
+                                color: selectedEvent!.color.toString(),
+                              ));
+                              bodyEvent.clear();
+                            });
+                          },
+                        ),
+                      ],
+                    );
+                  }),
+                  SizedBox(height: defaultPadding * 2),
+                  Text('سجل الأحداث:'.tr, style: Styles.headLineStyle1),
+                  SizedBox(height: defaultPadding),
+                  Container(
+                    padding: EdgeInsets.all(0.0),
+                    alignment: Alignment.center,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: eventRecords.length,
+                      itemBuilder: (context, index) {
+                        final record = eventRecords[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(int.parse(record.color))
+                                  .withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 14.0, horizontal: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    record.type,
+                                    style: Styles.headLineStyle1
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    record.body,
+                                    style: Styles.headLineStyle1
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  SizedBox(width: 50),
+                                  Text(
+                                    record.date,
+                                    style: Styles.headLineStyle3,
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-
-              ],
-            ),),
+                ],
+              ),
+            )
 
 
           ],

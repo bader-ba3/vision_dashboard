@@ -32,7 +32,7 @@ class CustomDropDownWithValue extends StatelessWidget {
         ),
         value:value==''? null:value,
         iconEnabledColor: Colors.blue,
-        hint: Text(label,style: Styles.headLineStyle4.copyWith(color: blueColor.withOpacity(0.7)),),
+        hint: Text(label,style: Styles.headLineStyle4.copyWith(color: primaryColor.withOpacity(0.4)),),
         onChanged: onChange,
         items:  mapValue.map((e) {
           return DropdownMenuItem(
