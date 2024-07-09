@@ -1,3 +1,5 @@
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Buses/Buses_View.dart';
@@ -13,13 +15,14 @@ import 'package:vision_dashboard/screens/expenses/expenses_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tab_container/tab_container.dart';
+import 'package:vision_dashboard/screens/login/login_screen.dart';
+import 'package:vision_dashboard/screens/logout/logout_View.dart';
 import 'package:vision_dashboard/utils/Hive_DataBase.dart';
 
 import '../account_management/Employee_View.dart';
 
 import '../employee_time/employee_time.dart';
 import '../event/event_view_screen.dart';
-import '../login/login_screen.dart';
 // import 'dart:html'  as html;
 
 class MainScreen extends StatefulWidget {
@@ -98,31 +101,66 @@ class _MainScreenState extends State<MainScreen>
     (
       name: "تسجيل الخروج",
       img: "assets/dashIcon/logout.png",
-      widget: Container(),
+      widget:LogoutView() ,
     ),
   ];
 
   late TabController tabController;
 
+
+  showConfirm()async{
+  await  QuickAlert.show(
+        context: context,
+        type: QuickAlertType
+            .confirm,
+        text:
+        'استرجاع هذه العنصر'
+            .tr,
+        title:
+        'هل انت متأكد ؟'
+            .tr,
+        onConfirmBtnTap: ()
+        {
+          HiveDataBase.deleteUserData();
+          Get.offAll(LoginScreen());
+
+        },
+        onCancelBtnTap: () {
+          tabController.animateTo(int.parse(HiveDataBase.getUserData().currentScreen));
+          Get.back();
+        },
+        confirmBtnText:
+        'نعم'.tr,
+        cancelBtnText:
+        'لا'.tr,
+        confirmBtnColor:
+        Colors.red,
+        showCancelBtn: true);
+  }
+
+  bool _isTabControllerListenerAdded = false;
+
   @override
   void initState() {
 
     tabController = TabController(length: allData.length, vsync: this);
-    tabController.addListener(() {
-      HiveDataBase.setCurrentScreen(tabController.index.toString());
-      // html.window.history.pushState(null, '', "/#/"+allData[tabController.index].widget.toString());
+    if (!_isTabControllerListenerAdded) {
+      tabController.addListener(() {
 
-      if (tabController.index == 13) {
-        Get.offAll(() => LoginScreen());
-        HiveDataBase.deleteUserData();
-      }
-      setState(() {});
-    });
+        // html.window.history.pushState(null, '', "/#/"+allData[tabController.index].widget.toString());
+
+          HiveDataBase.setCurrentScreen(tabController.index.toString());
+
+        setState(() {});
+      });
+      _isTabControllerListenerAdded = true;
+    }
     super.initState();
     WidgetsFlutterBinding.ensureInitialized()
         .waitUntilFirstFrameRasterized
         .then(
       (value) {
+
         tabController
             .animateTo(int.parse(HiveDataBase.getUserData().currentScreen));
         setState(() {});
@@ -133,58 +171,56 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (controller) {
-      return SafeArea(
-        child: Scaffold(
-          backgroundColor: secondaryColor,
-          body: controller.isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TabContainer(
-                      textDirection: Get.locale.toString() != "en_US"
-                          ? TextDirection.rtl
-                          : TextDirection.ltr,
-                      controller: tabController,
-                      tabEdge: Get.locale.toString() != "en_US"
-                          ? TabEdge.right
-                          : TabEdge.left,
-                      tabsEnd: 1,
-                      tabsStart: 0.0,
-                      tabMaxLength: controller.isDrawerOpen ? 60 : 60,
-                      tabExtent: controller.isDrawerOpen ? 180 : 60,
-                      borderRadius: BorderRadius.circular(10),
-                      tabBorderRadius: BorderRadius.circular(20),
-                      childPadding: const EdgeInsets.all(0.0),
-                      selectedTextStyle: const TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15.0,
-                      ),
-                      unselectedTextStyle: Styles.headLineStyle1.copyWith(
-                        color: primaryColor,
-                        fontSize: 13.0,
-                      ),
-                      colors: List.generate(allData.length, (index) => bgColor),
-                      tabs: List.generate(
-                        allData.length,
-                        (index) {
-                          return DrawerListTile(
-                            index: index,
-                            title: allData[index].name.toString().tr,
-                            svgSrc: allData[index].img,
-                            press: () {
-                              setState(() {});
-                            },
-                          );
-                        },
-                      ),
-                      child: allData[int.parse(
-                              HiveDataBase.getUserData().currentScreen)]
-                          .widget),
-                ),
-        ),
+      return Scaffold(
+        backgroundColor: secondaryColor,
+        body: controller.isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 20),
+                child: TabContainer(
+                    textDirection: Get.locale.toString() != "en_US"
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    controller: tabController,
+                    tabEdge: Get.locale.toString() != "en_US"
+                        ? TabEdge.right
+                        : TabEdge.left,
+                    tabsEnd: 1,
+                    tabsStart: 0.0,
+                    tabMaxLength: controller.isDrawerOpen ? 60 : 60,
+                    tabExtent: controller.isDrawerOpen ? 180 : 60,
+                    borderRadius: BorderRadius.circular(10),
+                    tabBorderRadius: BorderRadius.circular(20),
+                    childPadding: const EdgeInsets.all(0.0),
+                    selectedTextStyle: const TextStyle(
+                      color: primaryColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15.0,
+                    ),
+                    unselectedTextStyle: Styles.headLineStyle1.copyWith(
+                      color: primaryColor,
+                      fontSize: 13.0,
+                    ),
+                    colors: List.generate(allData.length, (index) => bgColor),
+                    tabs: List.generate(
+                      allData.length,
+                      (index) {
+                        return DrawerListTile(
+                          index: index,
+                          title: allData[index].name.toString().tr,
+                          svgSrc: allData[index].img,
+                          press: () {
+                            setState(() {});
+                          },
+                        );
+                      },
+                    ),
+                    child: allData[int.parse(
+                            HiveDataBase.getUserData().currentScreen)]
+                        .widget),
+              ),
       );
     });
   }

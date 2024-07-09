@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -121,7 +122,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                 rows: [
                                   for (var accountModel
                                       in controller.allAccountManagement.values)
-                                    DataRow(cells: [
+                                    DataRow(
+                                        color: WidgetStatePropertyAll(
+                                          checkIfPendingDelete(affectedId: accountModel.id)?Colors.redAccent.withOpacity(0.2):Colors.transparent
+                                        ),
+                                        cells: [
                                       dataRowItem(size / userData.length,
                                           accountModel.userName.toString()),
                                       dataRowItem(size / userData.length,
@@ -168,12 +173,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                             IconButton(
                                                 onPressed: () {
                                                   if (enableUpdate)
-                                                    controller.deleteAccount(
-                                                        accountModel);
+                                                    if( checkIfPendingDelete(affectedId: accountModel.id))
+                                                      returnPendingDelete(affectedId: accountModel.id);
+                                                  else
+                                                    addDeleteOperation(collectionName: accountManagementCollection, affectedId: accountModel.id);
                                                 },
                                                 icon: Icon(
-                                                  Icons.delete_forever_outlined,
-                                                  color: Colors.red,
+                                                  checkIfPendingDelete(affectedId: accountModel.id)?CupertinoIcons.refresh_thick:    Icons.delete_forever_outlined,
+                                                  color:checkIfPendingDelete(affectedId: accountModel.id)?Colors.green: Colors.red,
                                                 )),
                                             IconButton(
                                                 onPressed: () {
@@ -181,7 +188,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                                       context, accountModel);
                                                 },
                                                 icon: Icon(Icons
-                                                    .remove_red_eye_outlined)),
+                                                    .remove_red_eye_outlined,color: primaryColor,)),
                                           ],
                                         ),
                                       ))
@@ -200,7 +207,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       "تأكيد العمليات".tr,
                       style: Styles.headLineStyle1,
                     ),
-                  if (getMyUserId()?.type == "مالك")
+                  if (getMyUserId().type == "مالك")
                     Container(
                       padding: EdgeInsets.all(defaultPadding),
                       decoration: BoxDecoration(
@@ -333,7 +340,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                                                           cancelBtnText:
                                                               'لا'.tr,
                                                           confirmBtnColor:
-                                                              Colors.redAccent.withOpacity(0.2),
+                                                              Colors.red,
                                                           showCancelBtn: true);
                                                   },
                                                   icon: Row(

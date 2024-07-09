@@ -101,7 +101,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                             title: "التفاصيل".tr,
                                             content: SizedBox(
                                                 width: Get.height / 2,
-                                                height: Get.height / 2,
+
                                                 child: Center(
                                                   child: Text(
                                                     expense.body.toString(),

@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:vision_dashboard/screens/login/login_screen.dart';
 import 'package:vision_dashboard/screens/main/main_screen.dart';
-import 'package:vision_dashboard/utils/Hive_DataBase.dart';
 
 class AppRoutes {
   static const main = '/';
-  static const login = '/login';
   static const DashboardScreen = '/DashboardScreen';
   static const parentView = '/ParentsView';
   static const StudentView = '/StudentView';
@@ -33,7 +30,7 @@ class AppRoutes {
       },
       transition: Transition.topLevel,
     ),
-    GetPage(
+   /* GetPage(
       name: parentView,
       page: () {
         // HiveDataBase.setCurrentScreen("1");
@@ -128,8 +125,7 @@ class AppRoutes {
         return MainScreen();
       },
       transition: Transition.topLevel,
-    ),
-
+    ),*/
     GetPage(
       name: Container,
       page: () => LoginScreen(),

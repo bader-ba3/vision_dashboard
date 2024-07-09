@@ -12,6 +12,7 @@ import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.d
 import 'package:vision_dashboard/screens/account_management/Controller/Min_View_Model.dart';
 
 import '../screens/Store/Controller/Store_View_Model.dart';
+import '../screens/classes/Controller/Class_View_Model.dart';
 class GetBinding extends Bindings {
 
   @override
@@ -28,6 +29,7 @@ class GetBinding extends Bindings {
     Get.put(BusViewModel());
     Get.put(DeleteManagementViewModel());
     Get.put(MinViewModel());
+    Get.put(ClassViewModel());
   }
 
 }

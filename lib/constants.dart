@@ -45,6 +45,7 @@ String generateId(String type) {
 }
 bool enableUpdate=true;
 const String parentsCollection = 'Parents';
+const String classCollection = 'Class';
 const String studentCollection = 'Students';
 const String storeCollection = 'Store';
 const String examsCollection = 'Exams';
@@ -76,6 +77,7 @@ List<String> jobList = [
   "مدرس/ه",
   "مدير/ه",
   "موظف/ه اداري/ه",
+  "سائق",
 ];
 
 List<String> contractsList = ['دوام جزئي', 'دوام كلي', 'اون لاين'];

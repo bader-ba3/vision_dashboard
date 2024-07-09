@@ -13,12 +13,11 @@ import 'package:vision_dashboard/router.dart';
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
-import 'package:vision_dashboard/screens/login/login_screen.dart';
 
 import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../constants.dart';
 import '../models/account_management_model.dart';
-import '../screens/main/main_screen.dart';
+import '../utils/Hive_DataBase.dart';
 import 'nfc/conditional_import.dart';
 
 enum UserManagementStatus {
@@ -27,10 +26,11 @@ enum UserManagementStatus {
   block,
   auth,
 }
-enum typeNFC{login,time,add}
+
+enum typeNFC { login, time, add }
 
 class AccountManagementViewModel extends GetxController {
-  TextEditingController nfcController=TextEditingController();
+  TextEditingController nfcController = TextEditingController();
   RxMap<String, AccountManagementModel> allAccountManagement =
       <String, AccountManagementModel>{}.obs;
   final accountManagementFireStore = FirebaseFirestore.instance
@@ -43,14 +43,14 @@ class AccountManagementViewModel extends GetxController {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   AccountManagementViewModel() {
-  getAllEmployee();
-
+    getAllEmployee();
   }
+
   late StreamSubscription<QuerySnapshot<AccountManagementModel>> listener;
 
-  getAllEmployee(){
-    listener= accountManagementFireStore.snapshots().listen(
-          (event) {
+  getAllEmployee() {
+    listener = accountManagementFireStore.snapshots().listen(
+      (event) {
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
             event.docs
                 .toList()
@@ -134,7 +134,15 @@ class AccountManagementViewModel extends GetxController {
   String? password;
 
   String? serialNFC;
-  AccountManagementModel? myUserModel=AccountManagementModel(id: "id", userName: "userName", password: "password", type: 'مالك', serialNFC: "serialNFC", isActive: true, salary: 2500, dayOfWork: 20);
+  AccountManagementModel? myUserModel = AccountManagementModel(
+      id: "id",
+      userName: "userName",
+      password: "password",
+      type: 'مالك',
+      serialNFC: "serialNFC",
+      isActive: true,
+      salary: 2500,
+      dayOfWork: 20);
   UserManagementStatus? userStatus;
 
   void checkUserStatus() async {
@@ -147,13 +155,26 @@ class AccountManagementViewModel extends GetxController {
           .listen((value) {
         if (userName == null) {
           userStatus = UserManagementStatus.first;
+          print("1");
           Get.offNamed(AppRoutes.main);
         } else if (value.docs.isNotEmpty) {
+          print("2");
           myUserModel =
               AccountManagementModel.fromJson(value.docs.first.data());
+          HiveDataBase.setCurrentScreen("0");
+
+
+  /*        HiveDataBase.se
+          HiveDataBase.setUserData(({
+            myUserModel!.userName,
+            myUserModel!.type,
+            myUserModel!.serialNFC,
+            myUserModel!.fullName
+          }) user);*/
           userStatus = UserManagementStatus.login;
           Get.offNamed(AppRoutes.DashboardScreen);
         } else if (value.docs.isEmpty) {
+          print("3");
           if (Get.currentRoute != AppRoutes.main) {
             userStatus = UserManagementStatus.first;
             Get.offNamed(AppRoutes.main);
@@ -167,7 +188,8 @@ class AccountManagementViewModel extends GetxController {
         }
         update();
       });
-    } /*else if (serialNFC != null) {
+    }
+    /*else if (serialNFC != null) {
       FirebaseFirestore.instance
           .collection(accountManagementCollection)
           .where('serialNFC', isEqualTo: serialNFC)
@@ -200,7 +222,8 @@ class AccountManagementViewModel extends GetxController {
         }
         update();
       });
-    }*/ else {
+    }*/
+    else {
       WidgetsFlutterBinding.ensureInitialized()
           .waitUntilFirstFrameRasterized
           .then((value) {
@@ -263,10 +286,13 @@ class AccountManagementViewModel extends GetxController {
 
           int AllTotalLate = listOfTotalLate.isEmpty
               ? 0
-              :listOfTotalLate.length>2?listOfTotalLate[0]: listOfTotalLate.reduce(
-                    (value, element) => int.parse(value) + int.parse(element),
-                  ) +
-                  totalLate.toInt();
+              : listOfTotalLate.length > 2
+                  ? listOfTotalLate[0]
+                  : listOfTotalLate.reduce(
+                        (value, element) =>
+                            int.parse(value) + int.parse(element),
+                      ) +
+                      totalLate.toInt();
           await Get.defaultDialog(
               barrierDismissible: false,
               backgroundColor: Colors.white,
@@ -449,26 +475,33 @@ class AccountManagementViewModel extends GetxController {
 
   void disposeNFC() {}
 
-
-
-   getOldData(String value) {
-  FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(accountManagementCollection).get().then(
-          (event) {
+  getOldData(String value) {
+    FirebaseFirestore.instance
+        .collection(archiveCollection)
+        .doc(value)
+        .collection(accountManagementCollection)
+        .get()
+        .then(
+      (event) {
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
-            event.docs
-                .toList()
-                .map((i) => MapEntry(i.id.toString(),AccountManagementModel.fromJson(i.data())  ))).obs;
+            event.docs.toList().map((i) => MapEntry(i.id.toString(),
+                AccountManagementModel.fromJson(i.data())))).obs;
         listener.cancel();
         update();
       },
     );
   }
 
-
-  double  getAllSalariesAtMonth(String month){
-double pay=0.0;
-    allAccountManagement.forEach((key, value) {
-      if(value.employeeTime.entries.where((element) => element.key.toString().split("-")[1]==month.padLeft(2,"0"),).isNotEmpty) {
+  double getAllSalariesAtMonth(String month) {
+    double pay = 0.0;
+    allAccountManagement.forEach(
+      (key, value) {
+        if (value.employeeTime.entries
+            .where(
+              (element) =>
+                  element.key.toString().split("-")[1] == month.padLeft(2, "0"),
+            )
+            .isNotEmpty) {
           AccountManagementModel accountModel = value;
           int totalLate = accountModel.employeeTime.isEmpty
               ? 0
@@ -485,69 +518,81 @@ double pay=0.0;
               ((accountModel.salary! / accountModel.dayOfWork!) *
                   ((totalTime / 60).floor() * 0.5)));
         }
-      },);
-return pay;
+      },
+    );
+    return pay;
   }
 
-  double  getUserSalariesAtMonth(String month,String user){
-
-    double pay=0.0;
-      if( allAccountManagement[user]!.employeeTime.entries.where((element) => element.key.toString().split("-")[1]==month.padLeft(2,"0").toString(),).isNotEmpty) {
-        AccountManagementModel accountModel = allAccountManagement[user]!;
-        int totalLate = accountModel.employeeTime.isEmpty
-            ? 0
-            : accountModel.employeeTime.values
-            .map((e) => e.totalLate ?? 0)
-            .reduce((value, element) => value + element);
-        int totalEarlier = accountModel.employeeTime.isEmpty
-            ? 0
-            : accountModel.employeeTime.values
-            .map((e) => e.totalEarlier ?? 0)
-            .reduce((value, element) => value + element);
-        int totalTime = totalLate + totalEarlier;
-        pay += ((accountModel.salary!) -
-            ((accountModel.salary! / accountModel.dayOfWork!) *
-                ((totalTime / 60).floor() * 0.5)));
-      }
+  double getUserSalariesAtMonth(String month, String user) {
+    double pay = 0.0;
+    if (allAccountManagement[user]!
+        .employeeTime
+        .entries
+        .where(
+          (element) =>
+              element.key.toString().split("-")[1] ==
+              month.padLeft(2, "0").toString(),
+        )
+        .isNotEmpty) {
+      AccountManagementModel accountModel = allAccountManagement[user]!;
+      int totalLate = accountModel.employeeTime.isEmpty
+          ? 0
+          : accountModel.employeeTime.values
+              .map((e) => e.totalLate ?? 0)
+              .reduce((value, element) => value + element);
+      int totalEarlier = accountModel.employeeTime.isEmpty
+          ? 0
+          : accountModel.employeeTime.values
+              .map((e) => e.totalEarlier ?? 0)
+              .reduce((value, element) => value + element);
+      int totalTime = totalLate + totalEarlier;
+      pay += ((accountModel.salary!) -
+          ((accountModel.salary! / accountModel.dayOfWork!) *
+              ((totalTime / 60).floor() * 0.5)));
+    }
 
     return pay;
   }
-  List<double>  getUserTimeToday(){
-String day=/*DateTime.now().day.toString()*/"12";
-    List<double> time=[0.0];
-allAccountManagement.forEach((key, value) {
-  if(value.employeeTime.entries.where((element) => element.key.toString().substring(8)==day.padLeft(2,"0"),).isNotEmpty) {
-    AccountManagementModel accountModel = value;
-    int totalLate = accountModel.employeeTime.isEmpty
-        ? 0
-        : accountModel.employeeTime.values
-        .map((e) => e.totalLate ?? 0)
-        .reduce((value, element) => value + element);
-    int totalEarlier = accountModel.employeeTime.isEmpty
-        ? 0
-        : accountModel.employeeTime.values
-        .map((e) => e.totalEarlier ?? 0)
-        .reduce((value, element) => value + element);
-    double totalTime = totalLate + totalEarlier*1.0;
-    if(totalTime>8)
-      time .add(8) ;
-    else
-    time .add(totalTime / 60) ;
-  }
-  else
-    time.add(0.0);
-},);
+
+  List<double> getUserTimeToday() {
+    String day = /*DateTime.now().day.toString()*/ "12";
+    List<double> time = [0.0];
+    allAccountManagement.forEach(
+      (key, value) {
+        if (value.employeeTime.entries
+            .where(
+              (element) =>
+                  element.key.toString().substring(8) == day.padLeft(2, "0"),
+            )
+            .isNotEmpty) {
+          AccountManagementModel accountModel = value;
+          int totalLate = accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values
+                  .map((e) => e.totalLate ?? 0)
+                  .reduce((value, element) => value + element);
+          int totalEarlier = accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values
+                  .map((e) => e.totalEarlier ?? 0)
+                  .reduce((value, element) => value + element);
+          double totalTime = totalLate + totalEarlier * 1.0;
+          if (totalTime > 8)
+            time.add(8);
+          else
+            time.add(totalTime / 60);
+        } else
+          time.add(0.0);
+      },
+    );
 
     return time;
   }
 
   void addCard({required String cardId}) {
-    nfcController.text=cardId;
-print("------${cardId}");
+    nfcController.text = cardId;
+    print("------${cardId}");
   }
-
-
-
 }
 
 AccountManagementModel getMyUserId() {

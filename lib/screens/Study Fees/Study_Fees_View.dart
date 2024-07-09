@@ -40,8 +40,10 @@ class _StudyFeesViewState extends State<StudyFeesView> {
     return Scaffold(
       appBar: Header(
           context: context,
-        title: 'الرسوم الدراسية'.tr,middleText: "تعرض هذه الواجهة اجمالي ادفعات المستلمة من الطلاب و اجمالي الدفعات الخير مستلمة واجمالي الدفعات المتأخرة عن الدفع عن هذا الشهر مع جدول يوضح تفاصيل الدفعات لكل اب مع امكانية استلام دفعة او التراجع عنها".tr
-      ),
+          title: 'الرسوم الدراسية'.tr,
+          middleText:
+              "تعرض هذه الواجهة اجمالي ادفعات المستلمة من الطلاب و اجمالي الدفعات الخير مستلمة واجمالي الدفعات المتأخرة عن الدفع عن هذا الشهر مع جدول يوضح تفاصيل الدفعات لكل اب مع امكانية استلام دفعة او التراجع عنها"
+                  .tr),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
           double size = max(
@@ -82,7 +84,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                 title: "الدفعات المتأخرة",
                                 body:
                                     "${studentController.getAllNunReceivePayThisMonth()}",
-                                color: Colors.redAccent.withOpacity(0.2),
+                                color: Colors.redAccent,
                                 png: "assets/late-payment.png")),
                         InkWell(
                             child: SquareWidget(
@@ -117,14 +119,15 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                             child: DataTable(
                                 columnSpacing: 0,
                                 dividerThickness: 0.3,
-
                                 columns: List.generate(
                                     data.length,
                                     (index) => DataColumn(
                                         label: Container(
                                             width: size / data.length,
                                             child: Center(
-                                                child: Text(data[index].toString().tr))))),
+                                                child: Text(data[index]
+                                                    .toString()
+                                                    .tr))))),
                                 rows: [
                                   ...List.generate(
                                     parentController.parentMap.values
@@ -173,7 +176,8 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                               studentController
                                                       .chekaIfHaveLateInstallment(
                                                           parent.id!)
-                                                  ? Colors.redAccent.withOpacity(0.2)
+                                                  ? Colors.redAccent
+                                                      .withOpacity(0.2)
                                                   : Colors.transparent),
                                           cells: [
                                             dataRowItem(size / data.length,
@@ -262,7 +266,8 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                 padding: EdgeInsets.all(10),
                 children: [
                   Center(
-                      child: Text('سجل الدفعات', style: Styles.headLineStyle1)),
+                      child:
+                          Text('سجل الدفعات'.tr, style: Styles.headLineStyle1)),
                   SizedBox(
                     height: defaultPadding,
                   ),
@@ -311,7 +316,6 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                     Wrap(
                                       alignment: WrapAlignment.spaceEvenly,
                                       children: [
-
                                         Container(
                                           clipBehavior: Clip.hardEdge,
                                           width: Get.width / 1.5,
@@ -350,7 +354,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                             installment[index]
                                                                 .installmentDate
                                                                 .toString(),
-                                                  title: 'الشهر',
+                                                  title: 'الشهر'.tr,
                                                   enable: false,
                                                   size: Get.width / 7.5,
                                                   isFullBorder: true,
@@ -363,7 +367,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                             installment[index]
                                                                 .installmentCost
                                                                 .toString(),
-                                                  title: "الدفعة",
+                                                  title: "الدفعة".tr,
                                                   enable: false,
                                                   size: Get.width / 7.5,
                                                   isFullBorder: true,
@@ -373,7 +377,6 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                             ),
                                           ),
                                         ),
-
                                         if (installment[index].isPay != true)
                                           IconButton(
                                               onPressed: () {
@@ -390,7 +393,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                               icon: Row(
                                                 children: [
                                                   Text(
-                                                    "تسديد!",
+                                                    "تسديد!".tr,
                                                     style: Styles.headLineStyle3
                                                         .copyWith(
                                                             color:
@@ -404,22 +407,45 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                               ))
                                         else
                                           GetBuilder<DeleteManagementViewModel>(
-                                            builder: (deleteController) {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: AppButton(
-                                                  text:checkIfPendingDelete(affectedId: installment[index]
-                                                      .installmentId!)?'في انتظار الموفقة..': "تراجع",
-                                                  onPressed: () {
-                                                    if(checkIfPendingDelete(affectedId: installment[index]
-                                                        .installmentId!))
-                                                      QuickAlert.show(context: context, type:QuickAlertType.info,width: Get.width/2,title: "مراجعة المسؤول".tr,text: "يرجى مراجعة مسؤول المنصة".tr);
-                                                      else
-                                                   addDeleteOperation(collectionName: installmentCollection, affectedId: installment[index]
-                                                       .installmentId!,relatedId:installmentStudent.keys
-                                                       .elementAt(
-                                                       parentIndex) );
-                                         /*           studentController
+                                              builder: (deleteController) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: AppButton(
+                                                text: checkIfPendingDelete(
+                                                        affectedId:
+                                                            installment[index]
+                                                                .installmentId!)
+                                                    ? 'في انتظار الموفقة..'.tr
+                                                    : "تراجع".tr,
+                                                onPressed: () {
+                                                  if (checkIfPendingDelete(
+                                                      affectedId:
+                                                          installment[index]
+                                                              .installmentId!))
+                                                    QuickAlert.show(
+                                                        context: context,
+                                                        type:
+                                                            QuickAlertType.info,
+                                                        width: Get.width / 2,
+                                                        title:
+                                                            "مراجعة المسؤول".tr,
+                                                        text:
+                                                            "يرجى مراجعة مسؤول المنصة"
+                                                                .tr);
+                                                  else
+                                                    addDeleteOperation(
+                                                        collectionName:
+                                                            installmentCollection,
+                                                        affectedId:
+                                                            installment[index]
+                                                                .installmentId!,
+                                                        relatedId:
+                                                            installmentStudent
+                                                                .keys
+                                                                .elementAt(
+                                                                    parentIndex));
+                                                  /*           studentController
                                                         .setInstallmentPay(
                                                             installment[index]
                                                                 .installmentId!,
@@ -427,13 +453,10 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                                 .elementAt(
                                                                     parentIndex),
                                                             false);*/
-
-                                                  },
-                                                ),
-                                              );
-                                            }
-                                          ),
-
+                                                },
+                                              ),
+                                            );
+                                          }),
                                       ],
                                     ),
                                   ],
@@ -448,7 +471,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                   ),
                   Center(
                       child: AppButton(
-                    text: "تم",
+                    text: "حفظ".tr,
                     onPressed: () {
                       Get.back();
                     },

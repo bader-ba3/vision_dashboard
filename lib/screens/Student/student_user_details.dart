@@ -9,10 +9,12 @@ import 'package:vision_dashboard/models/Installment_model.dart';
 
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/models/event_record_model.dart';
+import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
+import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dart';
 import '../../constants.dart';
 import '../../controller/event_view_model.dart';
 import '../../models/event_model.dart';
@@ -82,11 +84,14 @@ class _StudentInputFormState extends State<StudentInputForm> {
 
   List<String> _contracts = [], _contractsTemp = [];
 
+  ClassViewModel classViewModel = Get.find<ClassViewModel>();
+
+  String busValue = '';
+
   addInstalment() {
     installmentCount++;
     monthsController.add(TextEditingController());
     costsController.add(TextEditingController());
-
   }
 
   bool _validateFields() {
@@ -182,9 +187,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
     totalPaymentController.clear();
     parentName = '';
     languageController.text = '';
-    setState(() {
-
-    });
+    busValue = '';
+    _contracts.clear();
+    _contractsTemp.clear();
+    setState(() {});
   }
 
   @override
@@ -217,8 +223,32 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       title: 'رقم الطالب'.tr,
                       keyboardType: TextInputType.phone),
                   CustomDropDown(
+                    value: classController.text,
+                    listValue: classViewModel.classMap.values
+                        .map(
+                          (e) => e.className!,
+                        )
+                        .toList(),
+                    label: 'الصف'.tr,
+                    onChange: (value) {
+                      if (value != null) {
+                        classController.text = value;
+                        setState(() {
+
+                        });
+                      }
+                    },
+                  ),
+                  CustomDropDown(
                     value: sectionController.text,
-                    listValue: sectionsList,
+                    listValue: classViewModel.classMap.values
+                            .where(
+                              (element) =>
+                                  element.className == classController.text,
+                            )
+                            .firstOrNull
+                            ?.classSection ??
+                        [],
                     label: 'الشعبة'.tr,
                     onChange: (value) {
                       if (value != null) {
@@ -237,16 +267,6 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: classController.text,
-                    listValue: classNameList,
-                    label: 'الصف'.tr,
-                    onChange: (value) {
-                      if (value != null) {
-                        classController.text = value;
-                      }
-                    },
-                  ),
-                  CustomDropDown(
                     value: languageController.text,
                     listValue: languageList,
                     label: 'اللغة'.tr,
@@ -257,12 +277,29 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: busController.text,
-                    listValue: busesList,
+                    value: busValue,
+                    listValue: Get.find<BusViewModel>()
+                            .busesMap
+                            .values
+                            .map(
+                              (e) => e.name!,
+                            )
+                            .toList() +
+                        ['بدون حافلة'],
                     label: 'الحافلة'.tr,
                     onChange: (value) {
                       if (value != null) {
-                        busController.text = value;
+                        busValue = value;
+                        final busViewController = Get.find<BusViewModel>();
+                        if (busViewController.busesMap.isNotEmpty) {
+                          busController.text = busViewController.busesMap.values
+                              .where(
+                                (element) => element.name == value,
+                              )
+                              .first
+                              .busId!;
+                        } else
+                          busController.text = value;
                       }
                     },
                   ),
@@ -330,7 +367,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       ).then((date) {
                         if (date != null) {
                           startDateController.text =
-                          date.toString().split(" ")[0];
+                              date.toString().split(" ")[0];
                         }
                       });
                     },
@@ -342,7 +379,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       icon: Icon(
                         Icons.date_range_outlined,
                         color: primaryColor,
-                      ) ,
+                      ),
                     ),
                   ),
                   InkWell(
@@ -353,8 +390,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         lastDate: DateTime(2100),
                       ).then((date) {
                         if (date != null) {
-                          ageController.text =
-                          date.toString().split(" ")[0];
+                          ageController.text = date.toString().split(" ")[0];
                         }
                       });
                     },
@@ -366,10 +402,9 @@ class _StudentInputFormState extends State<StudentInputForm> {
                       icon: Icon(
                         Icons.date_range_outlined,
                         color: primaryColor,
-                      ) ,
+                      ),
                     ),
                   ),
-
                   if (_payWay == 'اقساط'.tr)
                     SizedBox(
                       width: Get.width / 2,

@@ -4,12 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
-import 'package:vision_dashboard/controller/home_controller.dart';
 
 import '../../../constants.dart';
 import '../../../controller/event_view_model.dart';
 import '../../../controller/expenses_view_model.dart';
-import '../../../router.dart';
 import '../../../utils/const.dart';
 import '../../Buses/Controller/Bus_View_Model.dart';
 import '../../Exams/controller/Exam_View_Model.dart';

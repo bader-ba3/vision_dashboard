@@ -10,59 +10,41 @@ class HiveDataBase {
   }
 
   static ({
+    String userName,
+    String type,
     String name,
-    String gender,
-    String email,
-    String mobile,
-    String licenseImage,
-    String passport,
-    String location,
+    String seralNFC,
+
     String currentScreen
   }) getUserData() {
-    String mobile = accountBox.get("mobile").toString();
+    String userName = accountBox.get("userName").toString();
+    String type = accountBox.get("type").toString();
+    String seralNFC = accountBox.get("seralNFC").toString();
     String name = accountBox.get("name").toString();
-    String gender = accountBox.get("gender").toString();
-    String email = accountBox.get("email").toString();
-    String licenseImage = accountBox.get("licenseImage").toString();
-    String passport = accountBox.get("passport").toString();
-    String location = accountBox.get("location").toString();
     String currentScreen = accountBox.get("currentScreen")??"0";
 
     return (
-      name: name,
-      gender: gender,
-      email: email,
-      mobile: mobile,
-      licenseImage: licenseImage,
-      passport: passport,
-      location: location,
+
+        userName:userName,
+      type:type,
+        seralNFC:seralNFC,
+      name:name,
       currentScreen: currentScreen
     );
   }
 
   static setUserData(
-      ({String name, String gender, String email, String mobile}) data) async {
-    await accountBox.put("mobile", data.mobile);
+      ({ String userName, String type, String syrialNFC, String name}) data) async {
     await accountBox.put("name", data.name);
-    await accountBox.put("gender", data.gender);
-    await accountBox.put("email", data.email);
+    await accountBox.put("userName", data.userName);
+    await accountBox.put("type", data.type);
+    await accountBox.put("email", data.syrialNFC);
     return true;
   }
 
-  static setUserPassPortData(String passport) async {
-    await accountBox.put("passport", passport);
-    return true;
-  }
 
-  static setUserLocationData(String location) async {
-    await accountBox.put("location", location);
-    return true;
-  }
 
-  static setUserLicenseImageData(String licenseImage) async {
-    await accountBox.put("licenseImage", licenseImage);
-    return true;
-  }
+
 
   static setCurrentScreen(String currentScreen) async {
     await accountBox.put("currentScreen", currentScreen);

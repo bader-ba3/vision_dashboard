@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DeleteManagementModel {
   late String id , affectedId , collectionName ;

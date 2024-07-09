@@ -1,9 +1,9 @@
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constants.dart';
+import '../../../controller/account_management_view_model.dart';
 import 'InfoBarchart.dart';
 import 'info_card.dart';
 
@@ -18,6 +18,8 @@ class EmployeeDetailsChart extends StatefulWidget {
 
 class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
   int touchedIndex = -1;
+  AccountManagementViewModel _accountManagementViewModel =
+      Get.find<AccountManagementViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,59 +40,99 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
             ),
           ),
           SizedBox(height: defaultPadding),
-          InfoBarChart(touchedIndex: touchedIndex,paiChartSelectionData:paiChartSelectionData(),title: "موظف".tr,subtitle: "60",),
+          InfoBarChart(
+            touchedIndex: touchedIndex,
+            paiChartSelectionData: paiChartSelectionData(),
+            title: "موظف".tr,
+            subtitle: _accountManagementViewModel.allAccountManagement.length
+                .toString(),
+          ),
           InfoCard(
-            onTap: (){
-              touchedIndex==0?touchedIndex=-1:touchedIndex=0;
+            onTap: () {
+              touchedIndex == 0 ? touchedIndex = -1 : touchedIndex = 0;
               setState(() {});
             },
             title: "اداري".tr,
-            amountOfEmployee: "١٠",
-            color: Colors.redAccent.withOpacity(0.2),
+            amountOfEmployee:
+                _accountManagementViewModel.allAccountManagement.values
+                    .where(
+                      (element) => element.jobTitle == 'مدير/ه',
+                    )
+                    .length
+                    .toString(),
+            color: Colors.redAccent,
           ),
           InfoCard(
-            onTap: (){
-              touchedIndex==1?touchedIndex=-1:touchedIndex=1;
+            onTap: () {
+              touchedIndex == 1 ? touchedIndex = -1 : touchedIndex = 1;
               setState(() {});
             },
             title: "استاذ".tr,
-            amountOfEmployee: "30",
+            amountOfEmployee:
+                _accountManagementViewModel.allAccountManagement.values
+                    .where(
+                      (element) => element.jobTitle == 'مدرس/ه',
+                    )
+                    .length
+                    .toString(),
             color: primaryColor,
           ),
           InfoCard(
-            onTap: (){
-              touchedIndex==2?touchedIndex=-1:touchedIndex=2;
+            onTap: () {
+              touchedIndex == 2 ? touchedIndex = -1 : touchedIndex = 2;
               setState(() {});
             },
             title: "موظف مكتبي".tr,
-            amountOfEmployee: "15",
+            amountOfEmployee:
+                _accountManagementViewModel.allAccountManagement.values
+                    .where(
+                      (element) => element.jobTitle == 'موظف/ه اداري/ه',
+                    )
+                    .length
+                    .toString(),
             color: blueColor,
           ),
           InfoCard(
-            onTap: (){
-              touchedIndex==3?touchedIndex=-1:touchedIndex=3;
+            onTap: () {
+              touchedIndex == 3 ? touchedIndex = -1 : touchedIndex = 3;
               setState(() {});
             },
             title: "سائق".tr,
-            amountOfEmployee: "5",
+            amountOfEmployee:
+                _accountManagementViewModel.allAccountManagement.values
+                    .where(
+                      (element) => element.jobTitle == 'سائق',
+                    )
+                    .length
+                    .toString(),
             color: Colors.cyan,
           ),
         ],
       ),
     );
   }
+
   List<PieChartSectionData> paiChartSelectionData() {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
-      double radius =  isTouched ? 60.0 :30;
+      double radius = isTouched ? 50.0 : 30;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: Colors.redAccent.withOpacity(0.2),
-            value: 10,
-            title: '${((10 / 60)*100).round()}%',
+            color: Colors.redAccent,
+            value: _accountManagementViewModel.allAccountManagement.values
+                    .where(
+                      (element) => element.jobTitle == 'مدير/ه',
+                    )
+                    .length *
+                1.0,
+            title: _accountManagementViewModel.allAccountManagement.isEmpty
+                ? ''
+                : '${((_accountManagementViewModel.allAccountManagement.values.where(
+                      (element) => element.jobTitle == 'مدير/ه',
+                    ).length / _accountManagementViewModel.allAccountManagement.length) * 100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -102,8 +144,17 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
         case 1:
           return PieChartSectionData(
             color: primaryColor,
-            value: 30,
-            title: '${((30 / 60)*100).round()}%',
+            value: _accountManagementViewModel.allAccountManagement.values
+                .where(
+                  (element) => element.jobTitle == 'مدرس/ه',
+            )
+                .length *
+                1.0,
+            title: _accountManagementViewModel.allAccountManagement.isEmpty
+                ? ''
+                : '${((_accountManagementViewModel.allAccountManagement.values.where(
+                  (element) => element.jobTitle == 'مدرس/ه',
+            ).length / _accountManagementViewModel.allAccountManagement.length) * 100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -115,8 +166,17 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
         case 2:
           return PieChartSectionData(
             color: blueColor,
-            value: 15,
-            title: '${((15 / 60)*100).round()}%',
+            value: _accountManagementViewModel.allAccountManagement.values
+                .where(
+                  (element) => element.jobTitle == 'موظف/ه اداري/ه',
+            )
+                .length *
+                1.0,
+            title: _accountManagementViewModel.allAccountManagement.isEmpty
+                ? ''
+                : '${((_accountManagementViewModel.allAccountManagement.values.where(
+                  (element) => element.jobTitle == 'موظف/ه اداري/ه',
+            ).length / _accountManagementViewModel.allAccountManagement.length) * 100).round()}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -128,8 +188,18 @@ class _EmployeeDetailsChartState extends State<EmployeeDetailsChart> {
         case 3:
           return PieChartSectionData(
             color: Colors.cyan,
-            value: 5,
-            title: '${((5 / 60)*100).round()}%',
+            value: _accountManagementViewModel.allAccountManagement.values
+                .where(
+                  (element) => element.jobTitle == 'سائق',
+            )
+                .length *
+                1.0,
+            title: _accountManagementViewModel.allAccountManagement.isEmpty
+                ? ''
+                : '${((_accountManagementViewModel.allAccountManagement.values.where(
+                  (element) => element.jobTitle == 'سائق',
+            ).length / _accountManagementViewModel.allAccountManagement.length) * 100).round()}%',
+
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

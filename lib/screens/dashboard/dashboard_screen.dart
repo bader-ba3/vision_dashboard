@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/responsive.dart';
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
@@ -8,6 +9,8 @@ import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Ch
 import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_info_Widget.dart';
 import 'package:flutter/material.dart';
+import 'package:vision_dashboard/screens/main/main_screen.dart';
+import 'package:vision_dashboard/utils/Hive_DataBase.dart';
 
 import '../../constants.dart';
 import '../Widgets/Custom_Drop_down.dart';
@@ -28,6 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   AccountManagementViewModel _accountManagementViewModel =
       Get.find<AccountManagementViewModel>();
   SalaryViewModel _salaryViewModel = Get.find<SalaryViewModel>();
+  DeleteManagementViewModel _deleteManagementViewModel =
+      Get.find<DeleteManagementViewModel>();
 
   String selectedMonth = '';
   bool isAll = false;
@@ -60,27 +65,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomDropDown(
-              value: selectedMonth.toString().tr,
-              listValue: (months.keys
-                      .map(
-                        (e) => e.toString().tr,
-                      )
-                      .toList()) +
-                  ["الكل".tr],
-              label: "اختر الشهر".tr,
-              onChange: (value) {
-                if (value != null && value != "الكل") {
-                  // print(value.tr);
-                  selectedMonth = value.tr;
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              width: Get.width,
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  CustomDropDown(
+                    value: selectedMonth.toString().tr,
+                    listValue: (months.keys
+                            .map(
+                              (e) => e.toString().tr,
+                            )
+                            .toList()) +
+                        ["الكل".tr],
+                    label: "اختر الشهر".tr,
+                    onChange: (value) {
+                      if (value != null && value != "الكل") {
+                        // print(value.tr);
+                        selectedMonth = value.tr;
 
-                  isAll = false;
-                } else {
-                  isAll = true;
-                }
-                setState(() {});
-              },
-              isFullBorder: true,
+                        isAll = false;
+                      } else {
+                        isAll = true;
+                      }
+                      setState(() {});
+                    },
+                    isFullBorder: true,
+                  ),
+                  if (_deleteManagementViewModel.allDelete.values
+                      .where(
+                        (element) => element.isAccepted == null,
+                      )
+                      .isNotEmpty)
+                    InkWell(
+                      onTap: () {
+                        HiveDataBase.setCurrentScreen("12");
+                        Get.offAll(MainScreen());
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(5),
+                              // decoration: BoxDecoration(color: Colors.red.withOpacity(1),shape: BoxShape.circle,),
+
+                              child: Icon(
+                                Icons.notifications_none_outlined,
+                                color: secondaryColor,
+                                size: 30,
+                              )),
+                          Positioned(
+                              top: -5,
+                              right: -2,
+                              child: Container(
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  _deleteManagementViewModel.allDelete.values
+                                      .where(
+                                        (element) => element.isAccepted == null,
+                                      )
+                                      .length
+                                      .toString(),
+                                  style: Styles.headLineStyle4
+                                      .copyWith(color: Colors.white),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
             SizedBox(
               height: defaultPadding,

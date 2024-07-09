@@ -87,7 +87,7 @@ class _StudentsDetailsChartState extends State<StudentsDetailsChart> {
     return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 30.0;
+      final radius = isTouched ? 50.0 : 30.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       switch (i) {
         case 0:
