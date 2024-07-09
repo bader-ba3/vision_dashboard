@@ -62,7 +62,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                           ? WrapAlignment.center
                           : WrapAlignment.spaceEvenly,
                       runSpacing: 25,
-                      spacing: 0,
+                      spacing: 10,
                       children: [
                         InkWell(
                             child: SquareWidget(

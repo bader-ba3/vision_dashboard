@@ -39,11 +39,16 @@ class _AddMarksState extends State<AddMarks> {
     return Scaffold(
       appBar: Header(
           context: context,
-
-          title: 'اضافة علامات للطلاب',middleText: 'تتمكن في هذه الواجهة من اضافة علامات للطلاب المشتركين في هذا الامتحان (يجب ان يكون ارقاما فقط)'),
+          title: 'اضافة علامات للطلاب'.tr,
+          middleText:
+              'تتمكن في هذه الواجهة من اضافة علامات للطلاب المشتركين في هذا الامتحان (يجب ان يكون ارقاما فقط)'.tr),
       body: SingleChildScrollView(
         child: GetBuilder<HomeViewModel>(builder: (controller) {
-          double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+          double size = max(
+                  MediaQuery.sizeOf(context).width -
+                      (controller.isDrawerOpen ? 240 : 120),
+                  1000) -
+              60;
           return Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
@@ -58,14 +63,15 @@ class _AddMarksState extends State<AddMarks> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "كل الطلاب الذين يحق لهم دخول امتحان ال${widget.examModel.subject}",
+                        "كل الطلاب الذين يحق لهم دخول امتحان".tr+"${widget.examModel.subject}",
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(
                         width: size + 60,
                         child: Scrollbar(
                           controller: _scrollController,
-                          child: GetBuilder<ExamViewModel>(builder: (examController) {
+                          child: GetBuilder<ExamViewModel>(
+                              builder: (examController) {
                             return SingleChildScrollView(
                               controller: _scrollController,
                               scrollDirection: Axis.horizontal,
@@ -73,18 +79,24 @@ class _AddMarksState extends State<AddMarks> {
                                 columnSpacing: 0,
                                 columns: List.generate(
                                   data.length,
-                                      (index) => DataColumn(
+                                  (index) => DataColumn(
                                     label: Container(
                                       width: size / data.length,
-                                      child: Center(child: Text(data[index])),
+                                      child: Center(child: Text(data[index].toString().tr)),
                                     ),
                                   ),
                                 ),
                                 rows: [
-                                  for (var exam in widget.examModel.marks?.keys ?? [])
+                                  for (var exam
+                                      in widget.examModel.marks?.keys ?? [])
                                     DataRow(
                                       cells: [
-                                        dataRowItem(size / data.length, Get.find<StudentViewModel>().studentMap[exam]!.studentName.toString()),
+                                        dataRowItem(
+                                            size / data.length,
+                                            Get.find<StudentViewModel>()
+                                                .studentMap[exam]!
+                                                .studentName
+                                                .toString()),
                                         dataRowItemText(
                                           size / data.length,
                                           _calculateMark(exam.toString()),
@@ -106,19 +118,24 @@ class _AddMarksState extends State<AddMarks> {
                 SizedBox(height: defaultPadding),
                 GetBuilder<ExamViewModel>(
                   builder: (controller) {
-                    return AppButton(text:'حفظ' ,   onPressed: () async {
-                      QuickAlert.show(
-                          width: Get.width / 2,
-                          context: context,
-                          type: QuickAlertType.loading,
-                          title: 'جاري التحميل'.tr,
-                          text: 'يتم العمل على الطلب'.tr,
-                          barrierDismissible: false);
-                      await controller.addMarkExam(widget.examModel.marks!, widget.examModel.id!);
-                      controller.changeExamScreen();
-                      Get.find<StudentViewModel>().getAllStudentWithOutListen();
-                      Get.back();
-                    },);
+                    return AppButton(
+                      text: 'حفظ'.tr,
+                      onPressed: () async {
+                        QuickAlert.show(
+                            width: Get.width / 2,
+                            context: context,
+                            type: QuickAlertType.loading,
+                            title: 'جاري التحميل'.tr,
+                            text: 'يتم العمل على الطلب'.tr,
+                            barrierDismissible: false);
+                        await controller.addMarkExam(
+                            widget.examModel.marks!, widget.examModel.id!);
+                        controller.changeExamScreen();
+                        Get.find<StudentViewModel>()
+                            .getAllStudentWithOutListen();
+                        Get.back();
+                      },
+                    );
                   },
                 ),
               ],
@@ -136,11 +153,11 @@ class _AddMarksState extends State<AddMarks> {
   }
 
   void _updateMark(String exam, String value) {
-    double updatedMark = (double.parse(value) / double.parse(widget.examModel.examMaxMark.toString())) * 100;
+    double updatedMark = (double.parse(value) /
+            double.parse(widget.examModel.examMaxMark.toString())) *
+        100;
     widget.examModel.marks?[exam] = updatedMark.toString();
   }
-
-
 
   dataRowItem(size, text, {onTap, color}) {
     return DataCell(
@@ -174,14 +191,13 @@ class _AddMarksState extends State<AddMarks> {
           hint: text,
           onChange: (value) {
             if (value!.isEmpty) {
-              showErrorDialog("خطأ", "لا يمكن أن تكون القيمة فارغة");
-              // Get.snackbar("خطأ", "لا يمكن أن تكون القيمة فارغة");
+              showErrorDialog("خطأ".tr, "لا يمكن أن تكون القيمة فارغة".tr);
+
               controller.clear();
             } else if (!isNumeric(value)) {
-              showErrorDialog("خطأ", "يجب أن تكون القيمة رقمية");
-              // Get.snackbar("خطأ", "يجب أن تكون القيمة رقمية");
-              controller.clear();
+              showErrorDialog("خطأ".tr, "يجب أن تكون القيمة رقمية".tr);
 
+              controller.clear();
             } else {
               onChange(value);
             }
@@ -191,5 +207,3 @@ class _AddMarksState extends State<AddMarks> {
     );
   }
 }
-
-

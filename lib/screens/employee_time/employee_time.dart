@@ -34,7 +34,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
   }
 
   bool isShowLogin = true;
-  List<String> data = ["اليوم","الدخول","الخروج","المجموع"," التأخير","عرض المبرر","وقت الخروج المبكر","عرض المبرر"];
+  List<String> data = ["اليوم","الدخول","الخروج","المجموع","التأخير","عرض المبرر","وقت الخروج المبكر","عرض المبرر"];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               height: 50,
                               width: MediaQuery.sizeOf(context).width * 0.35,
                               decoration: BoxDecoration(
-                                  color: isShowLogin ? primaryColor : Colors.white,
+                                  color: isShowLogin ? primaryColor : Colors.transparent,
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(15),
                                     bottomRight: Radius.circular(15),
@@ -91,7 +91,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               height: 50,
                               width: MediaQuery.sizeOf(context).width * 0.35,
                               decoration: BoxDecoration(
-                                  color: isShowLogin ? Colors.transparent : Colors.blueAccent.shade700,
+                                  color: isShowLogin ? Colors.transparent : primaryColor,
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(15),
                                     bottomLeft: Radius.circular(15),

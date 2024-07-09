@@ -188,7 +188,7 @@ clearController(){
                         ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
                         : bodyController.text,
                     total: int.parse(totalController.text),
-                    userId: getMyUserId().id,
+                    userId: getMyUserId().id??'',
                     images: imageLinkList,
                   );
                   if (widget.busId != null)

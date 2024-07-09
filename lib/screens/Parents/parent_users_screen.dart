@@ -106,7 +106,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                                           dataRowItem(size / data.length,
                                               parent.emergencyPhone.toString()),
                                           dataRowItem(
-                                              size / data.length, parent.eventRecords?.length==0?"لايوجد":"عرض  (${parent.eventRecords?.length})  حدث".toString(),onTap: (){
+                                              size / data.length, parent.eventRecords?.length==0?"لايوجد".tr:"عرض  (${parent.eventRecords?.length})  حدث".toString(),onTap: (){
                                             if(parent.eventRecords!.length>0)
                                            showEventDialog(context, parent.eventRecords!);
                                           }),

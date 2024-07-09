@@ -9,6 +9,7 @@ class HomeViewModel extends GetxController {
   bool isDrawerOpen= true;
   bool isLoading=false;
 
+
   changeIsLoading(){
     isLoading=!isLoading;
     update();

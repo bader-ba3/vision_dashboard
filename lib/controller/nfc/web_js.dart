@@ -20,7 +20,7 @@ Future<bool> initNFCWorker(typeNFC type) async {
     String serialCode = state['data'].toString();
     AccountManagementViewModel accountManagementViewModel = Get.find<AccountManagementViewModel>();
     if(type==typeNFC.login){
-      accountManagementViewModel.signInUsingNFC(serialCode);
+      // accountManagementViewModel.signInUsingNFC(serialCode);
     }else if(type==typeNFC.time){
       accountManagementViewModel.addTime(cardId: serialCode);
     }else{

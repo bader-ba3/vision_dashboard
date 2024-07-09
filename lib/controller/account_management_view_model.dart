@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import 'package:vision_dashboard/models/Salary_Model.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
+import 'package:vision_dashboard/router.dart';
 
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 
@@ -133,7 +134,7 @@ class AccountManagementViewModel extends GetxController {
   String? password;
 
   String? serialNFC;
-  AccountManagementModel? myUserModel;
+  AccountManagementModel? myUserModel=AccountManagementModel(id: "id", userName: "userName", password: "password", type: 'مالك', serialNFC: "serialNFC", isActive: true, salary: 2500, dayOfWork: 20);
   UserManagementStatus? userStatus;
 
   void checkUserStatus() async {
@@ -146,16 +147,16 @@ class AccountManagementViewModel extends GetxController {
           .listen((value) {
         if (userName == null) {
           userStatus = UserManagementStatus.first;
-          Get.offAll(() => LoginScreen());
+          Get.offNamed(AppRoutes.main);
         } else if (value.docs.isNotEmpty) {
           myUserModel =
               AccountManagementModel.fromJson(value.docs.first.data());
           userStatus = UserManagementStatus.login;
-          Get.offAll(() => MainScreen());
+          Get.offNamed(AppRoutes.DashboardScreen);
         } else if (value.docs.isEmpty) {
-          if (Get.currentRoute != "/LoginScreen") {
+          if (Get.currentRoute != AppRoutes.main) {
             userStatus = UserManagementStatus.first;
-            Get.offAll(() => LoginScreen());
+            Get.offNamed(AppRoutes.main);
           } else {
             Get.snackbar("error", "not matched");
           }
@@ -166,7 +167,7 @@ class AccountManagementViewModel extends GetxController {
         }
         update();
       });
-    } else if (serialNFC != null) {
+    } /*else if (serialNFC != null) {
       FirebaseFirestore.instance
           .collection(accountManagementCollection)
           .where('serialNFC', isEqualTo: serialNFC)
@@ -174,11 +175,11 @@ class AccountManagementViewModel extends GetxController {
           .listen((value) {
         if (serialNFC == null) {
           userStatus = UserManagementStatus.first;
-          Get.offAll(() => LoginScreen());
+          Get.offNamed(AppRoutes.main);
         } else if (value.docs.first.data()["isDisabled"]) {
           Get.snackbar("خطأ", "تم إلغاء تفعيل البطاقة");
           userStatus = UserManagementStatus.first;
-          Get.offAll(() => LoginScreen());
+          Get.offNamed(AppRoutes.main);
         } else if (value.docs.isNotEmpty) {
           myUserModel =
               AccountManagementModel.fromJson(value.docs.first.data());
@@ -199,20 +200,20 @@ class AccountManagementViewModel extends GetxController {
         }
         update();
       });
-    } else {
+    }*/ else {
       WidgetsFlutterBinding.ensureInitialized()
           .waitUntilFirstFrameRasterized
           .then((value) {
         userStatus = UserManagementStatus.first;
-        Get.offAll(() => LoginScreen());
+        Get.offNamed(AppRoutes.main);
       });
     }
   }
 
-  void signInUsingNFC(String cardId) {
+/*  void signInUsingNFC(String cardId) {
     print(cardId);
     Get.offAll(() => MainScreen());
-  }
+  }*/
 
   String? loginUserPage;
 

@@ -6,14 +6,14 @@ import 'package:vision_dashboard/screens/Store/Store_Screen.dart';
 
 import '../../constants.dart';
 
-class StoreView extends StatefulWidget {
-  const StoreView({super.key});
+class StoreViewPage extends StatefulWidget {
+  const StoreViewPage({super.key});
 
   @override
-  State<StoreView> createState() => _StoreViewState();
+  State<StoreViewPage> createState() => _StoreViewPageState();
 }
 
-class _StoreViewState extends State<StoreView>{
+class _StoreViewPageState extends State<StoreViewPage>{
   bool isAdd=false;
 
   @override

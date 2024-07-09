@@ -25,7 +25,7 @@ AlertDialog buildSignViewDialog(String text, AccountManagementModel account,
           shrinkWrap: true,
           children: [
             Text(
-              "يرجى التوقيع من قبل الموظف",
+              "يرجى التوقيع من قبل الموظف".tr,
               style: Styles.headLineStyle1,
             ),
             SizedBox(
@@ -33,7 +33,7 @@ AlertDialog buildSignViewDialog(String text, AccountManagementModel account,
             ),
             CustomTextField(
               controller: salaryMonth..text = text.toString(),
-              title: "الراتب المستحق",
+              title: "الراتب المستحق".tr,
               enable: false,
             ),
             SizedBox(
@@ -41,7 +41,7 @@ AlertDialog buildSignViewDialog(String text, AccountManagementModel account,
             ),
             CustomTextField(
                 controller: salaryReceived..text = text.toString(),
-                title: "الراتب الممنوح"),
+                title: "الراتب الممنوح".tr),
             SizedBox(
               height: defaultPadding,
             ),
@@ -59,13 +59,13 @@ AlertDialog buildSignViewDialog(String text, AccountManagementModel account,
             SizedBox(height: 10),
             Row(children: <Widget>[
               AppButton(
-                  text: "حفظ",
+                  text: "حفظ".tr,
                   onPressed: () {
 
                     handleSaveButtonPressed(
                         salaryReceived.text, account.id, date, account.salary.toString(), text);
                   }),
-              AppButton(text: "اعادة", onPressed: handleClearButtonPressed),
+              AppButton(text: "اعادة".tr, onPressed: handleClearButtonPressed),
             ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
           ],
         ),

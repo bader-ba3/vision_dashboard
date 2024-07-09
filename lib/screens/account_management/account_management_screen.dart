@@ -200,7 +200,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       "تأكيد العمليات".tr,
                       style: Styles.headLineStyle1,
                     ),
-                  if (getMyUserId().type == "مالك")
+                  if (getMyUserId()?.type == "مالك")
                     Container(
                       padding: EdgeInsets.all(defaultPadding),
                       decoration: BoxDecoration(

@@ -9,6 +9,7 @@ import 'package:vision_dashboard/controller/home_controller.dart';
 import '../../../constants.dart';
 import '../../../controller/event_view_model.dart';
 import '../../../controller/expenses_view_model.dart';
+import '../../../router.dart';
 import '../../../utils/const.dart';
 import '../../Buses/Controller/Bus_View_Model.dart';
 import '../../Exams/controller/Exam_View_Model.dart';
@@ -42,8 +43,8 @@ class MinViewModel extends GetxController {
 
   changeLanguage(String lan)async{
 
-    HomeViewModel homeViewModel =Get.find<HomeViewModel>();
-    homeViewModel.changeIsLoading();
+/*    HomeViewModel homeViewModel =Get.find<HomeViewModel>();
+    homeViewModel.changeIsLoading();*/
 
     if(lan=='عربي')
       {
@@ -53,9 +54,9 @@ class MinViewModel extends GetxController {
     await  Get.updateLocale(Locale("en",'US'));
 
     }
-    homeViewModel.changeIsLoading();
-    homeViewModel.changeIndex(0);
-
+/* await   homeViewModel.changeIsLoading();
+    // await  Get.offNamed(AppRoutes.EmployeeView);
+    update();*/
   }
   getAllArchive() {
     fireStoreInstance.collection(archiveCollection).get().then(

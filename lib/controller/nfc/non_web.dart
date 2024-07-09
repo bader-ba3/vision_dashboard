@@ -25,7 +25,7 @@ Future<bool> initNFCWorker(typeNFC type) async {
       var cardId=id.toUpperCase();
       AccountManagementViewModel accountManagementViewModel = Get.find<AccountManagementViewModel>();
       if(type==typeNFC.login){
-        accountManagementViewModel.signInUsingNFC(cardId);
+        // accountManagementViewModel.signInUsingNFC(cardId);
       }else if(type==typeNFC.time){
         accountManagementViewModel.addTime(cardId: cardId);
       }else{

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
+import 'package:vision_dashboard/router.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 
 import '../../constants.dart';
@@ -13,9 +14,16 @@ class ClassesView extends StatefulWidget {
 }
 
 class _ClassesViewState extends State<ClassesView> {
-  ScrollController scrollController = ScrollController();
-  ScrollController secScrollController = ScrollController();
+
   int? SelectedClass;
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +31,7 @@ class _ClassesViewState extends State<ClassesView> {
       body: Row(
         children: [
           SizedBox(
-            width: 200,
+            width: Get.width/6,
             child: Column(
               children: [
                 Container(
@@ -40,6 +48,8 @@ class _ClassesViewState extends State<ClassesView> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: classNameList.length,
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -199,18 +209,24 @@ class _ClassesViewState extends State<ClassesView> {
                                                   .toList();
                                           return Column(
                                             children: [
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                    child: Text(
-                                                        listStudent[index]
-                                                            .studentName!,
-                                                        style: Styles
-                                                            .headLineStyle3
-                                                            .copyWith(
-                                                                color:
-                                                                    blueColor))),
+                                              InkWell(
+                                                onTap: (){
+                                                  Get.offNamed(AppRoutes.StudentView);
+
+                                                },
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                          listStudent[index]
+                                                              .studentName!,
+                                                          style: Styles
+                                                              .headLineStyle3
+                                                              .copyWith(
+                                                                  color:
+                                                                      blueColor))),
+                                                ),
                                               ),
                                               Container(
                                                 height: 3,
@@ -272,18 +288,23 @@ class _ClassesViewState extends State<ClassesView> {
                                                   .toList();
                                           return Column(
                                             children: [
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                    child: Text(
-                                                        listStudent[index]
-                                                            .studentName!,
-                                                        style: Styles
-                                                            .headLineStyle3
-                                                            .copyWith(
-                                                                color:
-                                                                    blueColor))),
+                                              InkWell(
+                                                onTap: (){
+                                                  Get.offNamed(AppRoutes.StudentView);
+                                                },
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Center(
+                                                      child: Text(
+                                                          listStudent[index]
+                                                              .studentName!,
+                                                          style: Styles
+                                                              .headLineStyle3
+                                                              .copyWith(
+                                                                  color:
+                                                                      blueColor))),
+                                                ),
                                               ),
                                               Container(
                                                 height: 3,

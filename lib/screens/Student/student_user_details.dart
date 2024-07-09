@@ -61,7 +61,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   List<EventRecordModel> eventRecords = [];
   String parentName = '';
 
-  @override
+/*  @override
   void dispose() {
     clearController();
     eventRecords.clear();
@@ -78,7 +78,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     busController.dispose();
     guardianController.dispose();
     super.dispose();
-  }
+  }*/
 
   List<String> _contracts = [], _contractsTemp = [];
 
