@@ -13,6 +13,8 @@ import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Student_Model.dart';
+import '../Widgets/Custom_Drop_down.dart';
+import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
@@ -42,7 +44,20 @@ class _StudentScreenState extends State<StudentScreen> {
     "الخيارات",
     "",
   ];
-
+  List filterData=[
+    "اسم الطالب",
+    "رقم الطالب",
+    "الجنس",
+    "التولد",
+    "الصف",
+    "الشعبة",
+    "تاريخ البداية",
+    "الحافلة",
+    "ولي الأمر",
+  ];
+  TextEditingController searchController = TextEditingController();
+  String searchValue = '';
+  int searchIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,109 +80,188 @@ class _StudentScreenState extends State<StudentScreen> {
                 color: secondaryColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: GetBuilder<StudentViewModel>(builder: (controller) {
-                return SizedBox(
-                  width: size + 60,
-                  child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                    return Scrollbar(
-                      controller: _scrollController,
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                            columnSpacing: 0,
-                            dividerThickness: 0,
-                            columns: List.generate(
-                                data.length,
-                                (index) => DataColumn(
-                                    label: Container(
-                                        width: size / data.length,
-                                        child:
-                                            Center(child: Text(data[index].toString().tr))))),
-                            rows: [
-                              for (var student in controller.studentMap.values)
-                                DataRow(
+              child: Column(
 
-                                    color: WidgetStatePropertyAll(
-                                        checkIfPendingDelete(
-                                                affectedId: student.studentID!)
-                                            ? Colors.redAccent.withOpacity(0.2)
-                                            : Colors.transparent),
-                                    cells: [
-                                      dataRowItem(size / data.length,
-                                          student.studentName.toString()),
-                                      dataRowItem(size / data.length,
-                                          student.studentNumber.toString()),
-                                      dataRowItem(size / data.length,
-                                          student.gender.toString()),
-                                      dataRowItem(size / data.length,
-                                          student.StudentBirthDay.toString()),
-                                      dataRowItem(
-                                          size / data.length,
-                                          student.stdClass.toString() +
-                                              " " +
-                                              student.stdLanguage.toString()),
-                                      dataRowItem(size / data.length,
-                                          student.section.toString()),
-                                      dataRowItem(
-                                          size / data.length,
-                                          student.startDate
-                                              .toString()
-                                              .split(" ")[0]),
-                                      dataRowItem(size / data.length,
-                                          student.bus.toString()),
-                                      dataRowItem(
-                                          size / data.length,
-                                          parent
-                                              .parentMap[
-                                                  student.parentId.toString()]!
-                                              .fullName
-                                              .toString(), onTap: () {
-                                        ParentModel parentModel =
-                                            parent.parentMap[
-                                                student.parentId.toString()]!;
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              buildParentAlertDialog(
-                                                  parentModel, student),
-                                        );
-                                      }),
-                                      dataRowItem(size / data.length, "عرض".tr,
-                                          color: Colors.teal, onTap: () {
-
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              buildMarksAlertDialog(student),
-                                        );
-                                      }),
-                                      dataRowItem(size / data.length,
-                                          student.grade.toString()),
-                                      dataRowItem(size / data.length, "تعديل".tr,
-                                          color: Colors.teal, onTap: () {
-                                            if (enableUpdate == true)
-                                              showStudentInputDialog(
-                                                  context, student);
-                                          }),
-                                      dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع".tr: "حذف".tr,
-                                          color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
-                                        if (enableUpdate)
-                                          if (checkIfPendingDelete(affectedId: student.studentID!))
-                                            _.returnDeleteOperation(
-                                                affectedId: student.studentID!);
-                                          else
-                                            addDeleteOperation(affectedId:
-                                                student.studentID!,collectionName: studentCollection,relatedId: student.parentId!,relatedList:student.stdExam);
-
-                                      }),
-                                    ]),
-                            ]),
+                children: [
+                  Wrap(
+                    spacing: 25,
+                    children: [
+                      CustomTextField(
+                        size: Get.width / 6,
+                        controller: searchController,
+                        title: "ابحث",
+                        onChange: (value) {
+                          setState(() {});
+                        },
                       ),
+                      CustomDropDown(
+                        size: Get.width / 6,
+                        value: searchValue,
+                        listValue: filterData
+                            .map(
+                              (e) => e.toString(),
+                        )
+                            .toList(),
+                        label: "اختر فلتر البحث",
+                        onChange: (value) {
+                          searchValue = value ?? '';
+                          searchIndex=filterData.indexOf(searchValue);
+                        },
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 5,),
+                  Divider(color: primaryColor.withOpacity(0.2),),
+                  SizedBox(height: 5,),
+                  GetBuilder<StudentViewModel>(builder: (controller) {
+                    return SizedBox(
+                      width: size + 60,
+                      child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                        return Scrollbar(
+                          controller: _scrollController,
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                                columnSpacing: 0,
+                                dividerThickness: 0,
+                                columns: List.generate(
+                                    data.length,
+                                    (index) => DataColumn(
+                                        label: Container(
+                                            width: size / data.length,
+                                            child:
+                                                Center(child: Text(data[index].toString().tr))))),
+                                rows: [
+                                  for (var student in controller.studentMap.values.where((element) {
+                                    if (searchController.text == '')
+                                      return true;
+                                    else {
+                                        switch (searchIndex) {
+                                          case 0:
+                                            return element.studentName!
+                                                .contains(
+                                                    searchController.text);
+                                          case 1:
+                                            return element.studentNumber!
+                                                .contains(
+                                                    searchController.text);
+                                          case 2:
+                                            return element.gender!.contains(
+                                                searchController.text);
+                                          case 3:
+                                            return element.startDate!.contains(
+                                                searchController.text);
+                                          case 4:
+                                            return element.stdClass!.contains(
+                                                searchController.text);
+                                          case 5:
+                                            return element.section!.contains(
+                                                searchController.text);
+                                          case 6:
+                                            return element.startDate!.contains(
+                                                searchController.text);
+                                          case 7:
+                                            return element.bus!.contains(
+                                                searchController.text);
+                                          case 8:
+                                            return element.parentId!.contains(
+                                                parent
+                                                        .parentMap.values.where((element) => element.fullName!.contains(searchController
+                                                    .text),)
+                                                        .toList().map((e) => e.id,).firstOrNull ??
+                                                    '894');
+
+                                          default:
+                                            return false;
+
+                                        }
+                                      }
+                                  },).toList())
+                                    DataRow(
+
+                                        color: WidgetStatePropertyAll(
+                                            checkIfPendingDelete(
+                                                    affectedId: student.studentID!)
+                                                ? Colors.redAccent.withOpacity(0.2)
+                                                : Colors.transparent),
+                                        cells: [
+                                          dataRowItem(size / data.length,
+                                              student.studentName.toString()),
+                                          dataRowItem(size / data.length,
+                                              student.studentNumber.toString()),
+                                          dataRowItem(size / data.length,
+                                              student.gender.toString()),
+                                          dataRowItem(size / data.length,
+                                              student.StudentBirthDay.toString()),
+                                          dataRowItem(
+                                              size / data.length,
+                                              student.stdClass.toString() +
+                                                  " " +
+                                                  student.stdLanguage.toString()),
+                                          dataRowItem(size / data.length,
+                                              student.section.toString()),
+                                          dataRowItem(
+                                              size / data.length,
+                                              student.startDate
+                                                  .toString()
+                                                  .split(" ")[0]),
+                                          dataRowItem(size / data.length,
+                                              student.bus.toString()),
+                                          dataRowItem(
+                                              size / data.length,
+                                              parent
+                                                  .parentMap[
+                                                      student.parentId.toString()]!
+                                                  .fullName
+                                                  .toString(), onTap: () {
+                                            ParentModel parentModel =
+                                                parent.parentMap[
+                                                    student.parentId.toString()]!;
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  buildParentAlertDialog(
+                                                      parentModel, student),
+                                            );
+                                          }),
+                                          dataRowItem(size / data.length, "عرض".tr,
+                                              color: Colors.teal, onTap: () {
+
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  buildMarksAlertDialog(student),
+                                            );
+                                          }),
+                                          dataRowItem(size / data.length,
+                                              student.grade.toString()),
+                                          dataRowItem(size / data.length, "تعديل".tr,
+                                              color: Colors.teal, onTap: () {
+                                                if (enableUpdate == true)
+                                                  showStudentInputDialog(
+                                                      context, student);
+                                              }),
+                                          dataRowItem(size / data.length,checkIfPendingDelete(affectedId: student.studentID!)?"استرجاع".tr: "حذف".tr,
+                                              color:checkIfPendingDelete(affectedId: student.studentID!)?Colors.white: Colors.red, onTap: () {
+                                            if (enableUpdate)
+                                              if (checkIfPendingDelete(affectedId: student.studentID!))
+                                                _.returnDeleteOperation(
+                                                    affectedId: student.studentID!);
+                                              else
+                                                addDeleteOperation(affectedId:
+                                                    student.studentID!,collectionName: studentCollection,relatedId: student.parentId!,relatedList:student.stdExam);
+
+                                          }),
+                                        ]),
+                                ]),
+                          ),
+                        );
+                      }),
                     );
                   }),
-                );
-              }),
+                ],
+              ),
             ),
           );
         }),

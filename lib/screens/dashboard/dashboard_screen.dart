@@ -54,6 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
+        enableSearch: false,
           context: context,
           title: 'الصفحة الرئيسية'.tr,
           middleText:

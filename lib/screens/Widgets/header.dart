@@ -3,12 +3,14 @@ import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 
 import '../../constants.dart';
 
 
 
-AppBar Header({required String  title,required String middleText,required BuildContext context}) {
+AppBar Header({required String  title,required String middleText,required BuildContext context, bool enableSearch=true, final textEditingController}) {
+
   return AppBar(
     toolbarHeight: 60,
     backgroundColor: Colors.transparent,
@@ -52,12 +54,14 @@ AppBar Header({required String  title,required String middleText,required BuildC
       ],
     ),
     actions: [
+
+      if(enableSearch)
       Padding(
         padding: const EdgeInsets.only(left: 8, top: 8),
         child: Builder(builder: (context) {
           return SizedBox(
               width: MediaQuery.sizeOf(context).width / 3,
-              child: SearchField());
+              child: CustomTextField(controller: textEditingController?? TextEditingController(),title: "ابحث",icon: Icon(Icons.search,color: primaryColor,),));
         }),
       ),
     ],
