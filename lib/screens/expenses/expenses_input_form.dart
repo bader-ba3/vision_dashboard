@@ -36,6 +36,20 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
     // TODO: implement initState
     super.initState();
     dateController.text=DateTime.now().toString().split(" ")[0];
+    initController();
+  }
+
+
+  initController(){
+    print(widget.expensesModel?.toJson());
+    if(widget.expensesModel!=null)
+      {
+         titleController.text=widget.expensesModel!.title.toString();
+         totalController.text=widget.expensesModel!.total.toString();
+         bodyController.text=widget.expensesModel!.body.toString();
+         dateController.text=widget.expensesModel!.date.toString();
+         imageLinkList.addAll(widget.expensesModel!.images??[]);
+      }
   }
 clearController(){
    titleController.clear();
@@ -134,7 +148,7 @@ clearController(){
                           ),
                         ),
                         ...List.generate(
-                          widget.expensesModel == null?  ImagesTempData.length:imageLinkList.length,
+                            ImagesTempData.length,
                           (index) {
                             return Padding(
                               padding:
@@ -146,12 +160,7 @@ clearController(){
                                       borderRadius: BorderRadius.circular(15)),
                                   width: 200,
                                   height: 200,
-                                  child:  widget.expensesModel == null?  Image.file(
-                                    File(ImagesTempData[index]),
-                                    height: 200,
-                                    width: 200,
-                                    fit: BoxFit.fitHeight,
-                                  ): Image.file(
+                                  child:  Image.file(
                                     File(ImagesTempData[index]),
                                     height: 200,
                                     width: 200,
@@ -159,7 +168,29 @@ clearController(){
                                   )),
                             );
                           },
-                        )
+                        ),
+                        ...List.generate(
+                            imageLinkList.length,
+                          (index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  width: 200,
+                                  height: 200,
+                                  child:   Image.network(
+                                    imageLinkList[index],
+                                    height: 200,
+                                    width: 200,
+                                    fit: BoxFit.fitHeight,
+                                  )),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -175,28 +206,30 @@ clearController(){
                       title: 'جاري التحميل'.tr,
                       text: 'يتم العمل على الطلب'.tr,
                       barrierDismissible: false);
-               if( widget.expensesModel == null)
-                  uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
-                  String expId = generateId("ExP");
-                  BusViewModel busController = Get.find<BusViewModel>();
-                  ExpensesModel model = ExpensesModel(
-                    date: dateController.text,
-                    id: expId,
-                    busId: widget.busId,
-                    title: titleController.text,
-                    body: widget.busId != null
-                        ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
-                        : bodyController.text,
-                    total: int.parse(totalController.text),
-                    userId: getMyUserId().id,
-                    images: imageLinkList,
-                  );
+            await      uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
+                    String expId =
+                        widget.expensesModel==null? generateId("ExP"):widget.expensesModel!.id!;
+                    BusViewModel busController = Get.find<BusViewModel>();
+                    ExpensesModel model = ExpensesModel(
+                      date: dateController.text,
+                      id: expId,
+                      busId: widget.busId,
+                      title: titleController.text,
+                      body: widget.busId != null
+                          ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
+                          : bodyController.text,
+                      total: int.parse(totalController.text),
+                      userId: getMyUserId().id,
+                      images: imageLinkList,
+                    );
                   if (widget.busId != null)
                     await busController.addExpenses(widget.busId!, expId);
-                  controller.addExpenses(model);
+
+                await  controller.addExpenses(model);
+
                   clearController();
 
-                  if (widget.busId != null)
+                  if (widget.busId != null||widget.expensesModel!=null)
                     Get.back();
                     Get.back();
                 },

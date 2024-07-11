@@ -28,7 +28,7 @@ class _ExamViewState extends State<ExamView>{
         ),
         secondChild: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: Get.height),
-          child: ExamInputForm(),
+          child: ExamInputForm(isEdite: true,),
         ),
         crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       ),

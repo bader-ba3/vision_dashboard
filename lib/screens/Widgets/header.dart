@@ -9,7 +9,7 @@ import '../../constants.dart';
 
 
 
-AppBar Header({required String  title,required String middleText,required BuildContext context, bool enableSearch=true, final textEditingController}) {
+AppBar Header({required String  title,required String middleText,required BuildContext context}) {
 
   return AppBar(
     toolbarHeight: 60,
@@ -54,7 +54,7 @@ AppBar Header({required String  title,required String middleText,required BuildC
       ],
     ),
     actions: [
-
+/*
       if(enableSearch)
       Padding(
         padding: const EdgeInsets.only(left: 8, top: 8),
@@ -63,7 +63,7 @@ AppBar Header({required String  title,required String middleText,required BuildC
               width: MediaQuery.sizeOf(context).width / 3,
               child: CustomTextField(controller: textEditingController?? TextEditingController(),title: "ابحث",icon: Icon(Icons.search,color: primaryColor,),));
         }),
-      ),
+      ),*/
     ],
   );
 }

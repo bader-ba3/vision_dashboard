@@ -16,12 +16,13 @@ import '../../models/Exam_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ExamInputForm extends StatefulWidget {
-  ExamInputForm({super.key, this.examModel});
+  ExamInputForm({super.key, this.examModel, required this.isEdite});
 
   @override
   _ExamInputFormState createState() => _ExamInputFormState();
 
   late final ExamModel? examModel;
+  final bool isEdite;
 }
 
 class _ExamInputFormState extends State<ExamInputForm> {
@@ -129,26 +130,37 @@ class _ExamInputFormState extends State<ExamInputForm> {
                 spacing: 25,
                 children: <Widget>[
                   CustomTextField(
-                      controller: subjectController, title: 'المقرر'.tr),
+                    controller: subjectController,
+                    title: 'المقرر'.tr,
+                    enable: widget.isEdite,
+                  ),
                   CustomTextField(
-                      controller: professorController, title: 'الاستاذ'.tr),
+                    controller: professorController,
+                    title: 'الاستاذ'.tr,
+                    enable: widget.isEdite,
+                  ),
                   CustomTextField(
-                      controller: examPassMarkController,
-                      title: 'علامة النجاح'.tr),
+                    controller: examPassMarkController,
+                    title: 'علامة النجاح'.tr,
+                    enable: widget.isEdite,
+                  ),
                   CustomTextField(
-                      controller: examMaxMarkController,
-                      title: 'العلامة الكاملة'.tr),
+                    controller: examMaxMarkController,
+                    title: 'العلامة الكاملة'.tr,
+                    enable: widget.isEdite,
+                  ),
                   InkWell(
                     onTap: () {
-                      showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2010),
-                        lastDate: DateTime(2100),
-                      ).then((date) {
-                        if (date != null) {
-                          dateController.text = date.toString().split(" ")[0];
-                        }
-                      });
+                      if (widget.isEdite)
+                        showDatePicker(
+                          context: context,
+                          firstDate: DateTime(2010),
+                          lastDate: DateTime(2100),
+                        ).then((date) {
+                          if (date != null) {
+                            dateController.text = date.toString().split(" ")[0];
+                          }
+                        });
                     },
                     child: CustomTextField(
                       controller: dateController,
@@ -163,6 +175,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   ),
                   CustomDropDown(
                     value: _selectedClass,
+                    enable: widget.isEdite,
                     listValue: classNameList,
                     label: 'اختر الصف'.tr,
                     onChange: (value) {
@@ -174,6 +187,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   CustomDropDown(
                     value: '',
                     listValue: _allSection.keys.toList(),
+                    enable: widget.isEdite,
                     label: 'اختر الشعب للأضافة'.tr,
                     onChange: (value) {
                       _selectedSection.addIf(
@@ -193,35 +207,37 @@ class _ExamInputFormState extends State<ExamInputForm> {
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: [
-                            InkWell(
-                              onTap: () async {
-                                FilePickerResult? _ = await FilePicker.platform
-                                    .pickFiles(
-                                        type: FileType.image,
-                                        allowMultiple: true);
-                                if (_ != null) {
-                                  _.xFiles.forEach(
-                                    (element) async {
-                                      _questionImageFileTemp!
-                                          .add(await element.path);
-                                    },
-                                  );
-                                  setState(() {});
-                                }
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  height: 200,
-                                  width: 200,
-                                  child: Icon(Icons.add),
+                            if (widget.isEdite)
+                              InkWell(
+                                onTap: () async {
+                                  FilePickerResult? _ =
+                                      await FilePicker.platform.pickFiles(
+                                          type: FileType.image,
+                                          allowMultiple: true);
+                                  if (_ != null) {
+                                    _.xFiles.forEach(
+                                      (element) async {
+                                        _questionImageFileTemp!
+                                            .add(await element.path);
+                                      },
+                                    );
+                                    setState(() {});
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    height: 200,
+                                    width: 200,
+                                    child: Icon(Icons.add),
+                                  ),
                                 ),
                               ),
-                            ),
                             ...List.generate(
                               _questionImageFileTemp!.length,
                               (index) {
@@ -285,35 +301,37 @@ class _ExamInputFormState extends State<ExamInputForm> {
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: [
-                            InkWell(
-                              onTap: () async {
-                                FilePickerResult? _ = await FilePicker.platform
-                                    .pickFiles(
-                                        type: FileType.image,
-                                        allowMultiple: true);
-                                if (_ != null) {
-                                  _.xFiles.forEach(
-                                    (element) async {
-                                      _answerImageFileTemp!
-                                          .add(await element.path);
-                                    },
-                                  );
-                                  setState(() {});
-                                }
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  height: 200,
-                                  width: 200,
-                                  child: Icon(Icons.add),
+                            if (widget.isEdite)
+                              InkWell(
+                                onTap: () async {
+                                  FilePickerResult? _ =
+                                      await FilePicker.platform.pickFiles(
+                                          type: FileType.image,
+                                          allowMultiple: true);
+                                  if (_ != null) {
+                                    _.xFiles.forEach(
+                                      (element) async {
+                                        _answerImageFileTemp!
+                                            .add(await element.path);
+                                      },
+                                    );
+                                    setState(() {});
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    height: 200,
+                                    width: 200,
+                                    child: Icon(Icons.add),
+                                  ),
                                 ),
                               ),
-                            ),
                             ...List.generate(
                               _answerImageFileTemp!.length,
                               (index) {
@@ -365,112 +383,113 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       ),
                     ],
                   ),
-                  GetBuilder<ExamViewModel>(builder: (examController) {
-                    return AppButton(
+                  if (widget.isEdite)
+                    GetBuilder<ExamViewModel>(builder: (examController) {
+                      return AppButton(
                         text: 'حفظ'.tr,
                         onPressed: () async {
-                                  await uploadImages(_answerImageFileTemp!, "Exam_answer")
-                            .then(
-                          (value) => _answerImageFile!.addAll(value),
-                        );
-                        await uploadImages(
-                                _questionImageFileTemp!, "Exam_question")
-                            .then(
-                          (value) => _questionImageFile!.addAll(value),
-                        );
-                        if (_validateFields()) {
-                          QuickAlert.show(
-                              width: Get.width / 2,
-                              context: context,
-                              type: QuickAlertType.loading,
-                              title: 'جاري التحميل'.tr,
-                              text: 'يتم العمل على الطلب'.tr,
-                              barrierDismissible: false);
-                          final exam = ExamModel(
-                            id: examId,
-                            isDone: false,
-                            questionImage: _questionImageFile ?? [],
-                            answerImage: _answerImageFile,
-                            subject: subjectController.text,
-                            professor: professorController.text,
-                            examPassMark: examPassMarkController.text,
-                            examMaxMark: examMaxMarkController.text,
-                            date: DateTime.parse(dateController.text),
-                            marks: _selectedStudent,
+                          await uploadImages(
+                                  _answerImageFileTemp!, "Exam_answer")
+                              .then(
+                            (value) => _answerImageFile!.addAll(value),
                           );
-                          print(_selectedStudent.length);
-                          studentViewModel.addExamToStudent(
-                              _selectedStudent.keys.toList(), examId);
-                       await   examController.addExam(exam);
-                          if(widget.examModel!=null)
-                              Get.back();
-                          clearController();
-                          Get.back();
-                        }
-                      },
-
-                        );
-                  }),
+                          await uploadImages(
+                                  _questionImageFileTemp!, "Exam_question")
+                              .then(
+                            (value) => _questionImageFile!.addAll(value),
+                          );
+                          if (_validateFields()) {
+                            QuickAlert.show(
+                                width: Get.width / 2,
+                                context: context,
+                                type: QuickAlertType.loading,
+                                title: 'جاري التحميل'.tr,
+                                text: 'يتم العمل على الطلب'.tr,
+                                barrierDismissible: false);
+                            final exam = ExamModel(
+                              id: examId,
+                              isDone: false,
+                              questionImage: _questionImageFile ?? [],
+                              answerImage: _answerImageFile,
+                              subject: subjectController.text,
+                              professor: professorController.text,
+                              examPassMark: examPassMarkController.text,
+                              examMaxMark: examMaxMarkController.text,
+                              date: DateTime.parse(dateController.text),
+                              marks: _selectedStudent,
+                            );
+                            print(_selectedStudent.length);
+                            studentViewModel.addExamToStudent(
+                                _selectedStudent.keys.toList(), examId);
+                            await examController.addExam(exam);
+                            if (widget.examModel != null) Get.back();
+                            clearController();
+                            Get.back();
+                          }
+                        },
+                      );
+                    }),
                 ],
               ),
             ),
             SizedBox(
               height: defaultPadding,
             ),
-            ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(
-                      height: defaultPadding,
-                    ),
-                itemCount: _selectedSection.length,
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemBuilder: (context, parentIndex) {
-                  return Container(
-                    padding: EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _selectedSection[parentIndex],
-                          style: Styles.headLineStyle1,
-                        ),
-                        SizedBox(
-                          height: defaultPadding,
-                        ),
-                        SizedBox(
-                          width: Get.width,
-                          child: DataTable(
-                            clipBehavior: Clip.hardEdge,
-                            columns: [
-                              DataColumn(label: Text("اسم الطالب")),
-                              DataColumn(label: Text("رقم الطالب")),
-                              DataColumn(label: Text("تاريخ البداية")),
-                              DataColumn(label: Text("ولي الأمر")),
-                              DataColumn(label: Text("موجود")),
-                            ],
-                            rows:
-                                _allSection[_selectedSection[parentIndex]]!.map(
-                              (e) {
-                                if (_selectedStudent.keys
-                                    .where(
-                                      (element) => element == e.studentID,
-                                    )
-                                    .isNotEmpty) e.available = true;
-
-                                return studentDataRow(e);
-                              },
-                            ).toList(),
+            if (widget.isEdite)
+              ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: defaultPadding,
+                      ),
+                  itemCount: _selectedSection.length,
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (context, parentIndex) {
+                    return Container(
+                      padding: EdgeInsets.all(16.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: secondaryColor,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _selectedSection[parentIndex],
+                            style: Styles.headLineStyle1,
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                          SizedBox(
+                            height: defaultPadding,
+                          ),
+                          SizedBox(
+                            width: Get.width,
+                            child: DataTable(
+                              clipBehavior: Clip.hardEdge,
+                              columns: [
+                                DataColumn(label: Text("اسم الطالب")),
+                                DataColumn(label: Text("رقم الطالب")),
+                                DataColumn(label: Text("تاريخ البداية")),
+                                DataColumn(label: Text("ولي الأمر")),
+                                DataColumn(label: Text("موجود")),
+                              ],
+                              rows: _allSection[_selectedSection[parentIndex]]!
+                                  .map(
+                                (e) {
+                                  if (_selectedStudent.keys
+                                      .where(
+                                        (element) => element == e.studentID,
+                                      )
+                                      .isNotEmpty) e.available = true;
+
+                                  return studentDataRow(e);
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
             SizedBox(
               height: defaultPadding,
             ),
@@ -505,13 +524,23 @@ class _ExamInputFormState extends State<ExamInputForm> {
                           _selectedStudent.length,
                           (index) => studentSelectedDataRow(
                               studentViewModel.studentMap[
-                                  _selectedStudent.keys.elementAt(index)]!),
+                                  _selectedStudent.keys.elementAt(index)]!,
+                              widget.isEdite),
                         )
                       ]),
                     ),
                   ],
                 ),
               ),
+            SizedBox(height: defaultPadding,),
+            if (!widget.isEdite)
+              Center(
+                child: AppButton(
+                    text: "تم".tr,
+                    onPressed: () {
+                      Get.back();
+                    }),
+              )
           ],
         ),
       ),
@@ -546,7 +575,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
     );
   }
 
-  DataRow studentSelectedDataRow(StudentModel student) {
+  DataRow studentSelectedDataRow(StudentModel student, bool isEdit) {
     return DataRow(
       cells: [
         DataCell(Text(student.studentName.toString())),
@@ -555,21 +584,25 @@ class _ExamInputFormState extends State<ExamInputForm> {
         DataCell(Text(student.parentId!)),
         DataCell(IconButton(
           onPressed: () {
-            student.available = false;
+            if (isEdit) {
+              student.available = false;
 
-            _selectedStudent.remove(student.studentID);
-            setState(() {});
+              _selectedStudent.remove(student.studentID);
+              setState(() {});
+            }
           },
-          icon: Icon(
-            Icons.delete_forever_outlined,
-            color: Colors.red,
-          ),
+          icon: isEdit
+              ? Icon(
+                  Icons.delete_forever_outlined,
+                  color: Colors.red,
+                )
+              : Container(),
         )),
       ],
     );
   }
 
-   clearController() {
+  clearController() {
     _questionImageFile = [];
     _answerImageFile = [];
     _answerImageFileTemp = [];

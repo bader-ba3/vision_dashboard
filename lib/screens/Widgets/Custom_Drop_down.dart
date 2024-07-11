@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import '../../constants.dart';
 
 class CustomDropDown extends StatelessWidget {
-   CustomDropDown({super.key,required this.value,required this.listValue,required this.label,required this.onChange,this.isFullBorder,this.size});
+   CustomDropDown({super.key,required this.value,required this.listValue,required this.label,required this.onChange,this.isFullBorder,this.size,this.enable=true});
    final double? size;
-
+ final bool? enable;
   @override
   Widget build(BuildContext context) {
 
@@ -19,6 +19,7 @@ class CustomDropDown extends StatelessWidget {
           hintStyle:TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis) ,
           hintText: label,
           labelText: label,
+          enabled: enable??true,
           labelStyle: TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis),
           enabledBorder:isFullBorder!=null? OutlineInputBorder(
             borderSide: BorderSide(color: primaryColor,width: 2),

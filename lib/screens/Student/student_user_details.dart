@@ -49,7 +49,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final sectionController = TextEditingController();
   final genderController = TextEditingController();
   final ageController = TextEditingController();
-  final classController = TextEditingController();
+  final classController = TextEditingController()..text='';
 
   final startDateController = TextEditingController();
 
@@ -135,6 +135,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
       sectionController.text = widget.studentModel!.section ?? '';
       genderController.text = widget.studentModel!.gender ?? '';
       ageController.text = widget.studentModel!.StudentBirthDay ?? '';
+      print(widget.studentModel!.stdClass);
       classController.text = widget.studentModel!.stdClass ?? '';
       startDateController.text = widget.studentModel!.startDate ?? '';
       busController.text = widget.studentModel!.bus ?? '';

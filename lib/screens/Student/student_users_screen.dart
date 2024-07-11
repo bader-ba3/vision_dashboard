@@ -14,6 +14,7 @@ import '../../constants.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Student_Model.dart';
 import '../Widgets/Custom_Drop_down.dart';
+import '../Widgets/Custom_Pluto_Grid.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
@@ -27,8 +28,9 @@ class StudentScreen extends StatefulWidget {
 
 class _StudentScreenState extends State<StudentScreen> {
   ExamViewModel exam = Get.find<ExamViewModel>();
+
   ParentsViewModel parent = Get.find<ParentsViewModel>();
-  final ScrollController _scrollController = ScrollController();
+ /*  final ScrollController _scrollController = ScrollController();
   List data = [
     "اسم الطالب",
     "رقم الطالب",
@@ -57,30 +59,325 @@ class _StudentScreenState extends State<StudentScreen> {
   ];
   TextEditingController searchController = TextEditingController();
   String searchValue = '';
-  int searchIndex = 0;
+  int searchIndex = 0;*/
+
+  String currentId = '';
+
+  bool getIfDelete() {
+    return checkIfPendingDelete(affectedId: currentId);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Header(
-          context: context,
-        title: 'الطلاب'.tr,middleText: "تعرض هذه الواجهة معلومات عن الطلاب مع امكانية تعديل الطالب او حذفه او اضافة طالب جديد \n ملاحظة١ : عند حذف الطالب يتم حذفه من الاباء ومن الامتحانات التي قام بها ومن الباص المشترك فيه ان كان مشترك \n ملاحظة ٢ : لايمكن تعديل الاب الخاص بالطالب".tr
-      ),
-      body: SingleChildScrollView(
-        child: GetBuilder<HomeViewModel>(builder: (controller) {
-          double size = max(
-                  MediaQuery.sizeOf(context).width -
-                      (controller.isDrawerOpen ? 240 : 120),
-                  1000) -
-              60;
-          return Padding(
-            padding: const EdgeInsets.all(8),
-            child: Container(
-              padding: EdgeInsets.all(defaultPadding),
-              decoration: BoxDecoration(
-                color: secondaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return GetBuilder<StudentViewModel>(builder: (controller) {
+      return Scaffold(
+        appBar: Header(
+            context: context,
+            title: 'الطلاب'.tr,
+            middleText:
+                "تعرض هذه الواجهة معلومات عن الطلاب مع امكانية تعديل الطالب او حذفه او اضافة طالب جديد \n ملاحظة١ : عند حذف الطالب يتم حذفه من الاباء ومن الامتحانات التي قام بها ومن الباص المشترك فيه ان كان مشترك \n ملاحظة ٢ : لايمكن تعديل الاب الخاص بالطالب"
+                    .tr),
+        body: SingleChildScrollView(
+          child: GetBuilder<HomeViewModel>(builder: (hController) {
+            double size = max(
+                    MediaQuery.sizeOf(context).width -
+                        (hController.isDrawerOpen ? 240 : 120),
+                    1000) -
+                60;
+            return Padding(
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                padding: EdgeInsets.all(defaultPadding),
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: Get.height,
+                  width: size + 60,
+                  child: CustomPlutoGrid(
+                    controller: controller,
+                    idName: "الرقم التسلسلي",
+                    onSelected: (event) {
+                      currentId = event.row?.cells["الرقم التسلسلي"]?.value;
+                      setState(() {});
+                    },
+                  ),
+                ),
               ),
+            );
+          }),
+        ),
+        floatingActionButton: enableUpdate && currentId != ''
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                    return FloatingActionButton(
+                      backgroundColor: getIfDelete()
+                          ? Colors.greenAccent.withOpacity(0.5)
+                          : Colors.red.withOpacity(0.5),
+                      onPressed: () {
+                        if (enableUpdate) {
+                          if (getIfDelete())
+                            _.returnDeleteOperation(
+                                affectedId: controller
+                                    .studentMap[currentId]!.studentID
+                                    .toString());
+                          else {
+                            addDeleteOperation(
+                                collectionName: parentsCollection,
+                                affectedId: controller
+                                    .studentMap[currentId]!.studentID!);
+                          }
+                        }
+                      },
+                      child: Icon(
+                        getIfDelete()
+                            ? Icons.restore_from_trash_outlined
+                            : Icons.delete,
+                        color: Colors.white,
+                      ),
+                    );
+                  }),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: primaryColor,
+                    onPressed: () {
+                      showStudentInputDialog(
+                          context, controller.studentMap[currentId]!);
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: primaryColor,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => buildParentAlertDialog(
+                            parent.parentMap[  controller.studentMap[currentId]!.parentId!]!  ),
+                      );
+
+                    },
+                    child: Icon(
+                      Icons.group,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  // if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
+                  FloatingActionButton(
+                    backgroundColor:(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false) ?primaryColor:Colors.grey.withOpacity(0.5),
+
+                    onPressed: () {
+                      if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
+                      showDialog(
+                        context: context,
+                        builder: (context) => buildMarksAlertDialog(
+                            controller.studentMap[currentId]!),
+                      );
+                    },
+                    child: Icon(
+                      Icons.collections_bookmark_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
+      );
+    });
+  }
+
+  AlertDialog buildMarksAlertDialog(StudentModel student) {
+    return AlertDialog(
+      backgroundColor: secondaryColor,
+      actions: [
+        Column(
+          children: [
+            Container(
+              width: Get.width / 3,
+              height:
+                  min(60.0 * (student.stdExam?.length ?? 1), Get.height / 3),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Text("المادة: "),
+                        Text(
+                          exam.examMap[student.stdExam![index]]!.subject!,
+                          style: Styles.headLineStyle2,
+                        ),
+                        Spacer(),
+                        Text("العلامة: "),
+                        Text(
+                          "${(double.parse(exam.examMap[student.stdExam![index]]!.marks![student.studentID]!) * double.parse(exam.examMap[student.stdExam![index]]!.examMaxMark!)) / 100}",
+                          style: Styles.headLineStyle2,
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: student.stdExam?.length ?? 0,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AppButton(
+              text: "تم",
+              onPressed: () {
+                Get.back();
+              },
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  AlertDialog buildParentAlertDialog(
+      ParentModel parentModel) {
+    return AlertDialog(
+      backgroundColor: secondaryColor,
+      actions: [
+        Column(
+          children: [
+            Container(
+              width: Get.width / 3,
+              height: Get.height / 3.5,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("الاسم الكامل: "),
+                      Text(
+                        parentModel.fullName.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("العنوان: "),
+                      Text(
+                        parentModel.address.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("الجنسية: "),
+                      Text(
+                        parentModel.nationality.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("العمر: "),
+                      Text(
+                        parentModel.age.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("العمل: "),
+                      Text(
+                        parentModel.work.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("رقم الام: "),
+                      Text(
+                        parentModel.motherPhone.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("رقم الطوارئ: "),
+                      Text(
+                        parentModel.emergencyPhone.toString(),
+                        style: Styles.headLineStyle2,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AppButton(
+              text: "تم",
+              onPressed: () {
+                Get.back();
+              },
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  void showStudentInputDialog(BuildContext context, dynamic student) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height / 2,
+            width: Get.width / 1.5,
+            child: StudentInputForm(
+              studentModel: student,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+/*    child: Column(
 
                 children: [
                   Wrap(
@@ -261,188 +558,4 @@ class _StudentScreenState extends State<StudentScreen> {
                     );
                   }),
                 ],
-              ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-
-  AlertDialog buildMarksAlertDialog(StudentModel student) {
-    return AlertDialog(
-      backgroundColor: secondaryColor,
-      actions: [
-        Column(
-          children: [
-            Container(
-              width: Get.width / 3,
-              height:
-                  min(60.0 * (student.stdExam?.length ?? 1), Get.height / 3),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Row(
-                      children: [
-                        Spacer(),
-                        Text("المادة: "),
-                        Text(
-                          exam.examMap[student.stdExam![index]]!.subject!,
-                          style: Styles.headLineStyle2,
-                        ),
-                        Spacer(),
-                        Text("العلامة: "),
-                        Text(
-                          "${(double.parse(exam.examMap[student.stdExam![index]]!.marks![student.studentID]!) * double.parse(exam.examMap[student.stdExam![index]]!.examMaxMark!)) / 100}",
-                          style: Styles.headLineStyle2,
-                        ),
-                        Spacer(),
-                      ],
-                    ),
-                  );
-                },
-                itemCount: student.stdExam?.length ?? 0,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            AppButton(
-              text: "تم",
-              onPressed: () {
-                Get.back();
-              },
-            )
-          ],
-        )
-      ],
-    );
-  }
-
-  AlertDialog buildParentAlertDialog(
-      ParentModel parentModel, StudentModel student) {
-    return AlertDialog(
-      backgroundColor: secondaryColor,
-      actions: [
-        Column(
-          children: [
-            Container(
-              width: Get.width / 3,
-              height: Get.height / 3.5,
-              child:Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("الاسم الكامل: "),
-                      Text(
-                        parentModel.fullName.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("العنوان: "),
-                      Text(
-                        parentModel.address.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("الجنسية: "),
-                      Text(
-                        parentModel.nationality.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("العمر: "),
-                      Text(
-                        parentModel.age.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("العمل: "),
-                      Text(
-                        parentModel.work.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("رقم الام: "),
-                      Text(
-                        parentModel.motherPhone.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("رقم الطوارئ: "),
-                      Text(
-                        parentModel.emergencyPhone.toString(),
-                        style: Styles.headLineStyle2,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            AppButton(
-              text: "تم",
-              onPressed: () {
-                Get.back();
-              },
-            )
-          ],
-        )
-      ],
-    );
-  }
-  void showStudentInputDialog(BuildContext context, dynamic student) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            height: Get.height / 2,
-            width: Get.width/1.5,
-            child: StudentInputForm(studentModel:student ,),
-          ),
-        );
-      },
-    );
-  }
-
-}
+              ),*/

@@ -1,18 +1,35 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 
 import '../../../controller/delete_management_view_model.dart';
+import '../../../utils/To_AR.dart';
 
 class ExamViewModel extends GetxController {
   final examCollectionRef =
       FirebaseFirestore.instance.collection(examsCollection);
+  List<PlutoColumn> columns = [];
+  List<PlutoRow> rows = [];
 
+  Map<String, PlutoColumnType> data = {
+    "الرقم التسلسلي": PlutoColumnType.text(),
+    "المقرر": PlutoColumnType.text(),
+    "الأستاذ": PlutoColumnType.text(),
+    "التاريخ": PlutoColumnType.date(),
+    "الطلاب": PlutoColumnType.text(),
+    "علامة النجاح": PlutoColumnType.text(),
+    "العلامة الكاملة": PlutoColumnType.text(),
+    "نسبة النجاح": PlutoColumnType.text(),
+  };
+  GlobalKey key=GlobalKey();
   ExamViewModel() {
+    columns.addAll(toAR(data));
     getAllExam();
   }
 
@@ -37,14 +54,36 @@ class ExamViewModel extends GetxController {
   getAllExam() async {
     listener=   await examCollectionRef.snapshots().listen((value) async{
       _examMap.clear();
+      key=GlobalKey();
+      rows.clear();
       for (var element in value.docs) {
         _examMap[element.id] = ExamModel.fromJson(element.data());
       }
       print("Exams :${_examMap.keys.length}");
       await getPassRate();
+
+      _examMap.forEach((key, value) {
+        rows.add(
+          PlutoRow(
+            cells: {
+              data.keys.elementAt(0): PlutoCell(value: key),
+              data.keys.elementAt(1): PlutoCell(value:value.subject.toString()),
+              data.keys.elementAt(2): PlutoCell(value:value.professor.toString()),
+              data.keys.elementAt(3): PlutoCell(value:value.date),
+              data.keys.elementAt(4): PlutoCell(value:value.marks?.length.toString()),
+              data.keys.elementAt(5): PlutoCell(value:value.examPassMark.toString()),
+              data.keys.elementAt(6): PlutoCell(value:value.examMaxMark.toString()),
+              data.keys.elementAt(7): PlutoCell(value:value.passRate.toString()),
+
+            },
+          ),
+        );
+      },);
       update();
     });
-  }getAllExamWithOutListen() async {
+  }
+
+  getAllExamWithOutListen() async {
     await examCollectionRef.get().then((value)async {
       _examMap.clear();
       for (var element in value.docs) {

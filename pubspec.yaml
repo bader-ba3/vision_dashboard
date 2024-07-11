@@ -60,6 +60,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   swipe_to: ^1.0.6
+  pluto_grid: ^8.0.0
 
 
 dev_dependencies:

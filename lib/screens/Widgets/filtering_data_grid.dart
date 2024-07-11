@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:vision_dashboard/controller/delete_management_view_model.dart';
 
 class FilteringDataGrid<T> extends StatefulWidget {
-  final void Function(int index, String id, void Function(String) init) onCellTap;
+  final void Function(int index, String id, int row,void Function(dynamic) init) onCellTap;
   final RxMap<String, T> dataGridSource;
   final String title;
   final T constructor;
@@ -69,9 +70,9 @@ class _FilteringDataGridState<T> extends State<FilteringDataGrid<T>> {
                     onCellTap: (DataGridCellTapDetails dataGridCellTapDetails) {
                       if (dataGridCellTapDetails.rowColumnIndex.rowIndex - 1 >= 0) {
                         if (infoDataGridSource!.effectiveRows.isEmpty) {
-                          widget.onCellTap(dataGridCellTapDetails.rowColumnIndex.rowIndex - 1, infoDataGridSource!.rows[dataGridCellTapDetails.rowColumnIndex.rowIndex - 1].getCells()[0].value, rebuild);
+                          widget.onCellTap(dataGridCellTapDetails.rowColumnIndex.rowIndex - 1, infoDataGridSource!.rows[dataGridCellTapDetails.rowColumnIndex.rowIndex - 1].getCells()[0].value,dataGridCellTapDetails.rowColumnIndex.columnIndex,rebuild);
                         } else {
-                          widget.onCellTap(dataGridCellTapDetails.rowColumnIndex.rowIndex - 1, infoDataGridSource!.effectiveRows[dataGridCellTapDetails.rowColumnIndex.rowIndex - 1].getCells()[0].value, rebuild);
+                          widget.onCellTap(dataGridCellTapDetails.rowColumnIndex.rowIndex - 1, infoDataGridSource!.effectiveRows[dataGridCellTapDetails.rowColumnIndex.rowIndex - 1].getCells()[0].value,dataGridCellTapDetails.rowColumnIndex.columnIndex,rebuild);
                         }
                       }
                     },
@@ -79,7 +80,7 @@ class _FilteringDataGridState<T> extends State<FilteringDataGrid<T>> {
                       GridColumn(
                           visible: false,
                           // width: double.nan,
-                          columnWidthMode: ColumnWidthMode.auto,
+                          columnWidthMode: ColumnWidthMode.fill,
                           columnName: constructor.affectedKey().toString(),
                           label: Column(
                             children: [
@@ -190,7 +191,8 @@ class InfoDataGridSource extends DataGridSource {
     String tab = "	";
 
     return DataGridRowAdapter(
-      color: backgroundColor,
+      // color: backgroundColor,
+      color: checkIfPendingDelete(affectedId: row.getCells().first.value)?Colors.red:backgroundColor,
       cells: List.generate(row.getCells().length, (index) {
         return Column(
           children: [

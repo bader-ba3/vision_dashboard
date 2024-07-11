@@ -16,8 +16,10 @@ import '../../models/event_record_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class BusInputForm extends StatefulWidget {
+  BusInputForm({
+    this.busModel,
+  });
 
-  BusInputForm({this.busModel,});
   @override
   _BusInputFormState createState() => _BusInputFormState();
 
@@ -34,41 +36,45 @@ class _BusInputFormState extends State<BusInputForm> {
   List<String> selectedEmployee = [];
   List<EventRecordModel> eventRecords = [];
   List<String> selectedStudent = [];
-  List dataStu=["اسم الطالب","الرقم","الوالد","موجود"];
-  List dataEMP=['اسم الموظف',"العنوان","الجنس","موجود"];
+  List dataStu = ["اسم الطالب", "الرقم", "الوالد", "موجود"];
+  List dataEMP = ['اسم الموظف', "العنوان", "الجنس", "موجود"];
 
-   Map<String, StudentModel> allSection =
+  Map<String, StudentModel> allSection =
       Get.find<StudentViewModel>().studentMap;
-   Map<String, AccountManagementModel> allEmployee =
+  Map<String, AccountManagementModel> allEmployee =
       Get.find<AccountManagementViewModel>().allAccountManagement;
 
   final ScrollController _scrollControllerStd = ScrollController();
+  final ScrollController _scrollControllerEmp = ScrollController();
 
-   initBus(){
-     if(widget.busModel!=null)
-       {
-         nameController.text=widget.busModel!.name.toString();
-         numberController.text=widget.busModel!.number.toString();
-         typeController.text=widget.busModel!.type.toString();
-         startDateController.text=widget.busModel!.startDate.toString().split(" ")[0];
+  initBus() {
+    if (widget.busModel != null) {
+      nameController.text = widget.busModel!.name.toString();
+      numberController.text = widget.busModel!.number.toString();
+      typeController.text = widget.busModel!.type.toString();
+      startDateController.text =
+          widget.busModel!.startDate.toString().split(" ")[0];
 
-         allEmployee.forEach((key, value) {
-         if(widget.busModel!.employees!.contains(key))
-           {
-             value.available=true;
-             selectedEmployee.add(key);
-           }
-         },);
-         allSection.forEach((key, value) {
-           if(widget.busModel!.students!.contains(key))
-           {
-             value.available=true;
-             selectedStudent.add(key);
-           }
-         },);
-       }
-   }
-   @override
+      allEmployee.forEach(
+        (key, value) {
+          if (widget.busModel!.employees!.contains(key)) {
+            value.available = true;
+            selectedEmployee.add(key);
+          }
+        },
+      );
+      allSection.forEach(
+        (key, value) {
+          if (widget.busModel!.students!.contains(key)) {
+            value.available = true;
+            selectedStudent.add(key);
+          }
+        },
+      );
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -83,27 +89,30 @@ class _BusInputFormState extends State<BusInputForm> {
     startDateController.dispose();
     super.dispose();
   }
-  clearControl(){
+
+  clearControl() {
     nameController.clear();
     numberController.clear();
     typeController.clear();
     startDateController.clear();
-    allSection.values.forEach((element) {
-      element.available=false;
-    },);
-    allEmployee.values.forEach((element) {
-      element.available=false;
-    },);
-    setState(() {
-
-    });
+    allSection.values.forEach(
+      (element) {
+        element.available = false;
+      },
+    );
+    allEmployee.values.forEach(
+      (element) {
+        element.available = false;
+      },
+    );
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
+            physics: ClampingScrollPhysics(),
             padding: EdgeInsets.all(16.0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -126,8 +135,6 @@ class _BusInputFormState extends State<BusInputForm> {
                         controller: numberController, title: 'رقم الحافلة'.tr),
                     CustomTextField(
                         controller: typeController, title: 'نوع الحافلة'.tr),
-
-
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -145,7 +152,8 @@ class _BusInputFormState extends State<BusInputForm> {
                               lastDate: DateTime(2100),
                             ).then((date) {
                               if (date != null) {
-                                startDateController.text = date.toString().split(" ")[0];
+                                startDateController.text =
+                                    date.toString().split(" ")[0];
                               }
                             });
                           },
@@ -156,44 +164,39 @@ class _BusInputFormState extends State<BusInputForm> {
                         ),
                       ],
                     ),
-                    GetBuilder<BusViewModel>(
-                      builder: (busController) {
-                        return AppButton(
-                          text: 'حفظ'.tr,
-                          onPressed: ()async {
-                            QuickAlert.show(
-                                width: Get.width / 2,
-                                context: context,
-                                type: QuickAlertType.loading,
-                                title: 'جاري التحميل'.tr,
-                                text: 'يتم العمل على الطلب'.tr,
-                                barrierDismissible: false);
-                            BusModel bus = BusModel(
-                              name: nameController.text,
-                              busId:widget.busModel==null? generateId("BUS"):widget.busModel!.busId!,
-                              number: numberController.text,
-                              type: typeController.text,
-                              employees: selectedEmployee,
-                              students: selectedStudent,
-                              startDate: DateTime.parse(startDateController.text),
+                    GetBuilder<BusViewModel>(builder: (busController) {
+                      return AppButton(
+                        text: 'حفظ'.tr,
+                        onPressed: () async {
+                          QuickAlert.show(
+                              width: Get.width / 2,
+                              context: context,
+                              type: QuickAlertType.loading,
+                              title: 'جاري التحميل'.tr,
+                              text: 'يتم العمل على الطلب'.tr,
+                              barrierDismissible: false);
+                          BusModel bus = BusModel(
+                            name: nameController.text,
+                            busId: widget.busModel == null
+                                ? generateId("BUS")
+                                : widget.busModel!.busId!,
+                            number: numberController.text,
+                            type: typeController.text,
+                            employees: selectedEmployee,
+                            students: selectedStudent,
+                            startDate: DateTime.parse(startDateController.text),
+                          );
+                          await busController.addBus(bus);
+                          clearControl();
 
-                            );
-                         await   busController.addBus(bus);
-                            clearControl();
-
-                            if(widget.busModel!=null)
-                                Get.back();
-                                Get.back();
-
-                          },
-                        );
-                      }
-                    ),
-
+                          if (widget.busModel != null) Get.back();
+                          Get.back();
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),
-
               SizedBox(
                 height: defaultPadding,
               ),
@@ -204,114 +207,121 @@ class _BusInputFormState extends State<BusInputForm> {
                   color: secondaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: GetBuilder<HomeViewModel>(
-                  builder: (controller) {
-                    double size = max(
-                        MediaQuery.sizeOf(context).width -
-                            (controller.isDrawerOpen ? 240 : 120),
-                        1000) -
-                        60;
-                    return SizedBox(
-                      width: size+60,
-                      child:  Scrollbar(
-                        controller: _scrollControllerStd,
-                        child: SingleChildScrollView(
-                        controller: _scrollControllerStd,
-                          scrollDirection: Axis.horizontal,
-
-                          child: DataTable(
-                          clipBehavior: Clip.hardEdge,
-                          columns:List.generate(
-                              dataStu.length,
-                                  (index) => DataColumn(
-                                  label: Container(
-                                      width: size / (dataStu.length),
-                                      child: Center(
-                                          child: Text(dataStu[index].toString().tr))))),
-                          rows: allSection.values
-                              .map(
-                                (e) => studentDataRow(e, size / (dataStu.length),),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ));
-                  }
-                ),
-              ),
-              SizedBox(
-                height: defaultPadding,
-              ),
-              Container(
-                padding: EdgeInsets.all(16.0),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: GetBuilder<HomeViewModel>(
-                    builder: (controller) {
-                      double size = max(
+                child: GetBuilder<HomeViewModel>(builder: (controller) {
+                  double size = max(
                           MediaQuery.sizeOf(context).width -
                               (controller.isDrawerOpen ? 240 : 120),
                           1000) -
-                          60;
-                      return SizedBox(
-                          width: size+60,
-                          child:  Scrollbar(
-                          controller: _scrollControllerStd,
-                          child: SingleChildScrollView(
+                      60;
+                  return SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                        controller: _scrollControllerStd,
+                        child: SingleChildScrollView(
                           controller: _scrollControllerStd,
                           scrollDirection: Axis.horizontal,
-
                           child: DataTable(
-                        clipBehavior: Clip.hardEdge,
-                        columns:List.generate(
-                            dataStu.length,
+                            clipBehavior: Clip.hardEdge,
+                            columns: List.generate(
+                                dataStu.length,
                                 (index) => DataColumn(
-                                label: Container(
-                                    width: size / (dataEMP.length),
-                                    child: Center(
-                                        child: Text(dataEMP[index].toString().tr))))),
-                        rows: allEmployee.values
-                            .map(
-                              (e) => employeeDataRow(e,size / (dataEMP.length),),
-                            )
-                            .toList(),
-                      ),
-                    )));
-                  }
+                                    label: Container(
+                                        width: size / (dataStu.length),
+                                        child: Center(
+                                            child: Text(dataStu[index]
+                                                .toString()
+                                                .tr))))),
+                            rows: allSection.values
+                                .map(
+                                  (e) => studentDataRow(
+                                    e,
+                                    size / (dataStu.length),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      ));
+                }),
+              ),
+              SizedBox(
+                height: defaultPadding,
+              ),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(15),
                 ),
+                child: GetBuilder<HomeViewModel>(builder: (controller) {
+                  double size = max(
+                          MediaQuery.sizeOf(context).width -
+                              (controller.isDrawerOpen ? 240 : 120),
+                          1000) -
+                      60;
+                  return SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                          controller: _scrollControllerEmp,
+                          child: SingleChildScrollView(
+                            controller: _scrollControllerEmp,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              clipBehavior: Clip.hardEdge,
+                              columns: List.generate(
+                                  dataStu.length,
+                                  (index) => DataColumn(
+                                      label: Container(
+                                          width: size / (dataEMP.length),
+                                          child: Center(
+                                              child: Text(dataEMP[index]
+                                                  .toString()
+                                                  .tr))))),
+                              rows: allEmployee.values
+                                  .map(
+                                    (e) => employeeDataRow(
+                                      e,
+                                      size / (dataEMP.length),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          )));
+                }),
               ),
               SizedBox(height: 16.0),
-
             ])));
-
   }
 
-  DataRow studentDataRow(StudentModel student,size) {
+  DataRow studentDataRow(StudentModel student, size) {
     return DataRow(
       cells: [
         DataCell(Container(
-          alignment: Alignment.center,
+            alignment: Alignment.center,
             width: size,
             child: Text(student.studentName.toString()))),
         DataCell(Container(
             alignment: Alignment.center,
-    width: size,child: Text(student.studentNumber.toString()))),
-
+            width: size,
+            child: Text(student.studentNumber.toString()))),
         DataCell(Container(
-            alignment: Alignment.center,width: size,child: Text(student.parentId.toString()))),
+            alignment: Alignment.center,
+            width: size,
+            child: Text(student.parentId.toString()))),
         DataCell(Container(
-          alignment: Alignment.center,width: size,
+          alignment: Alignment.center,
+          width: size,
           child: Checkbox(
             fillColor: WidgetStateProperty.all(primaryColor),
             checkColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onChanged: (v) {
-
               student.available = v ?? false;
-              selectedStudent.contains(student.studentID) ?selectedStudent.remove(student.studentID):selectedStudent.add(student.studentID.toString());
+              selectedStudent.contains(student.studentID)
+                  ? selectedStudent.remove(student.studentID)
+                  : selectedStudent.add(student.studentID.toString());
 
               setState(() {});
             },
@@ -322,7 +332,7 @@ class _BusInputFormState extends State<BusInputForm> {
     );
   }
 
-  DataRow employeeDataRow(AccountManagementModel employee,size) {
+  DataRow employeeDataRow(AccountManagementModel employee, size) {
     return DataRow(
       cells: [
         DataCell(Container(
@@ -330,25 +340,26 @@ class _BusInputFormState extends State<BusInputForm> {
             width: size,
             child: Text(employee.userName.toString()))),
         DataCell(Container(
-    alignment: Alignment.center,
-    width: size,
-    child: Text(employee.address.toString()))),
+            alignment: Alignment.center,
+            width: size,
+            child: Text(employee.address.toString()))),
         DataCell(Container(
             alignment: Alignment.center,
             width: size,
             child: Text(employee.startDate.toString()))),
-
         DataCell(Container(
           alignment: Alignment.center,
           width: size,
           child: Checkbox(
             fillColor: WidgetStateProperty.all(primaryColor),
             checkColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onChanged: (v) {
-
               employee.available = v ?? false;
-              selectedEmployee.contains(employee.id) ?selectedEmployee.remove(employee.id):selectedEmployee.add(employee.id.toString());
+              selectedEmployee.contains(employee.id)
+                  ? selectedEmployee.remove(employee.id)
+                  : selectedEmployee.add(employee.id.toString());
               setState(() {});
             },
             value: employee.available,
