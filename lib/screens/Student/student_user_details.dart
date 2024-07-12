@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -82,8 +83,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
     super.dispose();
   }*/
 
-  List<String> _contracts = [], _contractsTemp = [];
-
+  List<String> _contracts = [];
+List<Uint8List>_contractsTemp = [];
   ClassViewModel classViewModel = Get.find<ClassViewModel>();
 
   String busValue = '';
@@ -627,9 +628,9 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                         type: FileType.image,
                                         allowMultiple: true);
                                 if (_ != null) {
-                                  _.xFiles.forEach(
+                                  _.files.forEach(
                                     (element) async {
-                                      _contractsTemp.add(await element.path);
+                                      _contractsTemp.add( element.bytes!);
                                     },
                                   );
                                   setState(() {});
@@ -662,8 +663,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                               BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
-                                      child: Image.file(
-                                        File(_contractsTemp[index]),
+                                      child: Image.memory(
+                                        (_contractsTemp[index]),
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,

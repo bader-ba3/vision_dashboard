@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
   final bodyController = TextEditingController();
   final dateController = TextEditingController();
   List imageLinkList = [];
-  List<String> ImagesTempData = [];
+  List<Uint8List> ImagesTempData = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -127,9 +128,9 @@ clearController(){
                                 .pickFiles(
                                     type: FileType.image, allowMultiple: true);
                             if (_ != null) {
-                              _.xFiles.forEach(
+                              _.files.forEach(
                                 (element) async {
-                                  ImagesTempData.add(await element.path);
+                                  ImagesTempData.add( element.bytes!);
                                 },
                               );
                               setState(() {});
@@ -160,8 +161,8 @@ clearController(){
                                       borderRadius: BorderRadius.circular(15)),
                                   width: 200,
                                   height: 200,
-                                  child:  Image.file(
-                                    File(ImagesTempData[index]),
+                                  child:  Image.memory(
+                                    (ImagesTempData[index]),
                                     height: 200,
                                     width: 200,
                                     fit: BoxFit.fitHeight,

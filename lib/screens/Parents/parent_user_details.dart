@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:faker/faker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
@@ -42,8 +43,8 @@ class _ParentInputFormState extends State<ParentInputForm> {
 
   List<EventRecordModel> eventRecords = [];
   EventModel? selectedEvent;
-  List<String> _contracts = [], _contractsTemp = [];
-
+  List<String> _contracts = [];
+List<Uint8List>  _contractsTemp = [];
   @override
   void initState() {
     super.initState();
@@ -280,9 +281,9 @@ date=date0;
                                         type: FileType.image,
                                         allowMultiple: true);
                                 if (_ != null) {
-                                  _.xFiles.forEach(
+                                  _.files.forEach(
                                     (element) async {
-                                      _contractsTemp.add(await element.path);
+                                      _contractsTemp.add( element.bytes!);
                                     },
                                   );
                                   setState(() {});
@@ -315,8 +316,8 @@ date=date0;
                                               BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
-                                      child: Image.file(
-                                        File(_contractsTemp[index]),
+                                      child: Image.memory(
+                                        (_contractsTemp[index]),
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,

@@ -1,4 +1,5 @@
-import 'dart:io';
+
+import 'dart:typed_data';
 
 import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/constants.dart';
@@ -75,9 +76,11 @@ class _ExamInputFormState extends State<ExamInputForm> {
   }
 
   List<String>? _questionImageFile = [],
-      _answerImageFile = [],
-      _answerImageFileTemp = [],
-      _questionImageFileTemp = [];
+      _answerImageFile = []
+     ;
+
+  List<Uint8List> _questionImageFileTemp=[],
+      _answerImageFileTemp = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
   final dateController = TextEditingController();
@@ -215,10 +218,16 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                           type: FileType.image,
                                           allowMultiple: true);
                                   if (_ != null) {
-                                    _.xFiles.forEach(
+
+                                    _.files.forEach(
+
                                       (element) async {
-                                        _questionImageFileTemp!
-                                            .add(await element.path);
+                                        _questionImageFileTemp
+                                            .add(element.bytes!);
+                                        /*File(element.bytes).readAsBytes().then((value) {
+
+                                        },);*/
+
                                       },
                                     );
                                     setState(() {});
@@ -252,8 +261,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                               BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
-                                      child: Image.file(
-                                        File(_questionImageFileTemp![index]),
+                                      child: Image.memory(
+                                        _questionImageFileTemp[index],
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,
@@ -309,10 +318,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                           type: FileType.image,
                                           allowMultiple: true);
                                   if (_ != null) {
-                                    _.xFiles.forEach(
+                                    _.files.forEach(
                                       (element) async {
-                                        _answerImageFileTemp!
-                                            .add(await element.path);
+                                        _answerImageFileTemp
+                                            .add( element.bytes!);
                                       },
                                     );
                                     setState(() {});
@@ -346,8 +355,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                               BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
-                                      child: Image.file(
-                                        File(_answerImageFileTemp![index]),
+                                      child: Image.memory(
+                                        _answerImageFileTemp[index],
                                         height: 200,
                                         width: 200,
                                         fit: BoxFit.fitHeight,
@@ -388,16 +397,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       return AppButton(
                         text: 'حفظ'.tr,
                         onPressed: () async {
-                          await uploadImages(
-                                  _answerImageFileTemp!, "Exam_answer")
-                              .then(
-                            (value) => _answerImageFile!.addAll(value),
-                          );
-                          await uploadImages(
-                                  _questionImageFileTemp!, "Exam_question")
-                              .then(
-                            (value) => _questionImageFile!.addAll(value),
-                          );
+
                           if (_validateFields()) {
                             QuickAlert.show(
                                 width: Get.width / 2,
@@ -406,6 +406,16 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 title: 'جاري التحميل'.tr,
                                 text: 'يتم العمل على الطلب'.tr,
                                 barrierDismissible: false);
+                            await uploadImages(
+                                _answerImageFileTemp, "Exam_answer")
+                                .then(
+                                  (value) => _answerImageFile!.addAll(value),
+                            );
+                            await uploadImages(
+                                _questionImageFileTemp, "Exam_question")
+                                .then(
+                                  (value) => _questionImageFile!.addAll(value),
+                            );
                             final exam = ExamModel(
                               id: examId,
                               isDone: false,
