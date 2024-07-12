@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
-import 'package:vision_dashboard/models/expenses_model.dart';
+
 import 'package:vision_dashboard/screens/expenses/expenses_input_form.dart';
 
 import '../../constants.dart';
@@ -13,10 +13,9 @@ import '../../controller/delete_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../utils/const.dart';
-import '../Widgets/Custom_Drop_down.dart';
+
 import '../Widgets/Custom_Pluto_Grid.dart';
-import '../Widgets/Custom_Text_Filed.dart';
-import '../Widgets/Data_Row.dart';
+
 import '../Widgets/header.dart';
 
 class ExpensesScreen extends StatefulWidget {
@@ -145,7 +144,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                     width: defaultPadding,
                   ),
                   FloatingActionButton(
-                    backgroundColor: primaryColor,
+                    backgroundColor: primaryColor.withOpacity(0.5),
                     onPressed: () {
 
                       showParentInputDialog(

@@ -144,7 +144,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     width: defaultPadding,
                   ),
                   FloatingActionButton(
-                    backgroundColor: primaryColor,
+                    backgroundColor: primaryColor.withOpacity(0.5),
                     onPressed: () {
                       showStudentInputDialog(
                           context, controller.studentMap[currentId]!);
@@ -158,7 +158,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     width: defaultPadding,
                   ),
                   FloatingActionButton(
-                    backgroundColor: primaryColor,
+                    backgroundColor: primaryColor.withOpacity(0.5),
                     onPressed: () {
                       showDialog(
                         context: context,

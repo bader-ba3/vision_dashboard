@@ -130,7 +130,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                     width: defaultPadding,
                   ),
                   FloatingActionButton(
-                    backgroundColor: primaryColor,
+                    backgroundColor: primaryColor.withOpacity(0.5),
                     onPressed: () {
                       showParentInputDialog(
                           context, controller.parentMap[currentId]!);
