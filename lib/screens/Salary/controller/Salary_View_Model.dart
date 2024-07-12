@@ -71,7 +71,7 @@ class SalaryViewModel extends GetxController{
 
       total+=double.parse(value.dilaySalary!).toInt();
     },);
-
+update();
     return total;
 
   }

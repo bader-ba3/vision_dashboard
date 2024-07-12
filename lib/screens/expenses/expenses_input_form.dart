@@ -16,7 +16,7 @@ import '../../controller/account_management_view_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ExpensesInputForm extends StatefulWidget {
-  const ExpensesInputForm({super.key, this.busId,this.expensesModel});
+  const ExpensesInputForm({super.key, this.busId, this.expensesModel});
 
   @override
   _ExpensesInputFormState createState() => _ExpensesInputFormState();
@@ -32,54 +32,52 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
   final dateController = TextEditingController();
   List imageLinkList = [];
   List<Uint8List> ImagesTempData = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    dateController.text=DateTime.now().toString().split(" ")[0];
+    dateController.text = DateTime.now().toString().split(" ")[0];
     initController();
   }
-  Map<bool,String> validateInputs() {
+
+  Map<bool, String> validateInputs() {
     // تحقق من أن جميع المت Controllers ليست فارغة
     if (titleController.text.isEmpty) {
-
       return {false: "يرجى إدخال عنوان.".tr};
     }
     if (!isNumeric(totalController.text)) {
-
       return {false: "يرجى إدخال المبلغ.".tr};
     }
 
     if (dateController.text.isEmpty) {
-
       return {false: "يرجى إدخال التاريخ.".tr};
     }
 
-    return {false: ""};
+    return {true: ""};
   }
 
-  initController(){
+  initController() {
     print(widget.expensesModel?.toJson());
-    if(widget.expensesModel!=null)
-      {
-         titleController.text=widget.expensesModel!.title.toString();
-         totalController.text=widget.expensesModel!.total.toString();
-         bodyController.text=widget.expensesModel!.body.toString();
-         dateController.text=widget.expensesModel!.date.toString();
-         imageLinkList.addAll(widget.expensesModel!.images??[]);
-      }
+    if (widget.expensesModel != null) {
+      titleController.text = widget.expensesModel!.title.toString();
+      totalController.text = widget.expensesModel!.total.toString();
+      bodyController.text = widget.expensesModel!.body.toString();
+      dateController.text = widget.expensesModel!.date.toString();
+      imageLinkList.addAll(widget.expensesModel!.images ?? []);
+    }
   }
-clearController(){
-   titleController.clear();
-   totalController.clear();
-   bodyController.clear();
-   dateController.clear();
-   imageLinkList = [];
-   ImagesTempData = [];
-   setState(() {
 
-   });
-}
+  clearController() {
+    titleController.clear();
+    totalController.clear();
+    bodyController.clear();
+    dateController.clear();
+    imageLinkList = [];
+    ImagesTempData = [];
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ExpensesViewModel>(builder: (controller) {
@@ -109,8 +107,7 @@ clearController(){
                     lastDate: DateTime(2100),
                   ).then((date) {
                     if (date != null) {
-                      dateController.text =
-                      date.toString().split(" ")[0];
+                      dateController.text = date.toString().split(" ")[0];
                     }
                   });
                 },
@@ -122,7 +119,7 @@ clearController(){
                   icon: Icon(
                     Icons.date_range_outlined,
                     color: primaryColor,
-                  ) ,
+                  ),
                 ),
               ),
               multiLineCustomTextField(
@@ -147,14 +144,15 @@ clearController(){
                             if (_ != null) {
                               _.files.forEach(
                                 (element) async {
-                                  ImagesTempData.add( element.bytes!);
+                                  ImagesTempData.add(element.bytes!);
                                 },
                               );
                               setState(() {});
                             }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   color: Colors.grey,
@@ -166,7 +164,7 @@ clearController(){
                           ),
                         ),
                         ...List.generate(
-                            ImagesTempData.length,
+                          ImagesTempData.length,
                           (index) {
                             return Padding(
                               padding:
@@ -178,7 +176,7 @@ clearController(){
                                       borderRadius: BorderRadius.circular(15)),
                                   width: 200,
                                   height: 200,
-                                  child:  Image.memory(
+                                  child: Image.memory(
                                     (ImagesTempData[index]),
                                     height: 200,
                                     width: 200,
@@ -188,7 +186,7 @@ clearController(){
                           },
                         ),
                         ...List.generate(
-                            imageLinkList.length,
+                          imageLinkList.length,
                           (index) {
                             return Padding(
                               padding:
@@ -200,7 +198,7 @@ clearController(){
                                       borderRadius: BorderRadius.circular(15)),
                                   width: 200,
                                   height: 200,
-                                  child:   Image.network(
+                                  child: Image.network(
                                     imageLinkList[index],
                                     height: 200,
                                     width: 200,
@@ -217,7 +215,6 @@ clearController(){
               AppButton(
                 text: "حفظ".tr,
                 onPressed: () async {
-
                   if (validateInputs().keys.first) {
                     QuickAlert.show(
                         width: Get.width / 2,
@@ -226,9 +223,12 @@ clearController(){
                         title: 'جاري التحميل'.tr,
                         text: 'يتم العمل على الطلب'.tr,
                         barrierDismissible: false);
-                    await      uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
-                    String expId =
-                    widget.expensesModel==null? generateId("ExP"):widget.expensesModel!.id!;
+                    await uploadImages(ImagesTempData, "expenses").then(
+                      (value) => imageLinkList.addAll(value),
+                    );
+                    String expId = widget.expensesModel == null
+                        ? generateId("ExP")
+                        : widget.expensesModel!.id!;
                     BusViewModel busController = Get.find<BusViewModel>();
                     ExpensesModel model = ExpensesModel(
                       date: dateController.text,
@@ -243,13 +243,12 @@ clearController(){
                       images: imageLinkList,
                     );
 
-
-                    await  controller.addExpenses(model);
+                    await controller.addExpenses(model);
                     if (widget.busId != null)
                       await busController.addExpenses(widget.busId!, expId);
                     clearController();
 
-                    if (widget.busId != null||widget.expensesModel!=null)
+                    if (widget.busId != null || widget.expensesModel != null)
                       Get.back();
                     Get.back();
                   } else {
@@ -258,10 +257,9 @@ clearController(){
                         context: context,
                         type: QuickAlertType.error,
                         title: 'خطأ'.tr,
-                        text:"${validateInputs().values.first}",
+                        text: "${validateInputs().values.first}",
                         barrierDismissible: false);
                   }
-
                 },
               )
             ],

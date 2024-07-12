@@ -148,81 +148,85 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(
               height: defaultPadding,
             ),
-            SizedBox(
-              width: Get.width,
-              child: Wrap(
-                direction: Axis.horizontal,
-                alignment: MediaQuery.sizeOf(context).width < 800
-                    ? WrapAlignment.center
-                    : WrapAlignment.spaceEvenly,
-                runSpacing: 25,
-                spacing: 0,
-                children: [
-                  InkWell(
-                      onHover: (value) {},
-                      onTap: () {
-                        index = 2;
-                        setState(() {});
-                      },
-                      child: SquareWidget(
-                          "الاجمالي",
-                          isAll
-                              ? (_studentViewModel.getAllReceivePay() -
-                                  _expensesViewModel.getAllExpensesMoney() -
-                                  _salaryViewModel.getAllSalaryPay())
-                              : (_studentViewModel.getAllReceivePayAtMonth(
-                                          months[selectedMonth]!) -
-                                      _expensesViewModel.getExpensesAtMonth(
-                                          months[selectedMonth]!) -
-                                      _accountManagementViewModel
-                                          .getAllSalariesAtMonth(months[
-                                              selectedMonth]! /*DateTime.now().month.toString()*/))
-                                  .toString(),
-                          primaryColor,
-                          "assets/budget.png",
-                          true)),
-                  InkWell(
-                      onTap: () {
-                        index = 1;
-                        setState(() {});
-                      },
-                      child: SquareWidget(
-                          "الايرادات",
-                          isAll
-                              ? _studentViewModel.getAllReceivePay()
-                              : _studentViewModel
-                                  .getAllReceivePayAtMonth(
-                                      months[selectedMonth]!)
-                                  .toString(),
-                          Colors.cyan,
-                          "assets/profit.png",
-                          true)),
-                  InkWell(
-                      onTap: () {
-                        index = 0;
-                        setState(() {});
-                      },
-                      child: SquareWidget(
-                          "المصروف",
-                          isAll
-                              ? _expensesViewModel.getAllExpensesMoney()
-                              : _expensesViewModel
-                                  .getExpensesAtMonth(months[selectedMonth]!)
-                                  .toString(),
-                          blueColor,
-                          "assets/poor.png",
-                          true)),
-                  SquareWidget(
-                      "الرواتب المستحقة",
-                      _accountManagementViewModel
-                          .getAllSalariesAtMonth(
-                              DateTime.now().month.toString())
-                          .toString(),
-                      Colors.black,
-                      "assets/money-bag.png",
-                      false),
-                ],
-              ),
+            GetBuilder<ExpensesViewModel>(
+              builder: (_) {
+                return SizedBox(
+                  width: Get.width,
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    alignment: MediaQuery.sizeOf(context).width < 800
+                        ? WrapAlignment.center
+                        : WrapAlignment.spaceEvenly,
+                    runSpacing: 25,
+                    spacing: 0,
+                    children: [
+                      InkWell(
+                          onHover: (value) {},
+                          onTap: () {
+                            index = 2;
+                            setState(() {});
+                          },
+                          child: SquareWidget(
+                              "الاجمالي",
+                              isAll
+                                  ? (_studentViewModel.getAllReceivePay() -
+                                      _expensesViewModel.getAllExpensesMoney() -
+                                      _salaryViewModel.getAllSalaryPay())
+                                  : (_studentViewModel.getAllReceivePayAtMonth(
+                                              months[selectedMonth]!) -
+                                          _expensesViewModel.getExpensesAtMonth(
+                                              months[selectedMonth]!) -
+                                          _accountManagementViewModel
+                                              .getAllSalariesAtMonth(months[
+                                                  selectedMonth]! /*DateTime.now().month.toString()*/))
+                                      .toString(),
+                              primaryColor,
+                              "assets/budget.png",
+                              true)),
+                      InkWell(
+                          onTap: () {
+                            index = 1;
+                            setState(() {});
+                          },
+                          child: SquareWidget(
+                              "الايرادات",
+                              isAll
+                                  ? _studentViewModel.getAllReceivePay()
+                                  : _studentViewModel
+                                      .getAllReceivePayAtMonth(
+                                          months[selectedMonth]!)
+                                      .toString(),
+                              Colors.cyan,
+                              "assets/profit.png",
+                              true)),
+                      InkWell(
+                          onTap: () {
+                            index = 0;
+                            setState(() {});
+                          },
+                          child: SquareWidget(
+                              "المصروف",
+                              isAll
+                                  ? _expensesViewModel.getAllExpensesMoney()
+                                  : _expensesViewModel
+                                      .getExpensesAtMonth(months[selectedMonth]!)
+                                      .toString(),
+                              blueColor,
+                              "assets/poor.png",
+                              true)),
+                      SquareWidget(
+                          "الرواتب المستحقة",
+                          _accountManagementViewModel
+                              .getAllSalariesAtMonth(
+                                  DateTime.now().month.toString())
+                              .toString(),
+                          Colors.black,
+                          "assets/money-bag.png",
+                          false),
+                    ],
+                  ),
+                );
+              }
             ),
             SizedBox(height: defaultPadding),
             Row(

@@ -271,19 +271,29 @@ class _StudentScreenState extends State<StudentScreen> {
                       Container(
                           width: Get.width/10,
                           child: Text("الاسم الكامل: ")),
-                      Text(
-                        parentModel.fullName.toString(),
-                        style: Styles.headLineStyle2,
+                      SizedBox(
+                        width: Get.width/9,
+                        child: Text(
+                          parentModel.fullName.toString(),
+                          style: Styles.headLineStyle2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("العنوان: "),
-                      Text(
-                        parentModel.address.toString(),
-                        style: Styles.headLineStyle2,
+                      Container(
+                          width: Get.width/10,
+                          child: Text("العنوان: ")),
+                      SizedBox(
+                        width: Get.width/9,
+                        child: Text(
+                          parentModel.address.toString(),
+                          style: Styles.headLineStyle2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
