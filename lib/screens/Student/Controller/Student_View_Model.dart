@@ -135,7 +135,7 @@ class StudentViewModel extends GetxController {
   updateStudent(StudentModel studentModel) async {
     await studentCollectionRef
         .doc(studentModel.studentID)
-        .set(studentModel.toJson());
+        .set(studentModel.toJson(),SetOptions(merge: true));
 
     update();
   }
@@ -163,6 +163,7 @@ class StudentViewModel extends GetxController {
         );
       },
     );
+    update();
     return total;
   }
 

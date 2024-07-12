@@ -48,6 +48,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         )
         .first
         .key;
+    WidgetsFlutterBinding.ensureInitialized().waitUntilFirstFrameRasterized.then((value) {
+
+    },);
   }
 
   @override

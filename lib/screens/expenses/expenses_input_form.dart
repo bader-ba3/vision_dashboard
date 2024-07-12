@@ -99,7 +99,7 @@ clearController(){
                 },
                 child: CustomTextField(
                   controller: dateController,
-                  title: 'تاريخ البداية'.tr,
+                  title: 'التاريخ'.tr,
                   enable: false,
                   keyboardType: TextInputType.datetime,
                   icon: Icon(
