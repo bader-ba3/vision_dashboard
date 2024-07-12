@@ -38,12 +38,16 @@ class ExpensesViewModel extends GetxController {
   };
   GlobalKey key=GlobalKey();
   ExpensesViewModel() {
-    columns.addAll(toAR(data));
+    getColumns();
     getAllExpenses();
 
 
   }
 
+  getColumns(){
+    columns.clear();
+    columns.addAll(toAR(data));
+  }
   late StreamSubscription<QuerySnapshot<ExpensesModel>> listener;
 
 

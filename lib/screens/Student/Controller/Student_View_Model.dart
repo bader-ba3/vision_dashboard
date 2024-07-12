@@ -39,9 +39,13 @@ class StudentViewModel extends GetxController {
   };
   GlobalKey key=GlobalKey();
   StudentViewModel() {
-    columns.addAll(toAR(data));
+    getColumns();
 
     getAllStudent();
+  }
+  getColumns(){
+    columns.clear();
+    columns.addAll(toAR(data));
   }
 
   Map<String, StudentModel> _studentMap = {};

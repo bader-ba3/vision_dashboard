@@ -50,8 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("تسجيل الدخول الى لوحة التحكم", style: Styles.headLineStyle1,),
-                            Text("مركز رؤية التعليمي للتدريب", style: Styles.headLineStyle1,),
+                            Text("تسجيل الدخول الى لوحة التحكم".tr, style: Styles.headLineStyle1,),
+                            Text("مركز رؤية التعليمي للتدريب".tr, style: Styles.headLineStyle1,),
                             SizedBox(height: 50,),
                        /*     if(controller.isSupportNfc)
                               Column(
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   TextField(
                                     controller: nameController,
                                     decoration: InputDecoration(
-                                      hintText: "اسم المستخدم",
+                                      hintText: "اسم المستخدم".tr,
                                       hintStyle: Styles.headLineStyle2,
                                       fillColor: bgColor,
                                       filled: true,
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     controller: passwordController,
                                     obscureText: isSecure,
                                     decoration: InputDecoration(
-                                      hintText: "كلمة المرور",
+                                      hintText: "كلمة المرور".tr,
                                       hintStyle: Styles.headLineStyle2,
                                       fillColor: bgColor,
                                       filled: true,
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: primaryColor,
                                         borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       ),
-                                      child: Center(child: Text("تسجيل الدخول", style: TextStyle(fontSize: 22, color: bgColor),)),
+                                      child: Center(child: Text("تسجيل الدخول".tr, style: TextStyle(fontSize: 22, color: bgColor),)),
                                     ),
                                   ),
                                 ],

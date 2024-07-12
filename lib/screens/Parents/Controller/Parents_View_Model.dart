@@ -39,9 +39,14 @@ class ParentsViewModel extends GetxController {
   GlobalKey key=GlobalKey();
 
   ParentsViewModel(){
-    columns.addAll(toAR(data));
+    getColumns();
 
     getAllParent();
+  }
+
+  getColumns(){
+    columns.clear();
+    columns.addAll(toAR(data));
   }
   Map<String, ParentModel> _parentMap = {};
 

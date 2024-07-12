@@ -29,10 +29,13 @@ class ExamViewModel extends GetxController {
   };
   GlobalKey key=GlobalKey();
   ExamViewModel() {
-    columns.addAll(toAR(data));
+    getColumns();
     getAllExam();
   }
-
+  getColumns(){
+    columns.clear();
+    columns.addAll(toAR(data));
+  }
   Map<String, ExamModel> _examMap = {};
 
   Map<String, ExamModel> get examMap => _examMap;

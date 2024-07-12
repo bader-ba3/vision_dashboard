@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../constants.dart';
@@ -7,13 +7,17 @@ import '../../controller/delete_management_view_model.dart';
 
 class CustomPlutoGrid extends StatefulWidget {
   CustomPlutoGrid(
-      {super.key, required this.onSelected, this.controller, this.idName, this.onRowDoubleTap});
+      {super.key,
+      required this.onSelected,
+      this.controller,
+      this.idName,
+      this.onRowDoubleTap});
 
   @override
   State<CustomPlutoGrid> createState() => _CustomPlutoGridState();
   final Function(PlutoGridOnSelectedEvent) onSelected;
   final Function(PlutoGridOnRowDoubleTapEvent)? onRowDoubleTap;
-final controller,idName;
+  final controller, idName;
 }
 
 class _CustomPlutoGridState extends State<CustomPlutoGrid> {
@@ -23,31 +27,37 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
   }
 
-  listener(){
-
-  }
+  listener() {}
 
   @override
   Widget build(BuildContext context) {
     return PlutoGrid(
-      key:widget.controller.key ,
-      columns: widget.controller.columns ,
+      key: widget.controller.key,
+      columns: widget.controller.columns,
       rows: widget.controller.rows,
       onChanged: (event) {
         print("onChanged");
       },
       onLoaded: (PlutoGridOnLoadedEvent event) {
 
+    /*    event.stateManager.insertColumns(0,  event.stateManager.columns.map(
+              (e) {
+            return PlutoColumn(title: e.title.toString().tr, field: e.field, type: e.type);
+          },
+        ).toList());*/
+     /*   event.stateManager.columns.map(
+          (e) {
+            return PlutoColumn(title: e.title.tr, field: e.field, type: e.type);
+          },
+        ).toList();*/
 /*         stateManager = event.stateManager;
     stateManager.setShowColumnFilter(true);*/
         // widget.controller.stateManager=stateManager;
       },
       mode: PlutoGridMode.selectWithOneTap,
-      onRowDoubleTap:widget.onRowDoubleTap,
+      onRowDoubleTap: widget.onRowDoubleTap,
       onSelected: widget.onSelected,
       configuration: PlutoGridConfiguration(
         shortcut: PlutoGridShortcut(

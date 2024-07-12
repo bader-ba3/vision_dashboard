@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/core/binding.dart';
+import 'package:vision_dashboard/screens/login/login_screen.dart';
 
 import '../../../constants.dart';
 import '../../../controller/event_view_model.dart';
@@ -48,10 +50,17 @@ class MinViewModel extends GetxController {
       {
       await  Get.updateLocale(Locale("ar",'ar'));
 
+      Get.offAll(LoginScreen(), binding: GetBinding());
       }else{
     await  Get.updateLocale(Locale("en",'US'));
 
     }
+    await _busViewModel.getColumns();
+    await _examViewModel.getColumns();
+    await _studentViewModel.getColumns();
+    await _parentsViewModel.getColumns();
+    await _expensesViewModel.getColumns();
+    await   Get.offAll(() =>LoginScreen(), binding: GetBinding());
 /* await   homeViewModel.changeIsLoading();
     // await  Get.offNamed(AppRoutes.EmployeeView);
     update();*/

@@ -274,4 +274,17 @@ Map<String, String> en = {
   "الكل": "ALl",
   "ALl": "الكل",
   "لا يوجد": "Empty",
+  "تسجيل الدخول الى لوحة التحكم":"Log in to the control panel",
+  "مركز رؤية التعليمي للتدريب":"Vision Educational Training Center",
+"النوع":"Type",
+  "تسجيل الدخول":"Log In",
+  "العلامة الكاملة":"Full Mark",
+  "سجل الأحداث":"Events Record",
+  "تاريخ":"Date",
+  "الفواتي المدخلة":"Input invoices",
+  "تسجيل الخروج":"Log Out",
+  "هل انت متأكد؟":"Are you sure?",
+  "":"",
+
+
 };

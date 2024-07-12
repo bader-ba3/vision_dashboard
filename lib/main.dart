@@ -67,6 +67,8 @@ class MyApp extends StatelessWidget {
       },*/
       translationsKeys: AppTranslation.translationKes,
 
+      // locale: const Locale("en", "US"),
+      // fallbackLocale:const Locale("en", "US"),
       locale: const Locale("ar", "ar"),
       fallbackLocale: const Locale("ar", "ar"),
       textDirection: Get.locale.toString() != "en_US"

@@ -31,14 +31,13 @@ class BusViewModel extends GetxController {
       name: 'درهم',
       decimalDigits: 2,
     ),
-    "تاريخ البداية": PlutoColumnType.date(),
+    "Start Date".tr: PlutoColumnType.date(),
   };
 
   GlobalKey key = GlobalKey();
 
   BusViewModel() {
-    columns.addAll(toAR(data));
-
+    getColumns();
     getAllBuse();
   }
 
@@ -48,22 +47,18 @@ class BusViewModel extends GetxController {
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
   getAllBuse() async {
-    listener = await buseCollectionRef.snapshots().listen((value) async{
+    listener = await buseCollectionRef.snapshots().listen((value) async {
       _busesMap.clear();
+
       key = GlobalKey();
       rows.clear();
       // await   Get.find<ExpensesViewModel>().getAllWithoutListenExpenses();
       for (var element in value.docs) {
-        int total=0;
+        int total = 0;
         _busesMap[element.id] = BusModel.fromJson(element.data());
 
-
-
         for (var ex in BusModel.fromJson(element.data()).expense ?? []) {
-          total +=
-              Get.find<ExpensesViewModel>()
-                  .allExpenses[ex]!
-                  .total??0;
+          total += Get.find<ExpensesViewModel>().allExpenses[ex]!.total ?? 0;
         }
         rows.add(
           PlutoRow(
@@ -85,8 +80,7 @@ class BusViewModel extends GetxController {
                       .employees
                       ?.length
                       .toString()),
-              data.keys.elementAt(6): PlutoCell(
-                  value: total),
+              data.keys.elementAt(6): PlutoCell(value: total),
               data.keys.elementAt(7):
                   PlutoCell(value: BusModel.fromJson(element.data()).startDate),
             },
@@ -97,12 +91,10 @@ class BusViewModel extends GetxController {
       update();
     });
   }
+
   getAllWithoutListenBuse() async {
-     await buseCollectionRef.get().then((value) async{
-
-
+    await buseCollectionRef.get().then((value) async {
       for (var element in value.docs) {
-
         _busesMap[element.id] = BusModel.fromJson(element.data());
       }
       print("buses Without Listen:${_busesMap.values.length}");
@@ -169,5 +161,10 @@ class BusViewModel extends GetxController {
         update();
       },
     );
+  }
+
+  getColumns() {
+    columns.clear();
+    columns.addAll(toAR(data));
   }
 }
