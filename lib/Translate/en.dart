@@ -284,6 +284,9 @@ Map<String, String> en = {
   "الفواتي المدخلة":"Input invoices",
   "تسجيل الخروج":"Log Out",
   "هل انت متأكد؟":"Are you sure?",
+  "يرجى إدخال عنوان.":"Please enter an address.",
+  "يرجى إدخال المبلغ.":"Please enter the amount.",
+  "يرجى إدخال التاريخ.":"Please enter the date.",
   "":"",
 
 

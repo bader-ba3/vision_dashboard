@@ -39,7 +39,24 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
     dateController.text=DateTime.now().toString().split(" ")[0];
     initController();
   }
+  Map<bool,String> validateInputs() {
+    // تحقق من أن جميع المت Controllers ليست فارغة
+    if (titleController.text.isEmpty) {
 
+      return {false: "يرجى إدخال عنوان.".tr};
+    }
+    if (!isNumeric(totalController.text)) {
+
+      return {false: "يرجى إدخال المبلغ.".tr};
+    }
+
+    if (dateController.text.isEmpty) {
+
+      return {false: "يرجى إدخال التاريخ.".tr};
+    }
+
+    return {false: ""};
+  }
 
   initController(){
     print(widget.expensesModel?.toJson());
@@ -200,16 +217,18 @@ clearController(){
               AppButton(
                 text: "حفظ".tr,
                 onPressed: () async {
-                  QuickAlert.show(
-                      width: Get.width / 2,
-                      context: context,
-                      type: QuickAlertType.loading,
-                      title: 'جاري التحميل'.tr,
-                      text: 'يتم العمل على الطلب'.tr,
-                      barrierDismissible: false);
-            await      uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
+
+                  if (validateInputs().keys.first) {
+                    QuickAlert.show(
+                        width: Get.width / 2,
+                        context: context,
+                        type: QuickAlertType.loading,
+                        title: 'جاري التحميل'.tr,
+                        text: 'يتم العمل على الطلب'.tr,
+                        barrierDismissible: false);
+                    await      uploadImages(ImagesTempData, "expenses").then((value) =>imageLinkList=value ,);
                     String expId =
-                        widget.expensesModel==null? generateId("ExP"):widget.expensesModel!.id!;
+                    widget.expensesModel==null? generateId("ExP"):widget.expensesModel!.id!;
                     BusViewModel busController = Get.find<BusViewModel>();
                     ExpensesModel model = ExpensesModel(
                       date: dateController.text,
@@ -225,14 +244,24 @@ clearController(){
                     );
 
 
-                await  controller.addExpenses(model);
-                  if (widget.busId != null)
-                    await busController.addExpenses(widget.busId!, expId);
-                  clearController();
+                    await  controller.addExpenses(model);
+                    if (widget.busId != null)
+                      await busController.addExpenses(widget.busId!, expId);
+                    clearController();
 
-                  if (widget.busId != null||widget.expensesModel!=null)
+                    if (widget.busId != null||widget.expensesModel!=null)
+                      Get.back();
                     Get.back();
-                    Get.back();
+                  } else {
+                    QuickAlert.show(
+                        width: Get.width / 2,
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: 'خطأ'.tr,
+                        text:"${validateInputs().values.first}",
+                        barrierDismissible: false);
+                  }
+
                 },
               )
             ],

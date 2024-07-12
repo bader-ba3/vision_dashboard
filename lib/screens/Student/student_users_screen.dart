@@ -268,7 +268,9 @@ class _StudentScreenState extends State<StudentScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("الاسم الكامل: "),
+                      Container(
+                          width: Get.width/10,
+                          child: Text("الاسم الكامل: ")),
                       Text(
                         parentModel.fullName.toString(),
                         style: Styles.headLineStyle2,

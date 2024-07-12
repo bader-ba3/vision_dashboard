@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -13,6 +15,7 @@ import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dar
 import '../../constants.dart';
 import '../../controller/delete_management_view_model.dart';
 import '../../utils/Hive_DataBase.dart';
+import '../Student/student_user_details.dart';
 import '../main/main_screen.dart';
 
 class ClassesView extends StatefulWidget {
@@ -324,9 +327,8 @@ class _ClassesViewState extends State<ClassesView> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    HiveDataBase
-                                                        .setCurrentScreen("2");
-                                                    Get.offAll(MainScreen());
+                                                    showStudentInputDialog(context, listStudent[index]);
+
                                                   },
                                                   child: Container(
                                                     padding:
@@ -407,9 +409,8 @@ class _ClassesViewState extends State<ClassesView> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    HiveDataBase
-                                                        .setCurrentScreen("2");
-                                                    Get.offAll(MainScreen());
+                                                    showStudentInputDialog(context, listStudent[index]);
+
                                                   },
                                                   child: Container(
                                                     padding:
@@ -447,6 +448,31 @@ class _ClassesViewState extends State<ClassesView> {
     );
   }
 
+
+  void showStudentInputDialog(BuildContext context, dynamic student) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            height: Get.height / 2,
+            width: Get.width / 1.5,
+            child: StudentInputForm(
+              studentModel: student,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void showClassInputDialog(
       BuildContext context, ClassModel classModel, ClassViewModel controller) {
     TextEditingController classNameController = TextEditingController()
@@ -468,7 +494,7 @@ class _ClassesViewState extends State<ClassesView> {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
                 width: 300,
-                height: currentList.length * 80,
+                height: max(350,currentList.length * 70),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
