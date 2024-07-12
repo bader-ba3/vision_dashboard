@@ -90,7 +90,7 @@ class _StudentScreenState extends State<StudentScreen> {
                 padding: EdgeInsets.all(defaultPadding),
                 decoration: BoxDecoration(
                   color: secondaryColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 child: SizedBox(
                   height: Get.height,
@@ -221,13 +221,13 @@ class _StudentScreenState extends State<StudentScreen> {
                         Text("المادة: "),
                         Text(
                           exam.examMap[student.stdExam![index]]!.subject!,
-                          style: Styles.headLineStyle2,
+                          style: Styles.headLineStyle2.copyWith(fontSize: 16),
                         ),
                         Spacer(),
                         Text("العلامة: "),
                         Text(
                           "${(double.parse(exam.examMap[student.stdExam![index]]!.marks![student.studentID]!) * double.parse(exam.examMap[student.stdExam![index]]!.examMaxMark!)) / 100}",
-                          style: Styles.headLineStyle2,
+                          style: Styles.headLineStyle2.copyWith(fontSize: 16),
                         ),
                         Spacer(),
                       ],
@@ -238,7 +238,7 @@ class _StudentScreenState extends State<StudentScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 12,
             ),
             AppButton(
               text: "تم",
@@ -260,90 +260,95 @@ class _StudentScreenState extends State<StudentScreen> {
         Column(
           children: [
             Container(
-              width: Get.width / 3,
+
               height: Get.height / 3.5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                          width: Get.width/10,
-                          child: Text("الاسم الكامل: ")),
+                          width: Get.width/12,
+                          child: Text("الاسم الكامل: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis,)),
                       SizedBox(
-                        width: Get.width/9,
+
                         child: Text(
                           parentModel.fullName.toString(),
-                          style: Styles.headLineStyle2,
+                          style: Styles.headLineStyle2.copyWith(fontSize: 16),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                          width: Get.width/10,
-                          child: Text("العنوان: ")),
+                          width: Get.width/12,
+                          child: Text("العنوان: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis,)),
                       SizedBox(
-                        width: Get.width/9,
+
                         child: Text(
                           parentModel.address.toString(),
-                          style: Styles.headLineStyle2,
+                          style: Styles.headLineStyle2.copyWith(fontSize: 16),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("الجنسية: "),
+                      Container(
+                          width: Get.width/12,child: Text("الجنسية: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis)),
                       Text(
                         parentModel.nationality.toString(),
-                        style: Styles.headLineStyle2,
+                        style: Styles.headLineStyle2.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("العمر: "),
+                      Container(
+                        width: Get.width/12,child:Text("العمر: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis)),
                       Text(
                         parentModel.age.toString(),
-                        style: Styles.headLineStyle2,
+                        style: Styles.headLineStyle2.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("العمل: "),
+                      Container(
+                        width: Get.width/12,child: Text("العمل: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis)),
                       Text(
                         parentModel.work.toString(),
-                        style: Styles.headLineStyle2,
+                        style: Styles.headLineStyle2.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("رقم الام: "),
+                      Container(
+                        width: Get.width/12,child:Text("رقم الام: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis)),
                       Text(
                         parentModel.motherPhone.toString(),
-                        style: Styles.headLineStyle2,
+                        style: Styles.headLineStyle2.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("رقم الطوارئ: "),
+                      Container(
+                        width: Get.width/12,child:Text("رقم الطوارئ: ",style: Styles.headLineStyle3.copyWith(color: Colors.white),maxLines: 1,overflow: TextOverflow.ellipsis)),
                       Text(
                         parentModel.emergencyPhone.toString(),
-                        style: Styles.headLineStyle2,
+                        style: Styles.headLineStyle2.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
@@ -351,7 +356,7 @@ class _StudentScreenState extends State<StudentScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 12,
             ),
             AppButton(
               text: "تم",
