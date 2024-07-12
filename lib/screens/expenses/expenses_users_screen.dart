@@ -101,62 +101,66 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           }),
         ),
         floatingActionButton: enableUpdate && currentId != ''
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                    return FloatingActionButton(
-                      backgroundColor: getIfDelete()
-                          ? Colors.greenAccent.withOpacity(0.5)
-                          : Colors.red.withOpacity(0.5),
-                      onPressed: () {
-                        if (enableUpdate) {
-                          if (getIfDelete())
-                            _.returnDeleteOperation(
-                                affectedId: controller
-                                    .allExpenses[currentId]!.id
-                                    .toString());
-                          else if (controller.allExpenses[currentId]!.busId !=
-                              null) {
-                            addDeleteOperation(
-                                collectionName: Const.expensesCollection,
-                                affectedId:
-                                    controller.allExpenses[currentId]!.id!,
-                                relatedId:
-                                    controller.allExpenses[currentId]!.busId!);
-                          } else {
-                            addDeleteOperation(
-                                collectionName: Const.expensesCollection,
-                                affectedId:
-                                    controller.allExpenses[currentId]!.id!);
+            ? SizedBox(
+          width: Get.width,
+          child: Wrap(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            alignment: WrapAlignment.center,
+                  children: [
+                    GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                      return FloatingActionButton(
+                        backgroundColor: getIfDelete()
+                            ? Colors.greenAccent.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.5),
+                        onPressed: () {
+                          if (enableUpdate) {
+                            if (getIfDelete())
+                              _.returnDeleteOperation(
+                                  affectedId: controller
+                                      .allExpenses[currentId]!.id
+                                      .toString());
+                            else if (controller.allExpenses[currentId]!.busId !=
+                                null) {
+                              addDeleteOperation(
+                                  collectionName: Const.expensesCollection,
+                                  affectedId:
+                                      controller.allExpenses[currentId]!.id!,
+                                  relatedId:
+                                      controller.allExpenses[currentId]!.busId!);
+                            } else {
+                              addDeleteOperation(
+                                  collectionName: Const.expensesCollection,
+                                  affectedId:
+                                      controller.allExpenses[currentId]!.id!);
+                            }
                           }
-                        }
+                        },
+                        child: Icon(
+                          getIfDelete()
+                              ? Icons.restore_from_trash_outlined
+                              : Icons.delete,
+                          color: Colors.white,
+                        ),
+                      );
+                    }),
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
+                      onPressed: () {
+
+                        showParentInputDialog(
+                            context, controller.allExpenses[currentId]!);
                       },
                       child: Icon(
-                        getIfDelete()
-                            ? Icons.restore_from_trash_outlined
-                            : Icons.delete,
+                        Icons.edit,
                         color: Colors.white,
                       ),
-                    );
-                  }),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  FloatingActionButton(
-                    backgroundColor: primaryColor.withOpacity(0.5),
-                    onPressed: () {
-
-                      showParentInputDialog(
-                          context, controller.allExpenses[currentId]!);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
                     ),
-                  ),
-                ],
-              )
+                  ],
+                ),
+            )
             : Container(),
       );
     });

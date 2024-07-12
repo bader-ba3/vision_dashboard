@@ -124,67 +124,71 @@ class _BusesScreenState extends State<BusesScreen> {
           }),
         ),
         floatingActionButton: enableUpdate && currentId != ''
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                    return FloatingActionButton(
-                      backgroundColor: getIfDelete()
-                          ? Colors.greenAccent.withOpacity(0.5)
-                          : Colors.red.withOpacity(0.5),
+            ? SizedBox(
+          width: Get.width,
+          child: Wrap(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            alignment: WrapAlignment.center,
+                  children: [
+                    GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                      return FloatingActionButton(
+                        backgroundColor: getIfDelete()
+                            ? Colors.greenAccent.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.5),
+                        onPressed: () {
+                          checkIfPendingDelete(
+                                  affectedId: controller
+                                      .busesMap[currentId]!.busId
+                                      .toString())
+                              ? _.returnDeleteOperation(
+                                  affectedId: controller
+                                      .busesMap[currentId]!.busId
+                                      .toString())
+                              : addDeleteOperation(
+                                  collectionName: busesCollection,
+                                  affectedId: controller
+                                      .busesMap[currentId]!.busId
+                                      .toString());
+                        },
+                        child: Icon(
+                          getIfDelete()
+                              ? Icons.restore_from_trash_outlined
+                              : Icons.delete,
+                          color: Colors.white,
+                        ),
+                      );
+                    }),
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
                       onPressed: () {
-                        checkIfPendingDelete(
-                                affectedId: controller
-                                    .busesMap[currentId]!.busId
-                                    .toString())
-                            ? _.returnDeleteOperation(
-                                affectedId: controller
-                                    .busesMap[currentId]!.busId
-                                    .toString())
-                            : addDeleteOperation(
-                                collectionName: busesCollection,
-                                affectedId: controller
-                                    .busesMap[currentId]!.busId
-                                    .toString());
+                        showExpensesInputDialog(
+                            context, controller.busesMap[currentId]!.busId!);
                       },
                       child: Icon(
-                        getIfDelete()
-                            ? Icons.restore_from_trash_outlined
-                            : Icons.delete,
+                        Icons.add_chart_outlined,
                         color: Colors.white,
                       ),
-                    );
-                  }),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  FloatingActionButton(
-                    backgroundColor: primaryColor.withOpacity(0.5),
-                    onPressed: () {
-                      showExpensesInputDialog(
-                          context, controller.busesMap[currentId]!.busId!);
-                    },
-                    child: Icon(
-                      Icons.add_chart_outlined,
-                      color: Colors.white,
                     ),
-                  ),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  FloatingActionButton(
-                    backgroundColor: primaryColor.withOpacity(0.5),
-                    onPressed: () {
-                      showBusInputDialog(
-                          context, controller.busesMap[currentId]!);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
+                    SizedBox(
+                      width: defaultPadding,
                     ),
-                  ),
-                ],
-              )
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
+                      onPressed: () {
+                        showBusInputDialog(
+                            context, controller.busesMap[currentId]!);
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+            )
             : Container(),
       );
     });

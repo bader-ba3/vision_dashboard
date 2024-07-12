@@ -109,91 +109,95 @@ class _StudentScreenState extends State<StudentScreen> {
           }),
         ),
         floatingActionButton: enableUpdate && currentId != ''
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                    return FloatingActionButton(
-                      backgroundColor: getIfDelete()
-                          ? Colors.greenAccent.withOpacity(0.5)
-                          : Colors.red.withOpacity(0.5),
-                      onPressed: () {
-                        if (enableUpdate) {
-                          if (getIfDelete())
-                            _.returnDeleteOperation(
-                                affectedId: controller
-                                    .studentMap[currentId]!.studentID
-                                    .toString());
-                          else {
-                            addDeleteOperation(
-                                collectionName: parentsCollection,
-                                affectedId: controller
-                                    .studentMap[currentId]!.studentID!);
+            ? SizedBox(
+          width: Get.width,
+              child: Wrap(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                        alignment: WrapAlignment.center,
+                  children: [
+                    GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                      return FloatingActionButton(
+                        backgroundColor: getIfDelete()
+                            ? Colors.greenAccent.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.5),
+                        onPressed: () {
+                          if (enableUpdate) {
+                            if (getIfDelete())
+                              _.returnDeleteOperation(
+                                  affectedId: controller
+                                      .studentMap[currentId]!.studentID
+                                      .toString());
+                            else {
+                              addDeleteOperation(
+                                  collectionName: parentsCollection,
+                                  affectedId: controller
+                                      .studentMap[currentId]!.studentID!);
+                            }
                           }
-                        }
+                        },
+                        child: Icon(
+                          getIfDelete()
+                              ? Icons.restore_from_trash_outlined
+                              : Icons.delete,
+                          color: Colors.white,
+                        ),
+                      );
+                    }),
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
+                      onPressed: () {
+                        showStudentInputDialog(
+                            context, controller.studentMap[currentId]!);
                       },
                       child: Icon(
-                        getIfDelete()
-                            ? Icons.restore_from_trash_outlined
-                            : Icons.delete,
+                        Icons.edit,
                         color: Colors.white,
                       ),
-                    );
-                  }),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  FloatingActionButton(
-                    backgroundColor: primaryColor.withOpacity(0.5),
-                    onPressed: () {
-                      showStudentInputDialog(
-                          context, controller.studentMap[currentId]!);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
                     ),
-                  ),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  FloatingActionButton(
-                    backgroundColor: primaryColor.withOpacity(0.5),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => buildParentAlertDialog(
-                            parent.parentMap[  controller.studentMap[currentId]!.parentId!]!  ),
-                      );
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => buildParentAlertDialog(
+                              parent.parentMap[  controller.studentMap[currentId]!.parentId!]!  ),
+                        );
 
-                    },
-                    child: Icon(
-                      Icons.group,
-                      color: Colors.white,
+                      },
+                      child: Icon(
+                        Icons.group,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  // if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
-                  FloatingActionButton(
-                    backgroundColor:(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false) ?primaryColor:Colors.grey.withOpacity(0.5),
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    // if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
+                    FloatingActionButton(
+                      backgroundColor:(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false) ?primaryColor:Colors.grey.withOpacity(0.5),
 
-                    onPressed: () {
-                      if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
-                      showDialog(
-                        context: context,
-                        builder: (context) => buildMarksAlertDialog(
-                            controller.studentMap[currentId]!),
-                      );
-                    },
-                    child: Icon(
-                      Icons.collections_bookmark_outlined,
-                      color: Colors.white,
+                      onPressed: () {
+                        if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
+                        showDialog(
+                          context: context,
+                          builder: (context) => buildMarksAlertDialog(
+                              controller.studentMap[currentId]!),
+                        );
+                      },
+                      child: Icon(
+                        Icons.collections_bookmark_outlined,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                ],
-              )
+                  ],
+                ),
+            )
             : Container(),
       );
     });

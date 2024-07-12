@@ -104,67 +104,71 @@ class _ExamScreenState extends State<ExamScreen> {
                 }),
               ),
               floatingActionButton: enableUpdate && currentId != ''
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                          return FloatingActionButton(
-                            backgroundColor: primaryColor.withOpacity(0.5),
+                  ? SizedBox(
+                width: Get.width,
+                child: Wrap(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                  alignment: WrapAlignment.center,
+                        children: [
+                          GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                            return FloatingActionButton(
+                              backgroundColor: primaryColor.withOpacity(0.5),
+                              onPressed: () {
+                                if (enableUpdate) {
+                                  examModel = examController.examMap[currentId]!;
+                                  examController.changeExamScreen();
+                                }
+                              },
+                              child: Icon(
+                                Icons.add_chart_outlined,
+                                color: Colors.white,
+                              ),
+                            );
+                          }),
+                          SizedBox(
+                            width: defaultPadding,
+                          ),
+                          FloatingActionButton(
+                            backgroundColor:
+                                examController.examMap[currentId]!.isDone!
+                                    ? Colors.grey.withOpacity(0.5)
+                                    : primaryColor.withOpacity(0.5),
                             onPressed: () {
-                              if (enableUpdate) {
-                                examModel = examController.examMap[currentId]!;
-                                examController.changeExamScreen();
-                              }
+                              if (enableUpdate) if (examController
+                                  .examMap[currentId]!.isDone!) {
+                                QuickAlert.show(
+                                    width: Get.width / 2,
+                                    context: context,
+                                    type: QuickAlertType.error,
+                                    text: "لا يمكن تعديل الامتحان بعد التصحيح".tr,
+                                    title: "خطأ",
+                                    confirmBtnText: "تم");
+                              } else
+                                showExamInputDialog(
+                                    context, examController.examMap[currentId]!,true);
                             },
                             child: Icon(
-                              Icons.add_chart_outlined,
+                              Icons.edit,
                               color: Colors.white,
                             ),
-                          );
-                        }),
-                        SizedBox(
-                          width: defaultPadding,
-                        ),
-                        FloatingActionButton(
-                          backgroundColor:
-                              examController.examMap[currentId]!.isDone!
-                                  ? Colors.grey.withOpacity(0.5)
-                                  : primaryColor.withOpacity(0.5),
-                          onPressed: () {
-                            if (enableUpdate) if (examController
-                                .examMap[currentId]!.isDone!) {
-                              QuickAlert.show(
-                                  width: Get.width / 2,
-                                  context: context,
-                                  type: QuickAlertType.error,
-                                  text: "لا يمكن تعديل الامتحان بعد التصحيح".tr,
-                                  title: "خطأ",
-                                  confirmBtnText: "تم");
-                            } else
-                              showExamInputDialog(
-                                  context, examController.examMap[currentId]!,true);
-                          },
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
                           ),
-                        ),
-                        SizedBox(
-                          width: defaultPadding,
-                        ),
-                        FloatingActionButton(
-                          backgroundColor:primaryColor.withOpacity(0.5) ,
-                          onPressed: () {
-                              showExamInputDialog(
-                                  context, examController.examMap[currentId]!,false);
-                          },
-                          child: Icon(
-                            Icons.remove_red_eye_outlined,
-                            color: Colors.white,
+                          SizedBox(
+                            width: defaultPadding,
                           ),
-                        ),
-                      ],
-                    )
+                          FloatingActionButton(
+                            backgroundColor:primaryColor.withOpacity(0.5) ,
+                            onPressed: () {
+                                showExamInputDialog(
+                                    context, examController.examMap[currentId]!,false);
+                            },
+                            child: Icon(
+                              Icons.remove_red_eye_outlined,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                  )
                   : Container(),
             ),
           ),

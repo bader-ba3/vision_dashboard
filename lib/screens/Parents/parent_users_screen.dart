@@ -96,52 +96,56 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
           }),
         ),
         floatingActionButton: enableUpdate && currentId != ''
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                    return FloatingActionButton(
-                      backgroundColor: getIfDelete()
-                          ? Colors.greenAccent.withOpacity(0.5)
-                          : Colors.red.withOpacity(0.5),
-                      onPressed: () {
-                        if (enableUpdate) {
-                          if (getIfDelete())
-                            _.returnDeleteOperation(
-                                affectedId: controller.parentMap[currentId]!.id
-                                    .toString());
-                          else {
-                            addDeleteOperation(
-                                collectionName: parentsCollection,
-                                affectedId:
-                                    controller.parentMap[currentId]!.id!);
+            ? SizedBox(
+            width: Get.width,
+            child: Wrap(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+              alignment: WrapAlignment.center,
+                  children: [
+                    GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                      return FloatingActionButton(
+                        backgroundColor: getIfDelete()
+                            ? Colors.greenAccent.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.5),
+                        onPressed: () {
+                          if (enableUpdate) {
+                            if (getIfDelete())
+                              _.returnDeleteOperation(
+                                  affectedId: controller.parentMap[currentId]!.id
+                                      .toString());
+                            else {
+                              addDeleteOperation(
+                                  collectionName: parentsCollection,
+                                  affectedId:
+                                      controller.parentMap[currentId]!.id!);
+                            }
                           }
-                        }
+                        },
+                        child: Icon(
+                          getIfDelete()
+                              ? Icons.restore_from_trash_outlined
+                              : Icons.delete,
+                          color: Colors.white,
+                        ),
+                      );
+                    }),
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
+                      onPressed: () {
+                        showParentInputDialog(
+                            context, controller.parentMap[currentId]!);
                       },
                       child: Icon(
-                        getIfDelete()
-                            ? Icons.restore_from_trash_outlined
-                            : Icons.delete,
+                        Icons.edit,
                         color: Colors.white,
                       ),
-                    );
-                  }),
-                  SizedBox(
-                    width: defaultPadding,
-                  ),
-                  FloatingActionButton(
-                    backgroundColor: primaryColor.withOpacity(0.5),
-                    onPressed: () {
-                      showParentInputDialog(
-                          context, controller.parentMap[currentId]!);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
                     ),
-                  ),
-                ],
-              )
+                  ],
+                ),
+            )
             : Container(),
       );
     });
