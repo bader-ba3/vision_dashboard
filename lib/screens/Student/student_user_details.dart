@@ -53,6 +53,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final classController = TextEditingController()..text='';
 
   final startDateController = TextEditingController();
+  final endDateController = TextEditingController();
 
   final busController = TextEditingController();
   final guardianController = TextEditingController();
@@ -187,6 +188,7 @@ List<Uint8List>_contractsTemp = [];
     monthsController.clear();
     costsController.clear();
     totalPaymentController.clear();
+    endDateController.clear();
     parentName = '';
     languageController.text = '';
     busValue = '';
@@ -220,16 +222,75 @@ List<Uint8List>_contractsTemp = [];
                   CustomTextField(
                       controller: studentNameController,
                       title: "اسم الطالب".tr),
+                  if (widget.studentModel == null)
+                    CustomDropDown(
+                      value: parentName,
+                      listValue: Get.find<ParentsViewModel>()
+                          .parentMap
+                          .values
+                          .map(
+                            (e) => e.fullName!,
+                      )
+                          .toList(),
+                      label: 'ولي الأمر'.tr,
+                      onChange: (value) {
+                        if (value != null) {
+                          parentName = value;
+                          guardianController.text = Get.find<ParentsViewModel>()
+                              .parentMap
+                              .values
+                              .where(
+                                (element) => element.fullName == value,
+                          )
+                              .first
+                              .id!;
+                        }
+                      },
+                    ),
                   CustomTextField(
                       controller: studentNumberController,
                       title: 'رقم الطالب'.tr,
                       keyboardType: TextInputType.phone),
+
+                  CustomDropDown(
+                    value: genderController.text,
+                    listValue: sexList,
+                    label: 'الجنس'.tr,
+                    onChange: (value) {
+                      if (value != null) {
+                        genderController.text = value;
+                      }
+                    },
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2100),
+                      ).then((date) {
+                        if (date != null) {
+                          ageController.text = date.toString().split(" ")[0];
+                        }
+                      });
+                    },
+                    child: CustomTextField(
+                      controller: ageController,
+                      title: 'التولد'.tr,
+                      enable: false,
+                      keyboardType: TextInputType.datetime,
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: primaryColor,
+                      ),
+                    ),
+                  ),
                   CustomDropDown(
                     value: classController.text,
                     listValue: classViewModel.classMap.values
                         .map(
                           (e) => e.className!,
-                        )
+                    )
                         .toList(),
                     label: 'الصف'.tr,
                     onChange: (value) {
@@ -244,27 +305,17 @@ List<Uint8List>_contractsTemp = [];
                   CustomDropDown(
                     value: sectionController.text,
                     listValue: classViewModel.classMap.values
-                            .where(
-                              (element) =>
-                                  element.className == classController.text,
-                            )
-                            .firstOrNull
-                            ?.classSection ??
+                        .where(
+                          (element) =>
+                      element.className == classController.text,
+                    )
+                        .firstOrNull
+                        ?.classSection ??
                         [],
                     label: 'الشعبة'.tr,
                     onChange: (value) {
                       if (value != null) {
                         sectionController.text = value;
-                      }
-                    },
-                  ),
-                  CustomDropDown(
-                    value: genderController.text,
-                    listValue: sexList,
-                    label: 'الجنس'.tr,
-                    onChange: (value) {
-                      if (value != null) {
-                        genderController.text = value;
                       }
                     },
                   ),
@@ -305,31 +356,7 @@ List<Uint8List>_contractsTemp = [];
                       }
                     },
                   ),
-                  if (widget.studentModel == null)
-                    CustomDropDown(
-                      value: parentName,
-                      listValue: Get.find<ParentsViewModel>()
-                          .parentMap
-                          .values
-                          .map(
-                            (e) => e.fullName!,
-                          )
-                          .toList(),
-                      label: 'ولي الأمر'.tr,
-                      onChange: (value) {
-                        if (value != null) {
-                          parentName = value;
-                          guardianController.text = Get.find<ParentsViewModel>()
-                              .parentMap
-                              .values
-                              .where(
-                                (element) => element.fullName == value,
-                              )
-                              .first
-                              .id!;
-                        }
-                      },
-                    ),
+
                   CustomTextField(
                       controller: totalPaymentController,
                       title: 'مبلغ التسجيل'.tr,
@@ -384,6 +411,7 @@ List<Uint8List>_contractsTemp = [];
                       ),
                     ),
                   ),
+                  if (widget.studentModel != null)
                   InkWell(
                     onTap: () {
                       showDatePicker(
@@ -392,13 +420,14 @@ List<Uint8List>_contractsTemp = [];
                         lastDate: DateTime(2100),
                       ).then((date) {
                         if (date != null) {
-                          ageController.text = date.toString().split(" ")[0];
+                          endDateController.text =
+                              date.toString().split(" ")[0];
                         }
                       });
                     },
                     child: CustomTextField(
-                      controller: ageController,
-                      title: 'التولد'.tr,
+                      controller: endDateController,
+                      title: 'تاريخ النهاية'.tr,
                       enable: false,
                       keyboardType: TextInputType.datetime,
                       icon: Icon(
@@ -407,6 +436,7 @@ List<Uint8List>_contractsTemp = [];
                       ),
                     ),
                   ),
+
                   if (_payWay == 'اقساط'.tr)
                     SizedBox(
                       width: Get.width / 2,
@@ -591,6 +621,8 @@ List<Uint8List>_contractsTemp = [];
                                     gender: genderController.text,
                                     bus: busController.text,
                                     startDate: startDateController.text,
+                                    endDate: endDateController.text,
+
                                     eventRecords: eventRecords,
                                     installmentRecords: instalmentMap,
                                   );
@@ -746,9 +778,12 @@ List<Uint8List>_contractsTemp = [];
                               gender: genderController.text,
                               bus: busController.text,
                               startDate: startDateController.text,
+                              endDate: endDateController.text,
+
                               eventRecords: eventRecords,
                               installmentRecords: instalmentMap,
                               paymentWay: _payWay,
+
                               totalPayment:
                                   int.parse(totalPaymentController.text),
                             );

@@ -12,6 +12,7 @@ class StudentModel {
       parentId,
       section,
       startDate,
+      endDate,
       paymentWay,
       stdClass;
   String? studentNumber;
@@ -35,6 +36,7 @@ class StudentModel {
     this.StudentBirthDay,
     this.grade,
     this.startDate,
+    this.endDate,
     this.eventRecords,
     this.installmentRecords,
     this.bus,
@@ -61,6 +63,7 @@ class StudentModel {
         if (stdExam != null) 'stdExam': stdExam,
         if (section != null) 'section': section,
         if (startDate != null) 'startDate': startDate!,
+        if (endDate != null) 'endDate': endDate!,
         if (contractsImage != null) 'contractsImage': contractsImage!,
         if (eventRecords != null)
           'eventRecords': eventRecords!.map((event) => event.toJson()).toList(),
@@ -91,6 +94,7 @@ class StudentModel {
     gender = json['gender'] ?? '';
     StudentBirthDay = json['StudentBirthDay'] ?? '';
     startDate = json['startDate'] ?? '';
+    endDate = json['endDate'] ?? '';
     eventRecords = (json['eventRecords'] as List<dynamic>?)
             ?.map((event) => EventRecordModel.fromJson(event))
             .toList() ??
