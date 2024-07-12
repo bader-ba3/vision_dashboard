@@ -297,8 +297,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               .where(
                                 (element) => element.name == value,
                               )
-                              .first
-                              .busId!;
+                              .firstOrNull
+                              ?.busId??value;
                         } else
                           busController.text = value;
                       }

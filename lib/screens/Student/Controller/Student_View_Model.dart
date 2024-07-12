@@ -11,6 +11,7 @@ import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import '../../../constants.dart';
 import '../../../controller/delete_management_view_model.dart';
 import '../../../utils/To_AR.dart';
+import '../../Buses/Controller/Bus_View_Model.dart';
 import '../../Parents/Controller/Parents_View_Model.dart';
 
 class StudentViewModel extends GetxController {
@@ -64,15 +65,15 @@ class StudentViewModel extends GetxController {
   getAllStudent() async {
     listener = await studentCollectionRef.snapshots().listen((value)async {
       _studentMap.clear();
-      key=GlobalKey();
-      rows.clear();
+
       for (var element in value.docs) {
         _studentMap[element.id] = StudentModel.fromJson(element.data());
 
       }
-      print("Student :${_studentMap.keys.length}");
-
+   await  Get.find<BusViewModel>().getAllWithoutListenBuse();
     await  examViewModel.getGrade(_studentMap);
+      key=GlobalKey();
+      rows.clear();
       _studentMap.forEach((key, value) {
         rows.add(
           PlutoRow(
@@ -86,7 +87,7 @@ class StudentViewModel extends GetxController {
               data.keys.elementAt(6):
               PlutoCell(value: value.section),
               data.keys.elementAt(7): PlutoCell(value:  value.startDate),
-              data.keys.elementAt(8): PlutoCell(value:  value.bus),
+              data.keys.elementAt(8): PlutoCell(value:  Get.find<BusViewModel>().busesMap[value.bus]?.name?? value.bus),
               data.keys.elementAt(9): PlutoCell(value: Get.find<ParentsViewModel>().parentMap[value.parentId]!.fullName ),
               data.keys.elementAt(10): PlutoCell(value:  value.grade),
               data.keys.elementAt(11): PlutoCell(value:  value.eventRecords?.length??"0"),
@@ -282,5 +283,9 @@ class StudentViewModel extends GetxController {
       },
     );
     return isLate;
+  }
+
+  void removeClass(String studentId) {
+    studentCollectionRef.doc(studentId).set({"stdClass":null,"section":null},SetOptions(merge: true));
   }
 }

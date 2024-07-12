@@ -48,13 +48,17 @@ class BusViewModel extends GetxController {
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
   getAllBuse() async {
-    listener = await buseCollectionRef.snapshots().listen((value) {
+    listener = await buseCollectionRef.snapshots().listen((value) async{
       _busesMap.clear();
       key = GlobalKey();
       rows.clear();
+      // await   Get.find<ExpensesViewModel>().getAllWithoutListenExpenses();
       for (var element in value.docs) {
         int total=0;
         _busesMap[element.id] = BusModel.fromJson(element.data());
+
+
+
         for (var ex in BusModel.fromJson(element.data()).expense ?? []) {
           total +=
               Get.find<ExpensesViewModel>()
@@ -66,7 +70,7 @@ class BusViewModel extends GetxController {
             cells: {
               data.keys.elementAt(0): PlutoCell(value: element.id),
               data.keys.elementAt(1):
-                  PlutoCell(value: BusModel.fromJson(element.data()).busId),
+                  PlutoCell(value: BusModel.fromJson(element.data()).number),
               data.keys.elementAt(2):
                   PlutoCell(value: BusModel.fromJson(element.data()).name),
               data.keys.elementAt(3):
@@ -90,6 +94,18 @@ class BusViewModel extends GetxController {
         );
       }
       print("buses :${_busesMap.values.length}");
+      update();
+    });
+  }
+  getAllWithoutListenBuse() async {
+     await buseCollectionRef.get().then((value) async{
+
+
+      for (var element in value.docs) {
+
+        _busesMap[element.id] = BusModel.fromJson(element.data());
+      }
+      print("buses Without Listen:${_busesMap.values.length}");
       update();
     });
   }

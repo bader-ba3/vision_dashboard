@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
 import '../constants.dart';
 import '../utils/To_AR.dart';
@@ -47,6 +48,7 @@ class ExpensesViewModel extends GetxController {
 
 
   getAllExpenses() {
+    final acc=  Get.find<AccountManagementViewModel>();
     listener = expensesFireStore.snapshots().listen(
       (event) {
         key=GlobalKey();
@@ -59,7 +61,7 @@ class ExpensesViewModel extends GetxController {
                 data.keys.elementAt(0): PlutoCell(value: i.id),
                 data.keys.elementAt(1): PlutoCell(value: i.data().title),
                 data.keys.elementAt(2): PlutoCell(value: i.data().total),
-                data.keys.elementAt(3): PlutoCell(value: i.data().userId),
+                data.keys.elementAt(3): PlutoCell(value:acc.allAccountManagement[i.data().userId]?.fullName??'No user' ),
                 data.keys.elementAt(4): PlutoCell(value: i.data().body),
                 data.keys.elementAt(5):
                     PlutoCell(value: i.data().images?.length ?? 0),
@@ -71,6 +73,21 @@ class ExpensesViewModel extends GetxController {
         })).obs;
 
         print("expenses ${allExpenses.length}");
+
+        update();
+      },
+    );
+  }
+  getAllWithoutListenExpenses() {
+     expensesFireStore.get().then(
+          (event) {
+
+        allExpenses =
+            Map<String, ExpensesModel>.fromEntries(event.docs.toList().map((i) {
+              return MapEntry(i.id.toString(), i.data());
+            })).obs;
+
+        print("expenses without listen ${allExpenses.length}");
 
         update();
       },

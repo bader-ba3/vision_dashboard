@@ -35,6 +35,8 @@ class _StudyFeesViewState extends State<StudyFeesView> {
   ];
   final ScrollController _scrollController = ScrollController();
 
+  int inkwellIndex=3;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +69,12 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                       spacing: 10,
                       children: [
                         InkWell(
+                          onTap: (){
+                            inkwellIndex=0;
+                            setState(() {
+
+                            });
+                          },
                             child: SquareWidget(
                                 title: "الدفعات القادمة",
                                 body:
@@ -74,12 +82,24 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                 color: primaryColor,
                                 png: "assets/poor.png")),
                         InkWell(
+                            onTap: (){
+                              inkwellIndex=1;
+                              setState(() {
+
+                              });
+                            },
                             child: SquareWidget(
                                 title: "الدفعات المستلمة",
                                 body: "${studentController.getAllReceivePay()}",
                                 color: blueColor,
                                 png: "assets/profit.png")),
                         InkWell(
+                            onTap: (){
+                              inkwellIndex=2;
+                              setState(() {
+
+                              });
+                            },
                             child: SquareWidget(
                                 title: "الدفعات المتأخرة",
                                 body:
@@ -87,6 +107,12 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                 color: Colors.redAccent,
                                 png: "assets/late-payment.png")),
                         InkWell(
+                            onTap: (){
+                              inkwellIndex=3;
+                              setState(() {
+
+                              });
+                            },
                             child: SquareWidget(
                                 title: "الاجمالي",
                                 body: "${studentController.getAllTotalPay()}",
@@ -132,31 +158,68 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                   ...List.generate(
                                     parentController.parentMap.values
                                         .where(
-                                          (element) =>
-                                              (element.children?.length ?? 0) >
-                                              0,
+                                          (element) {
+
+                                            if(inkwellIndex==0)
+                                        return    element.children?.where((element) =>  studentController
+                                                .studentMap[element]!.installmentRecords?.entries.where((element0) {
+                                          return  element0.value.isPay!=true;
+                                                },).isNotEmpty??false,).toList().isNotEmpty??false;
+                                            else  if(inkwellIndex==1)
+                                              return    element.children?.where((element) =>  studentController
+                                                  .studentMap[element]!.installmentRecords?.entries.where((element0) {
+                                                return  element0.value.isPay==true;
+                                              },).isNotEmpty??false,).toList().isNotEmpty??false;
+                                            else  if(inkwellIndex==2)
+                                              return    element.children?.where((element) =>  studentController
+                                                  .studentMap[element]!.installmentRecords?.entries.where((element0) {
+                                                return  int.parse(element0.value.installmentDate!) <= DateTime.now().month &&
+                                                    element0.value.isPay != true;
+                                              },).isNotEmpty??false,).toList().isNotEmpty??false;
+                                            else
+                                            return (element.children?.length ?? 0) >
+                                              0;
+                                          },
                                         )
                                         .length,
                                     (index) {
                                       ParentModel parent =
                                           parentController.parentMap.values
                                               .where(
-                                                (element) =>
-                                                    (element.children?.length ??
-                                                        0) >
-                                                    0,
+                                                (element) {
+
+                                              if(inkwellIndex==0)
+                                                return    element.children?.where((element) =>  studentController
+                                                    .studentMap[element]!.installmentRecords?.entries.where((element0) {
+                                                  return  element0.value.isPay!=true;
+                                                },).isNotEmpty??false,).toList().isNotEmpty??false;
+                                              else  if(inkwellIndex==1)
+                                                return    element.children?.where((element) =>  studentController
+                                                    .studentMap[element]!.installmentRecords?.entries.where((element0) {
+                                                  return  element0.value.isPay==true;
+                                                },).isNotEmpty??false,).toList().isNotEmpty??false;
+                                              else  if(inkwellIndex==2)
+                                                return    element.children?.where((element) =>  studentController
+                                                    .studentMap[element]!.installmentRecords?.entries.where((element0) {
+                                                  return  int.parse(element0.value.installmentDate!) <= DateTime.now().month &&
+                                                      element0.value.isPay != true;
+                                                },).isNotEmpty??false,).toList().isNotEmpty??false;
+                                              else
+                                                return (element.children?.length ?? 0) >
+                                                    0;
+                                            },
                                               )
                                               .toList()[index];
                                       int payment = 0;
                                       int totalPayment = 0;
-                                      for (var pat in parent.children!
-                                          .map((e) => studentController
+                                      for (var pat in parent.children
+                                          ?.map((e) => studentController
                                               .studentMap[e]!.totalPayment)
-                                          .toList()) {
-                                        totalPayment += pat!;
+                                          .toList()??[0]) {
+                                        totalPayment += (pat??0);
                                       }
-                                      for (var pat in parent.children!
-                                          .map((e) => studentController
+                                      for (var pat in parent.children
+                                          ?.map((e) => studentController
                                               .studentMap[e]
                                               ?.installmentRecords
                                               ?.values
@@ -165,7 +228,9 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                     element.isPay == true,
                                               )
                                               .toList())
-                                          .toList()) {
+                                          .toList()??[])
+
+                                      {
                                         for (var pay in pat ?? []) {
                                           payment += int.parse(
                                               pay.installmentCost.toString());

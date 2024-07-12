@@ -7,11 +7,12 @@ import '../../controller/delete_management_view_model.dart';
 
 class CustomPlutoGrid extends StatefulWidget {
   CustomPlutoGrid(
-      {super.key, required this.onSelected, this.controller, this.idName});
+      {super.key, required this.onSelected, this.controller, this.idName, this.onRowDoubleTap});
 
   @override
   State<CustomPlutoGrid> createState() => _CustomPlutoGridState();
   final Function(PlutoGridOnSelectedEvent) onSelected;
+  final Function(PlutoGridOnRowDoubleTapEvent)? onRowDoubleTap;
 final controller,idName;
 }
 
@@ -22,7 +23,7 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("this is state");
+
 
   }
 
@@ -46,6 +47,7 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
         // widget.controller.stateManager=stateManager;
       },
       mode: PlutoGridMode.selectWithOneTap,
+      onRowDoubleTap:widget.onRowDoubleTap,
       onSelected: widget.onSelected,
       configuration: PlutoGridConfiguration(
         shortcut: PlutoGridShortcut(

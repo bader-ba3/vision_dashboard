@@ -12,7 +12,7 @@ class ClassViewModel extends GetxController {
   final firebaseFirestore = FirebaseFirestore.instance;
 
   ClassViewModel() {
-  /*  classNameList.forEach(
+/*    classNameList.forEach(
       (element) {
         addClass(ClassModel(
             classId: generateId("Class"),

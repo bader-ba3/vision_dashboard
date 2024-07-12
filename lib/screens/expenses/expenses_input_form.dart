@@ -222,11 +222,11 @@ clearController(){
                       userId: getMyUserId().id,
                       images: imageLinkList,
                     );
-                  if (widget.busId != null)
-                    await busController.addExpenses(widget.busId!, expId);
+
 
                 await  controller.addExpenses(model);
-
+                  if (widget.busId != null)
+                    await busController.addExpenses(widget.busId!, expId);
                   clearController();
 
                   if (widget.busId != null||widget.expensesModel!=null)

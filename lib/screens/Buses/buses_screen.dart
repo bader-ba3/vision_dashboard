@@ -13,13 +13,9 @@ import 'package:vision_dashboard/screens/expenses/expenses_input_form.dart';
 import '../../constants.dart';
 
 import '../../controller/delete_management_view_model.dart';
-import '../../models/Bus_Model.dart';
 import '../Student/Controller/Student_View_Model.dart';
 import '../Widgets/AppButton.dart';
-import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/Custom_Pluto_Grid.dart';
-import '../Widgets/Custom_Text_Filed.dart';
-import '../Widgets/Data_Row.dart';
 
 class BusesScreen extends StatefulWidget {
   @override
@@ -54,103 +50,144 @@ class _BusesScreenState extends State<BusesScreen> {
   bool getIfDelete() {
     return checkIfPendingDelete(affectedId: currentId);
   }
+
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BusViewModel>(
-      builder: (controller) {
-        return Scaffold(
-          appBar: Header(
-              context: context,
-              title: 'الحافلات'.tr,
-              middleText:
-                  "تعرض معلومات الحافلات مع امكانية اضافة حافلة جديدة او اضافة مصروف الى حافلة موجودة سابقا"
-                      .tr),
-          body: SingleChildScrollView(
-            child: GetBuilder<HomeViewModel>(builder: (hcontroller) {
-              double size = max(
-                      MediaQuery.sizeOf(context).width -
-                          (hcontroller.isDrawerOpen ? 240 : 120),
-                      1000) -
-                  60;
-              return Padding(
-                padding: const EdgeInsets.all(8),
-                child: Container(
-                  padding: EdgeInsets.all(defaultPadding),
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return GetBuilder<BusViewModel>(builder: (controller) {
+      return Scaffold(
+        appBar: Header(
+            context: context,
+            title: 'الحافلات'.tr,
+            middleText:
+                "تعرض معلومات الحافلات مع امكانية اضافة حافلة جديدة او اضافة مصروف الى حافلة موجودة سابقا"
+                    .tr),
+        body: SingleChildScrollView(
+          child: GetBuilder<HomeViewModel>(builder: (hcontroller) {
+            double size = max(
+                    MediaQuery.sizeOf(context).width -
+                        (hcontroller.isDrawerOpen ? 240 : 120),
+                    1000) -
+                60;
+            return Padding(
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                padding: EdgeInsets.all(defaultPadding),
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: Get.height,
+                  width: size + 60,
+                  child: CustomPlutoGrid(
+                    controller: controller,
+                    idName: "الرقم التسلسلي",
+                    onSelected: (event) {
+                      currentId = event.row?.cells["الرقم التسلسلي"]?.value;
+                      setState(() {});
+                    },
+                    onRowDoubleTap: (event) {
+                      if (event.cell.column.title == 'عدد الطلاب')
+                        showDialog(
+                          context: context,
+                          builder: (context) => buildStudentDialog(controller
+                                  .busesMap[
+                                      event.row.cells["الرقم التسلسلي"]?.value]
+                                  ?.students ??
+                              []),
+                        );
+                      if (event.cell.column.title == 'عدد الموظفين')
+                        showDialog(
+                          context: context,
+                          builder: (context) => buildEmployeeDialog(controller
+                              .busesMap[
+                          event.row.cells["الرقم التسلسلي"]?.value]
+                              ?.employees ??
+                              []),
+                        );
+                      if (event.cell.column.title == 'المصروف')
+                        showDialog(
+                          context: context,
+                          builder: (context) => buildExpensesDialog(controller
+                              .busesMap[
+                          event.row.cells["الرقم التسلسلي"]?.value]
+                              ?.expense ??
+                              []),
+                        );
+                      print(event.cell.column.title);
+                      print(event.rowIdx);
+                    },
                   ),
-                  child: SizedBox(
-                    height: Get.height,
-                    width: size + 60,
-                    child: CustomPlutoGrid(
-                      controller: controller,
-                      idName: "الرقم التسلسلي",
-                      onSelected: (event) {
-                        currentId = event.row?.cells["الرقم التسلسلي"]?.value;
-                        setState(() {});
+                ),
+              ),
+            );
+          }),
+        ),
+        floatingActionButton: enableUpdate && currentId != ''
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                    return FloatingActionButton(
+                      backgroundColor: getIfDelete()
+                          ? Colors.greenAccent.withOpacity(0.5)
+                          : Colors.red.withOpacity(0.5),
+                      onPressed: () {
+                        checkIfPendingDelete(
+                                affectedId: controller
+                                    .busesMap[currentId]!.busId
+                                    .toString())
+                            ? _.returnDeleteOperation(
+                                affectedId: controller
+                                    .busesMap[currentId]!.busId
+                                    .toString())
+                            : addDeleteOperation(
+                                collectionName: busesCollection,
+                                affectedId: controller
+                                    .busesMap[currentId]!.busId
+                                    .toString());
                       },
+                      child: Icon(
+                        getIfDelete()
+                            ? Icons.restore_from_trash_outlined
+                            : Icons.delete,
+                        color: Colors.white,
+                      ),
+                    );
+                  }),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: primaryColor.withOpacity(0.5),
+                    onPressed: () {
+                      showExpensesInputDialog(
+                          context, controller.busesMap[currentId]!.busId!);
+                    },
+                    child: Icon(
+                      Icons.add_chart_outlined,
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              );
-            }),
-          ),
-          floatingActionButton: enableUpdate && currentId != ''
-              ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                return FloatingActionButton(
-                  backgroundColor: getIfDelete()
-                      ? Colors.greenAccent.withOpacity(0.5)
-                      : Colors.red.withOpacity(0.5),
-                  onPressed: () {
-                    checkIfPendingDelete(
-                        affectedId:
-                        controller.busesMap[currentId]!.busId
-                            .toString())
-                        ? _.returnDeleteOperation(
-                        affectedId:
-                        controller.busesMap[currentId]!.busId
-                            .toString())
-                        : addDeleteOperation(
-                        collectionName:
-                        busesCollection,
-                        affectedId:
-                        controller.busesMap[currentId]!.busId
-                            .toString());
-
-                  },
-                  child: Icon(
-                    getIfDelete()
-                        ? Icons.restore_from_trash_outlined
-                        : Icons.delete,
-                    color: Colors.white,
+                  SizedBox(
+                    width: defaultPadding,
                   ),
-                );
-              }),
-              SizedBox(
-                width: defaultPadding,
-              ),
-              FloatingActionButton(
-                backgroundColor: primaryColor,
-                onPressed: () {
-                  showBusnIputDialog(
-                      context,  controller.busesMap[currentId]!);
-
-                },
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          )
-              : Container(),
-        );
-      }
-    );
+                  FloatingActionButton(
+                    backgroundColor: primaryColor.withOpacity(0.5),
+                    onPressed: () {
+                      showBusInputDialog(
+                          context, controller.busesMap[currentId]!);
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
+      );
+    });
   }
 
   void showExpensesInputDialog(BuildContext context, String busId) {
@@ -180,47 +217,57 @@ class _BusesScreenState extends State<BusesScreen> {
     return AlertDialog(
       backgroundColor: secondaryColor,
       actions: [
-        Column(
-          children: [
-            Container(
-              width: Get.width / 3,
-              height: Get.height / 3.5,
-              child: ListView.builder(
+        Container(
+          width: Get.width / 3,
+          height: min(student.length*70,Get.height / 3.5),
+          child: Column(
+
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+Spacer(),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
                 itemCount: student.length,
                 itemBuilder: (context, index) {
                   return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("الاسم الكامل: "),
-                      Text(
-                        Get.find<StudentViewModel>()
-                                .studentMap[student[index]]
-                                ?.studentName
-                                .toString() ??
-                            'sd',
-                        style: Styles.headLineStyle2,
+                      Flexible(child: Text("الاسم الكامل: ",style: Styles.headLineStyle3.copyWith(),)),
+                      SizedBox(width: 5,),
+                      Flexible(
+                        child: Text(
+
+                          Get.find<StudentViewModel>()
+                                  .studentMap[student[index]]
+                                  ?.studentName
+                                  .toString() ??
+                              'sd',
+                          maxLines: 1,
+                          style: Styles.headLineStyle2,
+                        ),
                       ),
+
                     ],
                   );
                 },
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            AppButton(
-              text: "تم",
-              onPressed: () {
-                Get.back();
-              },
-            )
-          ],
+              Spacer(),
+              AppButton(
+                text: "تم",
+                onPressed: () {
+                  Get.back();
+                },
+              )
+            ],
+          ),
         )
       ],
     );
   }
 
-  AlertDialog buildExpensesDialog(List<ExpensesModel> expenses) {
+  AlertDialog buildExpensesDialog(List<String> expenses) {
     return AlertDialog(
       backgroundColor: secondaryColor,
       actions: [
@@ -245,7 +292,8 @@ class _BusesScreenState extends State<BusesScreen> {
                             Text("العنوان: ", style: Styles.headLineStyle3),
                             Spacer(),
                             Text(
-                              expenses[index].title.toString(),
+                              Get.find<ExpensesViewModel>()
+                                  .allExpenses[expenses[index]]?.title.toString()??'',
                               style: Styles.headLineStyle2,
                             ),
                             Spacer(),
@@ -264,7 +312,8 @@ class _BusesScreenState extends State<BusesScreen> {
                             ),
                             Spacer(),
                             Text(
-                              expenses[index].total.toString(),
+                              Get.find<ExpensesViewModel>()
+                                  .allExpenses[expenses[index]]?.total.toString()??'',
                               style: Styles.headLineStyle2,
                             ),
                             Spacer(),
@@ -295,37 +344,39 @@ class _BusesScreenState extends State<BusesScreen> {
     return AlertDialog(
       backgroundColor: secondaryColor,
       actions: [
-        SizedBox(
-          height: Get.height / 2,
+        Container(
+          width: Get.width / 3,
+          height: min(employee.length*60,Get.height / 3.5),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Spacer(),
-              Container(
-                width: Get.width / 3,
-                height: Get.height / 3.5,
-                child: ListView.builder(
-                  itemCount: employee.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("الاسم الكامل: "),
-                        Text(
-                          Get.find<AccountManagementViewModel>()
-                                  .allAccountManagement[employee[index]]
-                                  ?.fullName
-                                  .toString() ??
-                              'sd',
-                          style: Styles.headLineStyle2,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+              ListView.builder(
+                itemCount: employee.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
+
+                    children: [
+                      Text("الاسم الكامل: ",style: Styles.headLineStyle3.copyWith(),),
+                      SizedBox(width: 5,),
+                      Text(
+                        Get.find<AccountManagementViewModel>()
+                                .allAccountManagement[employee[index]]
+                                ?.fullName
+                                .toString() ??
+                            'null',
+                        maxLines: 1,
+                        style: Styles.headLineStyle2,
+                      ),
+
+                    ],
+                  );
+                },
               ),
-              Spacer(),
+         Spacer(),
               AppButton(
                 text: "تم",
                 onPressed: () {
@@ -339,7 +390,7 @@ class _BusesScreenState extends State<BusesScreen> {
     );
   }
 
-  void showBusnIputDialog(BuildContext context, dynamic bus) {
+  void showBusInputDialog(BuildContext context, dynamic bus) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -360,7 +411,6 @@ class _BusesScreenState extends State<BusesScreen> {
       },
     );
   }
-
 
 /*   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

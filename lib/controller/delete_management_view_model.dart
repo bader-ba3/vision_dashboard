@@ -9,6 +9,7 @@ import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
+import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dart';
 
 import '../models/delete_management_model.dart';
 import '../screens/Exams/controller/Exam_View_Model.dart';
@@ -51,34 +52,39 @@ class DeleteManagementViewModel extends GetxController {
     );
   }
 
-  doTheDelete(DeleteManagementModel deleteModel) {
-    if(deleteModel.collectionName!=installmentCollection)
-    FirebaseFirestore.instance
-        .collection(deleteModel.collectionName)
-        .doc(deleteModel.affectedId)
-        .delete();
-    else
-      Get.find<StudentViewModel>()
-          .setInstallmentPay(
-          deleteModel.affectedId,
-          deleteModel.relatedId.toString(),
-          false);
-    deleteDeleteOperation(deleteModel,true);
+  doTheDelete(DeleteManagementModel deleteModel)async {
+
+await    deleteDeleteOperation(deleteModel,true);
     switch (deleteModel.collectionName) {
       case Const.expensesCollection:
         if (deleteModel.relatedId != null) {
-          deleteExpenseFromBus(
+      await    deleteExpenseFromBus(
               deleteModel.relatedId.toString(), deleteModel.affectedId);
         }
         break;
       case studentCollection:
-        deleteStudentFromParentsAndExam(
+     await   deleteStudentFromParentsAndExam(
             deleteModel.affectedId, deleteModel.relatedId!,deleteModel.relatedList??[]);
         break;
       case parentsCollection:
-        deleteStudentWithParent(deleteModel.affectedId,deleteModel.relatedList??[]);
+      await  deleteStudentWithParent(deleteModel.affectedId,deleteModel.relatedList??[]);
         break;
+      case classCollection:
+       await deleteClassFromStudent(deleteModel.affectedId);
+        break;
+
     }
+    if(deleteModel.collectionName!=installmentCollection)
+   await   FirebaseFirestore.instance
+          .collection(deleteModel.collectionName)
+          .doc(deleteModel.affectedId)
+          .delete();
+    else
+  await    Get.find<StudentViewModel>()
+          .setInstallmentPay(
+          deleteModel.affectedId,
+          deleteModel.relatedId.toString(),
+          false);
     update();
   }
   deleteStudentFromParentsAndExam(String studentId, String relatedId,List<String> exams)async {
@@ -165,6 +171,17 @@ class DeleteManagementViewModel extends GetxController {
     await FirebaseFirestore.instance.collection(studentCollection).doc(element).delete();
     } );
    }
+
+  deleteClassFromStudent(String affectedId) {
+
+   String className =   Get.find<ClassViewModel>().classMap[affectedId]?.className??'';
+   Get.find<StudentViewModel>().studentMap.forEach((key, value) {
+     if(value.stdClass==className)
+       {
+         Get.find<StudentViewModel>().removeClass(key);
+       }
+   },);
+  }
 }
 
 addDeleteOperation(
