@@ -10,7 +10,7 @@ import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 
 import '../../constants.dart';
 import '../../controller/account_management_view_model.dart';
-import '../../controller/delete_management_view_model.dart';
+import '../../controller/Wait_management_view_model.dart';
 import '../../controller/home_controller.dart';
 import '../../models/account_management_model.dart';
 import '../Widgets/AppButton.dart';

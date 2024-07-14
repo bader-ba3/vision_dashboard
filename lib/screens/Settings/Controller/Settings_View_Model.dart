@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/core/binding.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
 
@@ -18,7 +18,7 @@ import '../../Salary/controller/Salary_View_Model.dart';
 import '../../Store/Controller/Store_View_Model.dart';
 import '../../Student/Controller/Student_View_Model.dart';
 
-class MinViewModel extends GetxController {
+class SettingsViewModel extends GetxController {
   AccountManagementViewModel _accountManagementViewModel =
       Get.find<AccountManagementViewModel>();
   EventViewModel _eventViewModel = Get.find<EventViewModel>();
@@ -28,13 +28,13 @@ class MinViewModel extends GetxController {
   ParentsViewModel _parentsViewModel = Get.find<ParentsViewModel>();
   ExpensesViewModel _expensesViewModel = Get.find<ExpensesViewModel>();
   StoreViewModel _storeViewModel = Get.find<StoreViewModel>();
-  DeleteManagementViewModel _deleteManagementViewModel = Get.find<DeleteManagementViewModel>();
+  WaitManagementViewModel _deleteManagementViewModel = Get.find<WaitManagementViewModel>();
   BusViewModel _busViewModel = Get.find<BusViewModel>();
 
 
   final fireStoreInstance = FirebaseFirestore.instance;
 
-  MinViewModel() {
+  SettingsViewModel() {
     getAllArchive();
   }
 
@@ -50,7 +50,6 @@ class MinViewModel extends GetxController {
       {
       await  Get.updateLocale(Locale("ar",'ar'));
 
-      Get.offAll(LoginScreen(), binding: GetBinding());
       }else{
     await  Get.updateLocale(Locale("en",'US'));
 
@@ -156,11 +155,11 @@ class MinViewModel extends GetxController {
           .set(arr.toJson());
       print("Finished StoreViewModel");
     }
-    for (var arr in _deleteManagementViewModel.allDelete.values.toList()) {
+    for (var arr in _deleteManagementViewModel.allWaiting.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
           .doc(DateTime.now().year.toString())
-          .collection(Const.deleteManagementCollection)
+          .collection(Const.waitManagementCollection)
           .doc(arr.id)
           .set(arr.toJson());
       print("Finished deleteManagementCollection");

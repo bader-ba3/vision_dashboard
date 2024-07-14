@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:vision_dashboard/constants.dart';
 
-import '../../../controller/delete_management_view_model.dart';
+import '../../../controller/Wait_management_view_model.dart';
 import '../../../controller/expenses_view_model.dart';
 import '../../../models/Bus_Model.dart';
 import '../../../utils/To_AR.dart';
@@ -117,7 +117,9 @@ class BusViewModel extends GetxController {
   }
 
   deleteBus(String buseId) async {
-    await addDeleteOperation(
+    await addWaitOperation(
+        type: waitingListTypes.delete,
+
         collectionName: busesCollection, affectedId: buseId);
     update();
   }

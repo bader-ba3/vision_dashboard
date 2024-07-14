@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
 
 import 'package:vision_dashboard/models/Student_Model.dart';
@@ -47,10 +46,9 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final studentNameController = TextEditingController();
   final studentNumberController = TextEditingController();
 
-  final sectionController = TextEditingController();
   final genderController = TextEditingController();
   final ageController = TextEditingController();
-  final classController = TextEditingController()..text='';
+  final classController = TextEditingController()..text = '';
 
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
@@ -58,6 +56,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
   final busController = TextEditingController();
   final guardianController = TextEditingController();
   final languageController = TextEditingController();
+  final editController = TextEditingController();
   final totalPaymentController = TextEditingController();
   List<TextEditingController> monthsController = [];
   List<TextEditingController> costsController = [];
@@ -65,27 +64,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
   List<EventRecordModel> eventRecords = [];
   String parentName = '';
 
-/*  @override
-  void dispose() {
-    clearController();
-    eventRecords.clear();
-    studentNameController.dispose();
-    studentNumberController.dispose();
-
-    sectionController.dispose();
-    genderController.dispose();
-    ageController.dispose();
-    classController.dispose();
-
-    startDateController.dispose();
-
-    busController.dispose();
-    guardianController.dispose();
-    super.dispose();
-  }*/
-
   List<String> _contracts = [];
-List<Uint8List>_contractsTemp = [];
+  List<Uint8List> _contractsTemp = [];
   ClassViewModel classViewModel = Get.find<ClassViewModel>();
 
   String busValue = '';
@@ -106,7 +86,6 @@ List<Uint8List>_contractsTemp = [];
     if (!validateNotEmpty(ageController.text, "التولد".tr)) return false;
     if (!validateNotEmpty(classController.text, "الصف".tr)) return false;
     if (!validateNotEmpty(_payWay, "طريقة الدفع".tr)) return false;
-    if (!validateNotEmpty(sectionController.text, "الشعبة".tr)) return false;
     if (!validateNotEmpty(languageController.text, "اللغة".tr)) return false;
     if (!validateNotEmpty(busController.text, "الحافلة".tr)) return false;
     if (!validateNotEmpty(genderController.text, "الجنس".tr)) return false;
@@ -134,15 +113,22 @@ List<Uint8List>_contractsTemp = [];
       instalmentMap = widget.studentModel!.installmentRecords ?? {};
       studentNameController.text = widget.studentModel!.studentName ?? '';
       studentNumberController.text = widget.studentModel!.studentNumber ?? '';
-      sectionController.text = widget.studentModel!.section ?? '';
+      busController.text = widget.studentModel!.bus ?? '';
+      busValue =
+          Get.find<BusViewModel>().busesMap[widget.studentModel!.bus]?.name ??
+              widget.studentModel!.bus!;
       genderController.text = widget.studentModel!.gender ?? '';
+
       ageController.text = widget.studentModel!.StudentBirthDay ?? '';
       print(widget.studentModel!.stdClass);
       classController.text = widget.studentModel!.stdClass ?? '';
       startDateController.text = widget.studentModel!.startDate ?? '';
       busController.text = widget.studentModel!.bus ?? '';
-
       guardianController.text = widget.studentModel!.parentId!;
+      parentName = Get.find<ParentsViewModel>()
+              .parentMap[widget.studentModel!.parentId!]
+              ?.fullName ??
+          "";
       languageController.text = widget.studentModel!.stdLanguage ?? '';
       totalPaymentController.text =
           widget.studentModel!.totalPayment.toString();
@@ -177,7 +163,6 @@ List<Uint8List>_contractsTemp = [];
     eventRecords.clear();
     studentNameController.clear();
     studentNumberController.clear();
-    sectionController.clear();
     genderController.text = '';
     _payWay = '';
     ageController.clear();
@@ -222,36 +207,34 @@ List<Uint8List>_contractsTemp = [];
                   CustomTextField(
                       controller: studentNameController,
                       title: "اسم الطالب".tr),
-                  if (widget.studentModel == null)
-                    CustomDropDown(
-                      value: parentName,
-                      listValue: Get.find<ParentsViewModel>()
-                          .parentMap
-                          .values
-                          .map(
-                            (e) => e.fullName!,
-                      )
-                          .toList(),
-                      label: 'ولي الأمر'.tr,
-                      onChange: (value) {
-                        if (value != null) {
-                          parentName = value;
-                          guardianController.text = Get.find<ParentsViewModel>()
-                              .parentMap
-                              .values
-                              .where(
-                                (element) => element.fullName == value,
-                          )
-                              .first
-                              .id!;
-                        }
-                      },
-                    ),
+                  CustomDropDown(
+                    value: parentName,
+                    listValue: Get.find<ParentsViewModel>()
+                        .parentMap
+                        .values
+                        .map(
+                          (e) => e.fullName!,
+                        )
+                        .toList(),
+                    label: 'ولي الأمر'.tr,
+                    onChange: (value) {
+                      if (value != null) {
+                        parentName = value;
+                        guardianController.text = Get.find<ParentsViewModel>()
+                            .parentMap
+                            .values
+                            .where(
+                              (element) => element.fullName == value,
+                            )
+                            .first
+                            .id!;
+                      }
+                    },
+                  ),
                   CustomTextField(
                       controller: studentNumberController,
                       title: 'رقم الطالب'.tr,
                       keyboardType: TextInputType.phone),
-
                   CustomDropDown(
                     value: genderController.text,
                     listValue: sexList,
@@ -290,32 +273,13 @@ List<Uint8List>_contractsTemp = [];
                     listValue: classViewModel.classMap.values
                         .map(
                           (e) => e.className!,
-                    )
+                        )
                         .toList(),
                     label: 'الصف'.tr,
                     onChange: (value) {
                       if (value != null) {
                         classController.text = value;
-                        setState(() {
-
-                        });
-                      }
-                    },
-                  ),
-                  CustomDropDown(
-                    value: sectionController.text,
-                    listValue: classViewModel.classMap.values
-                        .where(
-                          (element) =>
-                      element.className == classController.text,
-                    )
-                        .firstOrNull
-                        ?.classSection ??
-                        [],
-                    label: 'الشعبة'.tr,
-                    onChange: (value) {
-                      if (value != null) {
-                        sectionController.text = value;
+                        setState(() {});
                       }
                     },
                   ),
@@ -346,17 +310,17 @@ List<Uint8List>_contractsTemp = [];
                         final busViewController = Get.find<BusViewModel>();
                         if (busViewController.busesMap.isNotEmpty) {
                           busController.text = busViewController.busesMap.values
-                              .where(
-                                (element) => element.name == value,
-                              )
-                              .firstOrNull
-                              ?.busId??value;
+                                  .where(
+                                    (element) => element.name == value,
+                                  )
+                                  .firstOrNull
+                                  ?.busId ??
+                              value;
                         } else
                           busController.text = value;
                       }
                     },
                   ),
-
                   CustomTextField(
                       controller: totalPaymentController,
                       title: 'مبلغ التسجيل'.tr,
@@ -412,31 +376,30 @@ List<Uint8List>_contractsTemp = [];
                     ),
                   ),
                   if (widget.studentModel != null)
-                  InkWell(
-                    onTap: () {
-                      showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2010),
-                        lastDate: DateTime(2100),
-                      ).then((date) {
-                        if (date != null) {
-                          endDateController.text =
-                              date.toString().split(" ")[0];
-                        }
-                      });
-                    },
-                    child: CustomTextField(
-                      controller: endDateController,
-                      title: 'تاريخ النهاية'.tr,
-                      enable: false,
-                      keyboardType: TextInputType.datetime,
-                      icon: Icon(
-                        Icons.date_range_outlined,
-                        color: primaryColor,
+                    InkWell(
+                      onTap: () {
+                        showDatePicker(
+                          context: context,
+                          firstDate: DateTime(2010),
+                          lastDate: DateTime(2100),
+                        ).then((date) {
+                          if (date != null) {
+                            endDateController.text =
+                                date.toString().split(" ")[0];
+                          }
+                        });
+                      },
+                      child: CustomTextField(
+                        controller: endDateController,
+                        title: 'تاريخ النهاية'.tr,
+                        enable: false,
+                        keyboardType: TextInputType.datetime,
+                        icon: Icon(
+                          Icons.date_range_outlined,
+                          color: primaryColor,
+                        ),
                       ),
                     ),
-                  ),
-
                   if (_payWay == 'اقساط'.tr)
                     SizedBox(
                       width: Get.width / 2,
@@ -566,75 +529,7 @@ List<Uint8List>_contractsTemp = [];
                             return AppButton(
                               text: "حفظ".tr,
                               onPressed: () async {
-                                if (_validateFields()) {
-                                  QuickAlert.show(
-                                      width: Get.width / 2,
-                                      context: context,
-                                      type: QuickAlertType.loading,
-                                      title: 'جاري التحميل'.tr,
-                                      text: 'يتم العمل على الطلب'.tr,
-                                      barrierDismissible: false);
-                                  for (int index = 0;
-                                      index < monthsController.length;
-                                      index++) {
-                                    String insId = widget.studentModel != null
-                                        ? widget.studentModel!
-                                            .installmentRecords!.values
-                                            .toList()[index]
-                                            .installmentId!
-                                        : generateId("INSTALLMENT");
-                                    instalmentMap[insId] = InstallmentModel(
-                                      installmentCost:
-                                          costsController[index].text,
-                                      installmentDate:
-                                          monthsController[index].text,
-                                      installmentId: insId,
-                                      isPay: widget.studentModel != null
-                                          ? widget.studentModel!
-                                              .installmentRecords!.values
-                                              .toList()[index]
-                                              .isPay!
-                                          : false,
-                                    );
-                                  }
-
-                                  await uploadImages(
-                                          _contractsTemp, "contracts")
-                                      .then(
-                                    (value) => _contracts.addAll(value),
-                                  );
-                                  final student = StudentModel(
-                                    studentID: widget.studentModel == null
-                                        ? generateId("STD")
-                                        : widget.studentModel!.studentID!,
-                                    parentId: guardianController.text,
-                                    stdLanguage: languageController.text,
-                                    section: sectionController.text,
-                                    studentNumber: studentNumberController.text,
-                                    StudentBirthDay: ageController.text,
-                                    studentName: studentNameController.text,
-                                    stdClass: classController.text,
-                                    contractsImage: _contracts,
-                                    paymentWay: _payWay,
-                                    totalPayment:
-                                        int.parse(totalPaymentController.text),
-                                    gender: genderController.text,
-                                    bus: busController.text,
-                                    startDate: startDateController.text,
-                                    endDate: endDateController.text,
-
-                                    eventRecords: eventRecords,
-                                    installmentRecords: instalmentMap,
-                                  );
-                                  widget.studentModel != null
-                                      ? await controller.updateStudent(student)
-                                      : await controller.addStudent(student);
-
-                                  clearController();
-                                  setState(() {});
-                                  if (widget.studentModel != null) Get.back();
-                                  Get.back();
-                                }
+                                save(controller);
                               },
                             );
                           }),
@@ -662,7 +557,7 @@ List<Uint8List>_contractsTemp = [];
                                 if (_ != null) {
                                   _.files.forEach(
                                     (element) async {
-                                      _contractsTemp.add( element.bytes!);
+                                      _contractsTemp.add(element.bytes!);
                                     },
                                   );
                                   setState(() {});
@@ -732,69 +627,15 @@ List<Uint8List>_contractsTemp = [];
                       ),
                     ],
                   ),
+                  if(widget.studentModel!=null)
+                    CustomTextField(
+                        controller: editController, title: 'سبب التعديل'.tr),
                   if (_payWay != "اقساط".tr)
                     GetBuilder<StudentViewModel>(builder: (controller) {
                       return AppButton(
                         text: "حفظ".tr,
                         onPressed: () async {
-                          if (_validateFields()) {
-                            QuickAlert.show(
-                                width: Get.width / 2,
-                                context: context,
-                                type: QuickAlertType.loading,
-                                title: 'جاري التحميل'.tr,
-                                text: 'يتم العمل على الطلب'.tr,
-                                barrierDismissible: false);
-                            String id = widget.studentModel == null
-                                ? generateId("INSTALLMENT")
-                                : widget.studentModel!.installmentRecords!.keys
-                                    .toList()[0];
-                            instalmentMap[id] = InstallmentModel(
-                                isPay: true,
-                                installmentId: id,
-                                installmentDate: DateTime.now()
-                                    .month
-                                    .toString()
-                                    .padLeft(2, "0"),
-                                installmentCost: totalPaymentController.text,
-                                payTime: DateTime.now().toString());
-
-                            await uploadImages(_contractsTemp, "contracts")
-                                .then(
-                              (value) => _contracts.addAll(value),
-                            );
-                            final student = StudentModel(
-                              studentID: widget.studentModel == null
-                                  ? generateId("STD")
-                                  : widget.studentModel!.studentID!,
-                              parentId: guardianController.text,
-                              stdLanguage: languageController.text,
-                              contractsImage: _contracts,
-                              section: sectionController.text,
-                              studentNumber: studentNumberController.text,
-                              StudentBirthDay: ageController.text,
-                              studentName: studentNameController.text,
-                              stdClass: classController.text,
-                              gender: genderController.text,
-                              bus: busController.text,
-                              startDate: startDateController.text,
-                              endDate: endDateController.text,
-
-                              eventRecords: eventRecords,
-                              installmentRecords: instalmentMap,
-                              paymentWay: _payWay,
-
-                              totalPayment:
-                                  int.parse(totalPaymentController.text),
-                            );
-                            widget.studentModel != null
-                                ? await controller.updateStudent(student)
-                                : await controller.addStudent(student);
-                            clearController();
-                            if (widget.studentModel != null) Get.back();
-                            Get.back();
-                            // print('بيانات الموظف: $student');
-                          }
+                          save(controller);
                         },
                       );
                     }),
@@ -928,5 +769,80 @@ List<Uint8List>_contractsTemp = [];
         ),
       ),
     );
+  }
+
+  save(controller) async {
+    if (_validateFields()) {
+      QuickAlert.show(
+          width: Get.width / 2,
+          context: context,
+          type: QuickAlertType.loading,
+          title: 'جاري التحميل'.tr,
+          text: 'يتم العمل على الطلب'.tr,
+          barrierDismissible: false);
+      for (int index = 0; index < monthsController.length; index++) {
+        String insId = widget.studentModel != null
+            ? widget.studentModel!.installmentRecords!.values
+                .toList()[index]
+                .installmentId!
+            : generateId("INSTALLMENT");
+        instalmentMap[insId] = InstallmentModel(
+          installmentCost: costsController[index].text,
+          installmentDate: monthsController[index].text,
+          installmentId: insId,
+          isPay: widget.studentModel != null
+              ? widget.studentModel!.installmentRecords!.values
+                  .toList()[index]
+                  .isPay!
+              : false,
+        );
+      }
+
+      await uploadImages(_contractsTemp, "contracts").then(
+        (value) => _contracts.addAll(value),
+      );
+      final student = StudentModel(
+        stdExam: widget.studentModel?.stdExam,
+        studentID: widget.studentModel == null
+            ? generateId("STD")
+            : widget.studentModel!.studentID!,
+        parentId: guardianController.text,
+        stdLanguage: languageController.text,
+        isAccepted: widget.studentModel == null ? true : false,
+        studentNumber: studentNumberController.text,
+        StudentBirthDay: ageController.text,
+        studentName: studentNameController.text,
+        stdClass: classController.text,
+        contractsImage: _contracts,
+        paymentWay: _payWay,
+        totalPayment: int.parse(totalPaymentController.text),
+        gender: genderController.text,
+        grade: 0.0,
+        bus: busController.text,
+        startDate: startDateController.text,
+        endDate: endDateController.text,
+        eventRecords: eventRecords,
+        installmentRecords: instalmentMap,
+      );
+
+      if (widget.studentModel!.parentId != guardianController.text) {
+
+        Get.find<ParentsViewModel>().deleteStudent(
+            widget.studentModel!.parentId!, widget.studentModel!.studentID!);
+      }
+      if (widget.studentModel != null)
+        addWaitOperation(
+            collectionName: studentCollection,
+            affectedId: widget.studentModel!.studentID!,
+            type: waitingListTypes.edite,
+            oldData: widget.studentModel!.toJson(),
+            newData: student.toJson(),details: editController.text);
+      await controller.addStudent(student);
+
+      clearController();
+      setState(() {});
+      if (widget.studentModel != null) Get.back();
+      Get.back();
+    }
   }
 }

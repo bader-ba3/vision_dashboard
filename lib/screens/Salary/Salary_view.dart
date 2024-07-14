@@ -41,8 +41,7 @@ class _SalaryViewState extends State<SalaryView> {
     final bytes = await data.toByteData(format: ui.ImageByteFormat.png);
     await Get.find<AccountManagementViewModel>()
         .adReceiveSalary(id, paySalary, date, constSalary, dilaySalary, bytes);
-    Get.back();
-    Get.back();
+
   }
 
   String selectedMonth = '';

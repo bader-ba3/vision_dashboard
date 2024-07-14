@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vision_dashboard/router.dart';
 import 'package:vision_dashboard/screens/login/login_screen.dart';
-import 'package:vision_dashboard/test/product_view.dart';
 import 'package:vision_dashboard/utils/Hive_DataBase.dart';
 import 'firebase_options.dart';
 

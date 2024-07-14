@@ -5,8 +5,8 @@ import 'event_record_model.dart';
 class AccountManagementModel {
   late String id, userName, password, type;
   String? serialNFC;
-  int? salary, dayOfWork;
-  bool? enableEdite;
+  int? salary, dayOfWork,discounts;
+  bool? isAccepted;
   late bool isActive;
   Map<String, EmployeeTimeModel> employeeTime = {};
   String? mobileNumber,
@@ -46,7 +46,8 @@ class AccountManagementModel {
       this.salaryReceived,
       this.salaryWithDelay,
       this.fullName,
-      this.enableEdite,
+      this.isAccepted,
+      this.discounts,
       this.available});
 
   AccountManagementModel.fromJson(json) {
@@ -56,10 +57,12 @@ class AccountManagementModel {
     type = json['type'] ?? '';
     fullName = json['fullName'] ?? '';
     serialNFC = json['serialNFC'] ?? '';
-    salary = json['salary'] ?? '';
+    salary = json['salary'] ?? 0;
+    discounts = json['salary'] ?? 0;
     salaryReceived = json['salaryReceived'] ?? [] ?? '';
-    dayOfWork = json['dayOfWork'] ?? '';
+    dayOfWork = json['dayOfWork'] ?? 0;
     isActive = json['isActive'] ?? true;
+    isAccepted = json['isAccepted'] ?? true;
     (json['employeeTime'] ?? {}).forEach((k, v) {
       employeeTime[k] = EmployeeTimeModel.fromJson(v);
     });
@@ -83,12 +86,14 @@ class AccountManagementModel {
       "id": id,
       "userName": userName,
       if (fullName != null) "fullName": fullName,
+      if (discounts != null) "discounts": discounts,
       "password": password,
       if (salaryReceived != null) "salaryReceived": salaryReceived?.toList(),
       "type": type,
       if (serialNFC != null) "serialNFC": serialNFC,
       "isActive": isActive,
       if (salary != null) "salary": salary,
+      if (isAccepted != null) "isAccepted": isAccepted,
       if (dayOfWork != null) "dayOfWork": dayOfWork,
       "employeeTime": Map.fromEntries(employeeTime.entries
           .map((e) => MapEntry(e.key, e.value.toJson()))

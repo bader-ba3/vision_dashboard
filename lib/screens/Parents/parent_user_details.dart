@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:faker/faker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down_with_value.dart';
@@ -40,11 +39,15 @@ class _ParentInputFormState extends State<ParentInputForm> {
   final bodyEventController = TextEditingController();
   final emergencyPhoneController = TextEditingController();
   final workController = TextEditingController();
+  final editController = TextEditingController();
 
   List<EventRecordModel> eventRecords = [];
   EventModel? selectedEvent;
   List<String> _contracts = [];
-List<Uint8List>  _contractsTemp = [];
+  List<Uint8List> _contractsTemp = [];
+
+  final idNumController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +62,7 @@ List<Uint8List>  _contractsTemp = [];
       emergencyPhoneController.text = widget.parent!.emergencyPhone.toString();
       workController.text = widget.parent!.work.toString();
       eventRecords = widget.parent!.eventRecords ?? [];
+      idNumController.text=widget.parent!.parentID??'';
     }
   }
 
@@ -83,6 +87,8 @@ List<Uint8List>  _contractsTemp = [];
     if (!validateNotEmpty(fullNameController.text, "الاسم الكامل".tr))
       return false;
     if (!validateNumericField(numberController.text, "رقم الهاتف".tr))
+      return false;
+    if (!validateNumericField(idNumController.text, "رقم الهوية".tr))
       return false;
     if (!validateNotEmpty(addressController.text, "العنوان".tr)) return false;
     if (!validateNotEmpty(nationalityController.text, "الجنسية".tr))
@@ -124,6 +130,8 @@ List<Uint8List>  _contractsTemp = [];
                   CustomTextField(
                       controller: fullNameController, title: 'الاسم الكامل'.tr),
                   CustomTextField(
+                      controller: idNumController, title: 'رقم الهوية'.tr),
+                  CustomTextField(
                       controller: numberController,
                       title: 'رقم الهاتف'.tr,
                       keyboardType: TextInputType.number),
@@ -154,7 +162,7 @@ List<Uint8List>  _contractsTemp = [];
                       ).then((date) {
                         if (date != null) {
                           startDateController.text =
-                          date.toString().split(" ")[0];
+                              date.toString().split(" ")[0];
                         }
                       });
                     },
@@ -166,10 +174,10 @@ List<Uint8List>  _contractsTemp = [];
                       icon: Icon(
                         Icons.date_range_outlined,
                         color: primaryColor,
-                      ) ,
+                      ),
                     ),
                   ),
-                 /* SizedBox(
+                  /* SizedBox(
                       width: Get.width / 4,
                       child: EasyInfiniteDateTimeLine(
                           selectionMode: const SelectionMode.autoCenter(),
@@ -283,7 +291,7 @@ date=date0;
                                 if (_ != null) {
                                   _.files.forEach(
                                     (element) async {
-                                      _contractsTemp.add( element.bytes!);
+                                      _contractsTemp.add(element.bytes!);
                                     },
                                   );
                                   setState(() {});
@@ -353,6 +361,9 @@ date=date0;
                       ),
                     ],
                   ),
+                  if(widget.parent!=null)
+                  CustomTextField(
+                      controller: editController, title: 'سبب التعديل'.tr),
                   AppButton(
                     text: 'حفظ'.tr,
                     onPressed: () async {
@@ -367,12 +378,14 @@ date=date0;
                         await uploadImages(_contractsTemp, "contracts").then(
                           (value) => _contracts.addAll(value),
                         );
+
                         ParentModel parent = ParentModel(
                           age: ageController.text,
                           nationality: nationalityController.text,
                           contract: _contracts,
-                          parentID:
-                              faker.randomGenerator.integer(1000000).toString(),
+                          isAccepted: widget.parent == null
+                              ?true:false,
+                          parentID:idNumController.text,
                           id: widget.parent == null
                               ? generateId("PARENT")
                               : widget.parent!.id.toString(),
@@ -384,14 +397,21 @@ date=date0;
                           phoneNumber: numberController.text,
                           eventRecords: eventRecords,
                           startDate: startDateController.text,
+                          children:  widget.parent == null
+                              ?null:widget.parent!.children
                         );
-
-                        await Future.delayed(Durations.extralong4);
+                        if (widget.parent != null) {
+                       await   addWaitOperation(
+                              collectionName: parentsCollection,
+                              affectedId: widget.parent!.id.toString(),
+                              type: waitingListTypes.edite,
+                              newData: parent.toJson(),
+                              oldData: widget.parent!.toJson(),details: editController.text);
+                        }
                         await Get.find<ParentsViewModel>().addParent(parent);
-
                         clearController();
                         print('Parent Model: $parent');
-                        if (widget.parent != null) Get.back();
+                        Get.back();
                         Get.back();
                       }
                     },
@@ -427,7 +447,6 @@ date=date0;
                               .toList(),
                           label: "نوع الحدث".tr,
                           onChange: (selectedWay) {
-
                             if (selectedWay != null) {
                               setState(() {});
                               selectedEvent =
@@ -531,5 +550,6 @@ date=date0;
     emergencyPhoneController.clear();
     workController.clear();
     eventRecords.clear();
+    editController.clear();
   }
 }

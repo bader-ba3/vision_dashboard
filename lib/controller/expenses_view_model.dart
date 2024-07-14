@@ -35,6 +35,8 @@ class ExpensesViewModel extends GetxController {
     "الوصف": PlutoColumnType.text(),
     "الفواتير المدخلة": PlutoColumnType.number(),
     "تاريخ": PlutoColumnType.date(),
+    "موافقة المدير":PlutoColumnType.text(),
+
   };
   GlobalKey key=GlobalKey();
   ExpensesViewModel() {
@@ -70,6 +72,7 @@ class ExpensesViewModel extends GetxController {
                 data.keys.elementAt(5):
                     PlutoCell(value: i.data().images?.length ?? 0),
                 data.keys.elementAt(6): PlutoCell(value: i.data().date),
+                data.keys.elementAt(7): PlutoCell(value: i.data().isAccepted),
               },
             ),
           );

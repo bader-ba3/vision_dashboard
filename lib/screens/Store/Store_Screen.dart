@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
@@ -57,7 +57,7 @@ class _StoreScreenState extends State<StoreScreen> {
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
-                          child: GetBuilder<DeleteManagementViewModel>(
+                          child: GetBuilder<WaitManagementViewModel>(
                             builder: (_) {
                               return DataTable(
                                   columnSpacing: 0,
@@ -91,7 +91,8 @@ class _StoreScreenState extends State<StoreScreen> {
                                                 onPressed: () {
                                                   checkIfPendingDelete(affectedId: storeModel.id!)?
                                                       _.returnDeleteOperation(affectedId:  storeModel.id!):
-                                                      addDeleteOperation(collectionName: storeCollection, affectedId:  storeModel.id!);
+                                                      addWaitOperation(                                                          type: waitingListTypes.delete,
+                                                          collectionName: storeCollection, affectedId:  storeModel.id!);
                                                 },
                                                 icon: Row(
                                                   children: [

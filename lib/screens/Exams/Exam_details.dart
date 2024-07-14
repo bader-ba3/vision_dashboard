@@ -27,7 +27,6 @@ class ExamInputForm extends StatefulWidget {
 }
 
 class _ExamInputFormState extends State<ExamInputForm> {
-  List<String> _selectedSection = [];
   Map<String, String> _selectedStudent = {};
 
   String _selectedClass = "";
@@ -50,23 +49,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
     }
   }
 
-  Map<String, List<StudentModel>> _allSection = {};
+
   StudentViewModel studentViewModel = Get.find<StudentViewModel>();
 
-  getSectionStudent() {
-    for (var a in sectionsList) {
-      _allSection[a] = studentViewModel.studentMap.values
-          .where(
-            (element) =>
-                element.section == a && element.stdClass == _selectedClass,
-          )
-          .toList();
 
-      if (_allSection[a]!.isEmpty) {
-        _allSection.remove(a);
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -183,21 +169,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     label: 'اختر الصف'.tr,
                     onChange: (value) {
                       if (value != null) _selectedClass = value;
-                      getSectionStudent();
                       setState(() {});
                     },
                   ),
-                  CustomDropDown(
-                    value: '',
-                    listValue: _allSection.keys.toList(),
-                    enable: widget.isEdite,
-                    label: 'اختر الشعب للأضافة'.tr,
-                    onChange: (value) {
-                      _selectedSection.addIf(
-                          !_selectedSection.contains(value), value!);
-                      setState(() {});
-                    },
-                  ),
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -248,7 +223,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 ),
                               ),
                             ...List.generate(
-                              _questionImageFileTemp!.length,
+                              _questionImageFileTemp.length,
                               (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -342,7 +317,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 ),
                               ),
                             ...List.generate(
-                              _answerImageFileTemp!.length,
+                              _answerImageFileTemp.length,
                               (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -446,60 +421,31 @@ class _ExamInputFormState extends State<ExamInputForm> {
               height: defaultPadding,
             ),
             if (widget.isEdite)
-              ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(
-                        height: defaultPadding,
-                      ),
-                  itemCount: _selectedSection.length,
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (context, parentIndex) {
-                    return Container(
-                      padding: EdgeInsets.all(16.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _selectedSection[parentIndex],
-                            style: Styles.headLineStyle1,
-                          ),
-                          SizedBox(
-                            height: defaultPadding,
-                          ),
-                          SizedBox(
-                            width: Get.width,
-                            child: DataTable(
-                              clipBehavior: Clip.hardEdge,
-                              columns: [
-                                DataColumn(label: Text("اسم الطالب")),
-                                DataColumn(label: Text("رقم الطالب")),
-                                DataColumn(label: Text("تاريخ البداية")),
-                                DataColumn(label: Text("ولي الأمر")),
-                                DataColumn(label: Text("موجود")),
-                              ],
-                              rows: _allSection[_selectedSection[parentIndex]]!
-                                  .map(
-                                (e) {
-                                  if (_selectedStudent.keys
-                                      .where(
-                                        (element) => element == e.studentID,
-                                      )
-                                      .isNotEmpty) e.available = true;
+              SizedBox(
+                width: Get.width,
+                child: DataTable(
+                  clipBehavior: Clip.hardEdge,
+                  columns: [
+                    DataColumn(label: Text("اسم الطالب")),
+                    DataColumn(label: Text("رقم الطالب")),
+                    DataColumn(label: Text("تاريخ البداية")),
+                    DataColumn(label: Text("ولي الأمر")),
+                    DataColumn(label: Text("موجود")),
+                  ],
+                  rows:
+                  studentViewModel.studentMap.values.where((element) => element.stdClass==_selectedClass,)   .map(
+                        (e) {
+                      if (_selectedStudent.keys
+                          .where(
+                            (element) => element == e.studentID,
+                      )
+                          .isNotEmpty) e.available = true;
 
-                                  return studentDataRow(e);
-                                },
-                              ).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+                      return studentDataRow(e);
+                    },
+                  ).toList(),
+                ),
+              ),
             SizedBox(
               height: defaultPadding,
             ),
@@ -623,9 +569,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
     examPassMarkController.clear();
     examMaxMarkController.clear();
     examId = generateId("EXAM");
-    _selectedSection = [];
     _selectedStudent = {};
-    _allSection = {};
     _selectedClass = '';
     setState(() {});
   }

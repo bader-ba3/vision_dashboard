@@ -9,7 +9,7 @@ import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/screens/expenses/expenses_input_form.dart';
 
 import '../../constants.dart';
-import '../../controller/delete_management_view_model.dart';
+import '../../controller/Wait_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../utils/const.dart';
@@ -100,14 +100,15 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
             );
           }),
         ),
-        floatingActionButton: enableUpdate && currentId != ''
+        floatingActionButton: enableUpdate && currentId  != ''&&controller
+            .allExpenses[currentId]!.isAccepted!&&!getIfDelete()
             ? SizedBox(
           width: Get.width,
           child: Wrap(
             // mainAxisAlignment: MainAxisAlignment.center,
             alignment: WrapAlignment.center,
                   children: [
-                    GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                    GetBuilder<WaitManagementViewModel>(builder: (_) {
                       return FloatingActionButton(
                         backgroundColor: getIfDelete()
                             ? Colors.greenAccent.withOpacity(0.5)
@@ -121,14 +122,18 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                       .toString());
                             else if (controller.allExpenses[currentId]!.busId !=
                                 null) {
-                              addDeleteOperation(
+                              addWaitOperation(
+                                  type: waitingListTypes.delete,
+
                                   collectionName: Const.expensesCollection,
                                   affectedId:
                                       controller.allExpenses[currentId]!.id!,
                                   relatedId:
                                       controller.allExpenses[currentId]!.busId!);
                             } else {
-                              addDeleteOperation(
+                              addWaitOperation(
+                                  type: waitingListTypes.delete,
+
                                   collectionName: Const.expensesCollection,
                                   affectedId:
                                       controller.allExpenses[currentId]!.id!);

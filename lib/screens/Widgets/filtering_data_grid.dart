@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 
 class FilteringDataGrid<T> extends StatefulWidget {
   final void Function(int index, String id, int row,void Function(dynamic) init) onCellTap;

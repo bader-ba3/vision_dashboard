@@ -7,14 +7,13 @@ import 'package:vision_dashboard/screens/Exams/Add_Marks.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 
 import '../../constants.dart';
-import '../../controller/delete_management_view_model.dart';
+import '../../controller/Wait_management_view_model.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Exam_model.dart';
 
-import '../Widgets/Custom_Drop_down.dart';
+
 import '../Widgets/Custom_Pluto_Grid.dart';
-import '../Widgets/Custom_Text_Filed.dart';
-import '../Widgets/Data_Row.dart';
+
 import '../Widgets/header.dart';
 import 'Exam_details.dart';
 
@@ -26,7 +25,6 @@ class ExamScreen extends StatefulWidget {
 }
 
 class _ExamScreenState extends State<ExamScreen> {
-  final ScrollController _scrollController = ScrollController();
   List data = [
     "المقرر",
     "الأستاذ",
@@ -110,7 +108,7 @@ class _ExamScreenState extends State<ExamScreen> {
                         // mainAxisAlignment: MainAxisAlignment.center,
                   alignment: WrapAlignment.center,
                         children: [
-                          GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                          GetBuilder<WaitManagementViewModel>(builder: (_) {
                             return FloatingActionButton(
                               backgroundColor: primaryColor.withOpacity(0.5),
                               onPressed: () {

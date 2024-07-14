@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:vision_dashboard/constants.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
 
 import '../../../utils/To_AR.dart';
@@ -25,22 +25,22 @@ class ParentsViewModel extends GetxController {
 
   Map<String, PlutoColumnType> data = {
     "الرقم التسلسلي": PlutoColumnType.text(),
-    "الاسم الكامل".tr: PlutoColumnType.text(),
-    "العنوان".tr: PlutoColumnType.text(),
-    "الجنسية".tr: PlutoColumnType.text(),
-    "العمر".tr: PlutoColumnType.text(),
-    "العمل".tr: PlutoColumnType.text(),
-    "تاريخ البداية".tr: PlutoColumnType.text(),
-    "رقم الام".tr: PlutoColumnType.text(),
-    "رقم الطوارئ".tr: PlutoColumnType.text(),
-    "سجل الأحداث".tr: PlutoColumnType.text(),
+    "الاسم الكامل": PlutoColumnType.text(),
+    "العنوان": PlutoColumnType.text(),
+    "الجنسية": PlutoColumnType.text(),
+    "العمر": PlutoColumnType.text(),
+    "العمل": PlutoColumnType.text(),
+    "تاريخ البداية": PlutoColumnType.text(),
+    "رقم الام": PlutoColumnType.text(),
+    "رقم الطوارئ": PlutoColumnType.text(),
+    "سجل الأحداث": PlutoColumnType.text(),
+    "موافقة المدير": PlutoColumnType.text(),
 
   };
   GlobalKey key=GlobalKey();
 
   ParentsViewModel(){
     getColumns();
-
     getAllParent();
   }
 
@@ -74,6 +74,7 @@ class ParentsViewModel extends GetxController {
               data.keys.elementAt(7): PlutoCell(value:  ParentModel.fromJson(element.data()).motherPhone),
               data.keys.elementAt(8): PlutoCell(value:  ParentModel.fromJson(element.data()).emergencyPhone),
               data.keys.elementAt(9): PlutoCell(value:  ParentModel.fromJson(element.data()).eventRecords?.length??"0"),
+              data.keys.elementAt(10): PlutoCell(value:  ParentModel.fromJson(element.data()).isAccepted),
             },
           ),
         );
@@ -96,8 +97,10 @@ class ParentsViewModel extends GetxController {
   }
 
   deleteParent(String parentId,List studentList)async {
-   await addDeleteOperation(
-        collectionName: parentsCollection,
+   await addWaitOperation(
+       type: waitingListTypes.delete,
+
+       collectionName: parentsCollection,
         affectedId: parentId,
    relatedList: studentList.map((e) => e.toString(),).toList());
     update();
@@ -114,6 +117,13 @@ class ParentsViewModel extends GetxController {
       listener.cancel();
       update();
     });
+
+  }
+
+  void deleteStudent(String parentId,String studentID) {
+
+    _parentMap[parentId]!.children!.removeWhere((element) => element==studentID,);
+    parentCollectionRef.doc(parentId).set({"children": _parentMap[parentId]!.children!},SetOptions(merge: true));
 
   }
 }

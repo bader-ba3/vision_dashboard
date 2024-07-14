@@ -13,10 +13,9 @@ import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dart';
 
 import '../../constants.dart';
-import '../../controller/delete_management_view_model.dart';
-import '../../utils/Hive_DataBase.dart';
+import '../../controller/Wait_management_view_model.dart';
+
 import '../Student/student_user_details.dart';
-import '../main/main_screen.dart';
 
 class ClassesView extends StatefulWidget {
   const ClassesView({super.key});
@@ -59,7 +58,7 @@ class _ClassesViewState extends State<ClassesView> {
                   ),
                   Column(
                     children: [
-                      GetBuilder<DeleteManagementViewModel>(builder: (_) {
+                      GetBuilder<WaitManagementViewModel>(builder: (_) {
                         return ListView.builder(
                           itemCount: classController.classMap.length,
                           physics: ClampingScrollPhysics(),
@@ -148,7 +147,8 @@ class _ClassesViewState extends State<ClassesView> {
                                             .toString();
                                         if (!checkIfPendingDelete(
                                             affectedId: classId))
-                                          addDeleteOperation(
+                                          addWaitOperation(
+                                              type: waitingListTypes.delete,
                                               collectionName: classCollection,
                                               affectedId: classId);
                                         else
@@ -167,28 +167,30 @@ class _ClassesViewState extends State<ClassesView> {
                           },
                         );
                       }),
-                      InkWell(
-                        onTap: () {
-                          showClassInputDialog(
-                              context,
-                              ClassModel(
-                                  classSection: sectionsList,
-                                  className: '',
-                                  classId: generateId("Class")),
-                              classController);
-                        },
-                        child: AnimatedContainer(
-                            duration: Durations.long1,
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                color: Colors.teal,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Center(
-                                child: Text(
-                              "اضافة".tr,
-                              style: Styles.headLineStyle2
-                                  .copyWith(color: Colors.white),
-                            ))),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            showClassInputDialog(
+                                context,
+                                ClassModel(
+                                    className: '',
+                                    classId: generateId("Class")),
+                                classController);
+                          },
+                          child: AnimatedContainer(
+                              duration: Durations.long1,
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                  color: Colors.teal,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Center(
+                                  child: Text(
+                                "اضافة".tr,
+                                style: Styles.headLineStyle2
+                                    .copyWith(color: Colors.white),
+                              ))),
+                        ),
                       ),
                     ],
                   ),
@@ -327,8 +329,9 @@ class _ClassesViewState extends State<ClassesView> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    showStudentInputDialog(context, listStudent[index]);
-
+                                                    showStudentInputDialog(
+                                                        context,
+                                                        listStudent[index]);
                                                   },
                                                   child: Container(
                                                     padding:
@@ -409,8 +412,9 @@ class _ClassesViewState extends State<ClassesView> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    showStudentInputDialog(context, listStudent[index]);
-
+                                                    showStudentInputDialog(
+                                                        context,
+                                                        listStudent[index]);
                                                   },
                                                   child: Container(
                                                     padding:
@@ -448,7 +452,6 @@ class _ClassesViewState extends State<ClassesView> {
     );
   }
 
-
   void showStudentInputDialog(BuildContext context, dynamic student) {
     showDialog(
       context: context,
@@ -477,7 +480,6 @@ class _ClassesViewState extends State<ClassesView> {
       BuildContext context, ClassModel classModel, ClassViewModel controller) {
     TextEditingController classNameController = TextEditingController()
       ..text = classModel.className!;
-    List<String> currentList = classModel.classSection!;
 
     showDialog(
       context: context,
@@ -494,74 +496,25 @@ class _ClassesViewState extends State<ClassesView> {
                   borderRadius: BorderRadius.circular(25.0),
                 ),
                 width: 300,
-                height: max(350,currentList.length * 70),
+                height: 150,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
                       CustomTextField(
                         controller: classNameController,
                         title: "اسم الصف",
                       ),
-                      Expanded(
-                        child: ListView.separated(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      currentList.removeAt(index);
-                                    });
-                                  },
-                                  icon: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.delete_forever,
-                                        color: Colors.red.withOpacity(0.7),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(currentList[index]),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 5,
-                          ),
-                          itemCount: currentList.length,
-                        ),
-                      ),
-                      if (currentList.length < 6)
-                        IconButton(
-                            onPressed: () {
-                              currentList.add(sectionsList.firstWhere(
-                                (element) => !currentList.contains(element),
-                              ));
-                              setState(() {});
-                            },
-                            icon: Row(
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: Colors.teal,
-                                ),
-                                Text("اضافة")
-                              ],
-                            )),
+                      Spacer(),
                       AppButton(
                         onPressed: () {
-                          controller.addClass(ClassModel(
-                              className: classNameController.text,
-                              classId: classModel.classId,
-                              classSection: currentList));
-                          Get.back();
+                          if(classNameController.text.isNotEmpty) {
+                            controller.addClass(ClassModel(
+                                className: classNameController.text,
+                                classId: classModel.classId,
+                                ));
+                            Get.back();
+                          }
                         },
                         text: "حفظ".tr,
                       )

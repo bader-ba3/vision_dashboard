@@ -4,7 +4,7 @@ import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../../../constants.dart';
 import '../../../controller/account_management_view_model.dart';
-import '../../../controller/delete_management_view_model.dart';
+import '../../../controller/Wait_management_view_model.dart';
 import '../../../models/account_management_model.dart';
 import '../../../models/Salary_Model.dart';
 import '../Widgets/Data_Row.dart';
@@ -45,7 +45,7 @@ final  ScrollController scrollController;
           child: SingleChildScrollView(
             controller: scrollController,
             scrollDirection: Axis.horizontal,
-            child: GetBuilder<DeleteManagementViewModel>(builder: (_) {
+            child: GetBuilder<WaitManagementViewModel>(builder: (_) {
               return GetBuilder<AccountManagementViewModel>(
                   builder: (controller) {
                     return GetBuilder<SalaryViewModel>(builder: (salaryController) {

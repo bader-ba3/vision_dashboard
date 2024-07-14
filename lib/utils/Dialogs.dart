@@ -1,15 +1,24 @@
 
-import 'dart:io';
+
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/constants.dart';
 
 import '../screens/Widgets/AppButton.dart';
 
 
+
+
+
+getReedOnlyError(BuildContext context){
+  QuickAlert.show(context: context,type: QuickAlertType.error,title: "هذا العنصر للعرض فقط".tr
+      ,confirmBtnText: "تم".tr);
+}
 Future<List<String>> uploadImages(List<Uint8List> ImagesTempData,String folderName) async{
 
   List<String> imageLinkList = [];

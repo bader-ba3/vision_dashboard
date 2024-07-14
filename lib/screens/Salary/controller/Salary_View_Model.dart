@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/models/Salary_Model.dart';
 
-import '../../../controller/delete_management_view_model.dart';
+import '../../../controller/Wait_management_view_model.dart';
 
 class SalaryViewModel extends GetxController{
   final salaryCollectionRef =
@@ -43,7 +43,9 @@ class SalaryViewModel extends GetxController{
   }
 
   deleteSalary(String salaryId)async {
-    await addDeleteOperation(
+    await addWaitOperation(
+        type: waitingListTypes.delete,
+
         collectionName: salaryCollection,
         affectedId: salaryId);
     update();

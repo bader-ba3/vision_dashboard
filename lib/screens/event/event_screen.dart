@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/event_view_model.dart';
 
 import '../../constants.dart';
-import '../../controller/delete_management_view_model.dart';
+import '../../controller/Wait_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../utils/const.dart';
@@ -53,7 +53,7 @@ class _EventScreenState extends State<EventScreen> {
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       scrollDirection: Axis.horizontal,
-                      child: GetBuilder<DeleteManagementViewModel>(
+                      child: GetBuilder<WaitManagementViewModel>(
                           builder: (_) {
                         return DataTable(
                             columnSpacing: 0,
@@ -116,7 +116,9 @@ class _EventScreenState extends State<EventScreen> {
                                                           affectedId:
                                                               event.id);
                                                     else
-                                                      addDeleteOperation(
+                                                      addWaitOperation(
+                                                          type: waitingListTypes.delete,
+
                                                           collectionName: Const
                                                               .eventCollection,
                                                           affectedId:

@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 
 import 'package:vision_dashboard/models/Salary_Model.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
@@ -18,6 +20,7 @@ import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../constants.dart';
 import '../models/account_management_model.dart';
 import '../utils/Hive_DataBase.dart';
+import '../utils/To_AR.dart';
 import 'nfc/conditional_import.dart';
 
 enum UserManagementStatus {
@@ -42,8 +45,39 @@ class AccountManagementViewModel extends GetxController {
       );
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
+
+  List<PlutoColumn> columns = [];
+  List<PlutoRow> rows = [];
+
+  Map<String, PlutoColumnType> data = {
+    "الرقم التسلسلي": PlutoColumnType.text(),
+    "User Name": PlutoColumnType.text(),
+    "الاسم الكامل": PlutoColumnType.text(),
+    "كامة السر": PlutoColumnType.text(),
+    "الدور": PlutoColumnType.text(),
+    "الحالة": PlutoColumnType.text(),
+    "رقم الموبايل": PlutoColumnType.text(),
+    "العنوان": PlutoColumnType.text(),
+    "الجنسية": PlutoColumnType.text(),
+    "الجنس": PlutoColumnType.text(),
+    "العمر": PlutoColumnType.text(),
+    "الوظيفة": PlutoColumnType.text(),
+    "العقد": PlutoColumnType.text(),
+    "الصفوف": PlutoColumnType.text(),
+    "تاريخ البداية": PlutoColumnType.text(),
+    "سجل الاحداث": PlutoColumnType.text(),
+    "موافقة المدير":PlutoColumnType.text(),
+  };
+
+
+  GlobalKey key=GlobalKey();
   AccountManagementViewModel() {
+    getColumns();
     getAllEmployee();
+  }
+  getColumns(){
+    columns.clear();
+    columns.addAll(toAR(data));
   }
 
   late StreamSubscription<QuerySnapshot<AccountManagementModel>> listener;
@@ -51,17 +85,45 @@ class AccountManagementViewModel extends GetxController {
   getAllEmployee() {
     listener = accountManagementFireStore.snapshots().listen(
       (event) {
+        key=GlobalKey();
+        rows.clear();
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
             event.docs
                 .toList()
-                .map((i) => MapEntry(i.id.toString(), i.data()))).obs;
+                .map((i) {
+
+              rows.add(
+                PlutoRow(
+                  cells: {
+                    data.keys.elementAt(0): PlutoCell(value: i.id),
+                    data.keys.elementAt(1): PlutoCell(value: i.data().userName),
+                    data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
+                    data.keys.elementAt(3): PlutoCell(value: i.data().password),
+                    data.keys.elementAt(4): PlutoCell(value: i.data().type),
+                    data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
+                    data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
+                    data.keys.elementAt(7): PlutoCell(value: i.data().address),
+                    data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
+                    data.keys.elementAt(9): PlutoCell(value: i.data().gender),
+                    data.keys.elementAt(10): PlutoCell(value: i.data().age),
+                    data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
+                    data.keys.elementAt(12): PlutoCell(value: i.data().contract),
+                    data.keys.elementAt(13): PlutoCell(value: i.data().bus),
+                    data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
+                    data.keys.elementAt(15): PlutoCell(value: i.data().eventRecords?.length.toString()),
+                    data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
+                  },
+                ),
+              );
+                  return MapEntry(i.id.toString(), i.data());
+                })).obs;
         update();
       },
     );
   }
 
   addAccount(AccountManagementModel accountModel) {
-    accountManagementFireStore.doc(accountModel.id).set(accountModel);
+    accountManagementFireStore.doc(accountModel.id).set(accountModel,SetOptions(merge: true));
   }
 
   updateAccount(AccountManagementModel accountModel) {
@@ -72,6 +134,9 @@ class AccountManagementViewModel extends GetxController {
 
   deleteAccount(AccountManagementModel accountModel) {
     accountManagementFireStore.doc(accountModel.id).delete();
+  }
+  deleteUnAcceptedAccount(String accountModelId) {
+    accountManagementFireStore.doc(accountModelId).delete();
   }
 
   toggleStatusAccount(AccountManagementModel accountModel) {
@@ -93,7 +158,8 @@ class AccountManagementViewModel extends GetxController {
   adReceiveSalary(String accountId, String paySalary, String salaryDate,
       String constSalary, String dilaySalary, bytes) async {
     String fileName = 'signatures/$accountId/$salaryDate.png';
-
+    print(dilaySalary);
+    print(paySalary);
     uploadImage(bytes, fileName).then(
       (value) async {
         if (value != Error) {
@@ -102,9 +168,12 @@ class AccountManagementViewModel extends GetxController {
               .collection(accountManagementCollection)
               .doc(accountId)
               .set({
+            "discounts":
+                (double.parse(paySalary) - double.parse(dilaySalary)).toInt(),
             "salaryReceived": FieldValue.arrayUnion([salaryId])
           }, SetOptions(merge: true));
-          Get.find<SalaryViewModel>().addSalary(SalaryModel(
+
+          await Get.find<SalaryViewModel>().addSalary(SalaryModel(
             salaryId: salaryId,
             constSalary: constSalary,
             employeeId: accountId,
@@ -112,6 +181,15 @@ class AccountManagementViewModel extends GetxController {
             paySalary: paySalary,
             signImage: fileName,
           ));
+
+          if (double.parse(paySalary).toInt() != double.parse(dilaySalary).toInt())
+            await addWaitOperation(
+                collectionName: accountManagementCollection,
+                affectedId: accountId,
+                type: waitingListTypes.waitDiscounts,
+                details:"الراتب الممنوح".tr+" ($paySalary) "+"الراتب المستحق".tr+" ($dilaySalary) ");
+          Get.back();
+          Get.back();
         }
       },
     );
@@ -134,15 +212,8 @@ class AccountManagementViewModel extends GetxController {
   String? password;
 
   String? serialNFC;
-  AccountManagementModel? myUserModel = AccountManagementModel(
-      id: "id",
-      userName: "userName",
-      password: "password",
-      type: 'مالك',
-      serialNFC: "serialNFC",
-      isActive: true,
-      salary: 2500,
-      dayOfWork: 20);
+  AccountManagementModel? myUserModel;
+
   UserManagementStatus? userStatus;
 
   void checkUserStatus() async {
@@ -159,12 +230,12 @@ class AccountManagementViewModel extends GetxController {
           Get.offNamed(AppRoutes.main);
         } else if (value.docs.isNotEmpty) {
           print("2");
+          print(value.docs.length);
           myUserModel =
               AccountManagementModel.fromJson(value.docs.first.data());
           HiveDataBase.setCurrentScreen("0");
 
-
-  /*        HiveDataBase.se
+          /*        HiveDataBase.se
           HiveDataBase.setUserData(({
             myUserModel!.userName,
             myUserModel!.type,
@@ -593,6 +664,11 @@ class AccountManagementViewModel extends GetxController {
     nfcController.text = cardId;
     print("------${cardId}");
   }
+
+   setAccepted(String affectedId) async{
+     FirebaseFirestore.instance
+         .collection(accountManagementCollection).doc(affectedId).set({"isAccepted":true} ,SetOptions(merge: true));
+   }
 }
 
 AccountManagementModel getMyUserId() {

@@ -6,6 +6,7 @@ import 'package:vision_dashboard/screens/Buses/Buses_View.dart';
 import 'package:vision_dashboard/screens/Exams/Exam_View.dart';
 import 'package:vision_dashboard/screens/Parents/Parents_View.dart';
 import 'package:vision_dashboard/screens/Salary/Salary_view.dart';
+import 'package:vision_dashboard/screens/Settings/Setting_View.dart';
 import 'package:vision_dashboard/screens/Store/Store_View.dart';
 import 'package:vision_dashboard/screens/Student/Student_view_Screen.dart';
 import 'package:vision_dashboard/screens/Study%20Fees/Study_Fees_View.dart';
@@ -64,9 +65,14 @@ class _MainScreenState extends State<MainScreen>
       widget: ExamView(),
     ),
     (
-      name: "الرواتب",
-      img: "assets/dashIcon/salary.png",
-      widget: SalaryView(),
+      name: "الموظفين",
+      img: "assets/dashIcon/employee.png",
+      widget: EmployeeView(),
+    ),
+    (
+    name: "الرواتب",
+    img: "assets/dashIcon/salary.png",
+    widget: SalaryView(),
     ),
     (
       name: "الحافلات",
@@ -96,7 +102,7 @@ class _MainScreenState extends State<MainScreen>
     (
       name: "ادارة المنصة",
       img: "assets/dashIcon/setting.png",
-      widget: EmployeeView(),
+      widget: SettingsView(),
     ),
     (
       name: "تسجيل الخروج",

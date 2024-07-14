@@ -1,15 +1,15 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/expenses_model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/utils/Dialogs.dart';
+import 'package:vision_dashboard/utils/const.dart';
 
 import '../../constants.dart';
 import '../../controller/account_management_view_model.dart';
@@ -232,6 +232,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                     BusViewModel busController = Get.find<BusViewModel>();
                     ExpensesModel model = ExpensesModel(
                       date: dateController.text,
+                      isAccepted: widget.expensesModel == null ? true : false,
                       id: expId,
                       busId: widget.busId,
                       title: titleController.text,
@@ -244,6 +245,13 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                     );
 
                     await controller.addExpenses(model);
+                    if (widget.expensesModel != null)
+                      addWaitOperation(
+                          collectionName: Const.expensesCollection,
+                          oldData: widget.expensesModel!.toJson(),
+                          newData:model.toJson() ,
+                          affectedId: expId,
+                          type: waitingListTypes.edite);
                     if (widget.busId != null)
                       await busController.addExpenses(widget.busId!, expId);
                     clearController();

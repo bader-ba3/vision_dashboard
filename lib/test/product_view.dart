@@ -1,20 +1,11 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:vision_dashboard/constants.dart';
-import 'package:vision_dashboard/controller/account_management_view_model.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
-import 'package:vision_dashboard/models/expenses_model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
-
-import '../screens/Widgets/Custom_Pluto_Grid.dart';
-import '../screens/Widgets/filtering_data_grid.dart';
 import '../utils/const.dart';
 
 class AllExp extends StatefulWidget {
@@ -160,7 +151,7 @@ class _AllExpState extends State<AllExp> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GetBuilder<DeleteManagementViewModel>(
+                      GetBuilder<WaitManagementViewModel>(
                         builder: (_) {
                           return FloatingActionButton(
                             backgroundColor:getIfDelete()? Colors.greenAccent.withOpacity(0.5):Colors.red.withOpacity(0.5),
@@ -171,13 +162,17 @@ class _AllExpState extends State<AllExp> {
                                   _.returnDeleteOperation(
                                       affectedId:controller.allExpenses[currentId]!.id.toString());
                                 else if (controller.allExpenses[currentId]!.busId != null) {
-                                  addDeleteOperation(
+                                  addWaitOperation(
+                                      type: waitingListTypes.delete,
+
                                       collectionName:
                                       Const.expensesCollection,
                                       affectedId: controller.allExpenses[currentId]!.id!,
                                       relatedId: controller.allExpenses[currentId]!.busId!);
                                 } else {
-                                  addDeleteOperation(
+                                  addWaitOperation(
+                                      type: waitingListTypes.delete,
+
                                       collectionName:
                                       Const.expensesCollection,
                                       affectedId: controller.allExpenses[currentId]!.id!);

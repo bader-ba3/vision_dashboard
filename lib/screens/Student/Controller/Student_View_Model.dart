@@ -9,7 +9,7 @@ import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 
 import '../../../constants.dart';
-import '../../../controller/delete_management_view_model.dart';
+import '../../../controller/Wait_management_view_model.dart';
 import '../../../utils/To_AR.dart';
 import '../../Buses/Controller/Bus_View_Model.dart';
 import '../../Parents/Controller/Parents_View_Model.dart';
@@ -27,14 +27,12 @@ class StudentViewModel extends GetxController {
     "الجنس": PlutoColumnType.text(),
     "التولد": PlutoColumnType.text(),
     "الصف": PlutoColumnType.text(),
-    "الشعبة": PlutoColumnType.text(),
     "تاريخ البداية": PlutoColumnType.text(),
     "الحافلة": PlutoColumnType.text(),
     "ولي الأمر": PlutoColumnType.text(),
-
     "المعدل": PlutoColumnType.text(),
-
     "سجل الأحداث": PlutoColumnType.text(),
+    "موافقة المدير": PlutoColumnType.text(),
 
   };
   GlobalKey key=GlobalKey();
@@ -88,13 +86,13 @@ class StudentViewModel extends GetxController {
               data.keys.elementAt(3): PlutoCell(value:  value.gender),
               data.keys.elementAt(4): PlutoCell(value: value.StudentBirthDay),
               data.keys.elementAt(5): PlutoCell(value:  value.stdClass),
-              data.keys.elementAt(6):
-              PlutoCell(value: value.section),
-              data.keys.elementAt(7): PlutoCell(value:  value.startDate),
-              data.keys.elementAt(8): PlutoCell(value:  Get.find<BusViewModel>().busesMap[value.bus]?.name?? value.bus),
-              data.keys.elementAt(9): PlutoCell(value: Get.find<ParentsViewModel>().parentMap[value.parentId]!.fullName ),
-              data.keys.elementAt(10): PlutoCell(value:  value.grade),
-              data.keys.elementAt(11): PlutoCell(value:  value.eventRecords?.length??"0"),
+
+              data.keys.elementAt(6): PlutoCell(value:  value.startDate),
+              data.keys.elementAt(7): PlutoCell(value:  Get.find<BusViewModel>().busesMap[value.bus]?.name?? value.bus),
+              data.keys.elementAt(8): PlutoCell(value: Get.find<ParentsViewModel>().parentMap[value.parentId]!.fullName ),
+              data.keys.elementAt(9): PlutoCell(value:  value.grade),
+              data.keys.elementAt(10): PlutoCell(value:  value.eventRecords?.length??"0"),
+              data.keys.elementAt(11): PlutoCell(value:  value.isAccepted),
             },
           ),
         );
@@ -121,6 +119,8 @@ class StudentViewModel extends GetxController {
     await studentCollectionRef
         .doc(studentModel.studentID)
         .set(studentModel.toJson());
+
+
     if (studentModel.parentId != null)
       await FirebaseFirestore.instance
           .collection(parentsCollection)
@@ -163,12 +163,14 @@ class StudentViewModel extends GetxController {
         );
       },
     );
-    update();
+
     return total;
   }
 
   deleteStudent(String studentId) async {
-    await addDeleteOperation(
+    await addWaitOperation(
+        type: waitingListTypes.delete,
+
         collectionName: studentCollection, affectedId: studentId);
     update();
   }

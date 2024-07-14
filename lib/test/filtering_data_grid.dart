@@ -68,8 +68,8 @@ class _FilteringDataGridState<T> extends State<FilteringDataGrid<T>> {
                   ),
                   ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.lightBlue.shade100),
-                        elevation: MaterialStatePropertyAll(0),
+                        backgroundColor: WidgetStatePropertyAll(Colors.lightBlue.shade100),
+                        elevation: WidgetStatePropertyAll(0),
                       ),
                       onPressed: () {
                         exportData(infoDataGridSource!);

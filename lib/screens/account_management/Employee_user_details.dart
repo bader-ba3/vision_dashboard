@@ -1,6 +1,7 @@
 import 'package:vision_dashboard/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/event_model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
@@ -12,6 +13,7 @@ import '../../models/account_management_model.dart';
 import '../../models/event_record_model.dart';
 import '../../utils/Dialogs.dart';
 import '../../utils/const.dart';
+import '../Buses/Controller/Bus_View_Model.dart';
 import '../Widgets/Custom_Drop_down_with_value.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -44,6 +46,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
     "admin": "مدير".tr,
     "superAdmin": "مالك".tr,
   };
+  String busValue = '';
   String? role;
   TextEditingController userNameController = TextEditingController();
   TextEditingController userPassController = TextEditingController();
@@ -254,16 +257,30 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                     },
                   ),
                   CustomDropDown(
-                    value: '',
-                    listValue: busesList
-                        .map(
-                          (e) => e.tr,
-                        )
-                        .toList(),
+                    value: busValue,
+                    listValue: Get.find<BusViewModel>()
+                            .busesMap
+                            .values
+                            .map(
+                              (e) => e.name!,
+                            )
+                            .toList() +
+                        ['بدون حافلة'],
                     label: 'الحافلة'.tr,
                     onChange: (value) {
                       if (value != null) {
-                        busController.text = value;
+                        busValue = value;
+                        final busViewController = Get.find<BusViewModel>();
+                        if (busViewController.busesMap.isNotEmpty) {
+                          busController.text = busViewController.busesMap.values
+                                  .where(
+                                    (element) => element.name == value,
+                                  )
+                                  .firstOrNull
+                                  ?.busId ??
+                              value;
+                        } else
+                          busController.text = value;
                       }
                     },
                   ),
@@ -276,7 +293,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       ).then((date) {
                         if (date != null) {
                           startDateController.text =
-                          date.toString().split(" ")[0];
+                              date.toString().split(" ")[0];
                         }
                       });
                     },
@@ -288,7 +305,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       icon: Icon(
                         Icons.date_range_outlined,
                         color: primaryColor,
-                      ) ,
+                      ),
                     ),
                   ),
                   CustomTextField(
@@ -323,13 +340,17 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                         if (_validateFields()) {
                           role ??= accountType.keys.first;
                           AccountManagementModel model = AccountManagementModel(
-                            id: generateId("EMPLOYEE"),
+                            id: widget.accountManagementModel == null
+                                ? generateId("EMPLOYEE")
+                                : widget.accountManagementModel!.id,
                             userName: userNameController.text,
                             fullName: fullNameController.text,
                             password: userPassController.text,
                             type: role!,
-                            serialNFC: accountManagementViewModel.nfcController.text,
+                            serialNFC:
+                                accountManagementViewModel.nfcController.text,
                             isActive: true,
+                            isAccepted: false,
                             salary: int.parse(salaryController.text),
                             dayOfWork: int.parse(dayWorkController.text),
                             mobileNumber: mobileNumberController.text,
@@ -344,6 +365,10 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                             eventRecords: eventRecords,
                           );
                           await controller.addAccount(model);
+                          await addWaitOperation(
+                              collectionName: accountManagementCollection,
+                              affectedId: model.id,
+                              type: waitingListTypes.add);
                           clearController();
                         }
                       },
@@ -374,17 +399,16 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                               .toList()
                               .where(
                                 (element) =>
-                            element.role == Const.eventTypeEmployee,
-                          )
+                                    element.role == Const.eventTypeEmployee,
+                              )
                               .map((e) => e)
                               .toList(),
                           label: "نوع الحدث".tr,
                           onChange: (selectedWay) {
-
                             if (selectedWay != null) {
                               setState(() {});
                               selectedEvent =
-                              eventController.allEvents[selectedWay];
+                                  eventController.allEvents[selectedWay];
                             }
                           },
                         ),
@@ -466,8 +490,6 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                 ],
               ),
             )
-
-
           ],
         ),
       ),

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/models/Store_Model.dart';
 
-import '../../../controller/delete_management_view_model.dart';
+import '../../../controller/Wait_management_view_model.dart';
 
 class StoreViewModel extends GetxController{
   final storeCollectionRef =
@@ -45,7 +45,9 @@ class StoreViewModel extends GetxController{
   }
 
   deleteStore(String storeId)async {
-    await addDeleteOperation(
+    await addWaitOperation(
+        type: waitingListTypes.delete,
+
         collectionName: storeCollection,
         affectedId: storeId);
     update();

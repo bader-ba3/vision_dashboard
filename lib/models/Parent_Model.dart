@@ -14,7 +14,7 @@ class ParentModel {
   id,
   nationality,startDate,
       work;
-
+bool? isAccepted;
   List<dynamic>? children,contract;
   List<EventRecordModel>? eventRecords;
 
@@ -32,6 +32,7 @@ class ParentModel {
     this.eventRecords,
     this.nationality,
     this.contract,
+    this.isAccepted,
 
     this.children,
   });
@@ -52,6 +53,7 @@ class ParentModel {
       if(age!=null)     'age':age,
       if(contract!=null)     'contract':contract,
       if(children!=null)    'children':children,
+      if(isAccepted!=null)    'isAccepted':isAccepted,
       if(eventRecords!=null)   'eventRecords': eventRecords?.map((event) => event.toJson()).toList()??[],
     };
   }
@@ -63,6 +65,7 @@ class ParentModel {
       parentID: json['parentID']??'',
       address: json['address']??'',
       age:json['age']??'',
+      isAccepted:json['isAccepted']??true,
       startDate:json['startDate']??'',
       nationality: json['nationality']??'',
       phoneNumber: json['phoneNumber']??'',

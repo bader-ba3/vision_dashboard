@@ -85,24 +85,8 @@ List<String> languageList = [
   "عربي",
   "لغات",
 ];
-List<String> busesList = [
-  "الحافلة الاولى",
-  "الحافلة الثانية",
-  "الحافلة الثالثة",
-  "الحافلة الرابعة",
-  "الحافلة الخامسة",
-  "الحافلة السادسة",
-  "بدون حافلة",
 
-];
-List<String> sectionsList = [
-  "الاولى",
-  "الثانية",
-  "الثالثة",
-  "الرابعة",
-  "الخامسة",
-  "السادسة",
-];
+
 Map<String, String> months = {
   "يناير (1)": "01",
   "فبراير (2)": "02",
@@ -117,6 +101,10 @@ Map<String, String> months = {
   "نوفمبر (11)": "11",
   "ديسمبر (12)": "12",
 };
+
+enum waitingListTypes{
+  delete,returnInstallment,waitDiscounts,add,edite
+}
 
  const accountManagementCollection = "AccountManagement";
 class Styles {

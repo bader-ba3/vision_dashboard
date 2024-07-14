@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../constants.dart';
-import '../../controller/delete_management_view_model.dart';
+import '../../controller/Wait_management_view_model.dart';
 
 class CustomPlutoGrid extends StatefulWidget {
   CustomPlutoGrid(
@@ -11,13 +11,17 @@ class CustomPlutoGrid extends StatefulWidget {
       required this.onSelected,
       this.controller,
       this.idName,
-      this.onRowDoubleTap});
+      this.onRowDoubleTap,
+      this.isEmp=false,
+      });
 
   @override
   State<CustomPlutoGrid> createState() => _CustomPlutoGridState();
   final Function(PlutoGridOnSelectedEvent) onSelected;
   final Function(PlutoGridOnRowDoubleTapEvent)? onRowDoubleTap;
   final controller, idName;
+
+  final bool isEmp;
 }
 
 class _CustomPlutoGridState extends State<CustomPlutoGrid> {
@@ -77,7 +81,12 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
         localeText: PlutoGridLocaleText.arabic(),
       ),
       rowColorCallback: (PlutoRowColorContext rowColorContext) {
-        if (checkIfPendingDelete(
+
+         if( rowColorContext.row.cells['موافقة المدير']?.value == false)
+               return Colors.green.withOpacity(0.3);
+
+
+         else if (checkIfPendingDelete(
             affectedId: rowColorContext.row.cells[widget.idName]?.value)) {
           return Colors.red.withOpacity(0.3);
         }

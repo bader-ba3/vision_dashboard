@@ -287,7 +287,10 @@ Map<String, String> en = {
   "يرجى إدخال عنوان.":"Please enter an address.",
   "يرجى إدخال المبلغ.":"Please enter the amount.",
   "يرجى إدخال التاريخ.":"Please enter the date.",
-  "":"",
+  "هذا العنصر للقرائة فقط فقط":"This Item For Read Only",
+  "waitDiscounts":'Salary increase granted',
+  "returnInstallment":'Return Installment',
+
 
 
 };

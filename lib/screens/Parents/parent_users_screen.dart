@@ -1,15 +1,11 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
-import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Pluto_Grid.dart';
-import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 import '../../constants.dart';
-import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 import 'Controller/Parents_View_Model.dart';
 
@@ -95,56 +91,61 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
             );
           }),
         ),
-        floatingActionButton: enableUpdate && currentId != ''
-            ? SizedBox(
-            width: Get.width,
-            child: Wrap(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-              alignment: WrapAlignment.center,
-                  children: [
-                    GetBuilder<DeleteManagementViewModel>(builder: (_) {
-                      return FloatingActionButton(
-                        backgroundColor: getIfDelete()
-                            ? Colors.greenAccent.withOpacity(0.5)
-                            : Colors.red.withOpacity(0.5),
-                        onPressed: () {
-                          if (enableUpdate) {
-                            if (getIfDelete())
-                              _.returnDeleteOperation(
-                                  affectedId: controller.parentMap[currentId]!.id
-                                      .toString());
-                            else {
-                              addDeleteOperation(
-                                  collectionName: parentsCollection,
-                                  affectedId:
-                                      controller.parentMap[currentId]!.id!);
+        floatingActionButton: enableUpdate && currentId != ''&&controller.parentMap[currentId]!.isAccepted!
+            ? GetBuilder<WaitManagementViewModel>(
+              builder: (_) {
+                return SizedBox(
+                width: Get.width,
+                child: Wrap(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                  alignment: WrapAlignment.center,
+                      children: [
+                        FloatingActionButton(
+                          backgroundColor: getIfDelete()
+                              ? Colors.greenAccent.withOpacity(0.5)
+                              : Colors.red.withOpacity(0.5),
+                          onPressed: () {
+                            if (enableUpdate) {
+                              if (getIfDelete())
+                                _.returnDeleteOperation(
+                                    affectedId: controller.parentMap[currentId]!.id
+                                        .toString());
+                              else {
+                                addWaitOperation(
+                                    type: waitingListTypes.delete,
+
+                                    collectionName: parentsCollection,
+                                    affectedId:
+                                        controller.parentMap[currentId]!.id!);
+                              }
                             }
-                          }
-                        },
-                        child: Icon(
-                          getIfDelete()
-                              ? Icons.restore_from_trash_outlined
-                              : Icons.delete,
-                          color: Colors.white,
+                          },
+                          child: Icon(
+                            getIfDelete()
+                                ? Icons.restore_from_trash_outlined
+                                : Icons.delete,
+                            color: Colors.white,
+                          ),
                         ),
-                      );
-                    }),
-                    SizedBox(
-                      width: defaultPadding,
+                        SizedBox(
+                          width: defaultPadding,
+                        ),
+                        if(!getIfDelete())
+                        FloatingActionButton(
+                          backgroundColor: primaryColor.withOpacity(0.5),
+                          onPressed: () {
+                            showParentInputDialog(
+                                context, controller.parentMap[currentId]!);
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    FloatingActionButton(
-                      backgroundColor: primaryColor.withOpacity(0.5),
-                      onPressed: () {
-                        showParentInputDialog(
-                            context, controller.parentMap[currentId]!);
-                      },
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
+                );
+              }
             )
             : Container(),
       );

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/responsive.dart';
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
@@ -31,8 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   AccountManagementViewModel _accountManagementViewModel =
       Get.find<AccountManagementViewModel>();
   SalaryViewModel _salaryViewModel = Get.find<SalaryViewModel>();
-  DeleteManagementViewModel _deleteManagementViewModel =
-      Get.find<DeleteManagementViewModel>();
+  WaitManagementViewModel _deleteManagementViewModel =
+      Get.find<WaitManagementViewModel>();
 
   String selectedMonth = '';
   bool isAll = false;
@@ -97,7 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                     isFullBorder: true,
                   ),
-                  if (_deleteManagementViewModel.allDelete.values
+                  if (_deleteManagementViewModel.allWaiting.values
                       .where(
                         (element) => element.isAccepted == null,
                       )
@@ -129,7 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Text(
-                                  _deleteManagementViewModel.allDelete.values
+                                  _deleteManagementViewModel.allWaiting.values
                                       .where(
                                         (element) => element.isAccepted == null,
                                       )

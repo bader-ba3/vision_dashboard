@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/screens/account_management/Controller/Min_View_Model.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 
 import 'package:vision_dashboard/screens/account_management/account_management_screen.dart';
 
@@ -21,7 +21,7 @@ class _EmployeeViewState extends State<EmployeeView> {
   @override
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MinViewModel>(
+    return GetBuilder<AccountManagementViewModel>(
       builder: (context) {
         return Scaffold(
 

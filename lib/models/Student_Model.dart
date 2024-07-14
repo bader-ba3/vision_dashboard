@@ -1,4 +1,3 @@
-
 import 'package:vision_dashboard/models/Installment_model.dart';
 
 import 'event_record_model.dart';
@@ -10,7 +9,6 @@ class StudentModel {
       StudentBirthDay,
       stdLanguage,
       parentId,
-      section,
       startDate,
       endDate,
       paymentWay,
@@ -18,8 +16,9 @@ class StudentModel {
   String? studentNumber;
   int? totalPayment;
   double? grade;
-  List<String>? stdExam,contractsImage;
-  bool? available = false;
+  List<String>? stdExam, contractsImage;
+
+  bool? available = false, isAccepted;
 
   Map<String, InstallmentModel>? installmentRecords = {};
   List<EventRecordModel>? eventRecords;
@@ -42,10 +41,9 @@ class StudentModel {
     this.bus,
     this.parentId,
     this.available,
-    this.section,
+    this.isAccepted,
     this.stdClass,
     this.stdLanguage,
-
     this.totalPayment,
     this.paymentWay,
     this.contractsImage,
@@ -61,7 +59,7 @@ class StudentModel {
         if (grade != null) 'grade': grade,
         if (stdLanguage != null) 'stdLanguage': stdLanguage,
         if (stdExam != null) 'stdExam': stdExam,
-        if (section != null) 'section': section,
+        if (isAccepted != null) 'isAccepted': isAccepted,
         if (startDate != null) 'startDate': startDate!,
         if (endDate != null) 'endDate': endDate!,
         if (contractsImage != null) 'contractsImage': contractsImage!,
@@ -83,8 +81,8 @@ class StudentModel {
     studentNumber = json['studentNumber'] ?? '';
     studentID = json['studentID'] ?? '';
     parentId = json['parentId'] ?? '';
-    section = json['section'] ?? '';
-    contractsImage =List.from(json['contractsImage'] ?? []) ;
+    isAccepted = json['isAccepted'] ?? true;
+    contractsImage = List.from(json['contractsImage'] ?? []);
     stdLanguage = json['stdLanguage'] ?? '';
     stdExam = (json['stdExam'] as List<dynamic>?)
             ?.map((item) => item as String)
@@ -111,7 +109,6 @@ class StudentModel {
 
   @override
   String toString() {
-    return 'Student(studentName: $studentName, studentNumber: $studentNumber, address: address, section: $section, gender: $gender, age: $StudentBirthDay, grade: $grade, teachers: teachers, exams: exams, startDate: $startDate,, eventRecords: $eventRecords, bus: $bus, )';
+    return 'Student(studentName: $studentName, studentNumber: $studentNumber, address: address, isAccepted: $isAccepted, gender: $gender, age: $StudentBirthDay, grade: $grade, teachers: teachers, exams: exams, startDate: $startDate,, eventRecords: $eventRecords, bus: $bus, )';
   }
 }
-

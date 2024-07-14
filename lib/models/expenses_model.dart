@@ -1,12 +1,11 @@
-import 'package:get/get.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-import 'package:vision_dashboard/controller/delete_management_view_model.dart';
+
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 
 class ExpensesModel {
   String? id, title, userId, date;
 
   int? total;
-
+bool? isAccepted;
   String? body, busId;
 
   List<dynamic>? images = [];
@@ -18,6 +17,7 @@ class ExpensesModel {
       this.total,
       this.busId,
       this.body,
+      this.isAccepted,
       this.images,
       this.date});
 
@@ -27,29 +27,13 @@ class ExpensesModel {
     userId = json['userId'];
     total = json['total'];
     body = json['body'];
+    isAccepted = json['isAccepted'];
     busId = json['busId'];
     date = json['date'] ?? DateTime.now().toString();
     images = json['images'] == null
         ? []
         : json['images'].map((e) => e.toString()).toList();
   }
-
-  String? affectedId() {
-    return id;
-  }
-
-  String? affectedKey({String? type}) {
-    return "id";
-  }
-
-  bool checkIfDelete(String id) {
-    return checkIfPendingDelete(affectedId: id);
-  }
-
-
-
-
-
 
 
   toJson() {
@@ -59,6 +43,7 @@ class ExpensesModel {
       "userId": userId,
       "total": total,
       "body": body,
+      "isAccepted": isAccepted,
       if (busId != null) "busId": busId,
       "images": images,
       "date": date,

@@ -8,7 +8,7 @@ import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 
-import '../../../controller/delete_management_view_model.dart';
+import '../../../controller/Wait_management_view_model.dart';
 import '../../../utils/To_AR.dart';
 
 class ExamViewModel extends GetxController {
@@ -111,7 +111,9 @@ class ExamViewModel extends GetxController {
   }
 
   deleteExam(String examId) async {
-    await addDeleteOperation(
+    await addWaitOperation(
+        type: waitingListTypes.delete,
+
         collectionName: examsCollection, affectedId: examId);
     update();
   }
@@ -141,13 +143,18 @@ class ExamViewModel extends GetxController {
 
   getGrade(Map<String, StudentModel> studentMap)async {
   // await  getAllExamWithOutListen();
+
     studentMap.forEach((key, value) {
-      for (var exam in value.stdExam!) {
-        studentMap[key]!.grade = studentMap[key]!.grade! +
-            double.parse(examMap[exam]?.marks?[key] ?? "0");
+      if(value.stdExam!.isEmpty)
+        studentMap[key]!.grade=0.0;
+      else {
+        for (var exam in value.stdExam!) {
+          studentMap[key]!.grade = studentMap[key]!.grade! +
+              double.parse(examMap[exam]?.marks?[key] ?? "0");
+        }
+        studentMap[key]!.grade =
+            studentMap[key]!.grade! / studentMap[key]!.stdExam!.length;
       }
-      studentMap[key]!.grade =
-          studentMap[key]!.grade! / studentMap[key]!.stdExam!.length;
     });
   }
 
