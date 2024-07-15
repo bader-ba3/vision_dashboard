@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
 import 'package:vision_dashboard/screens/Parents/parent_user_details.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Pluto_Grid.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 import '../../constants.dart';
 import '../Widgets/header.dart';
 import 'Controller/Parents_View_Model.dart';
@@ -91,46 +94,74 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
             );
           }),
         ),
-        floatingActionButton: enableUpdate && currentId != ''&&controller.parentMap[currentId]!.isAccepted!
-            ? GetBuilder<WaitManagementViewModel>(
-              builder: (_) {
+        floatingActionButton: enableUpdate &&
+                currentId != '' &&
+                controller.parentMap[currentId]!.isAccepted!
+            ? GetBuilder<WaitManagementViewModel>(builder: (_) {
                 return SizedBox(
-                width: Get.width,
-                child: Wrap(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                  alignment: WrapAlignment.center,
-                      children: [
-                        FloatingActionButton(
-                          backgroundColor: getIfDelete()
-                              ? Colors.greenAccent.withOpacity(0.5)
-                              : Colors.red.withOpacity(0.5),
-                          onPressed: () {
-                            if (enableUpdate) {
-                              if (getIfDelete())
-                                _.returnDeleteOperation(
-                                    affectedId: controller.parentMap[currentId]!.id
-                                        .toString());
-                              else {
-                                addWaitOperation(
+                  width: Get.width,
+                  child: Wrap(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      FloatingActionButton(
+                        backgroundColor: getIfDelete()
+                            ? Colors.greenAccent.withOpacity(0.5)
+                            : Colors.red.withOpacity(0.5),
+                        onPressed: ()async {
+                          if (enableUpdate) {
+                            if (getIfDelete())
+                              _.returnDeleteOperation(
+                                  affectedId: controller
+                                      .parentMap[currentId]!.id
+                                      .toString());
+                            else {
+                              TextEditingController editController =
+                                  TextEditingController();
+
+                              QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                widget:Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CustomTextField(controller: editController, title: "سبب الحذف".tr,size: Get.width/4,),
+                                  ),
+                                ),
+                                text: 'قبول هذه العملية'.tr,
+                                title: 'هل انت متأكد ؟'.tr,
+                                onConfirmBtnTap: () async {
+
+                                  await addWaitOperation(
                                     type: waitingListTypes.delete,
 
                                     collectionName: parentsCollection,
                                     affectedId:
-                                        controller.parentMap[currentId]!.id!);
-                              }
+                                        controller.parentMap[currentId]!.id!,
+                                    details: editController.text,
+                                  );
+                                  Get.back();
+                                },
+                                onCancelBtnTap: () => Get.back(),
+                                confirmBtnText: 'نعم'.tr,
+                                cancelBtnText: 'لا'.tr,
+                                confirmBtnColor: Colors.redAccent,
+                                showCancelBtn: true,
+                              );
                             }
-                          },
-                          child: Icon(
-                            getIfDelete()
-                                ? Icons.restore_from_trash_outlined
-                                : Icons.delete,
-                            color: Colors.white,
-                          ),
+                          }
+                        },
+                        child: Icon(
+                          getIfDelete()
+                              ? Icons.restore_from_trash_outlined
+                              : Icons.delete,
+                          color: Colors.white,
                         ),
-                        SizedBox(
-                          width: defaultPadding,
-                        ),
-                        if(!getIfDelete())
+                      ),
+                      SizedBox(
+                        width: defaultPadding,
+                      ),
+                      if (!getIfDelete())
                         FloatingActionButton(
                           backgroundColor: primaryColor.withOpacity(0.5),
                           onPressed: () {
@@ -142,11 +173,10 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                             color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
+                    ],
+                  ),
                 );
-              }
-            )
+              })
             : Container(),
       );
     });

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
@@ -16,6 +18,7 @@ import '../../utils/const.dart';
 
 import '../Widgets/Custom_Pluto_Grid.dart';
 
+import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/header.dart';
 
 class ExpensesScreen extends StatefulWidget {
@@ -120,24 +123,53 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                   affectedId: controller
                                       .allExpenses[currentId]!.id
                                       .toString());
-                            else if (controller.allExpenses[currentId]!.busId !=
-                                null) {
-                              addWaitOperation(
-                                  type: waitingListTypes.delete,
+                            else
+                            {
+                              TextEditingController editController =
+                              TextEditingController();
 
-                                  collectionName: Const.expensesCollection,
-                                  affectedId:
-                                      controller.allExpenses[currentId]!.id!,
-                                  relatedId:
-                                      controller.allExpenses[currentId]!.busId!);
-                            } else {
-                              addWaitOperation(
-                                  type: waitingListTypes.delete,
+                              QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                widget:Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CustomTextField(controller: editController, title: "سبب الحذف".tr,size: Get.width/4,),
+                                  ),
+                                ),
+                                text: 'قبول هذه العملية'.tr,
+                                title: 'هل انت متأكد ؟'.tr,
+                                onConfirmBtnTap: () async {
 
-                                  collectionName: Const.expensesCollection,
-                                  affectedId:
-                                      controller.allExpenses[currentId]!.id!);
+                                  if (controller.allExpenses[currentId]!.busId !=
+                                      null) {
+                                    addWaitOperation(
+                                        type: waitingListTypes.delete,details: editController.text,
+                                        collectionName: Const.expensesCollection,
+                                        affectedId:
+                                        controller.allExpenses[currentId]!.id!,
+                                        relatedId:
+                                        controller.allExpenses[currentId]!.busId!);
+                                  } else {
+                                    addWaitOperation(
+                                        type: waitingListTypes.delete
+                                        ,details: editController.text,
+                                        collectionName: Const.expensesCollection,
+                                        affectedId:
+                                        controller.allExpenses[currentId]!.id!);
+                                  }
+                                  Get.back();
+                                },
+                                onCancelBtnTap: () => Get.back(),
+                                confirmBtnText: 'نعم'.tr,
+                                cancelBtnText: 'لا'.tr,
+                                confirmBtnColor: Colors.redAccent,
+                                showCancelBtn: true,
+                              );
                             }
+
+
+
                           }
                         },
                         child: Icon(

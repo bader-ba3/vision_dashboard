@@ -325,7 +325,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
 
       return DataRow(
         color: WidgetStatePropertyAll(
-          studentController.chekaIfHaveLateInstallment(parent.id!)
+          studentController.chekaIfHaveLateInstallment(parent.id??"")
               ? Colors.redAccent.withOpacity(0.2)
               : Colors.transparent,
         ),
@@ -334,7 +334,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
           dataRowItem(
             size / data.length,
             parent.children
-                ?.map((e) => studentController.studentMap[e]!.studentName)
+                ?.map((e) => studentController.studentMap[e]?.studentName)
                 .toString(),
           ),
           dataRowItem(size / data.length, "$payment درهم"),
@@ -358,21 +358,21 @@ class _StudyFeesViewState extends State<StudyFeesView> {
       StudentViewModel studentController) {
     if (inkwellIndex == 0) {
       return parent.children?.any((child) =>
-              studentController.studentMap[child]!.installmentRecords?.values
+              studentController.studentMap[child]?.installmentRecords?.values
                   .any((record) => record.isPay != true) ??
               false) ??
           false;
     } else if (inkwellIndex == 1) {
       return parent.children?.any((child) =>
-              studentController.studentMap[child]!.installmentRecords?.values
+              studentController.studentMap[child]?.installmentRecords?.values
                   .any((record) => record.isPay == true) ??
               false) ??
           false;
     } else if (inkwellIndex == 2) {
       return parent.children?.any((child) =>
-              studentController.studentMap[child]!.installmentRecords?.values
+              studentController.studentMap[child]?.installmentRecords?.values
                   .any((record) =>
-                      int.parse(record.installmentDate!) <=
+                      int.parse(record.installmentDate??'0') <=
                           DateTime.now().month &&
                       record.isPay != true) ??
               false) ??
@@ -386,7 +386,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
       ParentModel parent, StudentViewModel studentController) {
     return parent.children
             ?.map((child) =>
-                studentController.studentMap[child]!.totalPayment ?? 0)
+                studentController.studentMap[child]?.totalPayment ?? 0)
             .fold(0, (sum, payment) => (sum ?? 0) + payment) ??
         0;
   }
@@ -394,7 +394,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
   int calculatePayment(ParentModel parent, StudentViewModel studentController) {
     return parent.children
             ?.expand((child) =>
-                studentController.studentMap[child]!.installmentRecords?.values
+                studentController.studentMap[child]?.installmentRecords?.values
                     .where((record) => record.isPay == true) ??
                 [InstallmentModel(installmentCost: "0")])
             .fold(
@@ -409,9 +409,9 @@ class _StudyFeesViewState extends State<StudyFeesView> {
       StudentViewModel studentController) {
     Map<String, List<InstallmentModel>> instalmentStudent = {};
 
-    for (var child in parent.children!) {
+    for (var child in parent.children??[]) {
       instalmentStudent[child] = studentController
-              .studentMap[child]!.installmentRecords?.values
+              .studentMap[child]?.installmentRecords?.values
               .toList() ??
           [];
     }

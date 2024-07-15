@@ -123,6 +123,46 @@ class AccountManagementViewModel extends GetxController {
     );
   }
 
+  getAllEmployeeWithoutListen() {
+     accountManagementFireStore.get().then(
+      (event)async {
+     await   Get.find<BusViewModel>().getAllWithoutListenBuse();
+        key=GlobalKey();
+        rows.clear();
+        allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
+            event.docs
+                .toList()
+                .map((i) {
+              rows.add(
+                PlutoRow(
+                  cells: {
+                    data.keys.elementAt(0): PlutoCell(value: i.id),
+                    data.keys.elementAt(1): PlutoCell(value: i.data().userName),
+                    data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
+                    data.keys.elementAt(3): PlutoCell(value: i.data().password),
+                    data.keys.elementAt(4): PlutoCell(value: i.data().type),
+                    data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
+                    data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
+                    data.keys.elementAt(7): PlutoCell(value: i.data().address),
+                    data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
+                    data.keys.elementAt(9): PlutoCell(value: i.data().gender),
+                    data.keys.elementAt(10): PlutoCell(value: i.data().age),
+                    data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
+                    data.keys.elementAt(12): PlutoCell(value: i.data().contract),
+                    data.keys.elementAt(13): PlutoCell(value: Get.find<BusViewModel>().busesMap[i.data().bus.toString()]?.name??i.data().bus),
+                    data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
+                    data.keys.elementAt(15): PlutoCell(value: i.data().eventRecords?.length.toString()),
+                    data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
+                  },
+                ),
+              );
+                  return MapEntry(i.id.toString(), i.data());
+                })).obs;
+        update();
+      },
+    );
+  }
+
   addAccount(AccountManagementModel accountModel) {
     accountManagementFireStore.doc(accountModel.id).set(accountModel,SetOptions(merge: true));
   }
@@ -228,7 +268,7 @@ class AccountManagementViewModel extends GetxController {
         if (userName == null) {
           userStatus = UserManagementStatus.first;
           print("1");
-          Get.offNamed(AppRoutes.main);
+          // Get.offNamed(AppRoutes.main);
         } else if (value.docs.isNotEmpty) {
           print("2");
           print(value.docs.length);
@@ -236,13 +276,7 @@ class AccountManagementViewModel extends GetxController {
               AccountManagementModel.fromJson(value.docs.first.data());
           HiveDataBase.setCurrentScreen("0");
 
-          /*        HiveDataBase.se
-          HiveDataBase.setUserData(({
-            myUserModel!.userName,
-            myUserModel!.type,
-            myUserModel!.serialNFC,
-            myUserModel!.fullName
-          }) user);*/
+     HiveDataBase.setUserData(name:myUserModel!.userName,type: myUserModel!.type,serialNFC: myUserModel!.serialNFC??'',userName: myUserModel!.userName );
           userStatus = UserManagementStatus.login;
           Get.offNamed(AppRoutes.DashboardScreen);
         } else if (value.docs.isEmpty) {
@@ -670,6 +704,12 @@ class AccountManagementViewModel extends GetxController {
      FirebaseFirestore.instance
          .collection(accountManagementCollection).doc(affectedId).set({"isAccepted":true} ,SetOptions(merge: true));
    }
+
+  setBus(String s, List emp)async {
+for(var employee in emp)
+    FirebaseFirestore.instance
+        .collection(accountManagementCollection).doc(employee).set({"bus":s} ,SetOptions(merge: true));
+  }
 }
 
 AccountManagementModel getMyUserId() {

@@ -1,11 +1,12 @@
 class StoreModel{
   String? id,subName,subQuantity;
 
-
+bool? isAccepted;
   StoreModel({
     this.id,
     this.subName,
     this.subQuantity,
+    this.isAccepted,
 
   });
 
@@ -15,6 +16,7 @@ class StoreModel{
       id: json['id'],
       subName: json['subName'],
       subQuantity: json['subQuantity'],
+      isAccepted: json['isAccepted']??true,
     );
   }
 
@@ -24,6 +26,7 @@ class StoreModel{
       'id': id,
       'subName': subName,
       'subQuantity': subQuantity,
+      'isAccepted': isAccepted,
     };
   }
 

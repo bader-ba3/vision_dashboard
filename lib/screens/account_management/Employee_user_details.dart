@@ -20,12 +20,15 @@ import '../Widgets/Custom_Drop_down_with_value.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class EmployeeInputForm extends StatefulWidget {
+
+
   @override
   _EmployeeInputFormState createState() => _EmployeeInputFormState();
 
-  EmployeeInputForm({this.accountManagementModel});
+  EmployeeInputForm({this.accountManagementModel,this.enableEdit=true});
 
   late final AccountManagementModel? accountManagementModel;
+  final bool? enableEdit;
 }
 
 class _EmployeeInputFormState extends State<EmployeeInputForm> {
@@ -338,10 +341,12 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       setState(() {});
                     },
                   ),
+                  if(widget.accountManagementModel!=null&&widget.enableEdit!)
                   CustomTextField(
                       controller: editController,
                       title: 'سبب التعديل'.tr,
                       keyboardType: TextInputType.text),
+                  if(widget.enableEdit!)
                   GetBuilder<AccountManagementViewModel>(builder: (controller) {
                     return AppButton(
                       text: "حفظ".tr,
@@ -431,6 +436,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if(widget.enableEdit!)
                   GetBuilder<EventViewModel>(builder: (eventController) {
                     return Wrap(
                       runAlignment: WrapAlignment.spaceAround,
@@ -480,6 +486,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       ],
                     );
                   }),
+                  if(widget.enableEdit!)
                   SizedBox(height: defaultPadding * 2),
                   Text('سجل الأحداث:'.tr, style: Styles.headLineStyle1),
                   SizedBox(height: defaultPadding),

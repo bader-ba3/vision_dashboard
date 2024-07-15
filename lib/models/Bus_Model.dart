@@ -13,6 +13,7 @@ class BusModel {
   List<String>? students;
   DateTime? startDate;
   List<String>? expense;
+  bool? isAccepted;
 
   List<EventRecordModel>? eventRecords;
 
@@ -26,6 +27,7 @@ class BusModel {
      this.startDate,
      this.expense,
      this.eventRecords,
+     this.isAccepted,
 
   });
 
@@ -34,6 +36,7 @@ class BusModel {
     if(busId!=null)    'busId': busId,
     if(number!=null)    'number': number,
     if(type!=null)   'type': type,
+    if(isAccepted!=null)   'isAccepted': isAccepted,
     if(employees!=null)   'employees': employees!.toList(),
     if(students!=null)   'students': students!.toList(),
     if(startDate!=null)    'startDate': startDate!.toIso8601String(),
@@ -47,6 +50,7 @@ class BusModel {
       busId: json['busId']??'',
       number: json['number']??'',
       type: json['type']??'',
+      isAccepted: json['isAccepted']??true,
       employees:List<String>.from(json['employees'] ?? []) ,
       students: List<String>.from(json['students']??[]),
       startDate: DateTime.parse(json['startDate']),

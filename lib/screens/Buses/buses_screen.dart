@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/controller/home_controller.dart';
@@ -15,6 +17,7 @@ import '../../controller/Wait_management_view_model.dart';
 import '../Student/Controller/Student_View_Model.dart';
 import '../Widgets/AppButton.dart';
 import '../Widgets/Custom_Pluto_Grid.dart';
+import '../Widgets/Custom_Text_Filed.dart';
 
 class BusesScreen extends StatefulWidget {
   @override
@@ -22,7 +25,7 @@ class BusesScreen extends StatefulWidget {
 }
 
 class _BusesScreenState extends State<BusesScreen> {
-  List data = [
+/*  List data = [
     "رقم الحافلة",
     "اسم الحافلة",
     "النوع",
@@ -37,10 +40,10 @@ class _BusesScreenState extends State<BusesScreen> {
     "رقم الحافلة",
     "اسم الحافلة",
     "النوع",
-  ];
-  TextEditingController searchController = TextEditingController();
-  String searchValue = '';
-  int searchIndex = 0;
+  ];*/
+  // TextEditingController searchController = TextEditingController();
+  // String searchValue = '';
+  // int searchIndex = 0;
   final TextEditingController subNameController = TextEditingController();
   final TextEditingController subQuantityController = TextEditingController();
   String currentId = '';
@@ -121,75 +124,106 @@ class _BusesScreenState extends State<BusesScreen> {
             );
           }),
         ),
-        floatingActionButton: enableUpdate && currentId != ''
-            ? SizedBox(
-          width: Get.width,
-          child: Wrap(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            alignment: WrapAlignment.center,
-                  children: [
-                    GetBuilder<WaitManagementViewModel>(builder: (_) {
-                      return FloatingActionButton(
-                        backgroundColor: getIfDelete()
-                            ? Colors.greenAccent.withOpacity(0.5)
-                            : Colors.red.withOpacity(0.5),
-                        onPressed: () {
-                          checkIfPendingDelete(
-                                  affectedId: controller
-                                      .busesMap[currentId]!.busId
-                                      .toString())
-                              ? _.returnDeleteOperation(
-                                  affectedId: controller
-                                      .busesMap[currentId]!.busId
-                                      .toString())
-                              : addWaitOperation(
-                              type: waitingListTypes.delete,
+        floatingActionButton: GetBuilder<WaitManagementViewModel>(
+          builder: (_) {
+            return enableUpdate && currentId != ''&&controller
+                .busesMap[currentId]!.isAccepted!
+                ? SizedBox(
+              width: Get.width,
+              child: Wrap(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                alignment: WrapAlignment.center,
+                      children: [
+                        FloatingActionButton(
+                          backgroundColor: getIfDelete()
+                              ? Colors.greenAccent.withOpacity(0.5)
+                              : Colors.red.withOpacity(0.5),
+                          onPressed: () {
+                            if(    getIfDelete())
 
-                              collectionName: busesCollection,
-                                  affectedId: controller
-                                      .busesMap[currentId]!.busId
-                                      .toString());
-                        },
-                        child: Icon(
-                          getIfDelete()
-                              ? Icons.restore_from_trash_outlined
-                              : Icons.delete,
-                          color: Colors.white,
+                                _.returnDeleteOperation(
+                                    affectedId: controller
+                                        .busesMap[currentId]!.busId
+                                        .toString());
+                                else
+
+                            {
+                              TextEditingController editController =
+                              TextEditingController();
+
+                              QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                widget:Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CustomTextField(controller: editController, title: "سبب الحذف".tr,size: Get.width/4,),
+                                  ),
+                                ),
+                                text: 'قبول هذه العملية'.tr,
+                                title: 'هل انت متأكد ؟'.tr,
+                                onConfirmBtnTap: () async {
+                                  addWaitOperation(
+                                      type: waitingListTypes.delete
+                                      ,details: editController.text,
+                                      collectionName: busesCollection,
+                                      affectedId: controller
+                                          .busesMap[currentId]!.busId
+                                          .toString());
+                                  Get.back();
+                                },
+                                onCancelBtnTap: () => Get.back(),
+                                confirmBtnText: 'نعم'.tr,
+                                cancelBtnText: 'لا'.tr,
+                                confirmBtnColor: Colors.redAccent,
+                                showCancelBtn: true,
+                              );
+                            }
+
+                          },
+                          child: Icon(
+                            getIfDelete()
+                                ? Icons.restore_from_trash_outlined
+                                : Icons.delete,
+                            color: Colors.white,
+                          ),
                         ),
-                      );
-                    }),
-                    SizedBox(
-                      width: defaultPadding,
+                        SizedBox(
+                          width: defaultPadding,
+                        ),
+                        if(!getIfDelete())
+                        FloatingActionButton(
+                          backgroundColor: primaryColor.withOpacity(0.5),
+                          onPressed: () {
+                            showExpensesInputDialog(
+                                context, controller.busesMap[currentId]!.busId!);
+                          },
+                          child: Icon(
+                            Icons.add_chart_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(
+                          width: defaultPadding,
+                        ),
+                        if(!getIfDelete())
+                        FloatingActionButton(
+                          backgroundColor: primaryColor.withOpacity(0.5),
+                          onPressed: () {
+                            showBusInputDialog(
+                                context, controller.busesMap[currentId]!);
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    FloatingActionButton(
-                      backgroundColor: primaryColor.withOpacity(0.5),
-                      onPressed: () {
-                        showExpensesInputDialog(
-                            context, controller.busesMap[currentId]!.busId!);
-                      },
-                      child: Icon(
-                        Icons.add_chart_outlined,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(
-                      width: defaultPadding,
-                    ),
-                    FloatingActionButton(
-                      backgroundColor: primaryColor.withOpacity(0.5),
-                      onPressed: () {
-                        showBusInputDialog(
-                            context, controller.busesMap[currentId]!);
-                      },
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-            )
-            : Container(),
+                )
+                : Container();
+          }
+        ),
       );
     });
   }

@@ -403,7 +403,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   List<DataCell> _buildWaitCells(double size, List<String> deleteData,
-      WaitManagementModel model, String affectedName, controller) {
+      WaitManagementModel model, String affectedName,WaitManagementViewModel controller) {
     return [
       dataRowItem(size / deleteData.length, model.type.toString().tr),
       dataRowItem(size / deleteData.length, model.details ?? "لا يوجد".tr),
@@ -698,9 +698,7 @@ print(newDate!.values.elementAt(i).toString());*/
                                   text: 'رفض هذه العملية'.tr,
                                   title: 'هل انت متأكد ؟'.tr,
                                   onConfirmBtnTap: () {
-
                                     Get.find<WaitManagementViewModel>().declineEdit(waitModel);
-                                    // controller.undoTheDelete(model);
                                     Get.back();
                                   },
                                   onCancelBtnTap: () => Get.back(),

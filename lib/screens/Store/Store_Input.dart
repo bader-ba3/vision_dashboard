@@ -79,6 +79,7 @@ class _StoreInputFormState extends State<StoreInputForm> {
             AppButton(text: 'حفظ'.tr,   onPressed: () {
 
               StoreModel store = StoreModel(
+                isAccepted: true,
                 subName:  subNameController.text,
                 subQuantity: subQuantityController.text,
                 id: generateId("SUB"),

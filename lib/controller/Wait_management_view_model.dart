@@ -71,6 +71,10 @@ class WaitManagementViewModel extends GetxController {
   }
 
   doDelete(WaitManagementModel waitModel) async {
+    await FirebaseFirestore.instance
+        .collection(waitModel.collectionName)
+        .doc(waitModel.affectedId)
+        .delete();
     switch (waitModel.collectionName) {
       case Const.expensesCollection:
         if (waitModel.relatedId != null) {
@@ -86,11 +90,14 @@ class WaitManagementViewModel extends GetxController {
       case classCollection:
         await deleteClassFromStudent(waitModel.affectedId);
         break;
+
+      case busesCollection:
+        {
+          Get.find<StudentViewModel>().getAllStudentWithOutListen();
+          Get.find<AccountManagementViewModel>().getAllEmployeeWithoutListen();
+        }
     }
-    await FirebaseFirestore.instance
-        .collection(waitModel.collectionName)
-        .doc(waitModel.affectedId)
-        .delete();
+
   }
 
   deleteStudentFromParents(String studentId, String relatedId) async {
@@ -171,8 +178,21 @@ class WaitManagementViewModel extends GetxController {
       },
     );
   }
+  deleteBusFromStudentAndEmployee(String affectedId) {
+
+    Get.find<StudentViewModel>().studentMap.forEach(
+          (key, value) {
+        if (value.bus == affectedId) {
+
+        }
+      },
+    );
+  }
 
   approveEdite(WaitManagementModel waitModel) async {
+
+
+
     await FirebaseFirestore.instance
         .collection(waitModel.collectionName)
         .doc(waitModel.affectedId)
@@ -181,6 +201,18 @@ class WaitManagementViewModel extends GetxController {
   }
 
   declineEdit(WaitManagementModel waitModel) async {
+    if(waitModel.collectionName==busesCollection)
+    {
+      await Get.find<StudentViewModel>()
+          .setBus("بدون حافلة", waitModel.newData?['students']??[]);
+      await Get.find<AccountManagementViewModel>()
+          .setBus("بدون حافلة", waitModel.newData?['employees']??[]);
+      await Get.find<StudentViewModel>()
+          .setBus(waitModel.affectedId,  waitModel.oldDate?['students']??[]);
+      await Get.find<AccountManagementViewModel>()
+          .setBus(waitModel.affectedId, waitModel.oldDate?['employees']??[]);
+    }
+
     await FirebaseFirestore.instance
         .collection(waitModel.collectionName)
         .doc(waitModel.affectedId)

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/screens/Settings/Settings_Screen.dart';
+import 'package:vision_dashboard/screens/account_management/Employee_user_details.dart';
 
 
 import '../../constants.dart';
@@ -32,19 +34,19 @@ class _SettingsViewState extends State<SettingsView> {
               ),
               secondChild: ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: Get.height),
-                child: Container(),
+                child: EmployeeInputForm(accountManagementModel: getMyUserId(),enableEdit:false),
               ),
-              crossFadeState: isAdd ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+              crossFadeState: getMyUserId().type!='مالك' ? CrossFadeState.showSecond : CrossFadeState.showFirst,
             ),
-            floatingActionButton:enableUpdate?FloatingActionButton(
-              backgroundColor:primaryColor,
-              onPressed: () {
-                setState(() {
-                  isAdd = !isAdd;
-                });
-              },
-              child: Icon(!isAdd? Icons.add:Icons.grid_view),
-            ):Container(),
+            // floatingActionButton:enableUpdate?FloatingActionButton(
+            //   backgroundColor:primaryColor,
+            //   onPressed: () {
+            //     setState(() {
+            //       isAdd = !isAdd;
+            //     });
+            //   },
+            //   child: Icon(!isAdd? Icons.add:Icons.grid_view),
+            // ):Container(),
 
           );
         }

@@ -34,11 +34,11 @@ class HiveDataBase {
   }
 
   static setUserData(
-      ({ String userName, String type, String syrialNFC, String name}) data) async {
-    await accountBox.put("name", data.name);
-    await accountBox.put("userName", data.userName);
-    await accountBox.put("type", data.type);
-    await accountBox.put("email", data.syrialNFC);
+      { required String userName,required String type, required String serialNFC,required String name}) async {
+    await accountBox.put("name",name);
+    await accountBox.put("userName", userName);
+    await accountBox.put("type", type);
+    await accountBox.put("email", serialNFC);
     return true;
   }
 

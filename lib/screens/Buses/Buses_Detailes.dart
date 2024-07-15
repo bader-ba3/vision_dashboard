@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/account_management_model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
@@ -30,6 +31,7 @@ class _BusInputFormState extends State<BusInputForm> {
   final nameController = TextEditingController();
   final numberController = TextEditingController();
   final typeController = TextEditingController();
+  final editController = TextEditingController();
 
   final startDateController = TextEditingController();
 
@@ -95,16 +97,10 @@ class _BusInputFormState extends State<BusInputForm> {
     numberController.clear();
     typeController.clear();
     startDateController.clear();
-    allSection.values.forEach(
-      (element) {
-        element.available = false;
-      },
-    );
-    allEmployee.values.forEach(
-      (element) {
-        element.available = false;
-      },
-    );
+    editController.clear();
+    allSection.removeWhere((key, value) => value.available==true,);
+    allEmployee.removeWhere((key, value) => value.available==true,);
+
     setState(() {});
   }
 
@@ -164,6 +160,9 @@ class _BusInputFormState extends State<BusInputForm> {
                         ),
                       ],
                     ),
+                    if(widget.busModel!=null)
+                    CustomTextField(
+                        controller: editController, title: 'سبب التعديل'.tr),
                     GetBuilder<BusViewModel>(builder: (busController) {
                       return AppButton(
                         text: 'حفظ'.tr,
@@ -184,12 +183,36 @@ class _BusInputFormState extends State<BusInputForm> {
                             type: typeController.text,
                             employees: selectedEmployee,
                             students: selectedStudent,
+                            isAccepted: widget.busModel == null
+                                ? true:false,
+                            eventRecords: [],
+                            expense: [],
                             startDate: DateTime.parse(startDateController.text),
                           );
                           await busController.addBus(bus);
-                          clearControl();
 
-                          if (widget.busModel != null) Get.back();
+
+                            await Get.find<StudentViewModel>()
+                                .setBus("بدون حافلة", widget.busModel?.students??[]);
+                          await Get.find<AccountManagementViewModel>()
+                              .setBus("بدون حافلة", widget.busModel?.employees??[]);
+                            await Get.find<StudentViewModel>()
+                                .setBus(bus.busId!, selectedStudent);
+                            await Get.find<AccountManagementViewModel>()
+                                .setBus(bus.busId!, selectedEmployee);
+
+                          if (widget.busModel != null) {
+                            addWaitOperation(
+                              collectionName: busesCollection,
+                              affectedId: widget.busModel!.busId!,
+                              type: waitingListTypes.edite,
+                              details: editController.text,
+                              oldData: widget.busModel!.toJson(),
+                              newData: bus.toJson(),
+                            );
+                            Get.back();
+                          }
+                          clearControl();
                           Get.back();
                         },
                       );
@@ -231,7 +254,7 @@ class _BusInputFormState extends State<BusInputForm> {
                                             child: Text(dataStu[index]
                                                 .toString()
                                                 .tr))))),
-                            rows: allSection.values
+                            rows: allSection.values.where((element) => element.bus=="بدون حافلة"&&element.isAccepted==true,)
                                 .map(
                                   (e) => studentDataRow(
                                     e,
@@ -278,7 +301,7 @@ class _BusInputFormState extends State<BusInputForm> {
                                               child: Text(dataEMP[index]
                                                   .toString()
                                                   .tr))))),
-                              rows: allEmployee.values
+                              rows: allEmployee.values.where((element) => element.bus=="بدون حافلة"&&element.isAccepted==true,)
                                   .map(
                                     (e) => employeeDataRow(
                                       e,

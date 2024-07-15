@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
@@ -9,6 +11,7 @@ import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.d
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/student_user_details.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/utils/Dialogs.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
@@ -16,6 +19,7 @@ import '../../models/Student_Model.dart';
 
 import '../Widgets/Custom_Pluto_Grid.dart';
 
+import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/header.dart';
 
 class StudentScreen extends StatefulWidget {
@@ -132,13 +136,42 @@ class _StudentScreenState extends State<StudentScreen> {
                               else {
                                 if(controller
                                     .studentMap[currentId]!.stdExam?.isEmpty??true)
-                                addWaitOperation(
-                                    type: waitingListTypes.delete,
+                                 {
+                                  TextEditingController editController =
+                                  TextEditingController();
 
-                                    collectionName: studentCollection,
-                                    affectedId: controller
-                                        .studentMap[currentId]!.studentID!,relatedId:controller
-                                    .studentMap[currentId]!.parentId! );
+                                  QuickAlert.show(
+                                    context: context,
+                                    type: QuickAlertType.confirm,
+                                    widget:Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CustomTextField(controller: editController, title: "سبب الحذف".tr,size: Get.width/4,),
+                                      ),
+                                    ),
+                                    text: 'قبول هذه العملية'.tr,
+                                    title: 'هل انت متأكد ؟'.tr,
+                                    onConfirmBtnTap: () async {
+
+                                      addWaitOperation(
+                                          type: waitingListTypes.delete
+                                          ,details: editController.text,
+                                          collectionName: studentCollection,
+                                          affectedId: controller
+                                              .studentMap[currentId]!.studentID!,relatedId:controller
+                                          .studentMap[currentId]!.parentId! );
+                                      Get.back();
+                                    },
+                                    onCancelBtnTap: () => Get.back(),
+                                    confirmBtnText: 'نعم'.tr,
+                                    cancelBtnText: 'لا'.tr,
+                                    confirmBtnColor: Colors.redAccent,
+                                    showCancelBtn: true,
+                                  );
+                                }
+                                else
+                                  getReedOnlyError(context,title: "لا يمكن حذف الطالب المشترك بالامتحانات".tr);
+
                               }
                             }
                           },

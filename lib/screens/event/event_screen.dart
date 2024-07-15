@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/controller/event_view_model.dart';
 
 import '../../constants.dart';
@@ -9,6 +11,7 @@ import '../../controller/Wait_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../utils/const.dart';
+import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
@@ -116,13 +119,41 @@ class _EventScreenState extends State<EventScreen> {
                                                           affectedId:
                                                               event.id);
                                                     else
-                                                      addWaitOperation(
-                                                          type: waitingListTypes.delete,
 
-                                                          collectionName: Const
-                                                              .eventCollection,
-                                                          affectedId:
+                                                    {
+                                                      TextEditingController editController =
+                                                      TextEditingController();
+
+                                                      QuickAlert.show(
+                                                        context: context,
+                                                        type: QuickAlertType.confirm,
+                                                        widget:Center(
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: CustomTextField(controller: editController, title: "سبب الحذف".tr,size: Get.width/4,),
+                                                          ),
+                                                        ),
+                                                        text: 'قبول هذه العملية'.tr,
+                                                        title: 'هل انت متأكد ؟'.tr,
+                                                        onConfirmBtnTap: () async {
+
+                                                          addWaitOperation(
+                                                              type: waitingListTypes.delete,
+details: editController.text,
+                                                              collectionName: Const
+                                                                  .eventCollection,
+                                                              affectedId:
                                                               event.id);
+                                                          Get.back();
+                                                        },
+                                                        onCancelBtnTap: () => Get.back(),
+                                                        confirmBtnText: 'نعم'.tr,
+                                                        cancelBtnText: 'لا'.tr,
+                                                        confirmBtnColor: Colors.redAccent,
+                                                        showCancelBtn: true,
+                                                      );
+                                                    }
+
                                                   }
                                                 }),
                                     ]),

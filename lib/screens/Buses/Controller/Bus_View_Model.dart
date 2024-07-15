@@ -32,6 +32,7 @@ class BusViewModel extends GetxController {
       decimalDigits: 2,
     ),
     "Start Date".tr: PlutoColumnType.date(),
+    "موافقة المدير".tr: PlutoColumnType.text(),
   };
 
   GlobalKey key = GlobalKey();
@@ -83,6 +84,8 @@ class BusViewModel extends GetxController {
               data.keys.elementAt(6): PlutoCell(value: total),
               data.keys.elementAt(7):
                   PlutoCell(value: BusModel.fromJson(element.data()).startDate),
+              data.keys.elementAt(8):
+              PlutoCell(value: BusModel.fromJson(element.data()).isAccepted),
             },
           ),
         );

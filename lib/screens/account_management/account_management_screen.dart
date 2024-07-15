@@ -15,6 +15,7 @@ import '../../controller/home_controller.dart';
 
 import '../../utils/Dialogs.dart';
 import '../Widgets/Custom_Pluto_Grid.dart';
+import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
@@ -115,10 +116,36 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                               if (checkIfPendingDelete(
                                   affectedId:controller.allAccountManagement[currentId]!.id.toString()))
                                 _.returnDeleteOperation(affectedId:controller.allAccountManagement[currentId]!.id);
-                              else
-                                addWaitOperation(
-                                    collectionName: accountManagementCollection,
-                                    affectedId: controller.allAccountManagement[currentId]!.id, type: waitingListTypes.delete);
+                              else {
+                                TextEditingController editController =
+                                TextEditingController();
+
+                                QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.confirm,
+                                  widget:Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CustomTextField(controller: editController, title: "سبب الحذف".tr,size: Get.width/4,),
+                                    ),
+                                  ),
+                                  text: 'قبول هذه العملية'.tr,
+                                  title: 'هل انت متأكد ؟'.tr,
+                                  onConfirmBtnTap: () async {
+                                    addWaitOperation(
+                                   details: editController.text,
+                                        collectionName: accountManagementCollection,
+                                        affectedId: controller.allAccountManagement[currentId]!.id, type: waitingListTypes.delete);
+                                    Get.back();
+                                  },
+                                  onCancelBtnTap: () => Get.back(),
+                                  confirmBtnText: 'نعم'.tr,
+                                  cancelBtnText: 'لا'.tr,
+                                  confirmBtnColor: Colors.redAccent,
+                                  showCancelBtn: true,
+                                );
+                              }
+
                             }
                         else
                         getReedOnlyError(context);

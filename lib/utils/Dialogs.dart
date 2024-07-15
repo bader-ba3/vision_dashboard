@@ -15,8 +15,8 @@ import '../screens/Widgets/AppButton.dart';
 
 
 
-getReedOnlyError(BuildContext context){
-  QuickAlert.show(context: context,type: QuickAlertType.error,title: "هذا العنصر للعرض فقط".tr
+getReedOnlyError(BuildContext context,{String title="هذا العنصر للعرض فقط"}){
+  QuickAlert.show(context: context,type: QuickAlertType.error,title: title.tr
       ,confirmBtnText: "تم".tr);
 }
 Future<List<String>> uploadImages(List<Uint8List> ImagesTempData,String folderName) async{

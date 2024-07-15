@@ -33,15 +33,16 @@ class StudentViewModel extends GetxController {
     "المعدل": PlutoColumnType.text(),
     "سجل الأحداث": PlutoColumnType.text(),
     "موافقة المدير": PlutoColumnType.text(),
-
   };
-  GlobalKey key=GlobalKey();
+  GlobalKey key = GlobalKey();
+
   StudentViewModel() {
     getColumns();
 
     getAllStudent();
   }
-  getColumns(){
+
+  getColumns() {
     columns.clear();
     columns.addAll(toAR(data));
   }
@@ -65,38 +66,44 @@ class StudentViewModel extends GetxController {
   late StreamSubscription<QuerySnapshot<Map<String, dynamic>>> listener;
 
   getAllStudent() async {
-    listener = await studentCollectionRef.snapshots().listen((value)async {
+    listener = await studentCollectionRef.snapshots().listen((value) async {
       _studentMap.clear();
 
       for (var element in value.docs) {
         _studentMap[element.id] = StudentModel.fromJson(element.data());
-
       }
-   await  Get.find<BusViewModel>().getAllWithoutListenBuse();
-    await  examViewModel.getGrade(_studentMap);
-      key=GlobalKey();
+      await Get.find<BusViewModel>().getAllWithoutListenBuse();
+      await examViewModel.getGrade(_studentMap);
+      key = GlobalKey();
       rows.clear();
-      _studentMap.forEach((key, value) {
-        rows.add(
-          PlutoRow(
-            cells: {
-              data.keys.elementAt(0): PlutoCell(value: key),
-              data.keys.elementAt(1): PlutoCell(value: value.studentName),
-              data.keys.elementAt(2): PlutoCell(value:  value.studentNumber),
-              data.keys.elementAt(3): PlutoCell(value:  value.gender),
-              data.keys.elementAt(4): PlutoCell(value: value.StudentBirthDay),
-              data.keys.elementAt(5): PlutoCell(value:  value.stdClass),
-
-              data.keys.elementAt(6): PlutoCell(value:  value.startDate),
-              data.keys.elementAt(7): PlutoCell(value:  Get.find<BusViewModel>().busesMap[value.bus]?.name?? value.bus),
-              data.keys.elementAt(8): PlutoCell(value: Get.find<ParentsViewModel>().parentMap[value.parentId]!.fullName ),
-              data.keys.elementAt(9): PlutoCell(value:  value.grade),
-              data.keys.elementAt(10): PlutoCell(value:  value.eventRecords?.length??"0"),
-              data.keys.elementAt(11): PlutoCell(value:  value.isAccepted),
-            },
-          ),
-        );
-      },);
+      _studentMap.forEach(
+        (key, value) {
+          rows.add(
+            PlutoRow(
+              cells: {
+                data.keys.elementAt(0): PlutoCell(value: key),
+                data.keys.elementAt(1): PlutoCell(value: value.studentName),
+                data.keys.elementAt(2): PlutoCell(value: value.studentNumber),
+                data.keys.elementAt(3): PlutoCell(value: value.gender),
+                data.keys.elementAt(4): PlutoCell(value: value.StudentBirthDay),
+                data.keys.elementAt(5): PlutoCell(value: value.stdClass),
+                data.keys.elementAt(6): PlutoCell(value: value.startDate),
+                data.keys.elementAt(7): PlutoCell(
+                    value: Get.find<BusViewModel>().busesMap[value.bus]?.name ??
+                        value.bus),
+                data.keys.elementAt(8): PlutoCell(
+                    value: Get.find<ParentsViewModel>()
+                        .parentMap[value.parentId]!
+                        .fullName),
+                data.keys.elementAt(9): PlutoCell(value: value.grade),
+                data.keys.elementAt(10):
+                    PlutoCell(value: value.eventRecords?.length ?? "0"),
+                data.keys.elementAt(11): PlutoCell(value: value.isAccepted),
+              },
+            ),
+          );
+        },
+      );
       update();
     });
   }
@@ -120,7 +127,6 @@ class StudentViewModel extends GetxController {
         .doc(studentModel.studentID)
         .set(studentModel.toJson());
 
-
     if (studentModel.parentId != null)
       await FirebaseFirestore.instance
           .collection(parentsCollection)
@@ -135,7 +141,7 @@ class StudentViewModel extends GetxController {
   updateStudent(StudentModel studentModel) async {
     await studentCollectionRef
         .doc(studentModel.studentID)
-        .set(studentModel.toJson(),SetOptions(merge: true));
+        .set(studentModel.toJson(), SetOptions(merge: true));
 
     update();
   }
@@ -170,8 +176,8 @@ class StudentViewModel extends GetxController {
   deleteStudent(String studentId) async {
     await addWaitOperation(
         type: waitingListTypes.delete,
-
-        collectionName: studentCollection, affectedId: studentId);
+        collectionName: studentCollection,
+        affectedId: studentId);
     update();
   }
 
@@ -293,6 +299,15 @@ class StudentViewModel extends GetxController {
   }
 
   void removeClass(String studentId) {
-    studentCollectionRef.doc(studentId).set({"stdClass":null,"section":null},SetOptions(merge: true));
+    studentCollectionRef
+        .doc(studentId)
+        .set({"stdClass": null, "section": null}, SetOptions(merge: true));
+  }
+
+  setBus(String s, List std) {
+    for (var student in std)
+      studentCollectionRef
+          .doc(student)
+          .set({"bus": s}, SetOptions(merge: true));
   }
 }
