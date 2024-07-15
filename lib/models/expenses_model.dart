@@ -1,5 +1,4 @@
 
-import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 
 class ExpensesModel {
   String? id, title, userId, date;

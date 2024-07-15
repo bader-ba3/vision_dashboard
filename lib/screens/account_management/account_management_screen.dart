@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quickalert/quickalert.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 
@@ -16,7 +16,6 @@ import '../../controller/home_controller.dart';
 import '../../utils/Dialogs.dart';
 import '../Widgets/Custom_Pluto_Grid.dart';
 import '../Widgets/Custom_Text_Filed.dart';
-import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 
 class AccountManagementScreen extends StatefulWidget {

@@ -49,7 +49,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         .first
         .key;
     WidgetsFlutterBinding.ensureInitialized().waitUntilFirstFrameRasterized.then((value) {
-
+      _studentViewModel.update();
+      _expensesViewModel.update();
+      _accountManagementViewModel.update();
+      _salaryViewModel.update();
     },);
   }
 

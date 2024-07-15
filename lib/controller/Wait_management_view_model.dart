@@ -6,21 +6,17 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/models/Bus_Model.dart';
-import 'package:vision_dashboard/models/Exam_model.dart';
 import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dart';
 
 import '../models/delete_management_model.dart';
-import '../screens/Exams/controller/Exam_View_Model.dart';
 import '../screens/Parents/Controller/Parents_View_Model.dart';
 
 import '../utils/const.dart';
 
 class WaitManagementViewModel extends GetxController {
-  ExamViewModel _examViewModel = Get.find<ExamViewModel>();
-
   ParentsViewModel _parentsViewModel = Get.find<ParentsViewModel>();
 
   BusViewModel _busViewModel = Get.find<BusViewModel>();
@@ -97,7 +93,6 @@ class WaitManagementViewModel extends GetxController {
           Get.find<AccountManagementViewModel>().getAllEmployeeWithoutListen();
         }
     }
-
   }
 
   deleteStudentFromParents(String studentId, String relatedId) async {
@@ -178,21 +173,16 @@ class WaitManagementViewModel extends GetxController {
       },
     );
   }
+
   deleteBusFromStudentAndEmployee(String affectedId) {
-
     Get.find<StudentViewModel>().studentMap.forEach(
-          (key, value) {
-        if (value.bus == affectedId) {
-
-        }
+      (key, value) {
+        if (value.bus == affectedId) {}
       },
     );
   }
 
   approveEdite(WaitManagementModel waitModel) async {
-
-
-
     await FirebaseFirestore.instance
         .collection(waitModel.collectionName)
         .doc(waitModel.affectedId)
@@ -201,16 +191,21 @@ class WaitManagementViewModel extends GetxController {
   }
 
   declineEdit(WaitManagementModel waitModel) async {
-    if(waitModel.collectionName==busesCollection)
-    {
+    if (waitModel.collectionName == busesCollection) {
       await Get.find<StudentViewModel>()
-          .setBus("بدون حافلة", waitModel.newData?['students']??[]);
+          .setBus("بدون حافلة", waitModel.newData?['students'] ?? []);
       await Get.find<AccountManagementViewModel>()
-          .setBus("بدون حافلة", waitModel.newData?['employees']??[]);
+          .setBus("بدون حافلة", waitModel.newData?['employees'] ?? []);
       await Get.find<StudentViewModel>()
-          .setBus(waitModel.affectedId,  waitModel.oldDate?['students']??[]);
+          .setBus(waitModel.affectedId, waitModel.oldDate?['students'] ?? []);
       await Get.find<AccountManagementViewModel>()
-          .setBus(waitModel.affectedId, waitModel.oldDate?['employees']??[]);
+          .setBus(waitModel.affectedId, waitModel.oldDate?['employees'] ?? []);
+    }
+    if (waitModel.collectionName == examsCollection) {
+      await Get.find<StudentViewModel>().removeExam(
+          waitModel.affectedId, waitModel.newData!['marks'].keys.toList());
+      await Get.find<StudentViewModel>().addExamToStudent(
+          waitModel.oldDate!['marks'].keys.toList(), waitModel.affectedId);
     }
 
     await FirebaseFirestore.instance
@@ -219,6 +214,7 @@ class WaitManagementViewModel extends GetxController {
         .set(waitModel.oldDate!, SetOptions(merge: true));
     setAcceptedDeleteOperation(waitModel, false);
   }
+
 }
 
 addWaitOperation({

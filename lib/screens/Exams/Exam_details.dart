@@ -399,7 +399,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 marks: _selectedStudent,
                                 isAccepted:
                                     widget.examModel == null ? true : false);
-                            if (widget.examModel != null)
+                            if (widget.examModel != null) {
+
+                               await   studentViewModel.removeExam(widget.examModel!.id!,widget.examModel!.marks?.keys.toList()??[]);
+
                               addWaitOperation(
                                   collectionName: examsCollection,
                                   affectedId: examId,
@@ -407,6 +410,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                   details: editController.text,
                                   oldData: widget.examModel!.toJson(),
                                   newData: exam.toJson());
+                            }
                             studentViewModel.addExamToStudent(
                                 _selectedStudent.keys.toList(), examId);
                             await examController.addExam(exam);

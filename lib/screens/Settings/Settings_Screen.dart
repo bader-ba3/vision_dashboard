@@ -431,8 +431,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: model.collectionName == parentsCollection
                           ? 'عند حذف ولي الامر سوف يتم حذف الاولاد الخاصة به'.tr
                           : 'هل انت متأكد ؟'.tr,
-                      onConfirmBtnTap: () {
-                        controller.doTheWait(model);
+                      onConfirmBtnTap: () async{
+                     await   controller.doTheWait(model);
+                        Get.back();
                         Get.back();
                       },
                       onCancelBtnTap: () => Get.back(),
@@ -697,8 +698,9 @@ print(newDate!.values.elementAt(i).toString());*/
                                   type: QuickAlertType.confirm,
                                   text: 'رفض هذه العملية'.tr,
                                   title: 'هل انت متأكد ؟'.tr,
-                                  onConfirmBtnTap: () {
-                                    Get.find<WaitManagementViewModel>().declineEdit(waitModel);
+                                  onConfirmBtnTap: ()async {
+                                   await Get.find<WaitManagementViewModel>().declineEdit(waitModel);
+                                    Get.back();
                                     Get.back();
                                   },
                                   onCancelBtnTap: () => Get.back(),

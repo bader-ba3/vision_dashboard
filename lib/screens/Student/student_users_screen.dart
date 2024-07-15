@@ -226,8 +226,12 @@ class _StudentScreenState extends State<StudentScreen> {
                             if(controller.studentMap[currentId]!.stdExam?.isNotEmpty??false)
                             showDialog(
                               context: context,
-                              builder: (context) => buildMarksAlertDialog(
-                                  controller.studentMap[currentId]!),
+                              builder: (context) => Container(
+                                width: Get.width/2,
+                                height: Get.height/2,
+                                child: buildMarksAlertDialog(
+                                    controller.studentMap[currentId]!),
+                              ),
                             );
                           },
                           child: Icon(
@@ -248,51 +252,56 @@ class _StudentScreenState extends State<StudentScreen> {
   AlertDialog buildMarksAlertDialog(StudentModel student) {
     return AlertDialog(
       backgroundColor: secondaryColor,
-      actions: [
-        Column(
-          children: [
-            Container(
-              width: Get.width / 3,
-              height:
-                  min(60.0 * (student.stdExam?.length ?? 1), Get.height / 3),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Row(
-                      children: [
-                        Spacer(),
-                        Text("المادة: "),
-                        Text(
+      content:    Container(
+        width: Get.width/3,
+        // height: Get.height/2,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                double width=constraints.maxWidth;
+                return Row(
+                  children: [
+                    SizedBox(
+                        width:width/4 ,
+                        child: Text("المادة: ",style: Styles.headLineStyle3,overflow: TextOverflow.ellipsis,)),
+                    SizedBox(
+                      width:width/4 ,
+                      child: Text(
                           exam.examMap[student.stdExam![index]]!.subject!,
-                          style: Styles.headLineStyle2.copyWith(fontSize: 16),
-                        ),
-                        Spacer(),
-                        Text("العلامة: "),
-                        Text(
-                          "${(double.parse(exam.examMap[student.stdExam![index]]!.marks![student.studentID]!) * double.parse(exam.examMap[student.stdExam![index]]!.examMaxMark!)) / 100}",
-                          style: Styles.headLineStyle2.copyWith(fontSize: 16),
-                        ),
-                        Spacer(),
-                      ],
+                          style: Styles.headLineStyle2.copyWith(fontSize: 16),overflow: TextOverflow.ellipsis
+                      ),
                     ),
-                  );
-                },
-                itemCount: student.stdExam?.length ?? 0,
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            AppButton(
-              text: "تم",
-              onPressed: () {
-                Get.back();
-              },
-            )
-          ],
+
+                    SizedBox(
+                      width:width/4 , child:  Text("العلامة: ",style: Styles.headLineStyle3,overflow: TextOverflow.ellipsis),),
+                    SizedBox(
+                      width:width/4 ,
+                      child: Text(
+                          "${(double.parse(exam.examMap[student.stdExam![index]]!.marks![student.studentID]!) * double.parse(exam.examMap[student.stdExam![index]]!.examMaxMark!)) / 100}",
+                          style: Styles.headLineStyle2.copyWith(fontSize: 16),overflow: TextOverflow.ellipsis
+                      ),
+                    ),
+                    // Spacer(),
+                  ],
+                );
+              }
+            );
+          },
+          itemCount: student.stdExam?.length ?? 0,
+        ),
+      ),
+      actions: [
+
+        Center(
+          child: AppButton(
+            text: "تم",
+            onPressed: () {
+              Get.back();
+            },
+          ),
         )
       ],
     );

@@ -301,7 +301,7 @@ class StudentViewModel extends GetxController {
   void removeClass(String studentId) {
     studentCollectionRef
         .doc(studentId)
-        .set({"stdClass": null, "section": null}, SetOptions(merge: true));
+        .set({"stdClass": null}, SetOptions(merge: true));
   }
 
   setBus(String s, List std) {
@@ -309,5 +309,16 @@ class StudentViewModel extends GetxController {
       studentCollectionRef
           .doc(student)
           .set({"bus": s}, SetOptions(merge: true));
+  }
+
+  removeExam(String examId, List studentList) {
+    for (var std in studentList) {
+      _studentMap[std]!.stdExam!.removeWhere(
+            (element) => element == examId,
+          );
+      studentCollectionRef.doc(std).set(
+          {"stdExam":_studentMap[std]!.stdExam},
+          SetOptions(merge: true));
+    }
   }
 }

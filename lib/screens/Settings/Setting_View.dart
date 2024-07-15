@@ -5,7 +5,6 @@ import 'package:vision_dashboard/screens/Settings/Settings_Screen.dart';
 import 'package:vision_dashboard/screens/account_management/Employee_user_details.dart';
 
 
-import '../../constants.dart';
 import 'Controller/Settings_View_Model.dart';
 
 
@@ -17,9 +16,9 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  bool isAdd=false;
 
-  @override
+
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SettingsViewModel>(
