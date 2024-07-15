@@ -6,6 +6,7 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:vision_dashboard/controller/expenses_view_model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
+import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
@@ -34,7 +35,6 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final ScrollController _scrollDeleteController = ScrollController();
   final ScrollController _scrollLogController = ScrollController();
-  final ScrollController _scrollEditController = ScrollController();
 
   List<String> deleteData = [
     "نوع العملية",
@@ -394,6 +394,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       case storeCollection:
         return Get.find<StoreViewModel>().storeMap[model.affectedId]?.subName ??
             model.affectedId;
+      case examsCollection:
+        return Get.find<ExamViewModel>().examMap[model.affectedId]?.subject ??
+            model.affectedId;
       default:
         return "";
     }
@@ -531,7 +534,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             (element) {
                               int count = 0;
                               for (int i = 0; i < oldDate.length; i++) {
-
+/*print(oldDate.values.elementAt(i).toString());
+print("------------------------------------");
+print(newDate!.values.elementAt(i).toString());*/
                                 if (oldDate.values.elementAt(i).toString() !=
                                     newDate!.values.elementAt(i).toString()) {
                                   count++;
@@ -552,12 +557,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   newDate?.entries
                                           .where(
                                             (element) {
+                                     /*         print("${element.value.toString()}" +"!="+
+                                                  "${oldDate!.values.elementAt(newDate.values.toList().indexOf(element.value)).toString()}");*/
                                               return element.value.toString() !=
-                                                  oldDate?.values
-                                                      .elementAtOrNull(newDate
-                                                          .values
+                                                  oldDate!.values
+                                                      .elementAt(newDate
+                                                          .keys
                                                           .toList()
-                                                          .indexOf(element.value))
+                                                          .indexOf(element.key))
                                                       .toString();
                                             },
                                           )
@@ -580,9 +587,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               return element.value.toString() !=
                                                   oldDate?.values
                                                       .elementAtOrNull(newDate
-                                                          .values
+                                                          .keys
                                                           .toList()
-                                                          .indexOf(element.value))
+                                                          .indexOf(element.key))
                                                       .toString();
                                             },
                                           )
@@ -606,9 +613,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               return element.value.toString() !=
                                                   newDate?.values
                                                       .elementAtOrNull(oldDate
-                                                          .values
+                                                          .keys
                                                           .toList()
-                                                          .indexOf(element.value))
+                                                          .indexOf(element.key))
                                                       .toString();
                                             },
                                           )
@@ -631,9 +638,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               return element.value.toString() !=
                                                   newDate?.values
                                                       .elementAtOrNull(oldDate
-                                                          .values
+                                                          .keys
                                                           .toList()
-                                                          .indexOf(element.value))
+                                                          .indexOf(element.key))
                                                       .toString();
                                             },
                                           )

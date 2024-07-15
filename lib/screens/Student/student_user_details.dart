@@ -824,20 +824,29 @@ class _StudentInputFormState extends State<StudentInputForm> {
         eventRecords: eventRecords,
         installmentRecords: instalmentMap,
       );
-
-      if (widget.studentModel!.parentId != guardianController.text) {
-
-        Get.find<ParentsViewModel>().deleteStudent(
-            widget.studentModel!.parentId!, widget.studentModel!.studentID!);
-      }
-      if (widget.studentModel != null)
+      if (busController.text.startsWith("BUS"))
+      Get.find<BusViewModel>().addStudent(
+          busController.text, widget.studentModel!.studentID!);
+      if (widget.studentModel != null) {
         addWaitOperation(
             collectionName: studentCollection,
             affectedId: widget.studentModel!.studentID!,
             type: waitingListTypes.edite,
             oldData: widget.studentModel!.toJson(),
-            newData: student.toJson(),details: editController.text);
-      await controller.addStudent(student);
+            newData: student.toJson(),
+            details: editController.text);
+        await controller.addStudent(student);
+        if (widget.studentModel!.parentId != guardianController.text) {
+
+          Get.find<ParentsViewModel>().deleteStudent(
+              widget.studentModel!.parentId!, widget.studentModel!.studentID!);
+        }
+        if (widget.studentModel!.bus != busController.text) {
+
+          Get.find<BusViewModel>().deleteStudent(
+              widget.studentModel!.bus!, widget.studentModel!.studentID!);
+        }
+      }
 
       clearController();
       setState(() {});

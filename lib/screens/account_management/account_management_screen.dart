@@ -97,60 +97,65 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               );
             }),
           ),
-          floatingActionButton: enableUpdate && currentId != ''
-              ? SizedBox(
-            width: Get.width,
-            child: Wrap(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              alignment: WrapAlignment.center,
-              children: [
-                GetBuilder<WaitManagementViewModel>(builder: (_) {
-                  return FloatingActionButton(
-                    backgroundColor: getIfDelete()
-                        ? Colors.greenAccent.withOpacity(0.5)
-                        : Colors.red.withOpacity(0.5),
-                    onPressed: () {
-                      if (enableUpdate&&(controller.allAccountManagement[currentId]!.isAccepted??false)) {
-                            if (checkIfPendingDelete(
-                                affectedId:controller.allAccountManagement[currentId]!.id.toString()))
-                              _.returnDeleteOperation(affectedId:controller.allAccountManagement[currentId]!.id);
-                            else
-                              addWaitOperation(
-                                  collectionName: accountManagementCollection,
-                                  affectedId: controller.allAccountManagement[currentId]!.id, type: waitingListTypes.delete);
-                          }
-                      getReedOnlyError(context);
+          floatingActionButton: GetBuilder<WaitManagementViewModel>(
+            builder: (_) {
+              return enableUpdate && currentId != ''&&controller.allAccountManagement[currentId]!.isAccepted!
+                  ? SizedBox(
+                width: Get.width,
+                child: Wrap(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    FloatingActionButton(
+                      backgroundColor: getIfDelete()
+                          ? Colors.greenAccent.withOpacity(0.5)
+                          : Colors.red.withOpacity(0.5),
+                      onPressed: () {
+                        if (enableUpdate) {
+                              if (checkIfPendingDelete(
+                                  affectedId:controller.allAccountManagement[currentId]!.id.toString()))
+                                _.returnDeleteOperation(affectedId:controller.allAccountManagement[currentId]!.id);
+                              else
+                                addWaitOperation(
+                                    collectionName: accountManagementCollection,
+                                    affectedId: controller.allAccountManagement[currentId]!.id, type: waitingListTypes.delete);
+                            }
+                        else
+                        getReedOnlyError(context);
 
 
-                    },
-                    child: Icon(
-                      getIfDelete()
-                          ? Icons.restore_from_trash_outlined
-                          : Icons.delete,
-                      color: Colors.white,
+                      },
+                      child: Icon(
+                        getIfDelete()
+                            ? Icons.restore_from_trash_outlined
+                            : Icons.delete,
+                        color: Colors.white,
+                      ),
                     ),
-                  );
-                }),
-                SizedBox(
-                  width: defaultPadding,
+                    SizedBox(
+                      width: defaultPadding,
+                    ),
+                    if(controller.allAccountManagement[currentId]!.isAccepted==true&&!getIfDelete())
+                    FloatingActionButton(
+                      backgroundColor: primaryColor.withOpacity(0.5),
+                      onPressed: () {
+                        // if(controller.allAccountManagement[currentId]!.isAccepted==true&&!getIfDelete())
+                        showEmployeeInputDialog(
+                            context, controller.allAccountManagement[currentId]!);
+                        // else
+                        //   getReedOnlyError(context);
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                FloatingActionButton(
-                  backgroundColor: primaryColor.withOpacity(0.5),
-                  onPressed: () {
-                    if(controller.allAccountManagement[currentId]!.isAccepted??false)
-                    showEmployeeInputDialog(
-                        context, controller.allAccountManagement[currentId]!);else
-                      getReedOnlyError(context);
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          )
-              : Container(),
+              )
+                  : Container();
+            }
+          ),
         );
       }
     );

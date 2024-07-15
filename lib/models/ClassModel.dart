@@ -1,16 +1,17 @@
 class ClassModel {
   String? className;
   String? classId;
-  List<String>? classStudent;
+  bool? isAccepted;
 
 
-  ClassModel({this.className, this.classId, this.classStudent,});
+
+  ClassModel({this.className, this.classId,this.isAccepted });
 
 
   ClassModel.fromJson(Map<String, dynamic> json) {
     className = json['className']??'';
     classId = json['classId']??'';
-    classStudent =List<String>.from(json['classStudent']??[]) ;
+    isAccepted = json['isAccepted']??true;
   }
 
 
@@ -18,13 +19,13 @@ class ClassModel {
     return {
       'className': className,
       'classId': classId,
-      'classStudent': classStudent,
+      'isAccepted': isAccepted,
     };
   }
 
   // toString: A method that returns a string representation of an instance
   @override
   String toString() {
-    return 'ClassModel(className: $className, classId: $classId, classStudent: $classStudent, )';
+    return 'ClassModel(className: $className, classId: $classId,  )';
   }
 }

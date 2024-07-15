@@ -1,3 +1,5 @@
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,13 +43,14 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
   final eventController = TextEditingController();
   final bodyEvent = TextEditingController();
   final dayWorkController = TextEditingController();
+  final editController = TextEditingController();
   Map accountType = {
     "user": "مستخدم".tr,
     "admin": "مدير".tr,
     "superAdmin": "مالك".tr,
   };
   String busValue = '';
-  String? role;
+  String? role = '';
   TextEditingController userNameController = TextEditingController();
   TextEditingController userPassController = TextEditingController();
   HomeViewModel homeViewModel = Get.find<HomeViewModel>();
@@ -60,10 +63,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
   void initState() {
     accountManagementViewModel.initNFC(typeNFC.add);
     super.initState();
-    Future.delayed(
-      Duration.zero,
-      () => init(),
-    );
+    init();
   }
 
   @override
@@ -103,9 +103,10 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
     bodyEvent.clear();
     userNameController.clear();
     userPassController.clear();
+    editController.clear();
     eventRecords.clear();
     accountManagementViewModel.nfcController.clear();
-    role = null;
+    role = '';
   }
 
   init() {
@@ -143,6 +144,10 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
       accountManagementViewModel.nfcController.text =
           widget.accountManagementModel!.serialNFC.toString();
       role = widget.accountManagementModel!.type.toString();
+      busValue = Get.find<BusViewModel>()
+              .busesMap[widget.accountManagementModel!.bus]
+              ?.name ??
+          widget.accountManagementModel!.bus!;
     }
   }
 
@@ -204,7 +209,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                   CustomTextField(
                       controller: nationalityController, title: 'الجنسية'.tr),
                   CustomDropDown(
-                    value: '',
+                    value: genderController.text,
                     listValue: sexList
                         .map(
                           (e) => e.tr,
@@ -226,7 +231,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       title: 'عدد ايام العمل'.tr,
                       keyboardType: TextInputType.number),
                   CustomDropDown(
-                      value: '',
+                      value: jobTitleController.text,
                       listValue: jobList
                           .map(
                             (e) => e.tr,
@@ -243,7 +248,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       title: 'الراتب'.tr,
                       keyboardType: TextInputType.number),
                   CustomDropDown(
-                    value: '',
+                    value: contractController.text,
                     listValue: contractsList
                         .map(
                           (e) => e.tr,
@@ -323,7 +328,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       enable: false,
                       keyboardType: TextInputType.datetime),
                   CustomDropDown(
-                    value: '',
+                    value: role.toString(),
                     listValue: accountType.entries
                         .map((e) => e.value.toString().tr)
                         .toList(),
@@ -333,11 +338,22 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       setState(() {});
                     },
                   ),
+                  CustomTextField(
+                      controller: editController,
+                      title: 'سبب التعديل'.tr,
+                      keyboardType: TextInputType.text),
                   GetBuilder<AccountManagementViewModel>(builder: (controller) {
                     return AppButton(
                       text: "حفظ".tr,
                       onPressed: () async {
                         if (_validateFields()) {
+                          QuickAlert.show(
+                              width: Get.width / 2,
+                              context: context,
+                              type: QuickAlertType.loading,
+                              title: 'جاري التحميل'.tr,
+                              text: 'يتم العمل على الطلب'.tr,
+                              barrierDismissible: false);
                           role ??= accountType.keys.first;
                           AccountManagementModel model = AccountManagementModel(
                             id: widget.accountManagementModel == null
@@ -363,12 +379,39 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                             bus: busController.text,
                             startDate: startDateController.text,
                             eventRecords: eventRecords,
+                            discounts: widget.accountManagementModel?.discounts,
+                            salaryReceived:
+                                widget.accountManagementModel?.salaryReceived,
                           );
-                          await controller.addAccount(model);
-                          await addWaitOperation(
-                              collectionName: accountManagementCollection,
-                              affectedId: model.id,
-                              type: waitingListTypes.add);
+                          if (busController.text.startsWith("BUS"))
+                            Get.find<BusViewModel>().addEmployee(
+                                busController.text,
+                                widget.accountManagementModel!.id);
+                          if (widget.accountManagementModel != null) {
+                            addWaitOperation(
+                                collectionName: accountManagementCollection,
+                                affectedId: widget.accountManagementModel!.id,
+                                type: waitingListTypes.edite,
+                                oldData:
+                                    widget.accountManagementModel!.toJson(),
+                                newData: model.toJson(),
+                                details: editController.text);
+                            await controller.addAccount(model);
+                            if (widget.accountManagementModel!.bus !=
+                                busController.text) {
+                              Get.find<BusViewModel>().deleteEmployee(
+                                  widget.accountManagementModel!.bus!,
+                                  widget.accountManagementModel!.id);
+                            }
+                          }
+
+                          if (widget.accountManagementModel == null)
+                            await addWaitOperation(
+                                collectionName: accountManagementCollection,
+                                affectedId: model.id,
+                                type: waitingListTypes.add);
+                          if (widget.accountManagementModel != null) Get.back();
+                          Get.back();
                           clearController();
                         }
                       },

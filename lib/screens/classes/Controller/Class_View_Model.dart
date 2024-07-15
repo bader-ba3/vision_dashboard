@@ -17,8 +17,7 @@ class ClassViewModel extends GetxController {
         addClass(ClassModel(
             classId: generateId("Class"),
             className: element,
-            classSection: sectionsList,
-            classStudent: []));
+            isAccepted: true));
       },
     );*/
     getAllClass();

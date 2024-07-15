@@ -97,7 +97,6 @@ class BusViewModel extends GetxController {
       for (var element in value.docs) {
         _busesMap[element.id] = BusModel.fromJson(element.data());
       }
-      print("buses Without Listen:${_busesMap.values.length}");
       update();
     });
   }
@@ -119,8 +118,8 @@ class BusViewModel extends GetxController {
   deleteBus(String buseId) async {
     await addWaitOperation(
         type: waitingListTypes.delete,
-
-        collectionName: busesCollection, affectedId: buseId);
+        collectionName: busesCollection,
+        affectedId: buseId);
     update();
   }
 
@@ -168,5 +167,33 @@ class BusViewModel extends GetxController {
   getColumns() {
     columns.clear();
     columns.addAll(toAR(data));
+  }
+
+  deleteStudent(String busId, String Student) async {
+    _busesMap[busId]!.students!.removeWhere(
+          (element) => element == Student,
+        );
+    buseCollectionRef.doc(busId).set(
+        {"students": _busesMap[busId]!.students!}, SetOptions(merge: true));
+  }
+
+  deleteEmployee(String busId, String empId) async {
+    _busesMap[busId]!.employees!.removeWhere(
+          (element) => element == empId,
+        );
+    buseCollectionRef.doc(busId).set(
+        {"employees": _busesMap[busId]!.students!}, SetOptions(merge: true));
+  }
+
+  addStudent(String busId, String Student) async {
+    buseCollectionRef.doc(busId).set({
+      "students": FieldValue.arrayUnion([Student])
+    }, SetOptions(merge: true));
+  }
+
+  addEmployee(String busId, String empId) async {
+    buseCollectionRef.doc(busId).set({
+      "employees": FieldValue.arrayUnion([empId])
+    }, SetOptions(merge: true));
   }
 }

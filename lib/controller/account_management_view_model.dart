@@ -11,6 +11,7 @@ import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Salary_Model.dart';
 import 'package:vision_dashboard/models/employee_time_model.dart';
 import 'package:vision_dashboard/router.dart';
+import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 
@@ -63,7 +64,7 @@ class AccountManagementViewModel extends GetxController {
     "العمر": PlutoColumnType.text(),
     "الوظيفة": PlutoColumnType.text(),
     "العقد": PlutoColumnType.text(),
-    "الصفوف": PlutoColumnType.text(),
+    "الحافلة": PlutoColumnType.text(),
     "تاريخ البداية": PlutoColumnType.text(),
     "سجل الاحداث": PlutoColumnType.text(),
     "موافقة المدير":PlutoColumnType.text(),
@@ -84,14 +85,14 @@ class AccountManagementViewModel extends GetxController {
 
   getAllEmployee() {
     listener = accountManagementFireStore.snapshots().listen(
-      (event) {
+      (event)async {
+     await   Get.find<BusViewModel>().getAllWithoutListenBuse();
         key=GlobalKey();
         rows.clear();
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
             event.docs
                 .toList()
                 .map((i) {
-
               rows.add(
                 PlutoRow(
                   cells: {
@@ -108,7 +109,7 @@ class AccountManagementViewModel extends GetxController {
                     data.keys.elementAt(10): PlutoCell(value: i.data().age),
                     data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
                     data.keys.elementAt(12): PlutoCell(value: i.data().contract),
-                    data.keys.elementAt(13): PlutoCell(value: i.data().bus),
+                    data.keys.elementAt(13): PlutoCell(value: Get.find<BusViewModel>().busesMap[i.data().bus.toString()]?.name??i.data().bus),
                     data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
                     data.keys.elementAt(15): PlutoCell(value: i.data().eventRecords?.length.toString()),
                     data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),

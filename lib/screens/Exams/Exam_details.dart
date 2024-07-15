@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:quickalert/quickalert.dart';
@@ -6,6 +5,7 @@ import 'package:vision_dashboard/constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
@@ -49,10 +49,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
     }
   }
 
-
   StudentViewModel studentViewModel = Get.find<StudentViewModel>();
-
-
 
   @override
   void initState() {
@@ -61,17 +58,15 @@ class _ExamInputFormState extends State<ExamInputForm> {
     initExam();
   }
 
-  List<String>? _questionImageFile = [],
-      _answerImageFile = []
-     ;
+  List<String>? _questionImageFile = [], _answerImageFile = [];
 
-  List<Uint8List> _questionImageFileTemp=[],
-      _answerImageFileTemp = [];
+  List<Uint8List> _questionImageFileTemp = [], _answerImageFileTemp = [];
   final subjectController = TextEditingController();
   final professorController = TextEditingController();
   final dateController = TextEditingController();
   final examPassMarkController = TextEditingController();
   final examMaxMarkController = TextEditingController();
+  final editController = TextEditingController();
   String examId = "";
 
   @override
@@ -172,7 +167,6 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       setState(() {});
                     },
                   ),
-
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -193,16 +187,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                           type: FileType.image,
                                           allowMultiple: true);
                                   if (_ != null) {
-
                                     _.files.forEach(
-
                                       (element) async {
                                         _questionImageFileTemp
                                             .add(element.bytes!);
                                         /*File(element.bytes).readAsBytes().then((value) {
 
                                         },);*/
-
                                       },
                                     );
                                     setState(() {});
@@ -296,7 +287,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                     _.files.forEach(
                                       (element) async {
                                         _answerImageFileTemp
-                                            .add( element.bytes!);
+                                            .add(element.bytes!);
                                       },
                                     );
                                     setState(() {});
@@ -368,11 +359,15 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     ],
                   ),
                   if (widget.isEdite)
+                    CustomTextField(
+                      controller: editController,
+                      title: "سبب التعديل",
+                    ),
+                  if (widget.isEdite)
                     GetBuilder<ExamViewModel>(builder: (examController) {
                       return AppButton(
                         text: 'حفظ'.tr,
                         onPressed: () async {
-
                           if (_validateFields()) {
                             QuickAlert.show(
                                 width: Get.width / 2,
@@ -382,28 +377,36 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 text: 'يتم العمل على الطلب'.tr,
                                 barrierDismissible: false);
                             await uploadImages(
-                                _answerImageFileTemp, "Exam_answer")
+                                    _answerImageFileTemp, "Exam_answer")
                                 .then(
-                                  (value) => _answerImageFile!.addAll(value),
+                              (value) => _answerImageFile!.addAll(value),
                             );
                             await uploadImages(
-                                _questionImageFileTemp, "Exam_question")
+                                    _questionImageFileTemp, "Exam_question")
                                 .then(
-                                  (value) => _questionImageFile!.addAll(value),
+                              (value) => _questionImageFile!.addAll(value),
                             );
                             final exam = ExamModel(
-                              id: examId,
-                              isDone: false,
-                              questionImage: _questionImageFile ?? [],
-                              answerImage: _answerImageFile,
-                              subject: subjectController.text,
-                              professor: professorController.text,
-                              examPassMark: examPassMarkController.text,
-                              examMaxMark: examMaxMarkController.text,
-                              date: DateTime.parse(dateController.text),
-                              marks: _selectedStudent,
-                            );
-                            print(_selectedStudent.length);
+                                id: examId,
+                                isDone: false,
+                                questionImage: _questionImageFile ?? [],
+                                answerImage: _answerImageFile,
+                                subject: subjectController.text,
+                                professor: professorController.text,
+                                examPassMark: examPassMarkController.text,
+                                examMaxMark: examMaxMarkController.text,
+                                date: DateTime.parse(dateController.text),
+                                marks: _selectedStudent,
+                                isAccepted:
+                                    widget.examModel == null ? true : false);
+                            if (widget.examModel != null)
+                              addWaitOperation(
+                                  collectionName: examsCollection,
+                                  affectedId: examId,
+                                  type: waitingListTypes.edite,
+                                  details: editController.text,
+                                  oldData: widget.examModel!.toJson(),
+                                  newData: exam.toJson());
                             studentViewModel.addExamToStudent(
                                 _selectedStudent.keys.toList(), examId);
                             await examController.addExam(exam);
@@ -432,13 +435,16 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     DataColumn(label: Text("ولي الأمر")),
                     DataColumn(label: Text("موجود")),
                   ],
-                  rows:
-                  studentViewModel.studentMap.values.where((element) => element.stdClass==_selectedClass,)   .map(
-                        (e) {
+                  rows: studentViewModel.studentMap.values
+                      .where(
+                    (element) => element.stdClass == _selectedClass&&element.isAccepted==true,
+                  )
+                      .map(
+                    (e) {
                       if (_selectedStudent.keys
                           .where(
                             (element) => element == e.studentID,
-                      )
+                          )
                           .isNotEmpty) e.available = true;
 
                       return studentDataRow(e);
@@ -488,7 +494,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   ],
                 ),
               ),
-            SizedBox(height: defaultPadding,),
+            SizedBox(
+              height: defaultPadding,
+            ),
             if (!widget.isEdite)
               Center(
                 child: AppButton(

@@ -259,5 +259,14 @@ Map<String, String> ar = {
   "motherPhone": "رقم الام",
   "parentID": "رقم الهوية",
   "phoneNumber": "رقم الهاتف",
-  "work": "العمل"
+  "work": "العمل",
+  "className": "اسم الصف",
+  "answerImage": "صور ورقة الاجابة",
+  "examMaxMark": "العلامة الكاملة",
+  "examPassMark": "علامة النجاح",
+  "isDone": "تم الانتهاء",
+  "marks": "الطلاب",
+  "professor": "الاستاذ",
+  "questionImage": "صور ورقة الاسئلة",
+  "subject": "المادة"
 };

@@ -26,6 +26,7 @@ class ExamViewModel extends GetxController {
     "علامة النجاح": PlutoColumnType.text(),
     "العلامة الكاملة": PlutoColumnType.text(),
     "نسبة النجاح": PlutoColumnType.text(),
+    "موافقة المدير": PlutoColumnType.text(),
   };
   GlobalKey key=GlobalKey();
   ExamViewModel() {
@@ -76,7 +77,8 @@ class ExamViewModel extends GetxController {
               data.keys.elementAt(4): PlutoCell(value:value.marks?.length.toString()),
               data.keys.elementAt(5): PlutoCell(value:value.examPassMark.toString()),
               data.keys.elementAt(6): PlutoCell(value:value.examMaxMark.toString()),
-              data.keys.elementAt(7): PlutoCell(value:value.passRate.toString()),
+              data.keys.elementAt(7): PlutoCell(value:value.isDone==true? value.passRate.toString():"لم يصحح بعد".tr),
+              data.keys.elementAt(8): PlutoCell(value:value.isAccepted),
 
             },
           ),

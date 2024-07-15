@@ -135,7 +135,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                 addWaitOperation(
                                     type: waitingListTypes.delete,
 
-                                    collectionName: storeCollection,
+                                    collectionName: studentCollection,
                                     affectedId: controller
                                         .studentMap[currentId]!.studentID!,relatedId:controller
                                     .studentMap[currentId]!.parentId! );

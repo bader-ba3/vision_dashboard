@@ -77,6 +77,8 @@ class _ClassesViewState extends State<ClassesView> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
+                                 if(   classController.classMap.values
+                                        .elementAt(listClassIndex).isAccepted!)
                                     SelectedClass = classController
                                         .classMap.values
                                         .elementAt(listClassIndex);
@@ -86,7 +88,10 @@ class _ClassesViewState extends State<ClassesView> {
                                       duration: Durations.long1,
                                       padding: EdgeInsets.all(20),
                                       decoration: BoxDecoration(
-                                          color: checkIfPendingDelete(
+                                          color:classController
+                                              .classMap.values
+                                              .elementAt(listClassIndex)
+                                              .isAccepted==false?Colors.green.withOpacity(0.5) : checkIfPendingDelete(
                                                   affectedId: classController
                                                       .classMap.values
                                                       .elementAt(listClassIndex)
@@ -119,7 +124,8 @@ class _ClassesViewState extends State<ClassesView> {
                                       ))),
                                 ),
                                 onLeftSwipe: (details) {
-                                  if (enableUpdate)
+                                  if (enableUpdate&&classController.classMap.values
+                                      .elementAt(listClassIndex).isAccepted!)
                                     showClassInputDialog(
                                         context,
                                         classController.classMap.values
@@ -127,7 +133,8 @@ class _ClassesViewState extends State<ClassesView> {
                                         classController);
                                 },
                                 onRightSwipe: (details) async {
-                                  if (enableUpdate)
+                                  if (enableUpdate&&classController.classMap.values
+                                      .elementAt(listClassIndex).isAccepted!)
                                     await QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.confirm,
@@ -140,6 +147,7 @@ class _ClassesViewState extends State<ClassesView> {
                                           : 'حذف هذا العنصر'.tr,
                                       title: 'هل انت متأكد ؟'.tr,
                                       onConfirmBtnTap: () {
+
                                         String classId = classController
                                             .classMap.values
                                             .elementAt(listClassIndex)
@@ -508,11 +516,27 @@ class _ClassesViewState extends State<ClassesView> {
                       Spacer(),
                       AppButton(
                         onPressed: () {
-                          if(classNameController.text.isNotEmpty) {
-                            controller.addClass(ClassModel(
+                          if (classNameController.text.isNotEmpty) {
+                            if (classModel.className != '') {
+                              addWaitOperation(
+                                  collectionName: classCollection,
+                                  affectedId: classModel.classId!,
+                                  type: waitingListTypes.edite,newData: ClassModel(
+                                  className: classNameController.text,
+                                  classId: classModel.classId,
+                                  isAccepted: false
+                              ).toJson(),oldData: classModel.toJson());
+                              controller.addClass(ClassModel(
                                 className: classNameController.text,
                                 classId: classModel.classId,
-                                ));
+                                isAccepted: false
+                              ));
+                            }
+                          else  controller.addClass(ClassModel(
+                              className: classNameController.text,
+                              classId: classModel.classId,
+                              isAccepted: true
+                            ));
                             Get.back();
                           }
                         },
