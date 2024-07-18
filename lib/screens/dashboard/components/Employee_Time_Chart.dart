@@ -1,10 +1,16 @@
+
+
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vision_dashboard/constants.dart';
-import 'package:vision_dashboard/controller/account_management_view_model.dart';
+
+import '../../../constants.dart';
+import '../../../controller/account_management_view_model.dart';
+import '../../../utils/Dialogs.dart';
+import '../../Widgets/Custom_Text_Filed.dart';
 
 class EmployeeTimeChart extends StatefulWidget {
   EmployeeTimeChart({
@@ -85,9 +91,17 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
   void initState() {
     touchedValue = -1;
     super.initState();
+    getTime().then(
+          (value) {
+        if (value != null) {
+          // selectedDay = value.formattedTime;
+          selectedDayController.text = value.formattedTime;
+        }
+      },
+    );
   }
-
-
+TextEditingController selectedDayController=TextEditingController();
+// String selectedDay='';
   AccountManagementViewModel accountManagementViewModel =
   Get.find<AccountManagementViewModel>();
   Widget leftTitleWidgets(double value, TitleMeta meta) {
@@ -116,7 +130,7 @@ class _EmployeeTimeChartState extends State<EmployeeTimeChart> {
         text = '٦';
         break;
       case 7:
-        text = '7';
+        text = '٧';
         break;
       case 8:
         text = '٨';
@@ -182,18 +196,49 @@ else {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const SizedBox(height: 10),
-        Text(
-          'دوام الموظفين'.tr,
-          style: TextStyle(
-            color: widget.averageLineColor.withOpacity(1),
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+        Center(
+          child: Text(
+            'دوام الموظفين'.tr,
+            style: TextStyle(
+              color: widget.averageLineColor.withOpacity(1),
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
         ),
         const SizedBox(
           height: 18,
+        ),
+        InkWell(
+          onTap: () {
+            showDatePicker(
+              context: context,
+              firstDate: DateTime(2010),
+              lastDate: DateTime(2100),
+            ).then((date) {
+              if (date != null) {
+
+                selectedDayController  .text = date
+                    .toString()
+                    .split(" ")[0];
+                setState(() {});
+              }
+            });
+          },
+          child: CustomTextField(
+            controller: selectedDayController,
+            title: 'تاريخ العرض'.tr,
+            enable: false,
+            keyboardType:
+            TextInputType.datetime,
+            icon: Icon(
+              Icons.date_range_outlined,
+              color: primaryColor,
+            ),
+          ),
         ),
         SingleChildScrollView(
           physics: ClampingScrollPhysics(),
@@ -319,8 +364,8 @@ else {
                   LineChartBarData(
                     isStepLineChart: true,
                     spots: List.generate(
-                      accountManagementViewModel.getUserTimeToday().length,
-                          (index) => accountManagementViewModel.getUserTimeToday().asMap().entries.map((e) {
+                      accountManagementViewModel.getUserTimeToday(selectedDayController.text).length,
+                          (index) => accountManagementViewModel.getUserTimeToday(selectedDayController.text).asMap().entries.map((e) {
                         return FlSpot(index*1.0, e.value);
                       }).toList()[index],
                     ),
@@ -379,7 +424,7 @@ else {
                         }
                       },
                       checkToShowDot: (spot, barData) {
-                        return spot.x != 0 && spot.x != 10;
+                        return spot.x != 0 &&  spot.x != accountManagementViewModel.allAccountManagement.length+1;
                       },
                     ),
                   ),

@@ -1,8 +1,9 @@
 class EmployeeTimeModel{
   String? dayName,reasonOfLate ,reasonOfEarlier;
   DateTime? startDate , endDate ;
-  int? totalDate , totalLate,totalEarlier;
-  bool? isDayEnd,isLateWithReason,isEarlierWithReason;
+  int? totalDate ;
+  bool? isDayEnd,isLateWithReason,isEarlierWithReason,isDayOff;
+  int?  totalLate,totalEarlier;
 
   EmployeeTimeModel({
     required this.dayName,
@@ -12,10 +13,12 @@ class EmployeeTimeModel{
     required this.isDayEnd,
     required this.isLateWithReason,
     required this.reasonOfLate,
-    required this.totalLate,
     required this.isEarlierWithReason,
     required this.reasonOfEarlier,
+    required this.isDayOff,
+    required this.totalLate,
     required this.totalEarlier,
+
 
   });
 
@@ -27,6 +30,7 @@ class EmployeeTimeModel{
     endDate = json['endDate']==null ?null :json['endDate'].toDate();
     totalDate = json['totalDate'];
     isDayEnd = json['isDayEnd'];
+    isDayOff = json['isDayOff'];
     totalLate = int.tryParse(json['totalLate'].toString());
     isEarlierWithReason = json['isEarlierWithReason'];
     reasonOfEarlier = json['reasonOfEarlier'];
@@ -40,6 +44,7 @@ class EmployeeTimeModel{
       'endDate':endDate,
       "totalDate":totalDate,
       'isDayEnd':isDayEnd,
+      'isDayOff':isDayOff,
       'isLateWithReason':isLateWithReason,
       'reasonOfLate':reasonOfLate,
       'totalLate':totalLate,

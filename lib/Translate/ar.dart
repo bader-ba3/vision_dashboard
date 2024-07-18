@@ -229,7 +229,7 @@ Map<String, String> ar = {
   "delete": "حذف",
   "edite": "تعديل",
   "address": "شارع فطحل",
-  "age": "24",
+  "age": "العمر",
   "bus": "الحافلة",
   "contract": "دوام كلي",
   "dayOfWork": "عدد ايام العمل",
@@ -287,4 +287,5 @@ Map<String, String> ar = {
   "studentName": "اسم الطالب",
   "studentNumber": "رقم الطالب",
   "totalPayment": "كامل المبلغ",
+  "subName": "اسم المادة",
 };

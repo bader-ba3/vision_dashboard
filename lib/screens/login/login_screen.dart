@@ -39,11 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      /*  Container(
-                      width: MediaQuery.sizeOf(context).width/3,
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(color: Color(0xff00308F).withOpacity(0.1),borderRadius: BorderRadius.circular(10)),
-                        child: Image.asset("assets/RAKTA-LOGO.png",)),*/
+
                       SizedBox(height: 100,),
                       Container(
                         width: 400,

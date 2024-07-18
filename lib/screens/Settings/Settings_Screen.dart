@@ -12,6 +12,7 @@ import 'package:vision_dashboard/screens/Store/Controller/Store_View_Model.dart'
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 import 'package:vision_dashboard/screens/account_management/Employee_user_details.dart';
 import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dart';
 import 'package:vision_dashboard/utils/const.dart';
@@ -262,28 +263,99 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               AppButton(
                                   text: "ارشفة البيانات الحالية".tr,
                                   onPressed: () async {
+                                    bool _validateYearFormat(
+                                        BuildContext context, String value) {
+                                      final yearFormat =
+                                          RegExp(r'^\d{4}-\d{4}$');
+                                      if (!yearFormat.hasMatch(value)) {
+                                        QuickAlert.show(
+                                          cancelBtnText: "موافق".tr,
+                                          context: context,
+                                          type: QuickAlertType.error,
+                                          title: 'يجب أن يكون التنسيق مثل 2024-2025'
+                                              .tr,
+                                          text: "يجب التأكد من البيانات".tr,
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'يجب أن يكون التنسيق مثل 2024-2025'
+                                                    .tr),
+                                          ),
+                                        );
+                                        return false;
+                                      } else
+                                        return true;
+                                    }
+
+                                    TextEditingController yearNameController =
+                                        TextEditingController();
                                     QuickAlert.show(
-                                        width: Get.width / 2,
-                                        context: context,
-                                        type: QuickAlertType.loading,
-                                        title: 'جاري التحميل'.tr,
-                                        text: 'يتم العمل على الطلب'.tr,
-                                        barrierDismissible: false);
-                                    await controller.archive();
-                                    Get.back();
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      widget: Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: CustomTextField(
+                                          controller: yearNameController,
+                                          title: "ادخل اسم السنة".tr,
+                                        ),
+                                      ),
+                                      text: 'قبول هذه العملية'.tr,
+                                      title: 'هل انت متأكد ؟'.tr,
+                                      onConfirmBtnTap: () async {
+
+
+                                          if (_validateYearFormat(
+                                              context, yearNameController.text))
+                                          {
+                                          QuickAlert.show(
+                                              width: Get.width / 2,
+                                              context: context,
+                                              type: QuickAlertType.loading,
+                                              title: 'جاري التحميل'.tr,
+                                              text: 'يتم العمل على الطلب'.tr,
+                                              barrierDismissible: false);
+
+                                          await controller.archive(yearNameController.text);
+                                          Get.back();
+                                          Get.back();
+                                        }
+                                      },
+                                      onCancelBtnTap: () => Get.back(),
+                                      confirmBtnText: 'نعم'.tr,
+                                      cancelBtnText: 'لا'.tr,
+                                      confirmBtnColor: Colors.redAccent,
+                                      showCancelBtn: true,
+                                    );
                                   }),
                               AppButton(
-                                  text: "تصفير البيانات الحالية".tr,
+                                  text: "بدأ عام دراسي جديد".tr,
                                   onPressed: () async {
                                     QuickAlert.show(
-                                        width: Get.width / 2,
-                                        context: context,
-                                        type: QuickAlertType.loading,
-                                        title: 'جاري التحميل'.tr,
-                                        text: 'يتم العمل على الطلب'.tr,
-                                        barrierDismissible: false);
-                                    await controller.archive();
-                                    Get.back();
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      text: 'قبول هذه العملية'.tr,
+                                      title:
+                                          'سيتم حذف جميع البيانات الحالية'.tr,
+                                      onConfirmBtnTap: () async {
+                                        QuickAlert.show(
+                                            width: Get.width / 2,
+                                            context: context,
+                                            type: QuickAlertType.loading,
+                                            title: 'جاري التحميل'.tr,
+                                            text: 'يتم العمل على الطلب'.tr,
+                                            barrierDismissible: false);
+                                        await controller.archive("s");
+                                        Get.back();
+                                        Get.back();
+                                      },
+                                      onCancelBtnTap: () => Get.back(),
+                                      confirmBtnText: 'نعم'.tr,
+                                      cancelBtnText: 'لا'.tr,
+                                      confirmBtnColor: Colors.redAccent,
+                                      showCancelBtn: true,
+                                    );
                                   }),
                             ],
                           ),
@@ -402,75 +474,86 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  List<DataCell> _buildWaitCells(double size, List<String> deleteData,
-      WaitManagementModel model, String affectedName,WaitManagementViewModel controller) {
+  List<DataCell> _buildWaitCells(
+      double size,
+      List<String> deleteData,
+      WaitManagementModel model,
+      String affectedName,
+      WaitManagementViewModel controller) {
     return [
       dataRowItem(size / deleteData.length, model.type.toString().tr),
       dataRowItem(size / deleteData.length, model.details ?? "لا يوجد".tr),
       dataRowItem(size / deleteData.length, affectedName),
       dataRowItem(size / deleteData.length, model.collectionName.toString()),
-      model.type==waitingListTypes.edite.name?  dataRowItem(size / deleteData.length,  "عرض".tr,
-    onTap: () {
-    showData(context, model.oldDate, model.newData,model);
-    }):   DataCell(
-        Container(
-          width: size / deleteData.length,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildIconButton(
-                Icons.check_circle_outline,
-                Colors.green,
-                "قبول".tr,
-                () {
-                  if (enableUpdate)
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.confirm,
-                      text: 'قبول هذه العملية'.tr,
-                      title: model.collectionName == parentsCollection
-                          ? 'عند حذف ولي الامر سوف يتم حذف الاولاد الخاصة به'.tr
-                          : 'هل انت متأكد ؟'.tr,
-                      onConfirmBtnTap: () async{
-                     await   controller.doTheWait(model);
-                        Get.back();
-                        Get.back();
+      model.type == waitingListTypes.edite.name
+          ? dataRowItem(size / deleteData.length, "عرض".tr, onTap: () {
+              Map<String, Map<String, dynamic>> differences = compareMaps(
+                model.newData ?? {},
+                model.oldDate ?? {},
+              );
+
+              showData(context, differences, model);
+            })
+          : DataCell(
+              Container(
+                width: size / deleteData.length,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildIconButton(
+                      Icons.check_circle_outline,
+                      Colors.green,
+                      "قبول".tr,
+                      () {
+                        if (enableUpdate)
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.confirm,
+                            text: 'قبول هذه العملية'.tr,
+                            title: model.collectionName == parentsCollection
+                                ? 'عند حذف ولي الامر سوف يتم حذف الاولاد الخاصة به'
+                                    .tr
+                                : 'هل انت متأكد ؟'.tr,
+                            onConfirmBtnTap: () async {
+                              await controller.doTheWait(model);
+                              Get.back();
+                              Get.back();
+                            },
+                            onCancelBtnTap: () => Get.back(),
+                            confirmBtnText: 'نعم'.tr,
+                            cancelBtnText: 'لا'.tr,
+                            confirmBtnColor: Colors.redAccent,
+                            showCancelBtn: true,
+                          );
                       },
-                      onCancelBtnTap: () => Get.back(),
-                      confirmBtnText: 'نعم'.tr,
-                      cancelBtnText: 'لا'.tr,
-                      confirmBtnColor: Colors.redAccent,
-                      showCancelBtn: true,
-                    );
-                },
-              ),
-              _buildIconButton(
-                Icons.remove_circle_outline,
-                Colors.red,
-                "رفض".tr,
-                () {
-                  if (enableUpdate)
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.confirm,
-                      text: 'رفض هذه العملية'.tr,
-                      title: 'هل انت متأكد ؟'.tr,
-                      onConfirmBtnTap: () {
-                        controller.undoTheDelete(model);
-                        Get.back();
+                    ),
+                    _buildIconButton(
+                      Icons.remove_circle_outline,
+                      Colors.red,
+                      "رفض".tr,
+                      () {
+                        if (enableUpdate)
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.confirm,
+                            text: 'رفض هذه العملية'.tr,
+                            title: 'هل انت متأكد ؟'.tr,
+                            onConfirmBtnTap: () {
+                              controller.undoTheDelete(model);
+                              Get.back();
+                            },
+                            onCancelBtnTap: () => Get.back(),
+                            confirmBtnText: 'نعم'.tr,
+                            cancelBtnText: 'لا'.tr,
+                            confirmBtnColor: Colors.red,
+                            showCancelBtn: true,
+                          );
                       },
-                      onCancelBtnTap: () => Get.back(),
-                      confirmBtnText: 'نعم'.tr,
-                      cancelBtnText: 'لا'.tr,
-                      confirmBtnColor: Colors.red,
-                      showCancelBtn: true,
-                    );
-                },
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     ];
   }
 
@@ -488,8 +571,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  showData(BuildContext context, Map<String, dynamic>? oldDate,
-      Map<String, dynamic>? newDate ,WaitManagementModel waitModel) {
+  showData(BuildContext context, Map<String, Map<String, dynamic>> differences,
+      WaitManagementModel waitModel) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -509,35 +592,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
               builder: (context, constraints) {
                 double width = constraints.maxWidth;
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
+                return ListView(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
                       width: Get.width,
                       child: Wrap(
                         alignment: WrapAlignment.spaceEvenly,
                         children: [
-
-                          Text("البيانات الجديدة",style: Styles.headLineStyle1,overflow: TextOverflow.ellipsis,),
-
-
-                          Text("البيانات القديمة",style: Styles.headLineStyle1,overflow: TextOverflow.ellipsis,),
-
-
+                          Text(
+                            "البيانات القديمة".tr,
+                            style: Styles.headLineStyle1,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                          Text(
+                            "البيانات الجديدة".tr,
+                            style: Styles.headLineStyle1,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: defaultPadding,),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
                     ListView.builder(
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: oldDate?.values.map(
+                      itemCount: differences.keys.length,
+
+                      /* oldDate?.values.map(
                             (element) {
                               int count = 0;
                               for (int i = 0; i < oldDate.length; i++) {
-/*print(oldDate.values.elementAt(i).toString());
+*/ /*print(oldDate.values.elementAt(i).toString());
 print("------------------------------------");
-print(newDate!.values.elementAt(i).toString());*/
+print(newDate!.values.elementAt(i).toString());*/ /*
                                 if (oldDate.values.elementAt(i).toString() !=
                                     newDate!.values.elementAt(i).toString()) {
                                   count++;
@@ -547,7 +641,7 @@ print(newDate!.values.elementAt(i).toString());*/
                               return count;
                             },
                           ).firstOrNull ??
-                          0,
+                          0,*/
                       itemBuilder: (context, index) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -555,11 +649,15 @@ print(newDate!.values.elementAt(i).toString());*/
                             Container(
                                 width: width / 5,
                                 child: Text(
-                                  newDate?.entries
+                                  differences.keys
+                                      .elementAt(index)
+                                      .toString()
+                                      .tr,
+                                  /*   newDate?.entries
                                           .where(
                                             (element) {
-                                     /*         print("${element.value.toString()}" +"!="+
-                                                  "${oldDate!.values.elementAt(newDate.values.toList().indexOf(element.value)).toString()}");*/
+                                     */ /*         print("${element.value.toString()}" +"!="+
+                                                  "${oldDate!.values.elementAt(newDate.values.toList().indexOf(element.value)).toString()}");*/ /*
                                               return element.value.toString() !=
                                                   oldDate!.values
                                                       .elementAt(newDate
@@ -573,16 +671,18 @@ print(newDate!.values.elementAt(i).toString());*/
                                           ?.key
                                           .toString()
                                           .tr ??
-                                      '',
+                                      '',*/
                                   overflow: TextOverflow.ellipsis,
                                   style: Styles.headLineStyle3,
                                 )),
-
                             Text(":"),
                             Container(
                                 width: width / 4.1,
                                 child: Text(
-                                  newDate?.entries
+                                  differences.values
+                                      .elementAt(index)['oldData']
+                                      .toString(),
+                                  /*    newDate?.entries
                                           .where(
                                             (element) {
                                               return element.value.toString() !=
@@ -598,17 +698,25 @@ print(newDate!.values.elementAt(i).toString());*/
                                           ?.value
                                           .toString()
                                           .tr ??
-                                      '',
+                                      '',*/
                                   style: Styles.headLineStyle3
                                       .copyWith(color: primaryColor),
                                 )),
                             Spacer(),
-                            Container(width: 1,color: Colors.grey,height: 30,),
+                            Container(
+                              width: 1,
+                              color: Colors.grey,
+                              height: 30,
+                            ),
                             Spacer(),
                             Container(
                                 width: width / 5,
                                 child: Text(
-                                  oldDate?.entries
+                                  differences.keys
+                                      .elementAt(index)
+                                      .toString()
+                                      .tr,
+                                  /* oldDate?.entries
                                           .where(
                                             (element) {
                                               return element.value.toString() !=
@@ -624,16 +732,18 @@ print(newDate!.values.elementAt(i).toString());*/
                                           ?.key
                                           .toString()
                                           .tr ??
-                                      '',
+                                      '',*/
                                   overflow: TextOverflow.ellipsis,
                                   style: Styles.headLineStyle3,
                                 )),
-
                             Text(":"),
                             Container(
                                 width: width / 4.1,
                                 child: Text(
-                                  oldDate?.entries
+                                  differences.values
+                                      .elementAt(index)['newData']
+                                      .toString(),
+                                  /*  oldDate?.entries
                                           .where(
                                             (element) {
                                               return element.value.toString() !=
@@ -649,7 +759,7 @@ print(newDate!.values.elementAt(i).toString());*/
                                           ?.value
                                           .toString()
                                           .tr ??
-                                      '',
+                                      '',*/
                                   style: Styles.headLineStyle3
                                       .copyWith(color: primaryColor),
                                 )),
@@ -657,7 +767,9 @@ print(newDate!.values.elementAt(i).toString());*/
                         );
                       },
                     ),
-                    SizedBox(height: defaultPadding,),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
                     Container(
                       // width: size / deleteData.length,
                       child: Row(
@@ -667,7 +779,7 @@ print(newDate!.values.elementAt(i).toString());*/
                             Icons.check_circle_outline,
                             Colors.green,
                             "قبول".tr,
-                                () {
+                            () {
                               if (enableUpdate)
                                 QuickAlert.show(
                                   context: context,
@@ -676,7 +788,8 @@ print(newDate!.values.elementAt(i).toString());*/
                                   title: 'هل انت متأكد ؟'.tr,
                                   onConfirmBtnTap: () {
                                     // controller.doTheWait(model);
-                                    Get.find<WaitManagementViewModel>().approveEdite(waitModel);
+                                    Get.find<WaitManagementViewModel>()
+                                        .approveEdite(waitModel);
                                     Get.back();
                                   },
                                   onCancelBtnTap: () => Get.back(),
@@ -691,15 +804,16 @@ print(newDate!.values.elementAt(i).toString());*/
                             Icons.remove_circle_outline,
                             Colors.red,
                             "رفض".tr,
-                                () {
+                            () {
                               if (enableUpdate)
                                 QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.confirm,
                                   text: 'رفض هذه العملية'.tr,
                                   title: 'هل انت متأكد ؟'.tr,
-                                  onConfirmBtnTap: ()async {
-                                   await Get.find<WaitManagementViewModel>().declineEdit(waitModel);
+                                  onConfirmBtnTap: () async {
+                                    await Get.find<WaitManagementViewModel>()
+                                        .declineEdit(waitModel);
                                     Get.back();
                                     Get.back();
                                   },

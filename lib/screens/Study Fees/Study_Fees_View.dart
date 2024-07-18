@@ -1,16 +1,20 @@
 import 'dart:math';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Installment_model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/utils/Image_OverLay.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
 import '../../models/Parent_Model.dart';
+import '../../utils/Dialogs.dart';
 import '../Parents/Controller/Parents_View_Model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 import '../Widgets/Square_Widget.dart';
@@ -37,125 +41,117 @@ class _StudyFeesViewState extends State<StudyFeesView> {
 
   int inkwellIndex = 3;
   ParentsViewModel parentsViewModel = Get.find<ParentsViewModel>();
+
   // StudentViewModel studentViewModel = Get.find<StudentViewModel>();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<StudentViewModel>(
-      builder: (studentViewModel) {
-        return Scaffold(
-          appBar: Header(
-              context: context,
-              title: 'الرسوم الدراسية'.tr,
-              middleText:
-                  "تعرض هذه الواجهة اجمالي ادفعات المستلمة من الطلاب و اجمالي الدفعات الخير مستلمة واجمالي الدفعات المتأخرة عن الدفع عن هذا الشهر مع جدول يوضح تفاصيل الدفعات لكل اب مع امكانية استلام دفعة او التراجع عنها"
-                      .tr),
-          body: SingleChildScrollView(
-            child: GetBuilder<HomeViewModel>(builder: (controller) {
-              double size = max(
-                      MediaQuery.sizeOf(context).width -
-                          (controller.isDrawerOpen ? 240 : 120),
-                      1000) -
-                  60;
-              return Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: Get.width,
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        alignment: MediaQuery.sizeOf(context).width < 800
-                            ? WrapAlignment.center
-                            : WrapAlignment.spaceEvenly,
-                        runSpacing: 25,
-                        spacing: 10,
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                inkwellIndex = 0;
-                              setState(() {
-
-                              });
-                              },
-                              child: SquareWidget(
-                                  title: "الدفعات القادمة",
-                                  body:
-                                      "${studentViewModel.getAllNunReceivePay()}",
-                                  color: primaryColor,
-                                  png: "assets/poor.png")),
-                          InkWell(
-                              onTap: () {
-                                inkwellIndex = 1;
-                                setState(() {
-
-                                });
-                              },
-                              child: SquareWidget(
-                                  title: "الدفعات المستلمة",
-                                  body: "${studentViewModel.getAllReceivePay()}",
-                                  color: blueColor,
-                                  png: "assets/profit.png")),
-                          InkWell(
-                              onTap: () {
-                                inkwellIndex = 2;
-                                       setState(() {
-
-                                });
-                              },
-                              child: SquareWidget(
-                                  title: "الدفعات المتأخرة",
-                                  body:
-                                      "${studentViewModel.getAllNunReceivePayThisMonth()}",
-                                  color: Colors.redAccent,
-                                  png: "assets/late-payment.png")),
-                          InkWell(
-                              onTap: () {
-                                inkwellIndex = 3;
-                                    setState(() {
-
-                                });
-                              },
-                              child: SquareWidget(
-                                  title: "الاجمالي",
-                                  body: "${studentViewModel.getAllTotalPay()}",
-                                  color: Colors.black,
-                                  png: "assets/budget.png")),
-                        ],
-                      ),
+    return GetBuilder<StudentViewModel>(builder: (studentViewModel) {
+      return Scaffold(
+        appBar: Header(
+            context: context,
+            title: 'الرسوم الدراسية'.tr,
+            middleText:
+                "تعرض هذه الواجهة اجمالي ادفعات المستلمة من الطلاب و اجمالي الدفعات الخير مستلمة واجمالي الدفعات المتأخرة عن الدفع عن هذا الشهر مع جدول يوضح تفاصيل الدفعات لكل اب مع امكانية استلام دفعة او التراجع عنها"
+                    .tr),
+        body: SingleChildScrollView(
+          child: GetBuilder<HomeViewModel>(builder: (controller) {
+            double size = max(
+                    MediaQuery.sizeOf(context).width -
+                        (controller.isDrawerOpen ? 240 : 120),
+                    1000) -
+                60;
+            return Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: Get.width,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      alignment: MediaQuery.sizeOf(context).width < 800
+                          ? WrapAlignment.center
+                          : WrapAlignment.spaceEvenly,
+                      runSpacing: 25,
+                      spacing: 10,
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              inkwellIndex = 0;
+                              setState(() {});
+                            },
+                            child: SquareWidget(
+                                title: "الدفعات القادمة",
+                                body:
+                                    "${studentViewModel.getAllNunReceivePay()}",
+                                color: primaryColor,
+                                png: "assets/poor.png")),
+                        InkWell(
+                            onTap: () {
+                              inkwellIndex = 1;
+                              setState(() {});
+                            },
+                            child: SquareWidget(
+                                title: "الدفعات المستلمة",
+                                body: "${studentViewModel.getAllReceivePay()}",
+                                color: blueColor,
+                                png: "assets/profit.png")),
+                        InkWell(
+                            onTap: () {
+                              inkwellIndex = 2;
+                              setState(() {});
+                            },
+                            child: SquareWidget(
+                                title: "الدفعات المتأخرة",
+                                body:
+                                    "${studentViewModel.getAllNunReceivePayThisMonth()}",
+                                color: Colors.redAccent,
+                                png: "assets/late-payment.png")),
+                        InkWell(
+                            onTap: () {
+                              inkwellIndex = 3;
+                              setState(() {});
+                            },
+                            child: SquareWidget(
+                                title: "الاجمالي",
+                                body: "${studentViewModel.getAllTotalPay()}",
+                                color: Colors.black,
+                                png: "assets/budget.png")),
+                      ],
                     ),
-                    SizedBox(
-                      height: defaultPadding * 2,
+                  ),
+                  SizedBox(
+                    height: defaultPadding * 2,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(defaultPadding),
+                    decoration: BoxDecoration(
+                      color: secondaryColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(defaultPadding),
-                      decoration: BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: SizedBox(
-                        width: size + 60,
-                        child: Scrollbar(
+                    child: SizedBox(
+                      width: size + 60,
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
                           controller: _scrollController,
-                          child: SingleChildScrollView(
-                            controller: _scrollController,
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                                columnSpacing: 0,
-                                dividerThickness: 0.3,
-                                columns: List.generate(
-                                    data.length,
-                                    (index) => DataColumn(
-                                        label: Container(
-                                            width: size / data.length,
-                                            child: Center(
-                                                child: Text(data[index]
-                                                    .toString()
-                                                    .tr))))),
-                                rows: generateDataRows(inkwellIndex, size, data,
-                                    studentViewModel, parentsViewModel)
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              columnSpacing: 0,
+                              dividerThickness: 0.3,
+                              columns: List.generate(
+                                  data.length,
+                                  (index) => DataColumn(
+                                      label: Container(
+                                          width: size / data.length,
+                                          child: Center(
+                                              child: Text(data[index]
+                                                  .toString()
+                                                  .tr))))),
+                              rows: generateDataRows(inkwellIndex, size, data,
+                                  studentViewModel, parentsViewModel)
 
-                                /*[
+                              /*[
                                       ...List.generate(
                                         parentController.parentMap.values
                                             .where(
@@ -299,19 +295,18 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                         },
                                       )
                                     ]*/
-                                ),
-                          ),
+                              ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              );
-            }),
-          ),
-        );
-      }
-    );
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
+      );
+    });
   }
 
   List<DataRow> generateDataRows(int inkwellIndex, double size, List data,
@@ -325,7 +320,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
 
       return DataRow(
         color: WidgetStatePropertyAll(
-          studentController.chekaIfHaveLateInstallment(parent.id??"")
+          studentController.chekaIfHaveLateInstallment(parent.id ?? "")
               ? Colors.redAccent.withOpacity(0.2)
               : Colors.transparent,
         ),
@@ -372,7 +367,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
       return parent.children?.any((child) =>
               studentController.studentMap[child]?.installmentRecords?.values
                   .any((record) =>
-                      int.parse(record.installmentDate??'0') <=
+                      int.parse(record.installmentDate ?? '0') <=
                           DateTime.now().month &&
                       record.isPay != true) ??
               false) ??
@@ -409,7 +404,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
       StudentViewModel studentController) {
     Map<String, List<InstallmentModel>> instalmentStudent = {};
 
-    for (var child in parent.children??[]) {
+    for (var child in parent.children ?? []) {
       instalmentStudent[child] = studentController
               .studentMap[child]?.installmentRecords?.values
               .toList() ??
@@ -431,7 +426,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
               borderRadius: BorderRadius.circular(25.0),
             ),
             child: Container(
-              width: Get.width / 1.5,
+              width: Get.width / 2,
               child: ListView(
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
@@ -467,158 +462,297 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                               bool isLate = int.parse(
                                       installment[index].installmentDate!) <=
                                   DateTime.now().month;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (index == 0)
-                                      Text(
-                                        studentController
-                                            .studentMap[installmentStudent.keys
-                                                .elementAt(parentIndex)]!
-                                            .studentName!,
-                                        style: Styles.headLineStyle2,
-                                      ),
-                                    if (index == 0)
-                                      SizedBox(
-                                        height: defaultPadding,
-                                      ),
-                                    Wrap(
-                                      alignment: WrapAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          clipBehavior: Clip.hardEdge,
-                                          width: Get.width / 1.5,
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              border: Border.all(
-                                                  width: 2.0,
-                                                  color: isLate &&
-                                                          installment[index]
-                                                                  .isPay !=
-                                                              true
-                                                      ? Colors.red
-                                                          .withOpacity(0.5)
-                                                      : installment[index]
-                                                                  .isPay ==
-                                                              true
-                                                          ? Colors.green
-                                                              .withOpacity(0.5)
-                                                          : primaryColor
-                                                              .withOpacity(
-                                                                  0.5))),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14.0, horizontal: 10),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Spacer(),
-                                                CustomTextField(
-                                                  controller:
-                                                      TextEditingController()
-                                                        ..text =
-                                                            installment[index]
-                                                                .installmentDate
-                                                                .toString(),
-                                                  title: 'الشهر'.tr,
-                                                  enable: false,
-                                                  size: Get.width / 7.5,
-                                                  isFullBorder: true,
-                                                ),
-                                                Spacer(),
-                                                CustomTextField(
-                                                  controller:
-                                                      TextEditingController()
-                                                        ..text =
-                                                            installment[index]
-                                                                .installmentCost
-                                                                .toString(),
-                                                  title: "الدفعة".tr,
-                                                  enable: false,
-                                                  size: Get.width / 7.5,
-                                                  isFullBorder: true,
-                                                ),
-                                                Spacer(),
-                                              ],
-                                            ),
-                                          ),
+                              Uint8List? _contractsTemp;
+                              String? imageURL =
+                                  installment[index].InstallmentImage;
+                              return StatefulBuilder(builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (index == 0)
+                                        Text(
+                                          studentController
+                                              .studentMap[installmentStudent
+                                                  .keys
+                                                  .elementAt(parentIndex)]!
+                                              .studentName!,
+                                          style: Styles.headLineStyle2,
                                         ),
-                                        if (installment[index].isPay != true)
-                                          IconButton(
-                                              onPressed: () {
-                                                studentController
-                                                    .setInstallmentPay(
+                                      if (index == 0)
+                                        SizedBox(
+                                          height: defaultPadding,
+                                        ),
+                                      Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        width: Get.width,
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                                width: 2.0,
+                                                color: isLate &&
                                                         installment[index]
-                                                            .installmentId!,
-                                                        installmentStudent.keys
-                                                            .elementAt(
-                                                                parentIndex),
-                                                        true);
-                                                Get.back();
-                                              },
-                                              icon: Row(
-                                                children: [
-                                                  Text(
-                                                    "تسديد!".tr,
-                                                    style: Styles.headLineStyle3
-                                                        .copyWith(
-                                                            color:
-                                                                primaryColor),
-                                                  ),
-                                                  Icon(
-                                                    Icons.check,
-                                                    color: Colors.blue,
-                                                  )
-                                                ],
-                                              ))
-                                        else
-                                          GetBuilder<WaitManagementViewModel>(
-                                              builder: (deleteController) {
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: AppButton(
-                                                text: checkIfPendingDelete(
-                                                        affectedId:
-                                                            installment[index]
-                                                                .installmentId!)
-                                                    ? 'في انتظار الموفقة..'.tr
-                                                    : "تراجع".tr,
-                                                onPressed: () {
-                                                  if (checkIfPendingDelete(
-                                                      affectedId:
+                                                                .isPay !=
+                                                            true
+                                                    ? Colors.red
+                                                        .withOpacity(0.5)
+                                                    : installment[index]
+                                                                .isPay ==
+                                                            true
+                                                        ? Colors.green
+                                                            .withOpacity(0.5)
+                                                        : primaryColor
+                                                            .withOpacity(0.5))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 14.0, horizontal: 10),
+                                          child: Wrap(
+                                            alignment:
+                                                WrapAlignment.spaceBetween,
+                                            // spacing: 25,
+                                            runSpacing: 25,
+                                            // mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              CustomTextField(
+                                                controller:
+                                                    TextEditingController()
+                                                      ..text =
                                                           installment[index]
-                                                              .installmentId!))
-                                                    QuickAlert.show(
-                                                        context: context,
-                                                        type:
-                                                            QuickAlertType.info,
-                                                        width: Get.width / 2,
-                                                        title:
-                                                            "مراجعة المسؤول".tr,
-                                                        text:
-                                                            "يرجى مراجعة مسؤول المنصة"
-                                                                .tr);
-                                                  else
-                                                    addWaitOperation(
-                                                        type: waitingListTypes.returnInstallment,
-                                                        collectionName:
-                                                            installmentCollection,
-                                                        affectedId:
-                                                            installment[index]
-                                                                .installmentId!,
-                                                        relatedId:
-                                                            installmentStudent
-                                                                .keys
-                                                                .elementAt(
-                                                                    parentIndex));
-                                                  /*           studentController
+                                                              .installmentDate
+                                                              .toString(),
+                                                title: 'الشهر'.tr,
+                                                enable: false,
+                                                size: Get.width / 10,
+                                                isFullBorder: true,
+                                              ),
+                                              CustomTextField(
+                                                controller:
+                                                    TextEditingController()
+                                                      ..text =
+                                                          installment[index]
+                                                              .installmentCost
+                                                              .toString(),
+                                                title: "الدفعة".tr,
+                                                enable: false,
+                                                size: Get.width / 10,
+                                                isFullBorder: true,
+                                              ),
+                                              if (installment[index].isPay !=
+                                                  true)
+                                                InkWell(
+                                                  onTap: () async {
+                                                    FilePickerResult? _ =
+                                                        await FilePicker
+                                                            .platform
+                                                            .pickFiles(
+                                                                type: FileType
+                                                                    .image,
+                                                                allowMultiple:
+                                                                    false);
+                                                    if (_ != null) {
+                                                      _.files.forEach(
+                                                        (element) async {
+                                                          if (element.bytes !=
+                                                              null)
+                                                            _contractsTemp =
+                                                                element.bytes!;
+                                                        },
+                                                      );
+
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: secondaryColor
+                                                              .withOpacity(0.8),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15)),
+                                                      height: 50,
+                                                      width: Get.width / 10,
+                                                      child: _contractsTemp ==
+                                                              null
+                                                          ? Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    "صورة السند"
+                                                                        .tr),
+                                                                Icon(Icons.add),
+                                                              ],
+                                                            )
+                                                          : Container(
+                                                              clipBehavior:
+                                                                  Clip.hardEdge,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15)),
+                                                              child:
+                                                                  Image.memory(
+                                                                (_contractsTemp!),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )),
+                                                    ),
+                                                  ),
+                                                ),
+                                              /* Padding(
+                                                    padding:
+                                                    const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal:
+                                                        8.0),
+                                                    child: Container(
+                                                        clipBehavior:
+                                                        Clip.hardEdge,
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                            Colors.grey,
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                15)),
+                                                        width: 100,
+                                                        height: 100,
+                                                        child:
+                                                        Image.network(
+                                                          _contracts,
+                                                          height: 200,
+                                                          width: 200,
+                                                          fit: BoxFit
+                                                              .fitHeight,
+                                                        )),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),*/
+                                              if (installment[index].isPay ==
+                                                  true)
+                                                ImageOverlay(
+                                                  imageUrl: imageURL!,
+                                                  imageHeight: 50,
+                                                  imageWidth: Get.width / 10,
+                                                ),
+                                              if (installment[index].isPay !=
+                                                  true)
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: AppButton(
+                                                    onPressed: () async {
+                                                      if (_contractsTemp !=
+                                                          null)
+                                                        await uploadImages([
+                                                          _contractsTemp!
+                                                        ], "contracts")
+                                                            .then(
+                                                          (value) => imageURL =
+                                                              value.first,
+                                                        );
+                                                      studentController
+                                                          .setInstallmentPay(
+                                                              installment[index]
+                                                                  .installmentId!,
+                                                              installmentStudent
+                                                                  .keys
+                                                                  .elementAt(
+                                                                      parentIndex),
+                                                              true,
+                                                              imageURL!);
+                                                      Get.back();
+                                                    },
+                                                    text: "تسديد!"
+                                                        .tr, /*Row(
+                                                  children: [
+                                                    Text(
+                                                      "تسديد!".tr,
+                                                      style: Styles.headLineStyle3
+                                                          .copyWith(
+                                                              color:
+                                                                  primaryColor),
+                                                    ),
+                                                    Icon(
+                                                      Icons.check,
+                                                      color: Colors.blue,
+                                                    )
+                                                  ],
+                                                )*/
+                                                  ),
+                                                )
+                                              else
+                                                GetBuilder<
+                                                        WaitManagementViewModel>(
+                                                    builder:
+                                                        (deleteController) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: AppButton(
+                                                      text: checkIfPendingDelete(
+                                                              affectedId:
+                                                                  installment[
+                                                                          index]
+                                                                      .installmentId!)
+                                                          ? 'في انتظار الموفقة..'
+                                                              .tr
+                                                          : "تراجع".tr,
+                                                      onPressed: () {
+                                                        if (checkIfPendingDelete(
+                                                            affectedId: installment[
+                                                                    index]
+                                                                .installmentId!))
+                                                          QuickAlert.show(
+                                                              context: context,
+                                                              type:
+                                                                  QuickAlertType
+                                                                      .info,
+                                                              width:
+                                                                  Get.width / 2,
+                                                              title:
+                                                                  "مراجعة المسؤول"
+                                                                      .tr,
+                                                              text:
+                                                                  "يرجى مراجعة مسؤول المنصة"
+                                                                      .tr);
+                                                        else
+                                                          addWaitOperation(
+                                                              type: waitingListTypes
+                                                                  .returnInstallment,
+                                                              collectionName:
+                                                                  installmentCollection,
+                                                              affectedId:
+                                                                  installment[
+                                                                          index]
+                                                                      .installmentId!,
+                                                              relatedId:
+                                                                  installmentStudent
+                                                                      .keys
+                                                                      .elementAt(
+                                                                          parentIndex));
+                                                        /*           studentController
                                                         .setInstallmentPay(
                                                             installment[index]
                                                                 .installmentId!,
@@ -626,15 +760,18 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                                 .elementAt(
                                                                     parentIndex),
                                                             false);*/
-                                                },
-                                              ),
-                                            );
-                                          }),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
+                                                      },
+                                                    ),
+                                                  );
+                                                }),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
                             },
                           ),
                         );

@@ -77,16 +77,16 @@ class SettingsViewModel extends GetxController {
     );
   }
 
-   archive() async {
+   archive(String yearName) async {
     fireStoreInstance
         .collection(archiveCollection)
-        .doc(DateTime.now().year.toString())
+        .doc(yearName)
         .set({"Year": DateTime.now().toString()}, SetOptions(merge: true));
     for (var arr
         in _accountManagementViewModel.allAccountManagement.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(accountManagementCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -95,7 +95,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _salaryViewModel.salaryMap.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(salaryCollection)
           .doc(arr.salaryId)
           .set(arr.toJson());
@@ -104,7 +104,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _eventViewModel.allEvents.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(Const.eventCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -113,7 +113,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _examViewModel.examMap.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(examsCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -122,7 +122,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _studentViewModel.studentMap.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(studentCollection)
           .doc(arr.studentID)
           .set(arr.toJson());
@@ -131,7 +131,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _parentsViewModel.parentMap.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(parentsCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -140,7 +140,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _expensesViewModel.allExpenses.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(Const.expensesCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -149,7 +149,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _storeViewModel.storeMap.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(storeCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -158,7 +158,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _deleteManagementViewModel.allWaiting.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(Const.waitManagementCollection)
           .doc(arr.id)
           .set(arr.toJson());
@@ -167,7 +167,7 @@ class SettingsViewModel extends GetxController {
     for (var arr in _busViewModel.busesMap.values.toList()) {
       await fireStoreInstance
           .collection(archiveCollection)
-          .doc(DateTime.now().year.toString())
+          .doc(yearName)
           .collection(busesCollection)
           .doc(arr.busId)
           .set(arr.toJson());

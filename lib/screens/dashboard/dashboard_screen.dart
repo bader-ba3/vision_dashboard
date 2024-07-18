@@ -9,10 +9,10 @@ import 'package:vision_dashboard/screens/dashboard/components/Employee_Salary_Ch
 import 'package:vision_dashboard/screens/dashboard/components/Student_Detiles_Chart.dart';
 import 'package:vision_dashboard/screens/dashboard/components/Total_info_Widget.dart';
 import 'package:flutter/material.dart';
-import 'package:vision_dashboard/screens/main/main_screen.dart';
-import 'package:vision_dashboard/utils/Hive_DataBase.dart';
+
 
 import '../../constants.dart';
+import '../../utils/Dialogs.dart';
 import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/header.dart';
 
@@ -107,8 +107,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       .isNotEmpty)
                     InkWell(
                       onTap: () {
-                        HiveDataBase.setCurrentScreen("12");
-                        Get.offAll(MainScreen());
+                        getTime().then((value) {
+                          print(value?.formattedTime);
+                          print(value?.isAfter(20, 24));
+                        },);
+                        // HiveDataBase.setCurrentScreen("12");
+                        // Get.offAll(MainScreen());
                       },
                       child: Stack(
                         clipBehavior: Clip.none,

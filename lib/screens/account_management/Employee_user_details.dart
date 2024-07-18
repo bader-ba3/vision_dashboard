@@ -361,6 +361,8 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                               barrierDismissible: false);
                           role ??= accountType.keys.first;
                           AccountManagementModel model = AccountManagementModel(
+
+
                             id: widget.accountManagementModel == null
                                 ? generateId("EMPLOYEE")
                                 : widget.accountManagementModel!.id,
@@ -383,6 +385,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                             contract: contractController.text,
                             bus: busController.text,
                             startDate: startDateController.text,
+
                             eventRecords: eventRecords,
                             discounts: widget.accountManagementModel?.discounts,
                             salaryReceived:

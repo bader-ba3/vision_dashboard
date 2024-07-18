@@ -14,7 +14,7 @@ class HiveDataBase {
     String type,
     String name,
     String seralNFC,
-
+String id,
     String currentScreen
   }) getUserData() {
     String userName = accountBox.get("userName").toString();
@@ -22,10 +22,12 @@ class HiveDataBase {
     String seralNFC = accountBox.get("seralNFC").toString();
     String name = accountBox.get("name").toString();
     String currentScreen = accountBox.get("currentScreen")??"0";
+    String id = accountBox.get("id")??"0";
 
     return (
 
         userName:userName,
+    id:id,
       type:type,
         seralNFC:seralNFC,
       name:name,
@@ -34,11 +36,12 @@ class HiveDataBase {
   }
 
   static setUserData(
-      { required String userName,required String type, required String serialNFC,required String name}) async {
+      { required String userName,required String type, required String serialNFC,required String name,required String id}) async {
     await accountBox.put("name",name);
     await accountBox.put("userName", userName);
     await accountBox.put("type", type);
-    await accountBox.put("email", serialNFC);
+    await accountBox.put("serialNFC", serialNFC);
+    await accountBox.put("id", id);
     return true;
   }
 

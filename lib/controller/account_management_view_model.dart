@@ -16,6 +16,8 @@ import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Salary/controller/Salary_View_Model.dart';
 
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
+import 'package:vision_dashboard/utils/Dialogs.dart';
 
 import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../constants.dart';
@@ -46,7 +48,6 @@ class AccountManagementViewModel extends GetxController {
       );
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-
   List<PlutoColumn> columns = [];
   List<PlutoRow> rows = [];
 
@@ -67,16 +68,17 @@ class AccountManagementViewModel extends GetxController {
     "الحافلة": PlutoColumnType.text(),
     "تاريخ البداية": PlutoColumnType.text(),
     "سجل الاحداث": PlutoColumnType.text(),
-    "موافقة المدير":PlutoColumnType.text(),
+    "موافقة المدير": PlutoColumnType.text(),
   };
 
+  GlobalKey key = GlobalKey();
 
-  GlobalKey key=GlobalKey();
   AccountManagementViewModel() {
     getColumns();
     getAllEmployee();
   }
-  getColumns(){
+
+  getColumns() {
     columns.clear();
     columns.addAll(toAR(data));
   }
@@ -85,86 +87,94 @@ class AccountManagementViewModel extends GetxController {
 
   getAllEmployee() {
     listener = accountManagementFireStore.snapshots().listen(
-      (event)async {
-     await   Get.find<BusViewModel>().getAllWithoutListenBuse();
-        key=GlobalKey();
+      (event) async {
+        await Get.find<BusViewModel>().getAllWithoutListenBuse();
+        key = GlobalKey();
         rows.clear();
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
-            event.docs
-                .toList()
-                .map((i) {
-              rows.add(
-                PlutoRow(
-                  cells: {
-                    data.keys.elementAt(0): PlutoCell(value: i.id),
-                    data.keys.elementAt(1): PlutoCell(value: i.data().userName),
-                    data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
-                    data.keys.elementAt(3): PlutoCell(value: i.data().password),
-                    data.keys.elementAt(4): PlutoCell(value: i.data().type),
-                    data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
-                    data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
-                    data.keys.elementAt(7): PlutoCell(value: i.data().address),
-                    data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
-                    data.keys.elementAt(9): PlutoCell(value: i.data().gender),
-                    data.keys.elementAt(10): PlutoCell(value: i.data().age),
-                    data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
-                    data.keys.elementAt(12): PlutoCell(value: i.data().contract),
-                    data.keys.elementAt(13): PlutoCell(value: Get.find<BusViewModel>().busesMap[i.data().bus.toString()]?.name??i.data().bus),
-                    data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
-                    data.keys.elementAt(15): PlutoCell(value: i.data().eventRecords?.length.toString()),
-                    data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
-                  },
-                ),
-              );
-                  return MapEntry(i.id.toString(), i.data());
-                })).obs;
+            event.docs.toList().map((i) {
+          rows.add(
+            PlutoRow(
+              cells: {
+                data.keys.elementAt(0): PlutoCell(value: i.id),
+                data.keys.elementAt(1): PlutoCell(value: i.data().userName),
+                data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
+                data.keys.elementAt(3): PlutoCell(value: i.data().password),
+                data.keys.elementAt(4): PlutoCell(value: i.data().type),
+                data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
+                data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
+                data.keys.elementAt(7): PlutoCell(value: i.data().address),
+                data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
+                data.keys.elementAt(9): PlutoCell(value: i.data().gender),
+                data.keys.elementAt(10): PlutoCell(value: i.data().age),
+                data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
+                data.keys.elementAt(12): PlutoCell(value: i.data().contract),
+                data.keys.elementAt(13): PlutoCell(
+                    value: Get.find<BusViewModel>()
+                            .busesMap[i.data().bus.toString()]
+                            ?.name ??
+                        i.data().bus),
+                data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
+                data.keys.elementAt(15):
+                    PlutoCell(value: i.data().eventRecords?.length.toString()),
+                data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
+              },
+            ),
+          );
+          return MapEntry(i.id.toString(), i.data());
+        })).obs;
         update();
       },
     );
   }
 
   getAllEmployeeWithoutListen() {
-     accountManagementFireStore.get().then(
-      (event)async {
-     await   Get.find<BusViewModel>().getAllWithoutListenBuse();
-        key=GlobalKey();
+    accountManagementFireStore.get().then(
+      (event) async {
+        await Get.find<BusViewModel>().getAllWithoutListenBuse();
+        key = GlobalKey();
         rows.clear();
         allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
-            event.docs
-                .toList()
-                .map((i) {
-              rows.add(
-                PlutoRow(
-                  cells: {
-                    data.keys.elementAt(0): PlutoCell(value: i.id),
-                    data.keys.elementAt(1): PlutoCell(value: i.data().userName),
-                    data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
-                    data.keys.elementAt(3): PlutoCell(value: i.data().password),
-                    data.keys.elementAt(4): PlutoCell(value: i.data().type),
-                    data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
-                    data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
-                    data.keys.elementAt(7): PlutoCell(value: i.data().address),
-                    data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
-                    data.keys.elementAt(9): PlutoCell(value: i.data().gender),
-                    data.keys.elementAt(10): PlutoCell(value: i.data().age),
-                    data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
-                    data.keys.elementAt(12): PlutoCell(value: i.data().contract),
-                    data.keys.elementAt(13): PlutoCell(value: Get.find<BusViewModel>().busesMap[i.data().bus.toString()]?.name??i.data().bus),
-                    data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
-                    data.keys.elementAt(15): PlutoCell(value: i.data().eventRecords?.length.toString()),
-                    data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
-                  },
-                ),
-              );
-                  return MapEntry(i.id.toString(), i.data());
-                })).obs;
+            event.docs.toList().map((i) {
+          rows.add(
+            PlutoRow(
+              cells: {
+                data.keys.elementAt(0): PlutoCell(value: i.id),
+                data.keys.elementAt(1): PlutoCell(value: i.data().userName),
+                data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
+                data.keys.elementAt(3): PlutoCell(value: i.data().password),
+                data.keys.elementAt(4): PlutoCell(value: i.data().type),
+                data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
+                data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
+                data.keys.elementAt(7): PlutoCell(value: i.data().address),
+                data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
+                data.keys.elementAt(9): PlutoCell(value: i.data().gender),
+                data.keys.elementAt(10): PlutoCell(value: i.data().age),
+                data.keys.elementAt(11): PlutoCell(value: i.data().jobTitle),
+                data.keys.elementAt(12): PlutoCell(value: i.data().contract),
+                data.keys.elementAt(13): PlutoCell(
+                    value: Get.find<BusViewModel>()
+                            .busesMap[i.data().bus.toString()]
+                            ?.name ??
+                        i.data().bus),
+                data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
+                data.keys.elementAt(15):
+                    PlutoCell(value: i.data().eventRecords?.length.toString()),
+                data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
+              },
+            ),
+          );
+          return MapEntry(i.id.toString(), i.data());
+        })).obs;
         update();
       },
     );
   }
 
   addAccount(AccountManagementModel accountModel) {
-    accountManagementFireStore.doc(accountModel.id).set(accountModel,SetOptions(merge: true));
+    accountManagementFireStore
+        .doc(accountModel.id)
+        .set(accountModel, SetOptions(merge: true));
   }
 
   updateAccount(AccountManagementModel accountModel) {
@@ -176,6 +186,7 @@ class AccountManagementViewModel extends GetxController {
   deleteAccount(AccountManagementModel accountModel) {
     accountManagementFireStore.doc(accountModel.id).delete();
   }
+
   deleteUnAcceptedAccount(String accountModelId) {
     accountManagementFireStore.doc(accountModelId).delete();
   }
@@ -199,8 +210,8 @@ class AccountManagementViewModel extends GetxController {
   adReceiveSalary(String accountId, String paySalary, String salaryDate,
       String constSalary, String dilaySalary, bytes) async {
     String fileName = 'signatures/$accountId/$salaryDate.png';
-    print(dilaySalary);
-    print(paySalary);
+    // print(dilaySalary);
+    // print(paySalary);
     uploadImage(bytes, fileName).then(
       (value) async {
         if (value != Error) {
@@ -223,12 +234,16 @@ class AccountManagementViewModel extends GetxController {
             signImage: fileName,
           ));
 
-          if (double.parse(paySalary).toInt() != double.parse(dilaySalary).toInt())
+          if (double.parse(paySalary).toInt() !=
+              double.parse(dilaySalary).toInt())
             await addWaitOperation(
                 collectionName: accountManagementCollection,
                 affectedId: accountId,
                 type: waitingListTypes.waitDiscounts,
-                details:"الراتب الممنوح".tr+" ($paySalary) "+"الراتب المستحق".tr+" ($dilaySalary) ");
+                details: "الراتب الممنوح".tr +
+                    " ($paySalary) " +
+                    "الراتب المستحق".tr +
+                    " ($dilaySalary) ");
           Get.back();
           Get.back();
         }
@@ -267,20 +282,25 @@ class AccountManagementViewModel extends GetxController {
           .listen((value) {
         if (userName == null) {
           userStatus = UserManagementStatus.first;
-          print("1");
+          // print("1");
           // Get.offNamed(AppRoutes.main);
         } else if (value.docs.isNotEmpty) {
-          print("2");
-          print(value.docs.length);
+          // print("2");
+          // print(value.docs.length);
           myUserModel =
               AccountManagementModel.fromJson(value.docs.first.data());
           HiveDataBase.setCurrentScreen("0");
 
-     HiveDataBase.setUserData(name:myUserModel!.userName,type: myUserModel!.type,serialNFC: myUserModel!.serialNFC??'',userName: myUserModel!.userName );
+          HiveDataBase.setUserData(
+              id: myUserModel!.id,
+              name: myUserModel!.userName,
+              type: myUserModel!.type,
+              serialNFC: myUserModel!.serialNFC ?? '',
+              userName: myUserModel!.userName);
           userStatus = UserManagementStatus.login;
           Get.offNamed(AppRoutes.DashboardScreen);
         } else if (value.docs.isEmpty) {
-          print("3");
+          // print("3");
           if (Get.currentRoute != AppRoutes.main) {
             userStatus = UserManagementStatus.first;
             Get.offNamed(AppRoutes.main);
@@ -349,11 +369,10 @@ class AccountManagementViewModel extends GetxController {
   Future<void> addTime(
       {String? cardId, String? userName, String? password}) async {
     bool? isLateWithReason;
-    bool? isEarlierWithReason;
+    bool isDayOff = false;
     int totalLate = 0;
     int totalEarlier = 0;
     TextEditingController lateReasonController = TextEditingController();
-    TextEditingController earlierReasonController = TextEditingController();
     print(cardId);
     print("add Time");
     AccountManagementModel? user;
@@ -367,12 +386,522 @@ class AccountManagementViewModel extends GetxController {
       user = allAccountManagement.values
           .where(
             (element) =>
-                element.userName == userName && element.password == password,
+                element.userName == userName ,
           )
           .firstOrNull;
     }
     if (user != null) {
-      String date = DateTime.now().toString().split(" ")[0];
+      getTime().then(
+        (timeData) async {
+          if (timeData != null) {
+            // print(timeData.hour);
+            if (user!.employeeTime[timeData.formattedTime] == null) {
+              if (timeData.isAfter(8, 31)) {
+                totalLate = timeData.dateTime
+                    .difference(
+                        DateTime.now().copyWith(hour: 7, minute: 41, second: 0))
+                    .inMinutes;
+                isDayOff = true;
+                isLateWithReason = false;
+                await Get.defaultDialog(
+                    barrierDismissible: false,
+                    backgroundColor: Colors.white,
+                    title: "أنت متأخر ",
+                    content: Container(
+                      child: StatefulBuilder(
+                        builder: (context, setstate) {
+                          return Column(
+                            children: [
+                              Text("تأخرت اليوم "),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      fillColor: WidgetStatePropertyAll(primaryColor),
+                                      shape: RoundedRectangleBorder(),
+                                      value: !isLateWithReason!,
+                                      onChanged: (_) {
+                                        isLateWithReason = !_!;
+                                        setstate(() {});
+                                      }),
+                                  Text("تأخر غير مبرر")
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      fillColor: WidgetStatePropertyAll(primaryColor),
+                                      shape: RoundedRectangleBorder(),
+                                      value: isLateWithReason,
+                                      onChanged: (_) {
+                                        isLateWithReason = _!;
+                                        setstate(() {});
+                                      }),
+                                  Text("تأخر مبرر"),
+                                ],
+                              ),
+                              CustomTextField(
+                                  controller: lateReasonController,
+                                  title: "سبب التأخر".tr),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    actions: [
+                      AppButton(
+                          text: "موافق",
+                          onPressed: () {
+                            Get.back();
+                          })
+                    ]);
+              } else if (timeData.isAfter(7, 40)) {
+                totalLate = timeData.dateTime
+                    .difference(
+                        DateTime.now().copyWith(hour: 7, minute: 41, second: 0))
+                    .inMinutes;
+                isLateWithReason = false;
+                await Get.defaultDialog(
+                    barrierDismissible: false,
+                    backgroundColor: Colors.white,
+                    title: "أنت متأخر ",
+                    content: Container(
+                      child: StatefulBuilder(
+                        builder: (context, setstate) {
+                          return Column(
+                            children: [
+                              Text("تأخرت اليوم "),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+
+                                  fillColor: WidgetStatePropertyAll(primaryColor),
+                                      shape: RoundedRectangleBorder(),
+                                      value: !isLateWithReason!,
+                                      onChanged: (_) {
+                                        isLateWithReason = !_!;
+                                        setstate(() {});
+                                      }),
+                                  Text("تأخر غير مبرر")
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      fillColor: WidgetStatePropertyAll(primaryColor),
+                                      shape: RoundedRectangleBorder(),
+                                      value: isLateWithReason,
+                                      onChanged: (_) {
+                                        isLateWithReason = _!;
+                                        setstate(() {});
+                                      }),
+                                  Text("تأخر مبرر"),
+                                ],
+                              ),
+                              CustomTextField(
+                                  controller: lateReasonController,
+                                  title: "سبب التأخر".tr),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    actions: [
+                      AppButton(
+                          text: "موافق",
+                          onPressed: () {
+                            Get.back();
+                          })
+                    ]);
+              }
+
+
+              user.employeeTime[timeData.formattedTime] = EmployeeTimeModel(
+                  dayName: timeData.formattedTime,
+                  startDate: timeData.dateTime.copyWith(
+                      hour: timeData.hour,
+                      day: timeData.day,
+                      minute: timeData.minute),
+                  endDate: null,
+                  totalDate: null,
+                  isDayEnd: false,
+                  isDayOff: isDayOff,
+                  isLateWithReason: isLateWithReason,
+                  reasonOfLate: lateReasonController.text,
+                  totalLate: totalLate,
+                  isEarlierWithReason: null,
+                  reasonOfEarlier: null,
+                  totalEarlier: null);
+              loginUserPage = "اهلا بك " + user.userName;
+            } else if (user.employeeTime[timeData.formattedTime]!.isDayEnd!) {
+              loginUserPage = "لقد قمت بالخروج بالفعل " + user.userName;
+              print("You close the day already");
+            } else {
+              if (timeData.isBefore(14, 00)) {
+                totalEarlier = timeData.dateTime
+                    .copyWith(hour: 14, minute: 00, second: 0)
+                    .difference(timeData.dateTime)
+                    .inMinutes;
+                /*    await Get.defaultDialog(
+                    barrierDismissible: false,
+                    backgroundColor: Colors.white,
+                    title: "لقد خرجت مبكرا ",
+                    content: Container(),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text("موافق"))
+                    ]);*/
+              }
+
+              user.employeeTime[timeData.formattedTime]!.isEarlierWithReason =
+                  true;
+              user.employeeTime[timeData.formattedTime]!.totalEarlier =
+                  totalEarlier;
+              user.employeeTime[timeData.formattedTime]!.reasonOfEarlier = '';
+              loginUserPage = "وداعا " + user.userName;
+              user.employeeTime[timeData.formattedTime]!.endDate =
+                  timeData.dateTime.copyWith(
+                      hour: timeData.hour,
+                      day: timeData.day,
+                      minute: timeData.minute);
+              ;
+              user.employeeTime[timeData.formattedTime]!.isDayEnd = true;
+              user.employeeTime[timeData.formattedTime]!.totalDate = timeData
+                  .dateTime
+                  .difference(
+                      user.employeeTime[timeData.formattedTime]!.startDate!)
+                  .inMinutes;
+            }
+            accountManagementFireStore.doc(user.id).update({
+              "employeeTime": Map.fromEntries(user.employeeTime.entries
+                  .map((e) => MapEntry(e.key, e.value.toJson()))
+                  .toList())
+            });
+
+            update();
+            await Future.delayed(Duration(seconds: 4));
+            loginUserPage = null;
+            update();
+          }
+        },
+      );
+    } else {
+      print("Not found");
+    }
+  }
+
+  void disposeNFC() {}
+
+  getOldData(String value) {
+    FirebaseFirestore.instance
+        .collection(archiveCollection)
+        .doc(value)
+        .collection(accountManagementCollection)
+        .get()
+        .then(
+      (event) {
+        allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
+            event.docs.toList().map((i) => MapEntry(i.id.toString(),
+                AccountManagementModel.fromJson(i.data())))).obs;
+        listener.cancel();
+        update();
+      },
+    );
+  }
+
+  double getAllSalariesAtMonth(String month) {
+    double pay = 0.0;
+    allAccountManagement.forEach(
+      (key, value) {
+        if (value.employeeTime.entries.where(
+          (element) {
+            return element.key.toString().split("-")[1] ==
+                month.padLeft(2, "0");
+          },
+        ).isNotEmpty) {
+          AccountManagementModel accountModel = value;
+          int totalLateAndEarlier = (accountModel.employeeTime.isEmpty
+                      ? 0
+                      : accountModel.employeeTime.values.where(
+                            (element) {
+                              return element.isDayOff != true &&
+                                  element.isLateWithReason != true;
+                            },
+                          ).length /
+                          3)
+                  .floor() *
+              75;
+          totalLateAndEarlier += (accountModel.employeeTime.isEmpty
+                      ? 0
+                      : accountModel.employeeTime.values.where(
+                            (element) {
+                              return element.isDayOff != true &&
+                                  element.endDate == null;
+                            },
+                          ).length /
+                          3)
+                  .floor() *
+              75;
+          // print(totalLateAndEarlier);
+          int totalDayOff = (accountModel.employeeTime.isEmpty
+                  ? 0
+                  : accountModel.employeeTime.values.where(
+                      (element) {
+                        return element.isDayOff == true;
+                      },
+                    ).length) *
+              (accountModel.salary! / accountModel.dayOfWork!).round();
+
+          pay += accountModel.salary! - totalDayOff - totalLateAndEarlier;
+        }
+        //   AccountManagementModel accountModel = value;
+        //   int totalLate = accountModel.employeeTime.isEmpty
+        //       ? 0
+        //       : accountModel.employeeTime.values
+        //           .map((e) => e.totalLate ?? 0)
+        //           .reduce((value, element) => value + element);
+        //   int totalEarlier = accountModel.employeeTime.isEmpty
+        //       ? 0
+        //       : accountModel.employeeTime.values
+        //           .map((e) => e.totalEarlier ?? 0)
+        //           .reduce((value, element) => value + element);
+        //   int totalTime = totalLate + totalEarlier;
+        //   pay += ((accountModel.salary!) -
+        //       ((accountModel.salary! / accountModel.dayOfWork!) *
+        //           ((totalTime / 60).floor() * 0.5)));
+        // }
+      },
+    );
+    return pay;
+  }
+
+  double getUserSalariesAtMonth(String month, String user) {
+
+    double pay = 0.0;
+    if (allAccountManagement[user]!
+        .employeeTime
+        .entries
+        .where(
+          (element) =>
+              element.key.toString().split("-")[1] ==
+              month.padLeft(2, "0").toString(),
+        )
+        .isNotEmpty) {
+      AccountManagementModel accountModel = allAccountManagement[user]!;
+      int totalLateAndEarlier = (accountModel.employeeTime.isEmpty
+                  ? 0
+                  : accountModel.employeeTime.values.where(
+                        (element) {
+                          return element.isDayOff != true &&
+                              element.isLateWithReason != true ;
+                        },
+                      ).length /
+                      3)
+              .floor() *
+          75;
+      totalLateAndEarlier += (accountModel.employeeTime.isEmpty
+          ? 0
+          : accountModel.employeeTime.values.where(
+            (element) {
+          return element.isDayOff != true &&
+              element.endDate == null;
+        },
+      ).length /
+          3)
+          .floor() *
+          75;
+      int totalDayOff = (accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values.where(
+                  (element) {
+                    return element.isDayOff == true;
+                  },
+                ).length) *
+          (accountModel.salary! / accountModel.dayOfWork!).round();
+
+      pay += accountModel.salary! - totalDayOff - totalLateAndEarlier;
+      // int totalLate = accountModel.employeeTime.isEmpty
+      //     ? 0
+      //     : accountModel.employeeTime.values
+      //         .map((e) => e.totalLate ?? 0)
+      //         .reduce((value, element) => value + element);
+      // int totalEarlier = accountModel.employeeTime.isEmpty
+      //     ? 0
+      //     : accountModel.employeeTime.values
+      //         .map((e) => e.totalEarlier ?? 0)
+      //         .reduce((value, element) => value + element);
+      // int totalTime = totalLate + totalEarlier;
+      // pay += ((accountModel.salary!) -
+      //     ((accountModel.salary! / accountModel.dayOfWork!) *
+      //         ((totalTime / 60).floor() * 0.5)));
+    }
+
+    return pay;
+  }
+  double getAllUserSalariesAtMonth( String user) {
+
+    double pay = 0.0;
+    if (allAccountManagement[user]!
+        .employeeTime
+        .entries
+        .isNotEmpty) {
+      AccountManagementModel accountModel = allAccountManagement[user]!;
+      int totalLateAndEarlier = (accountModel.employeeTime.isEmpty
+                  ? 0
+                  : accountModel.employeeTime.values.where(
+                        (element) {
+                          return element.isDayOff != true &&
+                              element.isLateWithReason != true ;
+                        },
+                      ).length /
+                      3)
+              .floor() *
+          75;
+      totalLateAndEarlier += (accountModel.employeeTime.isEmpty
+          ? 0
+          : accountModel.employeeTime.values.where(
+            (element) {
+          return element.isDayOff != true &&
+              element.endDate == null;
+        },
+      ).length /
+          3)
+          .floor() *
+          75;
+      int totalDayOff = (accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values.where(
+                  (element) {
+                    return element.isDayOff == true;
+                  },
+                ).length) *
+          (accountModel.salary! / accountModel.dayOfWork!).round();
+
+      pay += accountModel.salary! - totalDayOff - totalLateAndEarlier;
+      // int totalLate = accountModel.employeeTime.isEmpty
+      //     ? 0
+      //     : accountModel.employeeTime.values
+      //         .map((e) => e.totalLate ?? 0)
+      //         .reduce((value, element) => value + element);
+      // int totalEarlier = accountModel.employeeTime.isEmpty
+      //     ? 0
+      //     : accountModel.employeeTime.values
+      //         .map((e) => e.totalEarlier ?? 0)
+      //         .reduce((value, element) => value + element);
+      // int totalTime = totalLate + totalEarlier;
+      // pay += ((accountModel.salary!) -
+      //     ((accountModel.salary! / accountModel.dayOfWork!) *
+      //         ((totalTime / 60).floor() * 0.5)));
+    }
+
+    return pay;
+  }
+
+  List<double> getUserTimeToday(String day) {
+    // String day = /*DateTime.now().day.toString()*/ "2024-07-16";
+    List<double> time = [0.0];
+    allAccountManagement.forEach(
+      (key, value) {
+        if (value.employeeTime.entries
+            .where(
+              (element) =>
+                  element.key.toString() == day&&element.value.isDayOff!=true,
+            )
+            .isNotEmpty) {
+          AccountManagementModel accountModel = value;
+          int totalLate = accountModel.employeeTime.isEmpty
+              ? 0
+              : accountModel.employeeTime.values.where((element) =>  element.dayName == day,)
+                  .map((e) => e.totalLate ?? 0).firstOrNull??0;
+                  /*.reduce((value, element) => value + element);*/
+          // int totalEarlier =   accountModel.employeeTime.isEmpty
+          //     ? 0
+          //     : accountModel.employeeTime.values
+          //         .map((e) => e.totalEarlier ?? 0)
+          //         .reduce((value, element) => value + element);
+          double totalTime = (totalLate + 0 * 1.0);
+
+         /* if (totalTime > 8)
+            time.add(8);
+          else*/
+            time.add(8-(totalTime / 60));
+        } else
+          time.add(0.0);
+      },
+    );
+
+    return time;
+  }
+
+  void addCard({required String cardId}) {
+    nfcController.text = cardId;
+    print("------${cardId}");
+  }
+
+  setAccepted(String affectedId) async {
+    FirebaseFirestore.instance
+        .collection(accountManagementCollection)
+        .doc(affectedId)
+        .set({"isAccepted": true}, SetOptions(merge: true));
+  }
+
+  setBus(String s, List emp) async {
+    for (var employee in emp)
+      FirebaseFirestore.instance
+          .collection(accountManagementCollection)
+          .doc(employee)
+          .set({"bus": s}, SetOptions(merge: true));
+  }
+
+   setAppend(String userId,date) {
+     allAccountManagement[userId]!
+      .employeeTime[date] = EmployeeTimeModel(
+         dayName: date,
+         startDate: DateTime.now().copyWith(
+             hour: 7,
+             day: int.parse(date.toString().split("-")[1]),
+             minute: 30),
+         endDate: DateTime.now().copyWith(
+             hour: 7,
+             day: int.parse(date.toString().split("-")[1]),
+             minute: 30),
+         totalDate: null,
+         isDayEnd: false,
+         isDayOff: true,
+         isLateWithReason: false,
+         reasonOfLate: "",
+         totalLate: 0,
+         isEarlierWithReason: null,
+         reasonOfEarlier: null,
+         totalEarlier: null);
+     accountManagementFireStore.doc(userId).update({
+       "employeeTime": Map.fromEntries(  allAccountManagement[userId]!.employeeTime.entries
+           .map((e) => MapEntry(e.key, e.value.toJson()))
+           .toList())
+     });
+   }
+}
+
+AccountManagementModel getMyUserId() {
+  /* print( HiveDataBase.getUserData().id);
+  print( HiveDataBase.getUserData().userName);
+  print( HiveDataBase.getUserData().seralNFC);
+  print( HiveDataBase.getUserData().type);
+  print( HiveDataBase.getUserData().name);*/
+  // return "a";
+  // return AccountManagementModel(id: HiveDataBase.getUserData().id, userName: HiveDataBase.getUserData().userName, password: "", type:HiveDataBase.getUserData(). type, serialNFC:HiveDataBase.getUserData(). seralNFC, isActive: true, salary: 34, dayOfWork: 20);
+  //
+  return Get.find<AccountManagementViewModel>().myUserModel!;
+}
+/*     String date = DateTime.now().toString().split(" ")[0];
       print(DateTime.now().hour);
       print(DateTime.now().minute);
       if (user.employeeTime[date] == null) {
@@ -471,7 +1000,8 @@ class AccountManagementViewModel extends GetxController {
             reasonOfEarlier: null,
             totalEarlier: null);
         loginUserPage = "اهلا بك " + user.userName;
-      } else if (user.employeeTime[date]!.isDayEnd!) {
+      }
+      else if (user.employeeTime[date]!.isDayEnd!) {
         loginUserPage = "لقد قمت بالخروج بالفعل " + user.userName;
         print("You close the day already");
       } else {
@@ -573,146 +1103,4 @@ class AccountManagementViewModel extends GetxController {
       update();
       await Future.delayed(Duration(seconds: 4));
       loginUserPage = null;
-      update();
-    } else {
-      print("Not found");
-    }
-  }
-
-  void disposeNFC() {}
-
-  getOldData(String value) {
-    FirebaseFirestore.instance
-        .collection(archiveCollection)
-        .doc(value)
-        .collection(accountManagementCollection)
-        .get()
-        .then(
-      (event) {
-        allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
-            event.docs.toList().map((i) => MapEntry(i.id.toString(),
-                AccountManagementModel.fromJson(i.data())))).obs;
-        listener.cancel();
-        update();
-      },
-    );
-  }
-
-  double getAllSalariesAtMonth(String month) {
-    double pay = 0.0;
-    allAccountManagement.forEach(
-      (key, value) {
-        if (value.employeeTime.entries
-            .where(
-              (element) =>
-                  element.key.toString().split("-")[1] == month.padLeft(2, "0"),
-            )
-            .isNotEmpty) {
-          AccountManagementModel accountModel = value;
-          int totalLate = accountModel.employeeTime.isEmpty
-              ? 0
-              : accountModel.employeeTime.values
-                  .map((e) => e.totalLate ?? 0)
-                  .reduce((value, element) => value + element);
-          int totalEarlier = accountModel.employeeTime.isEmpty
-              ? 0
-              : accountModel.employeeTime.values
-                  .map((e) => e.totalEarlier ?? 0)
-                  .reduce((value, element) => value + element);
-          int totalTime = totalLate + totalEarlier;
-          pay += ((accountModel.salary!) -
-              ((accountModel.salary! / accountModel.dayOfWork!) *
-                  ((totalTime / 60).floor() * 0.5)));
-        }
-      },
-    );
-    return pay;
-  }
-
-  double getUserSalariesAtMonth(String month, String user) {
-    double pay = 0.0;
-    if (allAccountManagement[user]!
-        .employeeTime
-        .entries
-        .where(
-          (element) =>
-              element.key.toString().split("-")[1] ==
-              month.padLeft(2, "0").toString(),
-        )
-        .isNotEmpty) {
-      AccountManagementModel accountModel = allAccountManagement[user]!;
-      int totalLate = accountModel.employeeTime.isEmpty
-          ? 0
-          : accountModel.employeeTime.values
-              .map((e) => e.totalLate ?? 0)
-              .reduce((value, element) => value + element);
-      int totalEarlier = accountModel.employeeTime.isEmpty
-          ? 0
-          : accountModel.employeeTime.values
-              .map((e) => e.totalEarlier ?? 0)
-              .reduce((value, element) => value + element);
-      int totalTime = totalLate + totalEarlier;
-      pay += ((accountModel.salary!) -
-          ((accountModel.salary! / accountModel.dayOfWork!) *
-              ((totalTime / 60).floor() * 0.5)));
-    }
-
-    return pay;
-  }
-
-  List<double> getUserTimeToday() {
-    String day = /*DateTime.now().day.toString()*/ "12";
-    List<double> time = [0.0];
-    allAccountManagement.forEach(
-      (key, value) {
-        if (value.employeeTime.entries
-            .where(
-              (element) =>
-                  element.key.toString().substring(8) == day.padLeft(2, "0"),
-            )
-            .isNotEmpty) {
-          AccountManagementModel accountModel = value;
-          int totalLate = accountModel.employeeTime.isEmpty
-              ? 0
-              : accountModel.employeeTime.values
-                  .map((e) => e.totalLate ?? 0)
-                  .reduce((value, element) => value + element);
-          int totalEarlier = accountModel.employeeTime.isEmpty
-              ? 0
-              : accountModel.employeeTime.values
-                  .map((e) => e.totalEarlier ?? 0)
-                  .reduce((value, element) => value + element);
-          double totalTime = totalLate + totalEarlier * 1.0;
-          if (totalTime > 8)
-            time.add(8);
-          else
-            time.add(totalTime / 60);
-        } else
-          time.add(0.0);
-      },
-    );
-
-    return time;
-  }
-
-  void addCard({required String cardId}) {
-    nfcController.text = cardId;
-    print("------${cardId}");
-  }
-
-   setAccepted(String affectedId) async{
-     FirebaseFirestore.instance
-         .collection(accountManagementCollection).doc(affectedId).set({"isAccepted":true} ,SetOptions(merge: true));
-   }
-
-  setBus(String s, List emp)async {
-for(var employee in emp)
-    FirebaseFirestore.instance
-        .collection(accountManagementCollection).doc(employee).set({"bus":s} ,SetOptions(merge: true));
-  }
-}
-
-AccountManagementModel getMyUserId() {
-  // return "a";
-  return Get.find<AccountManagementViewModel>().myUserModel!;
-}
+      update();*/

@@ -10,7 +10,14 @@ abstract class Const {
   static const eventTypeEmployee = 'eventTypeEmployee';
   static const allEventType = [eventTypeStudent,eventTypeParent,eventTypeEmployee];
 }
-
+Map<String, Map<String, dynamic>> compareMaps(Map<String, dynamic> newData, Map<String, dynamic> oldData) {
+  Map<String, Map<String, dynamic>> differences = {};
+  newData.forEach((key, value) {
+    if (oldData.containsKey(key) && newData[key].toString() != oldData[key].toString()) {
+      differences[key] = {'newData': newData[key], 'oldData': oldData[key]};
+    }
+  });
+  return differences;}
 String getEventTypeFromEnum(data){
   if(data == Const.eventTypeStudent){
     return "طالب";

@@ -33,26 +33,27 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
+
   List<({String name, String img, Widget widget})> allData = [
     (
       name: "لوحة التحكم",
       img: "assets/dashIcon/dash.png",
-      widget: DashboardScreen(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),):DashboardScreen(),
     ),
     (
       name: "أولياء الامور",
       img: "assets/dashIcon/family (1).png",
-      widget: ParentsView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ParentsView(),
     ),
     (
       name: "الطلاب",
       img: "assets/dashIcon/student.png",
-      widget: StudentView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StudentView(),
     ),
     (
       name: "الصفوف",
       img: "assets/dashIcon/class.png",
-      widget: ClassesView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ClassesView(),
     ),
     (
       name: "الدوام",
@@ -62,47 +63,47 @@ class _MainScreenState extends State<MainScreen>
     (
       name: "الامتحانات",
       img: "assets/dashIcon/checklist.png",
-      widget: ExamView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ExamView(),
     ),
     (
       name: "الموظفين",
       img: "assets/dashIcon/employee.png",
-      widget: EmployeeView(),
+      widget: !(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),):EmployeeView(),
     ),
     (
     name: "الرواتب",
     img: "assets/dashIcon/salary.png",
-    widget: SalaryView(),
+    widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): SalaryView(),
     ),
     (
       name: "الحافلات",
       img: "assets/dashIcon/bus.png",
-      widget: BusesView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): BusesView(),
     ),
     (
       name: "الرسوم الدراسية",
       img: "assets/dashIcon/accounting.png",
-      widget: StudyFeesView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StudyFeesView(),
     ),
     (
       name: "الأحداث",
       img: "assets/dashIcon/events.png",
-      widget: EventViewScreen(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): EventViewScreen(),
     ),
     (
       name: "المصاريف",
       img: "assets/dashIcon/audit.png",
-      widget: ExpensesViewScreen(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ExpensesViewScreen(),
     ),
     (
       name: "المستودع",
       img: "assets/dashIcon/groceries.png",
-      widget: StoreViewPage(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StoreViewPage(),
     ),
     (
       name: "ادارة المنصة",
       img: "assets/dashIcon/setting.png",
-      widget: SettingsView(),
+      widget:!(HiveDataBase.getUserData().type!='مستخدم')? Container(child: Center(child: Text("غير مسموح الوصل".tr),),): SettingsView(),
     ),
     (
       name: "تسجيل الخروج",
@@ -148,7 +149,7 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
-
+    print(HiveDataBase.getUserData().type!='مستخدم');
     tabController = TabController(length: allData.length, vsync: this);
     if (!_isTabControllerListenerAdded) {
       tabController.addListener(() {

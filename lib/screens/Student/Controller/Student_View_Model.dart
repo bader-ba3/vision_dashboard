@@ -10,6 +10,7 @@ import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
 
 import '../../../constants.dart';
 import '../../../controller/Wait_management_view_model.dart';
+
 import '../../../utils/To_AR.dart';
 import '../../Buses/Controller/Bus_View_Model.dart';
 import '../../Parents/Controller/Parents_View_Model.dart';
@@ -267,10 +268,13 @@ class StudentViewModel extends GetxController {
     return total;
   }
 
-  setInstallmentPay(String installmentId, String studentId, bool isPay) {
+  setInstallmentPay(String installmentId, String studentId, bool isPay,String imageUrl) async{
+
+
     Map<String, InstallmentModel>? installmentRecords =
         _studentMap[studentId]!.installmentRecords;
     installmentRecords![installmentId]!.isPay = isPay;
+    installmentRecords[installmentId]!.InstallmentImage = imageUrl;
     installmentRecords[installmentId]!.payTime = DateTime.now().toString();
     studentCollectionRef.doc(studentId).set(
         StudentModel(installmentRecords: installmentRecords).toJson(),

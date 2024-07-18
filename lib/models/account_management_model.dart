@@ -63,6 +63,7 @@ class AccountManagementModel {
     dayOfWork = json['dayOfWork'] ?? 0;
     isActive = json['isActive'] ?? true;
     isAccepted = json['isAccepted'] ?? true;
+
     (json['employeeTime'] ?? {}).forEach((k, v) {
       employeeTime[k] = EmployeeTimeModel.fromJson(v);
     });
@@ -95,6 +96,7 @@ class AccountManagementModel {
       if (salary != null) "salary": salary,
       if (isAccepted != null) "isAccepted": isAccepted,
       if (dayOfWork != null) "dayOfWork": dayOfWork,
+      if(employeeTime.isEmpty)
       "employeeTime": Map.fromEntries(employeeTime.entries
           .map((e) => MapEntry(e.key, e.value.toJson()))
           .toList()),

@@ -2,6 +2,7 @@ class InstallmentModel {
   String? installmentId;
   String? installmentCost;
   String? installmentDate;
+  String? InstallmentImage;
   String? payTime;
   bool? isPay;
 
@@ -11,6 +12,7 @@ class InstallmentModel {
     this.installmentDate,
     this.isPay,
     this.payTime,
+    this.InstallmentImage,
   });
 
   // fromJson method
@@ -19,6 +21,7 @@ class InstallmentModel {
       installmentId: json['installmentId'] ?? '',
       installmentCost: json['installmentCost'] ?? '',
       installmentDate: json['installmentDate'] ?? '',
+      InstallmentImage: json['InstallmentImage'] ?? 'https://image.shutterstock.com/image-vector/dotted-spiral-vortex-royaltyfree-images-600w-2227567913.jpg',
       isPay: json['isPay'] ?? false,
       payTime: json['payTime'] ?? '',
     );
@@ -30,6 +33,7 @@ class InstallmentModel {
       'installmentId': installmentId,
       'installmentCost': installmentCost,
       'installmentDate': installmentDate,
+      'InstallmentImage': InstallmentImage,
       'isPay': isPay,
       'payTime': payTime,
     };

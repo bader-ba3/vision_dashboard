@@ -155,11 +155,14 @@ class _StudentInputFormState extends State<StudentInputForm> {
       eventRecords = widget.studentModel!.eventRecords ?? [];
       _contracts = widget.studentModel!.contractsImage ?? [];
     }
+    else{
+       addInstalment();
+    }
   }
 
   int installmentCount = 0;
 
-  clearController() {
+  clearController() async{
     eventRecords.clear();
     studentNameController.clear();
     studentNumberController.clear();
@@ -179,6 +182,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
     busValue = '';
     _contracts.clear();
     _contractsTemp.clear();
+    installmentCount=0;
+    monthsController.clear();
+    costsController.clear();
+  await  addInstalment();
     setState(() {});
   }
 
@@ -335,7 +342,20 @@ class _StudentInputFormState extends State<StudentInputForm> {
                     label: "طريقة الدفع".tr,
                     onChange: (selectedWay) async {
                       if (selectedWay != null) {
-                        if (selectedWay == 'اقساط'.tr) {
+                        _payWay = selectedWay;
+                        if (selectedWay != 'اقساط'.tr)
+                          {
+                            print("object");
+                            monthsController[0].text=DateTime.now().month.toString().padLeft(2,"0");
+                            costsController.first=totalPaymentController;
+                            print(monthsController[0].text);
+                          }else{
+                          monthsController[0].text='';
+                          costsController.first=TextEditingController();
+                        }
+
+
+                      /*  if (selectedWay == 'اقساط'.tr) {
                           _payWay = selectedWay;
 
                           await addInstalment();
@@ -347,8 +367,10 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           monthsController.clear();
                           costsController.clear();
                           setState(() {});
-                        }
+                        }*/
+
                       }
+                      setState(() {});
                     },
                   ),
                   InkWell(
@@ -400,7 +422,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                         ),
                       ),
                     ),
-                  if (_payWay == 'اقساط'.tr)
+
                     SizedBox(
                       width: Get.width / 2,
                       child: Column(
@@ -465,11 +487,14 @@ class _StudentInputFormState extends State<StudentInputForm> {
                                               : CustomDropDown(
                                                   value: months.entries
                                                           .where(
-                                                            (element) =>
-                                                                element.value ==
+                                                            (element) {
+                                                              if(monthsController.isEmpty)
+                                                                return false;
+                                                              return element.value ==
                                                                 monthsController[
                                                                         index]
-                                                                    .text,
+                                                                    .text;
+                                                            },
                                                           )
                                                           .firstOrNull
                                                           ?.key ??
@@ -525,14 +550,14 @@ class _StudentInputFormState extends State<StudentInputForm> {
                           SizedBox(
                             height: defaultPadding,
                           ),
-                          GetBuilder<StudentViewModel>(builder: (controller) {
+                       /*   GetBuilder<StudentViewModel>(builder: (controller) {
                             return AppButton(
                               text: "حفظ".tr,
                               onPressed: () async {
                                 save(controller);
                               },
                             );
-                          }),
+                          }),*/
                         ],
                       ),
                     ),
@@ -630,7 +655,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                   if(widget.studentModel!=null)
                     CustomTextField(
                         controller: editController, title: 'سبب التعديل'.tr),
-                  if (_payWay != "اقساط".tr)
+
                     GetBuilder<StudentViewModel>(builder: (controller) {
                       return AppButton(
                         text: "حفظ".tr,
@@ -771,7 +796,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
     );
   }
 
-  save(controller) async {
+  save(StudentViewModel controller) async {
     if (_validateFields()) {
       QuickAlert.show(
           width: Get.width / 2,
@@ -780,6 +805,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
           title: 'جاري التحميل'.tr,
           text: 'يتم العمل على الطلب'.tr,
           barrierDismissible: false);
+      print( monthsController.length);
       for (int index = 0; index < monthsController.length; index++) {
         String insId = widget.studentModel != null
             ? widget.studentModel!.installmentRecords!.values
@@ -825,8 +851,8 @@ class _StudentInputFormState extends State<StudentInputForm> {
         installmentRecords: instalmentMap,
       );
       if (busController.text.startsWith("BUS"))
-      Get.find<BusViewModel>().addStudent(
-          busController.text, widget.studentModel!.studentID!);
+    await  Get.find<BusViewModel>().addStudent(
+          busController.text, student.studentID!);
       if (widget.studentModel != null) {
         addWaitOperation(
             collectionName: studentCollection,
@@ -835,7 +861,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
             oldData: widget.studentModel!.toJson(),
             newData: student.toJson(),
             details: editController.text);
-        await controller.addStudent(student);
+
         if (widget.studentModel!.parentId != guardianController.text) {
 
           Get.find<ParentsViewModel>().deleteStudent(
@@ -847,7 +873,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
               widget.studentModel!.bus!, widget.studentModel!.studentID!);
         }
       }
-
+      await controller.addStudent(student);
       clearController();
       setState(() {});
       if (widget.studentModel != null) Get.back();

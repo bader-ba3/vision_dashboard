@@ -63,7 +63,7 @@ class WaitManagementViewModel extends GetxController {
 
   doReturnInstallment(WaitManagementModel waitModel) async {
     await Get.find<StudentViewModel>().setInstallmentPay(
-        waitModel.affectedId, waitModel.relatedId.toString(), false);
+        waitModel.affectedId, waitModel.relatedId.toString(), false,'');
   }
 
   doDelete(WaitManagementModel waitModel) async {
@@ -79,7 +79,7 @@ class WaitManagementViewModel extends GetxController {
         }
         break;
       case studentCollection:
-        await deleteStudentFromParents(
+        await deleteStudentFromParentsAndBus(
             waitModel.affectedId, waitModel.relatedId!);
         break;
 
@@ -95,11 +95,12 @@ class WaitManagementViewModel extends GetxController {
     }
   }
 
-  deleteStudentFromParents(String studentId, String relatedId) async {
+  deleteStudentFromParentsAndBus(String studentId, String relatedId) async {
     _parentsViewModel.parentMap[relatedId]!.children!.remove(studentId);
     await _parentsViewModel.updateParent(ParentModel(
         id: relatedId,
         children: _parentsViewModel.parentMap[relatedId]!.children!));
+
   }
 
   deleteExpenseFromBus(String busId, String expensesId) {
