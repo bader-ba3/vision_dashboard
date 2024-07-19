@@ -9,7 +9,6 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:vision_dashboard/constants.dart';
 import 'package:vision_dashboard/models/TimeModel.dart';
-
 import 'package:http/http.dart' as http;
 import '../screens/Widgets/AppButton.dart';
 
@@ -95,12 +94,9 @@ bool validateNumericField(String value, String fieldName) {
 Future<TimesModel?> getTime() async {
   TimesModel? timesModel;
   try {
+
     final response = await http.get(Uri.parse(
-        "https://api.api-ninjas.com/v1/worldtime?city=Dubai"), headers: {
-      "Access-Control-Allow-Origin": "*",
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    });
+        "http://worldtimeapi.org/api/timezone/Asia/Dubais"));
     print(response.statusCode);
     print(response.body);
     // final response = await http.get(uri,);
