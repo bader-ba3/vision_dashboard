@@ -13,6 +13,7 @@ import 'package:vision_dashboard/utils/const.dart';
 
 import '../../constants.dart';
 import '../../controller/account_management_view_model.dart';
+import '../../utils/Hive_DataBase.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class ExpensesInputForm extends StatefulWidget {
@@ -240,7 +241,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
                           ? "مصروف الحافلة ${busController.busesMap[widget.busId]!.name}\n ${bodyController.text}"
                           : bodyController.text,
                       total: int.parse(totalController.text),
-                      userId: getMyUserId().id,
+                      userId: HiveDataBase.getAccountManagementModel()!.id,
                       images: imageLinkList,
                     );
 

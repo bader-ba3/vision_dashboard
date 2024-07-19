@@ -132,8 +132,8 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                             ),
                             InkWell(
                               onTap: () {
-                                if(HiveDataBase.getUserData().type!='مستخدم')
-                                isShowLogin = false;
+                                if (HiveDataBase.getUserData().type != 'مستخدم')
+                                  isShowLogin = false;
                                 setState(() {});
                               },
                               child: Container(
@@ -674,10 +674,14 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                                                         .dateToMinAndHour(
                                                                             j.startDate!)),
                                                             dataRowItem(
-                                                              color: j.isDayOff !=
-                                                                  true
-                                                                  ?j.endDate ==
-                                                                  null?Colors.teal:primaryColor:primaryColor,
+                                                                color: j.isDayOff !=
+                                                                        true
+                                                                    ? j.endDate ==
+                                                                            null
+                                                                        ? Colors
+                                                                            .teal
+                                                                        : primaryColor
+                                                                    : primaryColor,
                                                                 size /
                                                                     data.length,
                                                                 j.isDayOff ==
@@ -810,7 +814,11 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
         (index) => DataColumn(
             label: Container(
                 width: size / 4,
-                child: Center(child: Text(empData[index].toString().tr)))));
+                child: Center(
+                    child: Text(
+                  empData[index].toString().tr,
+                  style: Styles.headLineStyle1,
+                )))));
   }
 
   List<DataRow> _buildDataRows(
@@ -820,7 +828,8 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
 
     return List.generate(employees.length, (index) {
       return DataRow(cells: [
-        dataRowItem(size / 4, employees[index].fullName.toString()),
+        dataRowItem(size / 4, employees[index].fullName.toString(),
+            color: Colors.white),
         DataCell(Center(
           child: Container(
             width: size / 4,
@@ -851,12 +860,18 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                             .employeeTime
                             .values
                             .where((element) =>
-                                element.dayName == dayNameNow.split(' ')[0] &&
-                                element.endDate != null)
+                        element.dayName ==
+                            dayNameNow.split(' ')[0] &&
+                            element.endDate != null)
                             .isEmpty)
-                          accountController.addTime(
-                            userName: employees[index].userName,
-                          );
+                        getConfirmDialog(
+                          context,
+                          onConfirm: () {
+                              accountController.addTime(
+                                userName: employees[index].userName,
+                              );
+                          },
+                        );
                       }),
                 if (employees[index]
                     .employeeTime
@@ -867,8 +882,11 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                   AppButton(
                     text: "غائب",
                     onPressed: () {
-                      accountController.setAppend(
-                          employees[index].id, selectedDate.text);
+                      getConfirmDialog(context, onConfirm: (){
+                        accountController.setAppend(
+                            employees[index].id, selectedDate.text);
+                      });
+
                     },
                     color: Colors.redAccent.withOpacity(0.5),
                   )

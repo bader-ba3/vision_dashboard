@@ -212,7 +212,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                   CustomTextField(
                       controller: nationalityController, title: 'الجنسية'.tr),
                   CustomDropDown(
-                    value: genderController.text,
+                    value: genderController.text.tr,
                     listValue: sexList
                         .map(
                           (e) => e.tr,

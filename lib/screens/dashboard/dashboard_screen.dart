@@ -283,6 +283,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         StudentsDetailsChart(
                           students: _studentViewModel.studentMap,
                         ),
+                        SizedBox(
+                          height: defaultPadding,
+                        ),
+                        SquareWidget(
+                            "العام الدراسي".tr,
+                              "${DateTime.now().year}-${DateTime.now().year+1}",
+                            Colors.black,
+                            "assets/books.png",
+                            false),
                       ],
                     ),
                   ),

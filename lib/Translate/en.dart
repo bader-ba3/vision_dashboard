@@ -290,7 +290,17 @@ Map<String, String> en = {
   "هذا العنصر للقرائة فقط فقط":"This Item For Read Only",
   "waitDiscounts":'Salary increase granted',
   "returnInstallment":'Return Installment',
-
+"العام الدراسي":"school year",
+"تاريخ العرض":"Presentation date",
+"مقبول":"acceptable",
+"مرفوض":"unacceptable",
+"قبول":"Accept",
+"قبول هذه العملية":"Accept this process",
+"عند حذف ولي الامر سوف يتم حذف الاولاد الخاصة به":"When you delete the guardian, his children will be deleted",
+"رفض":"Reject",
+"رفض هذه العملية":"Refuse this operation",
+"بدأ عام دراسي جديد":"A new school year has begun",
+"":"",
 
 
 };

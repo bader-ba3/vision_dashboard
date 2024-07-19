@@ -38,22 +38,22 @@ class _MainScreenState extends State<MainScreen>
     (
       name: "لوحة التحكم",
       img: "assets/dashIcon/dash.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),):DashboardScreen(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),):DashboardScreen(),
     ),
     (
       name: "أولياء الامور",
       img: "assets/dashIcon/family (1).png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ParentsView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ParentsView(),
     ),
     (
       name: "الطلاب",
       img: "assets/dashIcon/student.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StudentView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StudentView(),
     ),
     (
       name: "الصفوف",
       img: "assets/dashIcon/class.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ClassesView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ClassesView(),
     ),
     (
       name: "الدوام",
@@ -63,47 +63,47 @@ class _MainScreenState extends State<MainScreen>
     (
       name: "الامتحانات",
       img: "assets/dashIcon/checklist.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ExamView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ExamView(),
     ),
     (
       name: "الموظفين",
       img: "assets/dashIcon/employee.png",
-      widget: !(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),):EmployeeView(),
+      widget: !(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),):EmployeeView(),
     ),
     (
     name: "الرواتب",
     img: "assets/dashIcon/salary.png",
-    widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): SalaryView(),
+    widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): SalaryView(),
     ),
     (
       name: "الحافلات",
       img: "assets/dashIcon/bus.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): BusesView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): BusesView(),
     ),
     (
       name: "الرسوم الدراسية",
       img: "assets/dashIcon/accounting.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StudyFeesView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StudyFeesView(),
     ),
     (
       name: "الأحداث",
       img: "assets/dashIcon/events.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): EventViewScreen(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): EventViewScreen(),
     ),
     (
       name: "المصاريف",
       img: "assets/dashIcon/audit.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ExpensesViewScreen(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): ExpensesViewScreen(),
     ),
     (
       name: "المستودع",
       img: "assets/dashIcon/groceries.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StoreViewPage(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')?  Container(child: Center(child: Text("غير مسموح الوصل".tr),),): StoreViewPage(),
     ),
     (
       name: "ادارة المنصة",
       img: "assets/dashIcon/setting.png",
-      widget:!(HiveDataBase.getUserData().type!='مستخدم')? Container(child: Center(child: Text("غير مسموح الوصل".tr),),): SettingsView(),
+      widget:!(HiveDataBase.getAccountManagementModel()!.type!='مستخدم')? Container(child: Center(child: Text("غير مسموح الوصل".tr),),): SettingsView(),
     ),
     (
       name: "تسجيل الخروج",
@@ -149,7 +149,7 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
-    print(HiveDataBase.getUserData().type!='مستخدم');
+    print(HiveDataBase.getAccountManagementModel()!.type);
     tabController = TabController(length: allData.length, vsync: this);
     if (!_isTabControllerListenerAdded) {
       tabController.addListener(() {

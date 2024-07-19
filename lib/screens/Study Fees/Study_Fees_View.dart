@@ -662,25 +662,29 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                       const EdgeInsets.all(8.0),
                                                   child: AppButton(
                                                     onPressed: () async {
-                                                      if (_contractsTemp !=
-                                                          null)
-                                                        await uploadImages([
+                                                      getConfirmDialog(context, onConfirm: ()async{
+                                                        if (_contractsTemp !=
+                                                            null)
+                                                          await uploadImages([
                                                           _contractsTemp!
                                                         ], "contracts")
                                                             .then(
-                                                          (value) => imageURL =
+                                                              (value) => imageURL =
                                                               value.first,
                                                         );
-                                                      studentController
-                                                          .setInstallmentPay(
-                                                              installment[index]
-                                                                  .installmentId!,
-                                                              installmentStudent
-                                                                  .keys
-                                                                  .elementAt(
-                                                                      parentIndex),
-                                                              true,
-                                                              imageURL!);
+                                                        studentController
+                                                            .setInstallmentPay(
+                                                            installment[index]
+                                                                .installmentId!,
+                                                            installmentStudent
+                                                                .keys
+                                                                .elementAt(
+                                                                parentIndex),
+                                                            true,
+                                                            imageURL!);
+                                                        Get.back();
+                                                      });
+
                                                       Get.back();
                                                     },
                                                     text: "تسديد!"
@@ -738,20 +742,23 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                                                                   "يرجى مراجعة مسؤول المنصة"
                                                                       .tr);
                                                         else
-                                                          addWaitOperation(
-                                                              type: waitingListTypes
-                                                                  .returnInstallment,
-                                                              collectionName:
-                                                                  installmentCollection,
-                                                              affectedId:
-                                                                  installment[
-                                                                          index]
-                                                                      .installmentId!,
-                                                              relatedId:
-                                                                  installmentStudent
-                                                                      .keys
-                                                                      .elementAt(
-                                                                          parentIndex));
+                                                          getConfirmDialog(context, onConfirm: () {
+                                                            addWaitOperation(
+                                                                type: waitingListTypes
+                                                                    .returnInstallment,
+                                                                collectionName:
+                                                                installmentCollection,
+                                                                affectedId:
+                                                                installment[
+                                                                index]
+                                                                    .installmentId!,
+                                                                relatedId:
+                                                                installmentStudent
+                                                                    .keys
+                                                                    .elementAt(
+                                                                    parentIndex));
+                                                          },);
+
                                                         /*           studentController
                                                         .setInstallmentPay(
                                                             installment[index]

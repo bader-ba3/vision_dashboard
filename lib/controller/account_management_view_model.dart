@@ -279,7 +279,7 @@ class AccountManagementViewModel extends GetxController {
           .where('userName', isEqualTo: userName)
           .where("password", isEqualTo: password)
           .snapshots()
-          .listen((value) {
+          .listen((value) async {
         if (userName == null) {
           userStatus = UserManagementStatus.first;
           // print("1");
@@ -291,12 +291,15 @@ class AccountManagementViewModel extends GetxController {
               AccountManagementModel.fromJson(value.docs.first.data());
           HiveDataBase.setCurrentScreen("0");
 
-          HiveDataBase.setUserData(
+      await    HiveDataBase.setUserData(
               id: myUserModel!.id,
               name: myUserModel!.userName,
               type: myUserModel!.type,
               serialNFC: myUserModel!.serialNFC ?? '',
               userName: myUserModel!.userName);
+      await HiveDataBase.deleteAccountManagementModel();
+          await HiveDataBase.setAccountManagementModel(myUserModel!);
+
           userStatus = UserManagementStatus.login;
           Get.offNamed(AppRoutes.DashboardScreen);
         } else if (value.docs.isEmpty) {
@@ -890,17 +893,17 @@ class AccountManagementViewModel extends GetxController {
    }
 }
 
-AccountManagementModel getMyUserId() {
-  /* print( HiveDataBase.getUserData().id);
-  print( HiveDataBase.getUserData().userName);
-  print( HiveDataBase.getUserData().seralNFC);
-  print( HiveDataBase.getUserData().type);
-  print( HiveDataBase.getUserData().name);*/
-  // return "a";
-  // return AccountManagementModel(id: HiveDataBase.getUserData().id, userName: HiveDataBase.getUserData().userName, password: "", type:HiveDataBase.getUserData(). type, serialNFC:HiveDataBase.getUserData(). seralNFC, isActive: true, salary: 34, dayOfWork: 20);
-  //
-  return Get.find<AccountManagementViewModel>().myUserModel!;
-}
+// AccountManagementModel getMyUserId() {
+//   /* print( HiveDataBase.getUserData().id);
+//   print( HiveDataBase.getUserData().userName);
+//   print( HiveDataBase.getUserData().seralNFC);
+//   print( HiveDataBase.getUserData().type);
+//   print( HiveDataBase.getUserData().name);*/
+//   // return "a";
+//   // return AccountManagementModel(id: HiveDataBase.getUserData().id, userName: HiveDataBase.getUserData().userName, password: "", type:HiveDataBase.getUserData(). type, serialNFC:HiveDataBase.getUserData(). seralNFC, isActive: true, salary: 34, dayOfWork: 20);
+//   //
+//   return Get.find<AccountManagementViewModel>().myUserModel!;
+// }
 /*     String date = DateTime.now().toString().split(" ")[0];
       print(DateTime.now().hour);
       print(DateTime.now().minute);

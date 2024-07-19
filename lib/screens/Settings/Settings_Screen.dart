@@ -87,12 +87,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SizedBox(
                     height: defaultPadding,
                   ),
-                  if (getMyUserId().type == "مالك")
                     Text(
                       "تأكيد العمليات".tr,
                       style: Styles.headLineStyle1,
                     ),
-                  if (getMyUserId().type == "مالك")
                     Container(
                       padding: EdgeInsets.all(defaultPadding),
                       decoration: BoxDecoration(

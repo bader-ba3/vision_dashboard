@@ -5,6 +5,7 @@ import 'package:vision_dashboard/screens/Settings/Settings_Screen.dart';
 import 'package:vision_dashboard/screens/account_management/Employee_user_details.dart';
 
 
+import '../../utils/Hive_DataBase.dart';
 import 'Controller/Settings_View_Model.dart';
 
 
@@ -33,9 +34,9 @@ class _SettingsViewState extends State<SettingsView> {
               ),
               secondChild: ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: Get.height),
-                child: EmployeeInputForm(accountManagementModel: getMyUserId(),enableEdit:false),
+                child: EmployeeInputForm(accountManagementModel: HiveDataBase.getAccountManagementModel(),enableEdit:false),
               ),
-              crossFadeState: getMyUserId().type!='مالك' ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+              crossFadeState: HiveDataBase.getAccountManagementModel()!.type!='مالك' ? CrossFadeState.showSecond : CrossFadeState.showFirst,
             ),
             // floatingActionButton:enableUpdate?FloatingActionButton(
             //   backgroundColor:primaryColor,
