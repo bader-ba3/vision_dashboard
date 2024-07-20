@@ -61,12 +61,14 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
       Get.find<AccountManagementViewModel>();
   EventModel? selectedEvent;
   List<EventRecordModel> eventRecords = [];
-
+bool isUpdate=false;
   @override
   void initState() {
     accountManagementViewModel.initNFC(typeNFC.add);
     super.initState();
     init();
+
+
   }
 
   @override
@@ -114,6 +116,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
 
   init() {
     if (widget.accountManagementModel != null) {
+      isUpdate=true;
       fullNameController.text =
           widget.accountManagementModel!.fullName.toString();
       mobileNumberController.text =
@@ -341,7 +344,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                       setState(() {});
                     },
                   ),
-                  if(widget.accountManagementModel!=null&&widget.enableEdit!)
+                  if(isUpdate&&widget.enableEdit!)
                   CustomTextField(
                       controller: editController,
                       title: 'سبب التعديل'.tr,
@@ -363,7 +366,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                           AccountManagementModel model = AccountManagementModel(
 
 
-                            id: widget.accountManagementModel == null
+                            id: !isUpdate
                                 ? generateId("EMPLOYEE")
                                 : widget.accountManagementModel!.id,
                             userName: userNameController.text,
@@ -385,7 +388,6 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                             contract: contractController.text,
                             bus: busController.text,
                             startDate: startDateController.text,
-
                             eventRecords: eventRecords,
                             discounts: widget.accountManagementModel?.discounts,
                             salaryReceived:
@@ -394,8 +396,8 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                           if (busController.text.startsWith("BUS"))
                             Get.find<BusViewModel>().addEmployee(
                                 busController.text,
-                                widget.accountManagementModel!.id);
-                          if (widget.accountManagementModel != null) {
+                                model.id);
+                          if (isUpdate) {
                             addWaitOperation(
                                 collectionName: accountManagementCollection,
                                 affectedId: widget.accountManagementModel!.id,
@@ -404,7 +406,7 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                                     widget.accountManagementModel!.toJson(),
                                 newData: model.toJson(),
                                 details: editController.text);
-                            await controller.addAccount(model);
+
                             if (widget.accountManagementModel!.bus !=
                                 busController.text) {
                               Get.find<BusViewModel>().deleteEmployee(
@@ -413,13 +415,16 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
                             }
                           }
 
-                          if (widget.accountManagementModel == null)
+                          if (!isUpdate)
                             await addWaitOperation(
                                 collectionName: accountManagementCollection,
                                 affectedId: model.id,
                                 type: waitingListTypes.add);
-                          if (widget.accountManagementModel != null) Get.back();
+
+                          if (isUpdate) Get.back();
                           Get.back();
+                          await controller.addAccount(model);
+                          getSuccessDialog(context);
                           clearController();
                         }
                       },

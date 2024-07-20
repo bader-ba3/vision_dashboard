@@ -153,8 +153,8 @@ final  ScrollController scrollController;
               dataRowItem(
                   size / 2.5 / 4,
                   accountController.allAccountManagement[
-                  salaryEmp.employeeId.toString()]!
-                      .fullName
+                  salaryEmp.employeeId.toString()]
+                      ?.fullName
                       .toString()),
               dataRowItem(size / 2.5 / 4, salaryEmp.dilaySalary.toString()),
               dataRowItem(size / 2.5 / 4, salaryEmp.constSalary.toString()),

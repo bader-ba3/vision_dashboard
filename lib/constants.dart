@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vision_dashboard/models/TimeModel.dart';
 
 const primaryColor = Color(0xff3E96F4);
 const secondaryColor = Color(0xffCCC7BF);
@@ -53,6 +54,7 @@ const String salaryCollection = 'Salaries';
 const String archiveCollection = 'Archive';
 const String busesCollection = 'Buses';
 const String installmentCollection = 'Installment';
+TimesModel? thisTimesModel;
 
 List<String> classNameList = [
   "KG 1",

@@ -10,6 +10,7 @@ import 'package:vision_dashboard/models/Parent_Model.dart';
 import 'package:vision_dashboard/screens/Buses/Controller/Bus_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dart';
+import 'package:vision_dashboard/utils/Dialogs.dart';
 
 import '../models/delete_management_model.dart';
 import '../screens/Parents/Controller/Parents_View_Model.dart';
@@ -55,6 +56,8 @@ class WaitManagementViewModel extends GetxController {
       doReturnInstallment(waitModel);
     if (waitModel.type == waitingListTypes.add.name) doAdd(waitModel);
     update();
+
+
   }
 
   doAdd(WaitManagementModel waitModel) async {
@@ -120,9 +123,12 @@ class WaitManagementViewModel extends GetxController {
   }
 
   addDeleteOperation(WaitManagementModel waitModel) {
-    waitManagementFireStore.doc(waitModel.id).set(
-          waitModel..date = DateTime.now().toString(),
-        );
+    getTime().then((date) {
+      waitManagementFireStore.doc(waitModel.id).set(
+        waitModel..date = date!.dateTime.toString(),
+      );
+    },);
+
     update();
   }
 

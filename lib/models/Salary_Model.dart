@@ -14,12 +14,12 @@ class SalaryModel{
   // fromJson method
   factory SalaryModel.fromJson(Map<String, dynamic> json) {
     return SalaryModel(
-      salaryId: json['salaryId'] ,
-      employeeId: json['employeeId'] ,
-      constSalary: json['constSalary'] ,
-      dilaySalary: json['dilaySalary'] ,
-      paySalary: json['paySalary'],
-      signImage: json['signImage'],
+      salaryId: json['salaryId']??"0" ,
+      employeeId: json['employeeId'] ??"0",
+      constSalary: json['constSalary'] ??"0",
+      dilaySalary: json['dilaySalary']??"0" ,
+      paySalary: double.parse(json['paySalary']??"0").round().toString(),
+      signImage: json['signImage']??"0",
     );
   }
 

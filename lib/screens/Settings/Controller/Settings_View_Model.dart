@@ -81,7 +81,7 @@ class SettingsViewModel extends GetxController {
     fireStoreInstance
         .collection(archiveCollection)
         .doc(yearName)
-        .set({"Year": DateTime.now().toString()}, SetOptions(merge: true));
+        .set({"Year": yearName}, SetOptions(merge: true));
     for (var arr
         in _accountManagementViewModel.allAccountManagement.values.toList()) {
       await fireStoreInstance

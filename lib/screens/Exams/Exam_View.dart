@@ -15,7 +15,7 @@ class ExamView extends StatefulWidget {
 class _ExamViewState extends State<ExamView>{
   bool isAdd=false;
 
-  @override
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +39,7 @@ class _ExamViewState extends State<ExamView>{
             isAdd = !isAdd;
           });
         },
-        child: Icon(!isAdd? Icons.add:Icons.grid_view),
+        child: Icon(!isAdd? Icons.add:Icons.grid_view,color: Colors.white,),
       ):Container(),
 
     );

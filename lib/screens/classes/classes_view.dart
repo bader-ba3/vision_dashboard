@@ -515,29 +515,32 @@ class _ClassesViewState extends State<ClassesView> {
                       Spacer(),
                       AppButton(
                         onPressed: () {
-                          if (classNameController.text.isNotEmpty) {
-                            if (classModel.className != '') {
-                              addWaitOperation(
-                                  collectionName: classCollection,
-                                  affectedId: classModel.classId!,
-                                  type: waitingListTypes.edite,newData: ClassModel(
-                                  className: classNameController.text,
-                                  classId: classModel.classId,
-                                  isAccepted: false
-                              ).toJson(),oldData: classModel.toJson());
-                              controller.addClass(ClassModel(
-                                className: classNameController.text,
-                                classId: classModel.classId,
-                                isAccepted: false
-                              ));
+                          if(classNameController.text!=classModel.className) {
+                            if (classNameController.text.isNotEmpty) {
+                              if (classModel.className != '') {
+                                addWaitOperation(
+                                    collectionName: classCollection,
+                                    affectedId: classModel.classId!,
+                                    type: waitingListTypes.edite,
+                                    newData: ClassModel(
+                                            className: classNameController.text,
+                                            classId: classModel.classId,
+                                            isAccepted: false)
+                                        .toJson(),
+                                    oldData: classModel.toJson());
+                                controller.addClass(ClassModel(
+                                    className: classNameController.text,
+                                    classId: classModel.classId,
+                                    isAccepted: false));
+                              } else
+                                controller.addClass(ClassModel(
+                                    className: classNameController.text,
+                                    classId: classModel.classId,
+                                    isAccepted: true));
+                              Get.back();
                             }
-                          else  controller.addClass(ClassModel(
-                              className: classNameController.text,
-                              classId: classModel.classId,
-                              isAccepted: true
-                            ));
+                          } else
                             Get.back();
-                          }
                         },
                         text: "حفظ".tr,
                       )

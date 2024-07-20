@@ -7,9 +7,18 @@ abstract class DateFun{
   static String minutesToTime(int time){
     return  printDuration(Duration(minutes:time),locale:ArabicDurationLocale(),delimiter: " و " );
   }
-  static String dateToMinAndHour(DateTime dateTime){
-    final format = DateFormat('hh:mm a'); // تنسيق 12 ساعة
-    return format.format(dateTime).tr;
-    // return "${dateTime.hour.toString().padLeft(2,"0")}:${dateTime.minute.toString().padLeft(2,"0")}";
+  static String dateToMinAndHour(DateTime dateTime) {
+    final format = DateFormat('hh:mm a');
+
+    String formattedTime = format.format(dateTime);
+
+    // استبدال AM و PM بالترجمات العربية
+    if (formattedTime.contains('AM')) {
+      formattedTime = formattedTime.replaceAll('AM', 'صباحًا');
+    } else if (formattedTime.contains('PM')) {
+      formattedTime = formattedTime.replaceAll('PM', 'مساءً');
+    }
+
+    return formattedTime;
   }
 }

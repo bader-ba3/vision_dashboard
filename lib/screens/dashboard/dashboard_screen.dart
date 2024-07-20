@@ -13,9 +13,11 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../utils/Dialogs.dart';
+import '../../utils/Hive_DataBase.dart';
 import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/header.dart';
 
+import '../main/main_screen.dart';
 import 'components/Employee_Time_Box.dart';
 import 'components/Employee_Details_Chart.dart';
 
@@ -48,12 +50,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         )
         .first
         .key;
-    WidgetsFlutterBinding.ensureInitialized().waitUntilFirstFrameRasterized.then((value) {
+
+    Future.delayed(Duration(seconds: 3),() async{
       _studentViewModel.update();
       _expensesViewModel.update();
       _accountManagementViewModel.update();
       _salaryViewModel.update();
+      print(thisTimesModel!.dateTime);
     },);
+/*    WidgetsFlutterBinding.ensureInitialized().waitUntilFirstFrameRasterized.then((value) {
+
+    },);*/
   }
 
   @override
@@ -107,12 +114,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       .isNotEmpty)
                     InkWell(
                       onTap: () {
-                        getTime().then((value) {
-                          print(value?.formattedTime);
-                          print(value?.isAfter(20, 24));
-                        },);
-                        // HiveDataBase.setCurrentScreen("12");
-                        // Get.offAll(MainScreen());
+                        // getTime().then((value) {
+                        //   print(value?.formattedTime);
+                        //   print(value?.isAfter(20, 24));
+                        // },);
+                        HiveDataBase.setCurrentScreen("12");
+                        Get.offAll(MainScreen());
                       },
                       child: Stack(
                         clipBehavior: Clip.none,

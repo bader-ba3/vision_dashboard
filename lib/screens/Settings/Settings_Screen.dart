@@ -22,6 +22,7 @@ import '../../controller/Wait_management_view_model.dart';
 import '../../controller/home_controller.dart';
 
 import '../../models/delete_management_model.dart';
+import '../../utils/Dialogs.dart';
 import '../Widgets/Data_Row.dart';
 import '../Widgets/header.dart';
 import 'Controller/Settings_View_Model.dart';
@@ -156,7 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   for (var deleteModel
                                       in controller.allWaiting.values.where(
                                     (element) => element.isAccepted != null,
-                                  ))
+                                  ).toList().reversed)
                                     DataRow(cells: [
                                       dataRowItem(size / logData.length,
                                           deleteModel.type.toString().tr),
@@ -263,6 +264,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   onPressed: () async {
                                     bool _validateYearFormat(
                                         BuildContext context, String value) {
+
+
                                       final yearFormat =
                                           RegExp(r'^\d{4}-\d{4}$');
                                       if (!yearFormat.hasMatch(value)) {
@@ -315,9 +318,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               text: 'يتم العمل على الطلب'.tr,
                                               barrierDismissible: false);
 
-                                          await controller.archive(yearNameController.text);
-                                          Get.back();
-                                          Get.back();
+                                          try{
+                                            await controller.archive(yearNameController.text);
+                                            Get.back();
+                                            Get.back();
+                                          } on Exception catch (e){
+                                          await  getReedOnlyError(context,title: e.toString());
+                                            Get.back();
+                                            Get.back();
+                                          }
+
                                         }
                                       },
                                       onCancelBtnTap: () => Get.back(),
@@ -515,7 +525,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             onConfirmBtnTap: () async {
                               await controller.doTheWait(model);
                               Get.back();
-                              Get.back();
                             },
                             onCancelBtnTap: () => Get.back(),
                             confirmBtnText: 'نعم'.tr,
@@ -523,6 +532,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             confirmBtnColor: Colors.redAccent,
                             showCancelBtn: true,
                           );
+
                       },
                     ),
                     _buildIconButton(
@@ -546,6 +556,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             confirmBtnColor: Colors.red,
                             showCancelBtn: true,
                           );
+
                       },
                     ),
                   ],
@@ -788,6 +799,7 @@ print(newDate!.values.elementAt(i).toString());*/ /*
                                     // controller.doTheWait(model);
                                     Get.find<WaitManagementViewModel>()
                                         .approveEdite(waitModel);
+                                    Get.back();
                                     Get.back();
                                   },
                                   onCancelBtnTap: () => Get.back(),

@@ -31,7 +31,9 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
   String selectedMonth = '';
   String selectedDay = '';
   String dayNameNow = '';
-  List<bool>? _isOpen;
+  List<bool> _isOpen   = List.generate(
+      Get.find<AccountManagementViewModel>().allAccountManagement.length,
+  (index) => false);
   final selectedDate = TextEditingController();
 
   @override
@@ -80,6 +82,8 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
 
   @override
   Widget build(BuildContext context) {
+
+
     double size = max(MediaQuery.sizeOf(context).width - 300, 1000);
     return Scaffold(
       body: GetBuilder<AccountManagementViewModel>(builder: (controller) {
@@ -420,7 +424,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                         expansionCallback:
                                             (int index, bool isExpanded) {
                                           setState(() {
-                                            _isOpen![index] = !_isOpen![index];
+                                            _isOpen[index] = !_isOpen[index];
                                           });
                                         },
                                         children: controller
@@ -429,6 +433,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             .asMap()
                                             .entries
                                             .map<ExpansionPanel>((entry) {
+
                                           int indexKey = entry.key;
 
                                           var accountModel = entry.value;
@@ -456,110 +461,117 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             headerBuilder:
                                                 (BuildContext context,
                                                     bool isExpanded) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Container(
-                                                      width: Get.width / 7,
-                                                      child: Text(
-                                                        accountModel.userName,
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                Get.width < 700
-                                                                    ? 16
-                                                                    : 20),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                              return InkWell(
+                                                onTap: (){
+                                                  setState(() {
+                                                    _isOpen[indexKey] = !_isOpen[indexKey];
+                                                  });
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(16.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Container(
+                                                        width: Get.width / 7,
+                                                        child: Text(
+                                                          accountModel.userName,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  Get.width < 700
+                                                                      ? 16
+                                                                      : 20),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      width: Get.width / 7,
-                                                      child: Text(
-                                                        DateFun.minutesToTime(
-                                                            totalTime),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                Get.width < 700
-                                                                    ? 16
-                                                                    : 20),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                      Container(
+                                                        width: Get.width / 7,
+                                                        child: Text(
+                                                          DateFun.minutesToTime(
+                                                              totalTime),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  Get.width < 700
+                                                                      ? 16
+                                                                      : 20),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      width: Get.width / 7,
-                                                      child: Text(
-                                                        selectedMonth ==
-                                                                "الكل".tr
-                                                            ? (accountModel
-                                                                        .salary! -
-                                                                    accountManagementViewModel.getAllUserSalariesAtMonth(
-                                                                        accountModel
-                                                                            .id))
-                                                                .toString()
-                                                            : (accountModel
-                                                                        .salary! -
-                                                                    accountManagementViewModel.getUserSalariesAtMonth(
-                                                                        months[
-                                                                            selectedMonth]!,
-                                                                        accountModel
-                                                                            .id))
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                Get.width < 700
-                                                                    ? 16
-                                                                    : 20),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                      Container(
+                                                        width: Get.width / 7,
+                                                        child: Text(
+                                                          selectedMonth ==
+                                                                  "الكل".tr
+                                                              ? (accountModel
+                                                                          .salary! -
+                                                                      accountManagementViewModel.getAllUserSalariesAtMonth(
+                                                                          accountModel
+                                                                              .id))
+                                                                  .toString()
+                                                              : (accountModel
+                                                                          .salary! -
+                                                                      accountManagementViewModel.getUserSalariesAtMonth(
+                                                                          months[
+                                                                              selectedMonth]!,
+                                                                          accountModel
+                                                                              .id))
+                                                                  .toString(),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  Get.width < 700
+                                                                      ? 16
+                                                                      : 20),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      width: Get.width / 7,
-                                                      child: Text(
-                                                        (accountModel.salary!)
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                Get.width < 700
-                                                                    ? 16
-                                                                    : 20),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                      Container(
+                                                        width: Get.width / 7,
+                                                        child: Text(
+                                                          (accountModel.salary!)
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  Get.width < 700
+                                                                      ? 16
+                                                                      : 20),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      width: Get.width / 7,
-                                                      child: Text(
-                                                        selectedMonth ==
-                                                                "الكل".tr
-                                                            ? (accountManagementViewModel
-                                                                    .getAllUserSalariesAtMonth(
-                                                                        accountModel
-                                                                            .id))
-                                                                .toString()
-                                                            : accountManagementViewModel
-                                                                .getUserSalariesAtMonth(
-                                                                    months[
-                                                                        selectedMonth]!,
-                                                                    accountModel
-                                                                        .id)
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                Get.width < 700
-                                                                    ? 16
-                                                                    : 20),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                      Container(
+                                                        width: Get.width / 7,
+                                                        child: Text(
+                                                          selectedMonth ==
+                                                                  "الكل".tr
+                                                              ? (accountManagementViewModel
+                                                                      .getAllUserSalariesAtMonth(
+                                                                          accountModel
+                                                                              .id))
+                                                                  .toString()
+                                                              : accountManagementViewModel
+                                                                  .getUserSalariesAtMonth(
+                                                                      months[
+                                                                          selectedMonth]!,
+                                                                      accountModel
+                                                                          .id)
+                                                                  .toString(),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  Get.width < 700
+                                                                      ? 16
+                                                                      : 20),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -689,7 +701,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                                                     ? "غائب".tr
                                                                     : j.endDate ==
                                                                             null
-                                                                        ? "PM 02:00"
+                                                                        ? "لم يسجل خروج".tr
                                                                         : DateFun.dateToMinAndHour(
                                                                             j.endDate!)),
                                                             dataRowItem(
@@ -836,6 +848,16 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+
+                if(employees[index]
+                    .employeeTime
+                    .values
+                    .where((element) =>
+                element.dayName ==
+                    selectedDate.text &&
+                    element.endDate != null)
+                    .isNotEmpty)
+                  Text("تم الانتهاء".tr,style: Styles.headLineStyle3.copyWith(color: primaryColor),)else
                 if (selectedDate.text == dayNameNow)
                   AppButton(
                       text: employees[index]
@@ -844,16 +866,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               .where((element) =>
                                   element.dayName == dayNameNow.split(' ')[0])
                               .isNotEmpty
-                          ? employees[index]
-                                  .employeeTime
-                                  .values
-                                  .where((element) =>
-                                      element.dayName ==
-                                          dayNameNow.split(' ')[0] &&
-                                      element.endDate != null)
-                                  .isNotEmpty
-                              ? "تم".tr
-                              : "الخروج".tr
+                          ? "الخروج".tr
                           : "الدخول".tr,
                       onPressed: () {
                         if (employees[index]
@@ -870,9 +883,11 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               accountController.addTime(
                                 userName: employees[index].userName,
                               );
+                              Get.back();
                           },
                         );
-                      }),
+                      })else
+                  Text("لم يسجل الخروج".tr,style: Styles.headLineStyle3.copyWith(color: primaryColor),),
                 if (employees[index]
                     .employeeTime
                     .values
@@ -885,6 +900,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                       getConfirmDialog(context, onConfirm: (){
                         accountController.setAppend(
                             employees[index].id, selectedDate.text);
+                        Get.back();
                       });
 
                     },

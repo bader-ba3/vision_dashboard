@@ -33,6 +33,14 @@ getConfirmDialog(BuildContext context,
     cancelBtnText: "لا".tr,
   );
 }
+getSuccessDialog(BuildContext context,) {
+  QuickAlert.show(
+    context: context,
+    title: "تمت العملية بنجاح".tr,
+    type: QuickAlertType.success,
+    confirmBtnText: "تم".tr,
+  );
+}
 
 Future<List<String>> uploadImages(List<Uint8List> ImagesTempData,
     String folderName) async {
@@ -96,7 +104,7 @@ Future<TimesModel?> getTime() async {
   try {
 
     final response = await http.get(Uri.parse(
-        "http://worldtimeapi.org/api/timezone/Asia/Dubais"));
+        "http://worldtimeapi.org/api/timezone/Asia/Dubai"));
     print(response.statusCode);
     print(response.body);
     // final response = await http.get(uri,);
@@ -120,10 +128,12 @@ Future<TimesModel?> getTime() async {
           milliSeconds:DateTime.now(). millisecond,
           dateTime: DateTime.now(),
           date:DateTime.now(). toString().split(" ")[0],
-          time:DateTime.now(). toString().split(" ")[1],
+          // time:DateTime.now(). toString().split(" ")[1],
           timeZone:DateTime.now(). timeZoneName,
           dayOfWeek:DateTime.now().day.toString(),
-          dstActive: true);
+          // dstActive: true
+
+      );
     }
   } on Exception catch (e) {
     // TODO
@@ -143,11 +153,12 @@ Future<TimesModel?> getTime() async {
         milliSeconds:DateTime.now(). millisecond,
         dateTime: DateTime.now(),
         date:DateTime.now(). toString().split(" ")[0],
-        time:DateTime.now(). toString().split(" ")[1],
+        // time:DateTime.now(). toString().split(" ")[1],
         timeZone:DateTime.now(). timeZoneName,
         dayOfWeek:DateTime.now().day.toString(),
-        dstActive: true);
+        // dstActive: true
+    );
   }
-
+  thisTimesModel=timesModel;
   return timesModel;
 }

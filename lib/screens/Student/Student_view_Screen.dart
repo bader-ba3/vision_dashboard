@@ -40,7 +40,7 @@ class _StudentViewState extends State<StudentView> {
             isAdd = !isAdd;
           });
         },
-        child: Icon(!isAdd? Icons.add:Icons.grid_view),
+        child: Icon(!isAdd? Icons.add:Icons.grid_view,color: Colors.white,),
       ):Container(),
     );
   }

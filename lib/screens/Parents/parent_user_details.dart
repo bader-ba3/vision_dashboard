@@ -465,13 +465,20 @@ date=date0;
                           text: 'إضافة سجل حدث'.tr,
                           onPressed: () {
                             setState(() {
-                              eventRecords.add(EventRecordModel(
-                                body: bodyEventController.text,
-                                type: selectedEvent!.name,
-                                date: DateTime.now().toString().split(" ")[0],
-                                color: selectedEvent!.color.toString(),
-                              ));
-                              bodyEventController.clear();
+                              getTime().then((value) {
+                                if (value!=null)
+                                  {
+                                    eventRecords.add(EventRecordModel(
+                                      body: bodyEventController.text,
+                                      type: selectedEvent!.name,
+                                      date: value.dateTime.toString().split(" ")[0],
+                                      color: selectedEvent!.color.toString(),
+                                    ));
+                                    bodyEventController.clear();
+                                  }
+
+                              },);
+
                             });
                           },
                         ),
