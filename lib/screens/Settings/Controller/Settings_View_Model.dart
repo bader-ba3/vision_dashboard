@@ -59,6 +59,8 @@ class SettingsViewModel extends GetxController {
     await _studentViewModel.getColumns();
     await _parentsViewModel.getColumns();
     await _expensesViewModel.getColumns();
+    await _storeViewModel.getColumns();
+
     await   Get.offAll(() =>LoginScreen(), binding: GetBinding());
 /* await   homeViewModel.changeIsLoading();
     // await  Get.offNamed(AppRoutes.EmployeeView);

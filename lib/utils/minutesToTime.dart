@@ -1,6 +1,5 @@
 import 'package:duration/duration.dart';
 import 'package:duration/locale.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 abstract class DateFun{
@@ -12,9 +11,9 @@ abstract class DateFun{
 
     String formattedTime = format.format(dateTime);
 
-    // استبدال AM و PM بالترجمات العربية
+
     if (formattedTime.contains('AM')) {
-      formattedTime = formattedTime.replaceAll('AM', 'صباحًا');
+      formattedTime = formattedTime.replaceAll('AM', 'صباحاً');
     } else if (formattedTime.contains('PM')) {
       formattedTime = formattedTime.replaceAll('PM', 'مساءً');
     }

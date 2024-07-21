@@ -109,12 +109,30 @@ class ParentsViewModel extends GetxController {
   getOldParent(String value) async{
     await   firebaseFirestore.collection(archiveCollection).doc(value).collection(parentsCollection).get().then((value) {
       _parentMap.clear();
+      key=GlobalKey();
+      rows.clear();
       for (var element in value.docs) {
         _parentMap[element.id] = ParentModel.fromJson(element.data());
-
+        rows.add(
+          PlutoRow(
+            cells: {
+              data.keys.elementAt(0): PlutoCell(value: element.id),
+              data.keys.elementAt(1): PlutoCell(value: ParentModel.fromJson(element.data()).fullName),
+              data.keys.elementAt(2): PlutoCell(value:  ParentModel.fromJson(element.data()).address),
+              data.keys.elementAt(3): PlutoCell(value:  ParentModel.fromJson(element.data()).nationality),
+              data.keys.elementAt(4): PlutoCell(value:  ParentModel.fromJson(element.data()).age),
+              data.keys.elementAt(5): PlutoCell(value:  ParentModel.fromJson(element.data()).work),
+              data.keys.elementAt(6):
+              PlutoCell(value: ParentModel.fromJson(element.data()).startDate),
+              data.keys.elementAt(7): PlutoCell(value:  ParentModel.fromJson(element.data()).motherPhone),
+              data.keys.elementAt(8): PlutoCell(value:  ParentModel.fromJson(element.data()).emergencyPhone),
+              data.keys.elementAt(9): PlutoCell(value:  ParentModel.fromJson(element.data()).eventRecords?.length??"0"),
+              data.keys.elementAt(10): PlutoCell(value:  ParentModel.fromJson(element.data()).isAccepted),
+            },
+          ),
+        );
       }
       print("Parents :${_parentMap.values.length}");
-      listener.cancel();
       update();
     });
 

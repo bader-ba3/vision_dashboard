@@ -87,7 +87,7 @@ class _EventInputFormState extends State<EventInputForm> {
             SizedBox(height: 50,),
             AppButton(text: "حفظ".tr,   onPressed: () {
               role ??= Const.eventTypeStudent;
-              EventModel model = EventModel(name: name.text, id: DateTime.now().millisecondsSinceEpoch.toString(), role: role!, color: selectedColor);
+              EventModel model = EventModel(name: name.text, id:generateId("EVENT"), role: role!, color: selectedColor);
               name.clear();
               pass.clear();
               role = null;

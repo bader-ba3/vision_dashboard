@@ -41,7 +41,7 @@ List<String> employeeName = [
 ];
 
 String generateId(String type) {
-  var _ = DateTime.now().microsecondsSinceEpoch.toString();
+  var _ = thisTimesModel!.dateTime.microsecondsSinceEpoch.toString();
   return "$type$_";
 }
 bool enableUpdate=true;

@@ -12,7 +12,6 @@ import 'package:vision_dashboard/utils/Dialogs.dart';
 import 'package:vision_dashboard/utils/const.dart';
 
 import '../../constants.dart';
-import '../../controller/account_management_view_model.dart';
 import '../../utils/Hive_DataBase.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -38,7 +37,7 @@ class _ExpensesInputFormState extends State<ExpensesInputForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    dateController.text = DateTime.now().toString().split(" ")[0];
+    dateController.text = thisTimesModel!.dateTime.toString().split(" ")[0];
     initController();
   }
 

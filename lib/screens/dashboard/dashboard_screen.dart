@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 
 
 import '../../constants.dart';
-import '../../utils/Dialogs.dart';
 import '../../utils/Hive_DataBase.dart';
 import '../Widgets/Custom_Drop_down.dart';
 import '../Widgets/header.dart';
@@ -46,18 +45,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     selectedMonth = months.entries
         .where(
           (element) =>
-              element.value == DateTime.now().month.toString().padLeft(2, "0"),
+              element.value == thisTimesModel!.month.toString().padLeft(2, "0"),
         )
         .first
         .key;
 
-    Future.delayed(Duration(seconds: 3),() async{
+/*    Future.delayed(Duration(seconds: 3),() async{
       _studentViewModel.update();
       _expensesViewModel.update();
       _accountManagementViewModel.update();
       _salaryViewModel.update();
-      print(thisTimesModel!.dateTime);
-    },);
+    },);*/
 /*    WidgetsFlutterBinding.ensureInitialized().waitUntilFirstFrameRasterized.then((value) {
 
     },);*/
@@ -65,203 +63,221 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Header(
-        // enableSearch: false,
-          context: context,
-          title: 'الصفحة الرئيسية'.tr,
-          middleText:
-              "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر"
-                  .tr),
-      body: SingleChildScrollView(
-        primary: false,
-        padding: EdgeInsets.all(defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 25),
-              width: Get.width,
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  CustomDropDown(
-                    value: selectedMonth.toString().tr,
-                    listValue: (months.keys
-                            .map(
-                              (e) => e.toString().tr,
-                            )
-                            .toList()) +
-                        ["الكل".tr],
-                    label: "اختر الشهر".tr,
-                    onChange: (value) {
-                      if (value != null && value != "الكل") {
-                        // print(value.tr);
-                        selectedMonth = value.tr;
+    return GetBuilder<AccountManagementViewModel>(
+      builder: (_) {
+        return Scaffold(
+          appBar: Header(
+            // enableSearch: false,
+              context: context,
+              title: 'الصفحة الرئيسية'.tr,
+              middleText:
+                  "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر"
+                      .tr),
+          body:_.isLoading? SingleChildScrollView(
+            primary: false,
+            padding: EdgeInsets.all(defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  width: Get.width,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    children: [
+                      CustomDropDown(
+                        value: selectedMonth.toString().tr,
+                        listValue: (months.keys
+                                .map(
+                                  (e) => e.toString().tr,
+                                )
+                                .toList()) +
+                            ["الكل".tr],
+                        label: "اختر الشهر".tr,
+                        onChange: (value) {
+                          if (value != null && value != "الكل") {
+                            // print(value.tr);
+                            selectedMonth = value.tr;
 
-                        isAll = false;
-                      } else {
-                        isAll = true;
-                      }
-                      setState(() {});
-                    },
-                    isFullBorder: true,
+                            isAll = false;
+                          } else {
+                            isAll = true;
+                          }
+                          setState(() {});
+                        },
+                        isFullBorder: true,
+                      ),
+                      if (_deleteManagementViewModel.allWaiting.values
+                          .where(
+                            (element) => element.isAccepted == null,
+                          )
+                          .isNotEmpty)
+                        InkWell(
+                          onTap: () {
+                            HiveDataBase.setCurrentScreen("12");
+                            Get.offAll(MainScreen());
+                          },
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.all(5),
+                                  // decoration: BoxDecoration(color: Colors.red.withOpacity(1),shape: BoxShape.circle,),
+
+                                  child: Icon(
+                                    Icons.notifications_none_outlined,
+                                    color: secondaryColor,
+                                    size: 30,
+                                  )),
+                              Positioned(
+                                  top: -5,
+                                  right: -2,
+                                  child: Container(
+                                    padding: EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withOpacity(1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(
+                                      _deleteManagementViewModel.allWaiting.values
+                                          .where(
+                                            (element) => element.isAccepted == null,
+                                          )
+                                          .length
+                                          .toString(),
+                                      style: Styles.headLineStyle4
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
-                  if (_deleteManagementViewModel.allWaiting.values
-                      .where(
-                        (element) => element.isAccepted == null,
-                      )
-                      .isNotEmpty)
-                    InkWell(
-                      onTap: () {
-                        // getTime().then((value) {
-                        //   print(value?.formattedTime);
-                        //   print(value?.isAfter(20, 24));
-                        // },);
-                        HiveDataBase.setCurrentScreen("12");
-                        Get.offAll(MainScreen());
-                      },
-                      child: Stack(
-                        clipBehavior: Clip.none,
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                GetBuilder<ExpensesViewModel>(
+                  builder: (_) {
+                    return SizedBox(
+                      width: Get.width,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        alignment: MediaQuery.sizeOf(context).width < 800
+                            ? WrapAlignment.center
+                            : WrapAlignment.spaceEvenly,
+                        runSpacing: 25,
+                        spacing: 0,
                         children: [
-                          Container(
-                              padding: EdgeInsets.all(5),
-                              // decoration: BoxDecoration(color: Colors.red.withOpacity(1),shape: BoxShape.circle,),
-
-                              child: Icon(
-                                Icons.notifications_none_outlined,
-                                color: secondaryColor,
-                                size: 30,
-                              )),
-                          Positioned(
-                              top: -5,
-                              right: -2,
-                              child: Container(
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(1),
-                                  shape: BoxShape.circle,
+                          InkWell(
+                              onHover: (value) {},
+                              onTap: () {
+                                index = 2;
+                                setState(() {});
+                              },
+                              child: SquareWidget(
+                                  "الاجمالي",
+                                  isAll
+                                      ? (_studentViewModel.getAllReceivePay() -
+                                          _expensesViewModel.getAllExpensesMoney() -
+                                          _salaryViewModel.getAllSalaryPay())
+                                      : (_studentViewModel.getAllReceivePayAtMonth(
+                                                  months[selectedMonth]!) -
+                                              _expensesViewModel.getExpensesAtMonth(
+                                                  months[selectedMonth]!) -
+                                              _accountManagementViewModel
+                                                  .getAllSalariesAtMonth(months[
+                                                      selectedMonth]! /*DateTime.now().month.toString()*/))
+                                          .toString(),
+                                  primaryColor,
+                                  "assets/budget.png",
+                                  true)),
+                          InkWell(
+                              onTap: () {
+                                index = 1;
+                                setState(() {});
+                              },
+                              child: SquareWidget(
+                                  "الايرادات",
+                                  isAll
+                                      ? _studentViewModel.getAllReceivePay()
+                                      : _studentViewModel
+                                          .getAllReceivePayAtMonth(
+                                              months[selectedMonth]!)
+                                          .toString(),
+                                  Colors.cyan,
+                                  "assets/profit.png",
+                                  true)),
+                          InkWell(
+                              onTap: () {
+                                index = 0;
+                                setState(() {});
+                              },
+                              child: SquareWidget(
+                                  "المصروف",
+                                  isAll
+                                      ? _expensesViewModel.getAllExpensesMoney()
+                                      : _expensesViewModel
+                                          .getExpensesAtMonth(months[selectedMonth]!)
+                                          .toString(),
+                                  blueColor,
+                                  "assets/poor.png",
+                                  true)),
+                          SquareWidget(
+                              "الرواتب المستحقة",
+                              _accountManagementViewModel
+                                  .getAllSalariesAtMonth(
+                                  thisTimesModel!.month.toString())
+                                  .toString(),
+                              Colors.black,
+                              "assets/money-bag.png",
+                              false),
+                        ],
+                      ),
+                    );
+                  }
+                ),
+                SizedBox(height: defaultPadding),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TotalBarChartWidget(
+                            index: index,
+                          ),
+                          SizedBox(height: defaultPadding),
+                          EmployeeTimeBox(),
+                          SizedBox(height: defaultPadding),
+                          EmployeeSalaryChartBox(),
+                          if (Responsive.isMobile(context))
+                            SizedBox(height: defaultPadding),
+                          if (Responsive.isMobile(context))
+                            Column(
+                              children: [
+                                EmployeeDetailsChart(),
+                                SizedBox(
+                                  height: defaultPadding,
                                 ),
-                                child: Text(
-                                  _deleteManagementViewModel.allWaiting.values
-                                      .where(
-                                        (element) => element.isAccepted == null,
-                                      )
-                                      .length
-                                      .toString(),
-                                  style: Styles.headLineStyle4
-                                      .copyWith(color: Colors.white),
+                                StudentsDetailsChart(
+                                  students: _studentViewModel.studentMap,
                                 ),
-                              )),
+                              ],
+                            ),
                         ],
                       ),
                     ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: defaultPadding,
-            ),
-            GetBuilder<ExpensesViewModel>(
-              builder: (_) {
-                return SizedBox(
-                  width: Get.width,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    alignment: MediaQuery.sizeOf(context).width < 800
-                        ? WrapAlignment.center
-                        : WrapAlignment.spaceEvenly,
-                    runSpacing: 25,
-                    spacing: 0,
-                    children: [
-                      InkWell(
-                          onHover: (value) {},
-                          onTap: () {
-                            index = 2;
-                            setState(() {});
-                          },
-                          child: SquareWidget(
-                              "الاجمالي",
-                              isAll
-                                  ? (_studentViewModel.getAllReceivePay() -
-                                      _expensesViewModel.getAllExpensesMoney() -
-                                      _salaryViewModel.getAllSalaryPay())
-                                  : (_studentViewModel.getAllReceivePayAtMonth(
-                                              months[selectedMonth]!) -
-                                          _expensesViewModel.getExpensesAtMonth(
-                                              months[selectedMonth]!) -
-                                          _accountManagementViewModel
-                                              .getAllSalariesAtMonth(months[
-                                                  selectedMonth]! /*DateTime.now().month.toString()*/))
-                                      .toString(),
-                              primaryColor,
-                              "assets/budget.png",
-                              true)),
-                      InkWell(
-                          onTap: () {
-                            index = 1;
-                            setState(() {});
-                          },
-                          child: SquareWidget(
-                              "الايرادات",
-                              isAll
-                                  ? _studentViewModel.getAllReceivePay()
-                                  : _studentViewModel
-                                      .getAllReceivePayAtMonth(
-                                          months[selectedMonth]!)
-                                      .toString(),
-                              Colors.cyan,
-                              "assets/profit.png",
-                              true)),
-                      InkWell(
-                          onTap: () {
-                            index = 0;
-                            setState(() {});
-                          },
-                          child: SquareWidget(
-                              "المصروف",
-                              isAll
-                                  ? _expensesViewModel.getAllExpensesMoney()
-                                  : _expensesViewModel
-                                      .getExpensesAtMonth(months[selectedMonth]!)
-                                      .toString(),
-                              blueColor,
-                              "assets/poor.png",
-                              true)),
-                      SquareWidget(
-                          "الرواتب المستحقة",
-                          _accountManagementViewModel
-                              .getAllSalariesAtMonth(
-                                  DateTime.now().month.toString())
-                              .toString(),
-                          Colors.black,
-                          "assets/money-bag.png",
-                          false),
-                    ],
-                  ),
-                );
-              }
-            ),
-            SizedBox(height: defaultPadding),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TotalBarChartWidget(
-                        index: index,
-                      ),
-                      SizedBox(height: defaultPadding),
-                      EmployeeTimeBox(),
-                      SizedBox(height: defaultPadding),
-                      EmployeeSalaryChartBox(),
-                      if (Responsive.isMobile(context))
-                        SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context))
-                        Column(
+                    if (!Responsive.isMobile(context))
+                      SizedBox(width: defaultPadding),
+                    // On Mobile means if the screen is less than 850 we don't want to show it
+                    if (!Responsive.isMobile(context))
+                      Expanded(
+                        flex: 2,
+                        child: Column(
                           children: [
                             EmployeeDetailsChart(),
                             SizedBox(
@@ -270,43 +286,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             StudentsDetailsChart(
                               students: _studentViewModel.studentMap,
                             ),
+                            SizedBox(
+                              height: defaultPadding,
+                            ),
+                            SquareWidget(
+                                "العام الدراسي".tr,
+                                  "${thisTimesModel!.year}-${thisTimesModel!.year+1}",
+                                Colors.black,
+                                "assets/books.png",
+                                false),
                           ],
                         ),
-                    ],
-                  ),
-                ),
-                if (!Responsive.isMobile(context))
-                  SizedBox(width: defaultPadding),
-                // On Mobile means if the screen is less than 850 we don't want to show it
-                if (!Responsive.isMobile(context))
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        EmployeeDetailsChart(),
-                        SizedBox(
-                          height: defaultPadding,
-                        ),
-                        StudentsDetailsChart(
-                          students: _studentViewModel.studentMap,
-                        ),
-                        SizedBox(
-                          height: defaultPadding,
-                        ),
-                        SquareWidget(
-                            "العام الدراسي".tr,
-                              "${DateTime.now().year}-${DateTime.now().year+1}",
-                            Colors.black,
-                            "assets/books.png",
-                            false),
-                      ],
-                    ),
-                  ),
+                      ),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ):Center(child: CircularProgressIndicator(color: primaryColor,),),
+        );
+      }
     );
   }
 

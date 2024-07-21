@@ -162,14 +162,34 @@ class ExamViewModel extends GetxController {
 
    getOldData(String value) async{
 
-    await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(examsCollection).get().then((value) {
+    await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(examsCollection).get().then((value)async{
       _examMap.clear();
+      key=GlobalKey();
+      rows.clear();
       for (var element in value.docs) {
         _examMap[element.id] = ExamModel.fromJson(element.data());
       }
       print("Exams :${_examMap.keys.length}");
-      getPassRate();
-      listener.cancel();
+      await getPassRate();
+
+      _examMap.forEach((key, value) {
+        rows.add(
+          PlutoRow(
+            cells: {
+              data.keys.elementAt(0): PlutoCell(value: key),
+              data.keys.elementAt(1): PlutoCell(value:value.subject.toString()),
+              data.keys.elementAt(2): PlutoCell(value:value.professor.toString()),
+              data.keys.elementAt(3): PlutoCell(value:value.date),
+              data.keys.elementAt(4): PlutoCell(value:value.marks?.length.toString()),
+              data.keys.elementAt(5): PlutoCell(value:value.examPassMark.toString()),
+              data.keys.elementAt(6): PlutoCell(value:value.examMaxMark.toString()),
+              data.keys.elementAt(7): PlutoCell(value:value.isDone==true? value.passRate.toString():"لم يصحح بعد".tr),
+              data.keys.elementAt(8): PlutoCell(value:value.isAccepted),
+
+            },
+          ),
+        );
+      },);
       update();
     });
   }

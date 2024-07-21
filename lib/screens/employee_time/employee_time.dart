@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:accordion/accordion.dart';
 
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 
@@ -31,25 +30,25 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
   String selectedMonth = '';
   String selectedDay = '';
   String dayNameNow = '';
-  List<bool> _isOpen   = List.generate(
+/*  List<bool> _isOpen   = List.generate(
       Get.find<AccountManagementViewModel>().allAccountManagement.length,
-  (index) => false);
+  (index) => false);*/
   final selectedDate = TextEditingController();
 
   @override
   void initState() {
+    super.initState();
+
     accountManagementViewModel.initNFC(typeNFC.time);
     selectedMonth = months.entries
         .where(
           (element) =>
-              element.value == DateTime.now().month.toString().padLeft(2, "0"),
+              element.value == thisTimesModel!.month.toString().padLeft(2, "0"),
         )
         .first
         .key;
-    super.initState();
-    _isOpen = List.generate(
-        accountManagementViewModel.allAccountManagement.length,
-        (index) => false);
+    print(" super.initState();");
+
     getTime().then(
       (value) {
         if (value != null) {
@@ -87,7 +86,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
     double size = max(MediaQuery.sizeOf(context).width - 300, 1000);
     return Scaffold(
       body: GetBuilder<AccountManagementViewModel>(builder: (controller) {
-        return SafeArea(
+        return !controller.isLoading? Center(child: CircularProgressIndicator(),):SafeArea(
           child: Center(
             child: Column(
               children: [
@@ -424,7 +423,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                         expansionCallback:
                                             (int index, bool isExpanded) {
                                           setState(() {
-                                            _isOpen[index] = !_isOpen[index];
+                                            controller.isOpen[index] = !controller.isOpen[index];
                                           });
                                         },
                                         children: controller
@@ -464,7 +463,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                               return InkWell(
                                                 onTap: (){
                                                   setState(() {
-                                                    _isOpen[indexKey] = !_isOpen[indexKey];
+                                                    controller.isOpen[indexKey] = !controller.isOpen[indexKey];
                                                   });
                                                 },
                                                 child: Padding(
@@ -782,7 +781,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                                 ],
                                               ),
                                             ),
-                                            isExpanded: _isOpen![indexKey],
+                                            isExpanded: controller.isOpen[indexKey],
                                           );
                                         }).toList(),
                                       ),

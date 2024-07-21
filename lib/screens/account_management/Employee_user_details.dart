@@ -20,12 +20,10 @@ import '../Widgets/Custom_Drop_down_with_value.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
 class EmployeeInputForm extends StatefulWidget {
-
-
   @override
   _EmployeeInputFormState createState() => _EmployeeInputFormState();
 
-  EmployeeInputForm({this.accountManagementModel,this.enableEdit=true});
+  EmployeeInputForm({this.accountManagementModel, this.enableEdit = true});
 
   late final AccountManagementModel? accountManagementModel;
   final bool? enableEdit;
@@ -61,14 +59,13 @@ class _EmployeeInputFormState extends State<EmployeeInputForm> {
       Get.find<AccountManagementViewModel>();
   EventModel? selectedEvent;
   List<EventRecordModel> eventRecords = [];
-bool isUpdate=false;
+  bool isUpdate = false;
+
   @override
   void initState() {
     accountManagementViewModel.initNFC(typeNFC.add);
     super.initState();
     init();
-
-
   }
 
   @override
@@ -116,7 +113,7 @@ bool isUpdate=false;
 
   init() {
     if (widget.accountManagementModel != null) {
-      isUpdate=true;
+      isUpdate = true;
       fullNameController.text =
           widget.accountManagementModel!.fullName.toString();
       mobileNumberController.text =
@@ -344,92 +341,102 @@ bool isUpdate=false;
                       setState(() {});
                     },
                   ),
-                  if(isUpdate&&widget.enableEdit!)
-                  CustomTextField(
-                      controller: editController,
-                      title: 'سبب التعديل'.tr,
-                      keyboardType: TextInputType.text),
-                  if(widget.enableEdit!)
-                  GetBuilder<AccountManagementViewModel>(builder: (controller) {
-                    return AppButton(
-                      text: "حفظ".tr,
-                      onPressed: () async {
-                        if (_validateFields()) {
-                          QuickAlert.show(
-                              width: Get.width / 2,
-                              context: context,
-                              type: QuickAlertType.loading,
-                              title: 'جاري التحميل'.tr,
-                              text: 'يتم العمل على الطلب'.tr,
-                              barrierDismissible: false);
-                          role ??= accountType.keys.first;
-                          AccountManagementModel model = AccountManagementModel(
+                  if (isUpdate && widget.enableEdit!)
+                    CustomTextField(
+                        controller: editController,
+                        title: 'سبب التعديل'.tr,
+                        keyboardType: TextInputType.text),
+                  if (widget.enableEdit!)
+                    GetBuilder<AccountManagementViewModel>(
+                        builder: (controller) {
+                      return AppButton(
+                        text: "حفظ".tr,
+                        onPressed: () async {
+                          if (_validateFields()) {
+                            QuickAlert.show(
+                                width: Get.width / 2,
+                                context: context,
+                                type: QuickAlertType.loading,
+                                title: 'جاري التحميل'.tr,
+                                text: 'يتم العمل على الطلب'.tr,
+                                barrierDismissible: false);
+                            try {
+                              role ??= accountType.keys.first;
+                              AccountManagementModel model =
+                                  AccountManagementModel(
+                                id: !isUpdate
+                                    ? generateId("EMPLOYEE")
+                                    : widget.accountManagementModel!.id,
+                                userName: userNameController.text,
+                                fullName: fullNameController.text,
+                                password: userPassController.text,
+                                type: role!,
+                                serialNFC: accountManagementViewModel
+                                    .nfcController.text,
+                                isActive: true,
+                                isAccepted: false,
+                                salary: int.parse(salaryController.text),
+                                dayOfWork: int.parse(dayWorkController.text),
+                                mobileNumber: mobileNumberController.text,
+                                address: addressController.text,
+                                nationality: nationalityController.text,
+                                gender: genderController.text,
+                                age: ageController.text,
+                                jobTitle: jobTitleController.text,
+                                contract: contractController.text,
+                                bus: busController.text,
+                                startDate: startDateController.text,
+                                eventRecords: eventRecords,
+                                discounts:
+                                    widget.accountManagementModel?.discounts,
+                                salaryReceived: widget
+                                    .accountManagementModel?.salaryReceived,
+                              );
+                              if (busController.text.startsWith("BUS"))
+                                Get.find<BusViewModel>()
+                                    .addEmployee(busController.text, model.id);
+                              if (isUpdate) {
+                                addWaitOperation(
+                                    collectionName: accountManagementCollection,
+                                    affectedId:
+                                        widget.accountManagementModel!.id,
+                                    type: waitingListTypes.edite,
+                                    oldData:
+                                        widget.accountManagementModel!.toJson(),
+                                    newData: model.toJson(),
+                                    details: editController.text);
 
+                                if (widget.accountManagementModel!.bus !=
+                                    busController.text) {
+                                  Get.find<BusViewModel>().deleteEmployee(
+                                      widget.accountManagementModel!.bus!,
+                                      widget.accountManagementModel!.id);
+                                }
+                              }
 
-                            id: !isUpdate
-                                ? generateId("EMPLOYEE")
-                                : widget.accountManagementModel!.id,
-                            userName: userNameController.text,
-                            fullName: fullNameController.text,
-                            password: userPassController.text,
-                            type: role!,
-                            serialNFC:
-                                accountManagementViewModel.nfcController.text,
-                            isActive: true,
-                            isAccepted: false,
-                            salary: int.parse(salaryController.text),
-                            dayOfWork: int.parse(dayWorkController.text),
-                            mobileNumber: mobileNumberController.text,
-                            address: addressController.text,
-                            nationality: nationalityController.text,
-                            gender: genderController.text,
-                            age: ageController.text,
-                            jobTitle: jobTitleController.text,
-                            contract: contractController.text,
-                            bus: busController.text,
-                            startDate: startDateController.text,
-                            eventRecords: eventRecords,
-                            discounts: widget.accountManagementModel?.discounts,
-                            salaryReceived:
-                                widget.accountManagementModel?.salaryReceived,
-                          );
-                          if (busController.text.startsWith("BUS"))
-                            Get.find<BusViewModel>().addEmployee(
-                                busController.text,
-                                model.id);
-                          if (isUpdate) {
-                            addWaitOperation(
-                                collectionName: accountManagementCollection,
-                                affectedId: widget.accountManagementModel!.id,
-                                type: waitingListTypes.edite,
-                                oldData:
-                                    widget.accountManagementModel!.toJson(),
-                                newData: model.toJson(),
-                                details: editController.text);
+                              if (!isUpdate)
+                                await addWaitOperation(
+                                    collectionName: accountManagementCollection,
+                                    affectedId: model.id,
+                                    details: model.toJson(),
+                                    type: waitingListTypes.add);
 
-                            if (widget.accountManagementModel!.bus !=
-                                busController.text) {
-                              Get.find<BusViewModel>().deleteEmployee(
-                                  widget.accountManagementModel!.bus!,
-                                  widget.accountManagementModel!.id);
+                              if (isUpdate) Get.back();
+                              Get.back();
+                              await controller.addAccount(model);
+                              getSuccessDialog(context);
+                              clearController();
+                            } on Exception catch (e) {
+                              await getReedOnlyError(context,
+                                  title: e.toString());
+                              print(e.toString());
+                              Get.back();
+                              Get.back();
                             }
                           }
-
-                          if (!isUpdate)
-                            await addWaitOperation(
-                                collectionName: accountManagementCollection,
-                                affectedId: model.id,
-                                type: waitingListTypes.add);
-
-                          if (isUpdate) Get.back();
-                          Get.back();
-                          await controller.addAccount(model);
-                          getSuccessDialog(context);
-                          clearController();
-                        }
-                      },
-                    );
-                  }),
+                        },
+                      );
+                    }),
                 ],
               ),
             ),
@@ -444,58 +451,59 @@ bool isUpdate=false;
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if(widget.enableEdit!)
-                  GetBuilder<EventViewModel>(builder: (eventController) {
-                    return Wrap(
-                      runAlignment: WrapAlignment.spaceAround,
-                      runSpacing: 25,
-                      children: [
-                        CustomDropDownWithValue(
-                          value: '',
-                          mapValue: eventController.allEvents.values
-                              .toList()
-                              .where(
-                                (element) =>
-                                    element.role == Const.eventTypeEmployee,
-                              )
-                              .map((e) => e)
-                              .toList(),
-                          label: "نوع الحدث".tr,
-                          onChange: (selectedWay) {
-                            if (selectedWay != null) {
-                              setState(() {});
-                              selectedEvent =
-                                  eventController.allEvents[selectedWay];
-                            }
-                          },
-                        ),
-                        SizedBox(width: 16.0),
-                        CustomTextField(
-                          controller: bodyEvent,
-                          title: 'الوصف'.tr,
-                          enable: true,
-                          keyboardType: TextInputType.text,
-                        ),
-                        SizedBox(width: 16.0),
-                        AppButton(
-                          text: 'إضافة سجل حدث'.tr,
-                          onPressed: () {
-                            setState(() {
-                              eventRecords.add(EventRecordModel(
-                                body: bodyEvent.text,
-                                type: selectedEvent!.name,
-                                date: DateTime.now().toString().split(".")[0],
-                                color: selectedEvent!.color.toString(),
-                              ));
-                              bodyEvent.clear();
-                            });
-                          },
-                        ),
-                      ],
-                    );
-                  }),
-                  if(widget.enableEdit!)
-                  SizedBox(height: defaultPadding * 2),
+                  if (widget.enableEdit!)
+                    GetBuilder<EventViewModel>(builder: (eventController) {
+                      return Wrap(
+                        runAlignment: WrapAlignment.spaceAround,
+                        runSpacing: 25,
+                        children: [
+                          CustomDropDownWithValue(
+                            value: '',
+                            mapValue: eventController.allEvents.values
+                                .toList()
+                                .where(
+                                  (element) =>
+                                      element.role == Const.eventTypeEmployee,
+                                )
+                                .map((e) => e)
+                                .toList(),
+                            label: "نوع الحدث".tr,
+                            onChange: (selectedWay) {
+                              if (selectedWay != null) {
+                                setState(() {});
+                                selectedEvent =
+                                    eventController.allEvents[selectedWay];
+                              }
+                            },
+                          ),
+                          SizedBox(width: 16.0),
+                          CustomTextField(
+                            controller: bodyEvent,
+                            title: 'الوصف'.tr,
+                            enable: true,
+                            keyboardType: TextInputType.text,
+                          ),
+                          SizedBox(width: 16.0),
+                          AppButton(
+                            text: 'إضافة سجل حدث'.tr,
+                            onPressed: () {
+                              setState(() {
+                                eventRecords.add(EventRecordModel(
+                                  body: bodyEvent.text,
+                                  type: selectedEvent!.name,
+                                  date: thisTimesModel!.dateTime
+                                      .toString()
+                                      .split(".")[0],
+                                  color: selectedEvent!.color.toString(),
+                                ));
+                                bodyEvent.clear();
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    }),
+                  if (widget.enableEdit!) SizedBox(height: defaultPadding * 2),
                   Text('سجل الأحداث:'.tr, style: Styles.headLineStyle1),
                   SizedBox(height: defaultPadding),
                   Container(

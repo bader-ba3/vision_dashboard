@@ -25,7 +25,6 @@ class CustomPlutoGrid extends StatefulWidget {
 }
 
 class _CustomPlutoGridState extends State<CustomPlutoGrid> {
-  late final PlutoGridStateManager stateManager;
 
   @override
   void initState() {
@@ -46,21 +45,9 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
       },
       onLoaded: (PlutoGridOnLoadedEvent event) {
 
-    /*    event.stateManager.insertColumns(0,  event.stateManager.columns.map(
-              (e) {
-            return PlutoColumn(title: e.title.toString().tr, field: e.field, type: e.type);
-          },
-        ).toList());*/
-     /*   event.stateManager.columns.map(
-          (e) {
-            return PlutoColumn(title: e.title.tr, field: e.field, type: e.type);
-          },
-        ).toList();*/
-/*         stateManager = event.stateManager;
-    stateManager.setShowColumnFilter(true);*/
-        // widget.controller.stateManager=stateManager;
       },
       mode: PlutoGridMode.selectWithOneTap,
+
       onRowDoubleTap: widget.onRowDoubleTap,
       onSelected: widget.onSelected,
       configuration: PlutoGridConfiguration(
@@ -71,7 +58,8 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
         ),
         style: PlutoGridStyleConfig(
             enableRowColorAnimation: true,
-            activatedColor: Colors.white.withOpacity(0.5),
+
+            activatedColor:Colors.white.withOpacity(0.5),
             gridBackgroundColor: Colors.transparent,
             evenRowColor: secondaryColor.withOpacity(0.5),
             cellTextStyle: Styles.headLineStyle3.copyWith(color: primaryColor),
@@ -82,11 +70,9 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
       ),
       rowColorCallback: (PlutoRowColorContext rowColorContext) {
 
-         if( rowColorContext.row.cells['موافقة المدير']?.value == false)
-               return Colors.green.withOpacity(0.3);
-
-
-         else if (checkIfPendingDelete(
+         if( rowColorContext.row.cells['موافقة المدير']?.value == false) {
+          return Colors.green.withOpacity(0.3);
+        } else if (checkIfPendingDelete(
             affectedId: rowColorContext.row.cells[widget.idName]?.value)) {
           return Colors.red.withOpacity(0.3);
         }

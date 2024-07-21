@@ -132,10 +132,47 @@ class BusViewModel extends GetxController {
         .doc(value)
         .collection(busesCollection)
         .get()
-        .then((value) {
+        .then((value)async {
       _busesMap.clear();
+
+      key = GlobalKey();
+      rows.clear();
+      // await   Get.find<ExpensesViewModel>().getAllWithoutListenExpenses();
       for (var element in value.docs) {
+        int total = 0;
         _busesMap[element.id] = BusModel.fromJson(element.data());
+
+        for (var ex in BusModel.fromJson(element.data()).expense ?? []) {
+          total += Get.find<ExpensesViewModel>().allExpenses[ex]!.total ?? 0;
+        }
+        rows.add(
+          PlutoRow(
+            cells: {
+              data.keys.elementAt(0): PlutoCell(value: element.id),
+              data.keys.elementAt(1):
+              PlutoCell(value: BusModel.fromJson(element.data()).number),
+              data.keys.elementAt(2):
+              PlutoCell(value: BusModel.fromJson(element.data()).name),
+              data.keys.elementAt(3):
+              PlutoCell(value: BusModel.fromJson(element.data()).type),
+              data.keys.elementAt(4): PlutoCell(
+                  value: BusModel.fromJson(element.data())
+                      .students
+                      ?.length
+                      .toString()),
+              data.keys.elementAt(5): PlutoCell(
+                  value: BusModel.fromJson(element.data())
+                      .employees
+                      ?.length
+                      .toString()),
+              data.keys.elementAt(6): PlutoCell(value: total),
+              data.keys.elementAt(7):
+              PlutoCell(value: BusModel.fromJson(element.data()).startDate),
+              data.keys.elementAt(8):
+              PlutoCell(value: BusModel.fromJson(element.data()).isAccepted),
+            },
+          ),
+        );
       }
       print("buses :${_busesMap.values.length}");
       update();

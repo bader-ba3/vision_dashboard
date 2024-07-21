@@ -105,8 +105,8 @@ Future<TimesModel?> getTime() async {
 
     final response = await http.get(Uri.parse(
         "http://worldtimeapi.org/api/timezone/Asia/Dubai"));
-    print(response.statusCode);
-    print(response.body);
+    print("response statusCode  ${response.statusCode}");
+    // print(response.body);
     // final response = await http.get(uri,);
     if (response.statusCode == 200) {
       timesModel = TimesModel.fromJson(jsonDecode(response.body));

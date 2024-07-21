@@ -24,7 +24,7 @@ class _EmployeeSalaryChartBoxState extends State<EmployeeSalaryChartBox> {
     selectedMonth = months.entries
         .where(
           (element) =>
-              element.value == DateTime.now().month.toString().padLeft(2, "0"),
+              element.value == thisTimesModel!.month.toString().padLeft(2, "0"),
         )
         .first
         .key;

@@ -19,7 +19,6 @@ import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 import 'package:vision_dashboard/utils/Dialogs.dart';
 
-import 'package:vision_dashboard/utils/minutesToTime.dart';
 import '../constants.dart';
 import '../models/account_management_model.dart';
 import '../utils/Hive_DataBase.dart';
@@ -36,6 +35,8 @@ enum UserManagementStatus {
 enum typeNFC { login, time, add }
 
 class AccountManagementViewModel extends GetxController {
+  bool isLoading=false;
+  List<bool> isOpen=[];
   TextEditingController nfcController = TextEditingController();
   RxMap<String, AccountManagementModel> allAccountManagement =
       <String, AccountManagementModel>{}.obs;
@@ -88,6 +89,8 @@ class AccountManagementViewModel extends GetxController {
   getAllEmployee() {
     listener = accountManagementFireStore.snapshots().listen(
       (event) async {
+        isLoading=false;
+        update();
         await Get.find<BusViewModel>().getAllWithoutListenBuse();
         key = GlobalKey();
         rows.clear();
@@ -123,6 +126,10 @@ class AccountManagementViewModel extends GetxController {
           );
           return MapEntry(i.id.toString(), i.data());
         })).obs;
+        isOpen=List.generate(
+            allAccountManagement.length,
+                (index) => false);
+        isLoading=true;
         update();
       },
     );
@@ -608,16 +615,46 @@ class AccountManagementViewModel extends GetxController {
         .collection(archiveCollection)
         .doc(value)
         .collection(accountManagementCollection)
-        .get()
-        .then(
-      (event) {
-        allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
-            event.docs.toList().map((i) => MapEntry(i.id.toString(),
-                AccountManagementModel.fromJson(i.data())))).obs;
-        listener.cancel();
-        update();
-      },
-    );
+        ..get().then(
+              (event) async {
+            await Get.find<BusViewModel>().getAllWithoutListenBuse();
+            key = GlobalKey();
+            rows.clear();
+            allAccountManagement = Map<String, AccountManagementModel>.fromEntries(
+                event.docs.toList().map((i) {
+                  rows.add(
+                    PlutoRow(
+                      cells: {
+                        data.keys.elementAt(0): PlutoCell(value: i.id),
+                        data.keys.elementAt(1): PlutoCell(value: i.data()["userName"]),
+                        data.keys.elementAt(2): PlutoCell(value: i.data()["fullName"]),
+                        data.keys.elementAt(3): PlutoCell(value: i.data()["password"]),
+                        data.keys.elementAt(4): PlutoCell(value: i.data()["type"]),
+                        data.keys.elementAt(5): PlutoCell(value: i.data()["isActive"]),
+                        data.keys.elementAt(6): PlutoCell(value: i.data()["mobileNumber"]),
+                        data.keys.elementAt(7): PlutoCell(value: i.data()["address"]),
+                        data.keys.elementAt(8): PlutoCell(value: i.data()["nationality"]),
+                        data.keys.elementAt(9): PlutoCell(value: i.data()["gender"]),
+                        data.keys.elementAt(10): PlutoCell(value: i.data()["age"]),
+                        data.keys.elementAt(11): PlutoCell(value: i.data()["jobTitle"]),
+                        data.keys.elementAt(12): PlutoCell(value: i.data()["contract"]),
+                        data.keys.elementAt(13): PlutoCell(
+                            value: Get.find<BusViewModel>()
+                                .busesMap[i.data()["bus"].toString()]
+                                ?.name ??
+                                i.data()["bus"]),
+                        data.keys.elementAt(14): PlutoCell(value: i.data()["startDate"]),
+                        data.keys.elementAt(15):
+                        PlutoCell(value: i.data()["eventRecords"]?.length.toString()),
+                        data.keys.elementAt(16): PlutoCell(value: i.data()["isAccepted"]),
+                      },
+                    ),
+                  );
+                  return MapEntry(i.id.toString(),AccountManagementModel.fromJson(i.data()) );
+                })).obs;
+            update();
+          },
+        );
   }
 
   double getAllSalariesAtMonth(String month) {

@@ -368,7 +368,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
               studentController.studentMap[child]?.installmentRecords?.values
                   .any((record) =>
                       int.parse(record.installmentDate ?? '0') <=
-                          DateTime.now().month &&
+                          thisTimesModel!.month &&
                       record.isPay != true) ??
               false) ??
           false;
@@ -461,7 +461,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                             itemBuilder: (context, index) {
                               bool isLate = int.parse(
                                       installment[index].installmentDate!) <=
-                                  DateTime.now().month;
+                                  thisTimesModel!.month;
                               Uint8List? _contractsTemp;
                               String? imageURL =
                                   installment[index].InstallmentImage;

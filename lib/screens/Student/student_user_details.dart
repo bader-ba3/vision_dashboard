@@ -718,7 +718,7 @@ class _StudentInputFormState extends State<StudentInputForm> {
                               eventRecords.add(EventRecordModel(
                                   body: bodyEvent.text,
                                   type: selectedEvent!.name,
-                                  date: DateTime.now()
+                                  date: thisTimesModel!.dateTime
                                       .toString()
                                       .split(" ")[0]
                                       .toString(),

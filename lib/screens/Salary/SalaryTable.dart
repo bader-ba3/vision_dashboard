@@ -86,7 +86,7 @@ final  ScrollController scrollController;
     element.value.employeeTime.keys.where((element0) => element0.toString().split("-")[1]=='${months[selectedMonth]}',).isNotEmpty
         &&element.value.salaryReceived!.where((element) {
           return element.toString().split(" ")[0] ==
-              '${DateTime.now().year}-${months[selectedMonth]}';
+              '${thisTimesModel!.year}-${months[selectedMonth]}';
         },).isEmpty)
         .toList();
 
@@ -129,7 +129,7 @@ final  ScrollController scrollController;
                                 ((totalTime / 60).floor() * 0.5)))
                             .toString(),
                         accountModel,
-                        "${DateTime.now().year}-${months[selectedMonth]}",signatureGlobalKey,handleSaveButtonPressed,handleClearButtonPressed),
+                        "${thisTimesModel!.year}-${months[selectedMonth]}",signatureGlobalKey,handleSaveButtonPressed,handleClearButtonPressed),
                   );
                 },
               ),
@@ -140,13 +140,13 @@ final  ScrollController scrollController;
           salaryController.salaryMap.values
               .where((element) =>
           element.salaryId.toString().split(" ")[0] ==
-              '${DateTime.now().year}-${months[selectedMonth]}')
+              '${thisTimesModel!.year}-${months[selectedMonth]}')
               .length,
               (index) {
             SalaryModel salaryEmp = salaryController.salaryMap.values
                 .where((element) =>
             element.salaryId.toString().split(" ")[0] ==
-                '${DateTime.now().year}-${months[selectedMonth]}')
+                '${thisTimesModel!.year}-${months[selectedMonth]}')
                 .toList()[index];
 
             return DataRow(cells: [
