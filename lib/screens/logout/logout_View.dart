@@ -7,6 +7,7 @@ import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/main/main_screen.dart';
 
 import '../../utils/Hive_DataBase.dart';
+import '../Widgets/header.dart';
 import '../login/login_screen.dart';
 
 class LogoutView extends StatefulWidget {
@@ -20,6 +21,12 @@ class _LogoutViewState extends State<LogoutView> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      appBar: Header(
+          context: context,
+          title: 'تسجيل الخروج'.tr,
+          middleText:
+          "يمكنك تسجيل الخروج في هذه الواجهة"
+              .tr),
       body: Center(
         child:Column(
           crossAxisAlignment: CrossAxisAlignment.center,

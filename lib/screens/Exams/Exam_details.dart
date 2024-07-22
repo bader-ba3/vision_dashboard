@@ -428,32 +428,35 @@ class _ExamInputFormState extends State<ExamInputForm> {
               height: defaultPadding,
             ),
             if (widget.isEdite)
-              SizedBox(
-                width: Get.width,
-                child: DataTable(
-                  clipBehavior: Clip.hardEdge,
-                  columns: [
-                    DataColumn(label: Text("اسم الطالب")),
-                    DataColumn(label: Text("رقم الطالب")),
-                    DataColumn(label: Text("تاريخ البداية")),
-                    DataColumn(label: Text("ولي الأمر")),
-                    DataColumn(label: Text("موجود")),
-                  ],
-                  rows: studentViewModel.studentMap.values
-                      .where(
-                    (element) => element.stdClass == _selectedClass&&element.isAccepted==true,
-                  )
-                      .map(
-                    (e) {
-                      if (_selectedStudent.keys
-                          .where(
-                            (element) => element == e.studentID,
-                          )
-                          .isNotEmpty) e.available = true;
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: Get.width,
+                  child: DataTable(
+                    clipBehavior: Clip.hardEdge,
+                    columns: [
+                      DataColumn(label: Text("اسم الطالب")),
+                      DataColumn(label: Text("رقم الطالب")),
+                      DataColumn(label: Text("تاريخ البداية")),
+                      DataColumn(label: Text("ولي الأمر")),
+                      DataColumn(label: Text("موجود")),
+                    ],
+                    rows: studentViewModel.studentMap.values
+                        .where(
+                      (element) => element.stdClass == _selectedClass&&element.isAccepted==true,
+                    )
+                        .map(
+                      (e) {
+                        if (_selectedStudent.keys
+                            .where(
+                              (element) => element == e.studentID,
+                            )
+                            .isNotEmpty) e.available = true;
 
-                      return studentDataRow(e);
-                    },
-                  ).toList(),
+                        return studentDataRow(e);
+                      },
+                    ).toList(),
+                  ),
                 ),
               ),
             SizedBox(
@@ -477,23 +480,36 @@ class _ExamInputFormState extends State<ExamInputForm> {
                     SizedBox(
                       height: defaultPadding,
                     ),
-                    SizedBox(
-                      width: Get.width,
-                      child: DataTable(clipBehavior: Clip.hardEdge, columns: [
-                        DataColumn(label: Text("اسم الطالب")),
-                        DataColumn(label: Text("رقم الطالب")),
-                        DataColumn(label: Text("تاريخ البداية")),
-                        DataColumn(label: Text("ولي الأمر")),
-                        DataColumn(label: Text("")),
-                      ], rows: [
-                        ...List.generate(
-                          _selectedStudent.length,
-                          (index) => studentSelectedDataRow(
-                              studentViewModel.studentMap[
-                                  _selectedStudent.keys.elementAt(index)]!,
-                              widget.isEdite),
-                        )
-                      ]),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: Get.width,
+                        child: DataTable(clipBehavior: Clip.hardEdge, columns: [
+                          DataColumn(label: SizedBox(
+                              width:Get.width/  5,
+                              child: Text("اسم الطالب"))),
+                          DataColumn(label: SizedBox(
+                              width:Get.width/  5,
+                              child: Text("رقم الطالب"))),
+                          DataColumn(label: SizedBox(
+                              width:Get.width/  5,
+                              child: Text("تاريخ البداية"))),
+                          DataColumn(label: SizedBox(
+                              width:Get.width/  5,
+                              child: Text("ولي الأمر"))),
+                          DataColumn(label: SizedBox(
+                              width:Get.width/  5,
+                              child: Text(""))),
+                        ], rows: [
+                          ...List.generate(
+                            _selectedStudent.length,
+                            (index) => studentSelectedDataRow(
+                                studentViewModel.studentMap[
+                                    _selectedStudent.keys.elementAt(index)]!,
+                                widget.isEdite),
+                          )
+                        ]),
+                      ),
                     ),
                   ],
                 ),

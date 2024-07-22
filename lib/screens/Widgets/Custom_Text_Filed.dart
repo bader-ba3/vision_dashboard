@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +24,8 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width:size?? Get.width/4.5,
+      width: max(150,size?? Get.width/4.5),
+
       child:TextFormField(
         onChanged: onChange,
         keyboardType: keyboardType,

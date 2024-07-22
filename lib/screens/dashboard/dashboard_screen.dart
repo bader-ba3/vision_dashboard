@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   width: Get.width,
                   child: Wrap(
                     alignment: WrapAlignment.spaceBetween,

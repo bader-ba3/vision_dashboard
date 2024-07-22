@@ -26,13 +26,9 @@ class CustomPlutoGrid extends StatefulWidget {
 
 class _CustomPlutoGridState extends State<CustomPlutoGrid> {
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
-  listener() {}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +47,9 @@ class _CustomPlutoGridState extends State<CustomPlutoGrid> {
       onRowDoubleTap: widget.onRowDoubleTap,
       onSelected: widget.onSelected,
       configuration: PlutoGridConfiguration(
-        shortcut: PlutoGridShortcut(
-          actions: {
-            // LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN):PlutoGridShortcutAction(),
-          },
-        ),
+
         style: PlutoGridStyleConfig(
             enableRowColorAnimation: true,
-
             activatedColor:Colors.white.withOpacity(0.5),
             gridBackgroundColor: Colors.transparent,
             evenRowColor: secondaryColor.withOpacity(0.5),

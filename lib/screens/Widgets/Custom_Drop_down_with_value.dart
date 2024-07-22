@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vision_dashboard/models/event_model.dart';
@@ -10,7 +12,7 @@ class CustomDropDownWithValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  SizedBox(
-      width: Get.width/4.5,
+      width: max(150,Get.width/4.5),
       child: DropdownButtonFormField<String>(
         decoration:  InputDecoration(
           labelText: label,

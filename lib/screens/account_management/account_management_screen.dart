@@ -61,9 +61,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         return Scaffold(
           appBar: Header(
               context: context,
-              title: 'ادارة المظفين'.tr,
+              title: 'ادارة الموظفين'.tr,
               middleText:
-                  "تقوم هذه الواجهة بعرض الامور الاساسية في المنصة وهي المستخدمين وامكانية اضافة او تعديل او حذف كما تعرض السجلات الممطلوب حذفها للموافقة عليها او استرجاعها كما يمكن ارشفة بيانات السنة الحالية او حذف البيانات او العودة الى نسخة سابقة"
+                  "تقوم هذه الواجهة بعرض الامور الاساسية في المنصة وهي المستخدمين وامكانية اضافة او تعديل او حذف كما تعرض السجلات الممطلوب حذفها للموافقة عليها او استرجاعها"
                       .tr),
           body: SingleChildScrollView(
             padding: EdgeInsets.all(16.0),

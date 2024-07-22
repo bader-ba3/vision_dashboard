@@ -13,7 +13,7 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return  SizedBox(
-      width:size?? max(140,Get.width/4.5),
+      width:size?? max(150,Get.width/4.5),
       child: DropdownButtonFormField<String>(
         decoration:  InputDecoration(
           hintStyle:TextStyle(color: primaryColor,overflow: TextOverflow.ellipsis) ,

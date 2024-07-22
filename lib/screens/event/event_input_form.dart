@@ -5,6 +5,7 @@ import 'package:vision_dashboard/controller/event_view_model.dart';
 
 import 'package:get/get.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
+import 'package:vision_dashboard/screens/Widgets/Custom_Text_Filed.dart';
 
 import '../../constants.dart';
 import '../../controller/home_controller.dart';
@@ -33,24 +34,14 @@ class _EventInputFormState extends State<EventInputForm> {
           children: [
             Text("إضافة حدث".tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
             SizedBox(height: 50,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              alignment: WrapAlignment.center,
+              runSpacing: 25,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                    width: Get.width/2.5,
-                    height: 50,
-                    child: TextField(
-                      controller: name,
-                      decoration: InputDecoration(
-                        hintText: "اسم الحدث".tr,
-                        fillColor: secondaryColor,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        ),
-                      ),
-                    )),
+
+                CustomTextField(controller: name, title: "اسم الحدث".tr),
+
                 SizedBox(
                   width: 50,
                 ),
