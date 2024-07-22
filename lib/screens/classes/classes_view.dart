@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -14,6 +16,7 @@ import 'package:vision_dashboard/screens/classes/Controller/Class_View_Model.dar
 import '../../constants.dart';
 import '../../controller/Wait_management_view_model.dart';
 
+import '../../controller/home_controller.dart';
 import '../Student/student_user_details.dart';
 
 class ClassesView extends StatefulWidget {
@@ -36,424 +39,440 @@ class _ClassesViewState extends State<ClassesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<ClassViewModel>(builder: (classController) {
-        return Row(
-          children: [
-            SizedBox(
-              width: Get.width / 6,
-              child: ListView(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  Container(
-                      height: 75,
-                      child: Center(
-                          child: Text(
-                        "الصفوف".tr,
-                        style: Styles.headLineStyle2.copyWith(color: blueColor),
-                      ))),
-                  Container(
-                    height: 6,
-                    color: secondaryColor,
-                  ),
-                  Column(
-                    children: [
-                      GetBuilder<WaitManagementViewModel>(builder: (_) {
-                        return ListView.builder(
-                          itemCount: classController.classMap.length,
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, listClassIndex) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SwipeTo(
-                                leftSwipeWidget: Icon(
-                                  Icons.edit,
-                                  color: secondaryColor,
-                                ),
-                                rightSwipeWidget: Icon(
-                                  Icons.delete,
-                                  color: secondaryColor,
-                                ),
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: ClampingScrollPhysics(),
+          child:  GetBuilder<HomeViewModel>(builder: (controller) {
+            double size = max(
+                MediaQuery.sizeOf(context).width -
+                    (controller.isDrawerOpen ? 240 : 120),
+                1000) -
+                60;
+              return SizedBox(
+                width: size+120,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: size / 6,
+                      child: ListView(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        children: [
+                          Container(
+                              height: 75,
+                              child: Center(
+                                  child: Text(
+                                "الصفوف".tr,
+                                style: Styles.headLineStyle2.copyWith(color: blueColor),
+                              ))),
+                          Container(
+                            height: 6,
+
+                            color: secondaryColor,
+                          ),
+                          Column(
+                            children: [
+                              GetBuilder<WaitManagementViewModel>(builder: (_) {
+                                return ListView.builder(
+                                  itemCount: classController.classMap.length,
+                                  physics: ClampingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, listClassIndex) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SwipeTo(
+                                        leftSwipeWidget: Icon(
+                                          Icons.edit,
+                                          color: secondaryColor,
+                                        ),
+                                        rightSwipeWidget: Icon(
+                                          Icons.delete,
+                                          color: secondaryColor,
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                         if(   classController.classMap.values
+                                                .elementAt(listClassIndex).isAccepted!)
+                                            SelectedClass = classController
+                                                .classMap.values
+                                                .elementAt(listClassIndex);
+                                            setState(() {});
+                                          },
+                                          child: AnimatedContainer(
+                                              duration: Durations.long1,
+                                              padding: EdgeInsets.all(20),
+                                              decoration: BoxDecoration(
+                                                  color:classController
+                                                      .classMap.values
+                                                      .elementAt(listClassIndex)
+                                                      .isAccepted==false?Colors.green.withOpacity(0.5) : checkIfPendingDelete(
+                                                          affectedId: classController
+                                                              .classMap.values
+                                                              .elementAt(listClassIndex)
+                                                              .classId!)
+                                                      ? Colors.red.withOpacity(0.2)
+                                                      : SelectedClass?.classId! ==
+                                                              classController
+                                                                  .classMap.values
+                                                                  .elementAt(
+                                                                      listClassIndex)
+                                                                  .classId
+                                                          ? primaryColor
+                                                          : Colors.transparent,
+                                                  borderRadius:
+                                                      BorderRadius.circular(15)),
+                                              child: Center(
+                                                  child: Text(
+                                                classController.classMap.values
+                                                    .elementAt(listClassIndex)
+                                                    .className
+                                                    .toString(),
+                                                style: SelectedClass?.classId! ==
+                                                        classController.classMap.values
+                                                            .elementAt(listClassIndex)
+                                                            .classId
+                                                    ? Styles.headLineStyle2
+                                                        .copyWith(color: Colors.white)
+                                                    : Styles.headLineStyle2
+                                                        .copyWith(color: blueColor),
+                                              ))),
+                                        ),
+                                        onLeftSwipe: (details) {
+                                          if (enableUpdate&&classController.classMap.values
+                                              .elementAt(listClassIndex).isAccepted!)
+                                            showClassInputDialog(
+                                                context,
+                                                classController.classMap.values
+                                                    .elementAt(listClassIndex),
+                                                classController);
+                                        },
+                                        onRightSwipe: (details) async {
+                                          if (enableUpdate&&classController.classMap.values
+                                              .elementAt(listClassIndex).isAccepted!)
+                                            await QuickAlert.show(
+                                              context: context,
+                                              type: QuickAlertType.confirm,
+                                              text: checkIfPendingDelete(
+                                                      affectedId: classController
+                                                          .classMap.values
+                                                          .elementAt(listClassIndex)
+                                                          .classId!)
+                                                  ? 'التراجع عن الحذف'
+                                                  : 'حذف هذا العنصر'.tr,
+                                              title: 'هل انت متأكد ؟'.tr,
+                                              onConfirmBtnTap: () {
+
+                                                String classId = classController
+                                                    .classMap.values
+                                                    .elementAt(listClassIndex)
+                                                    .classId
+                                                    .toString();
+                                                if (!checkIfPendingDelete(
+                                                    affectedId: classId))
+                                                  addWaitOperation(
+                                                      type: waitingListTypes.delete,
+                                                      collectionName: classCollection,
+                                                      affectedId: classId);
+                                                else
+                                                  _.returnDeleteOperation(
+                                                      affectedId: classId);
+                                                Get.back();
+                                              },
+                                              onCancelBtnTap: () => Get.back(),
+                                              confirmBtnText: 'نعم'.tr,
+                                              cancelBtnText: 'لا'.tr,
+                                              confirmBtnColor: Colors.red,
+                                            );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () {
-                                 if(   classController.classMap.values
-                                        .elementAt(listClassIndex).isAccepted!)
-                                    SelectedClass = classController
-                                        .classMap.values
-                                        .elementAt(listClassIndex);
-                                    setState(() {});
+                                    showClassInputDialog(
+                                        context,
+                                        ClassModel(
+                                            className: '',
+                                            classId: generateId("Class")),
+                                        classController);
                                   },
                                   child: AnimatedContainer(
                                       duration: Durations.long1,
                                       padding: EdgeInsets.all(20),
                                       decoration: BoxDecoration(
-                                          color:classController
-                                              .classMap.values
-                                              .elementAt(listClassIndex)
-                                              .isAccepted==false?Colors.green.withOpacity(0.5) : checkIfPendingDelete(
-                                                  affectedId: classController
-                                                      .classMap.values
-                                                      .elementAt(listClassIndex)
-                                                      .classId!)
-                                              ? Colors.red.withOpacity(0.2)
-                                              : SelectedClass?.classId! ==
-                                                      classController
-                                                          .classMap.values
-                                                          .elementAt(
-                                                              listClassIndex)
-                                                          .classId
-                                                  ? primaryColor
-                                                  : Colors.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
+                                          color: Colors.teal,
+                                          borderRadius: BorderRadius.circular(15)),
                                       child: Center(
                                           child: Text(
-                                        classController.classMap.values
-                                            .elementAt(listClassIndex)
-                                            .className
-                                            .toString(),
-                                        style: SelectedClass?.classId! ==
-                                                classController.classMap.values
-                                                    .elementAt(listClassIndex)
-                                                    .classId
-                                            ? Styles.headLineStyle2
-                                                .copyWith(color: Colors.white)
-                                            : Styles.headLineStyle2
-                                                .copyWith(color: blueColor),
+                                        "اضافة".tr,
+                                        style: Styles.headLineStyle2
+                                            .copyWith(color: Colors.white),
                                       ))),
                                 ),
-                                onLeftSwipe: (details) {
-                                  if (enableUpdate&&classController.classMap.values
-                                      .elementAt(listClassIndex).isAccepted!)
-                                    showClassInputDialog(
-                                        context,
-                                        classController.classMap.values
-                                            .elementAt(listClassIndex),
-                                        classController);
-                                },
-                                onRightSwipe: (details) async {
-                                  if (enableUpdate&&classController.classMap.values
-                                      .elementAt(listClassIndex).isAccepted!)
-                                    await QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      text: checkIfPendingDelete(
-                                              affectedId: classController
-                                                  .classMap.values
-                                                  .elementAt(listClassIndex)
-                                                  .classId!)
-                                          ? 'التراجع عن الحذف'
-                                          : 'حذف هذا العنصر'.tr,
-                                      title: 'هل انت متأكد ؟'.tr,
-                                      onConfirmBtnTap: () {
-
-                                        String classId = classController
-                                            .classMap.values
-                                            .elementAt(listClassIndex)
-                                            .classId
-                                            .toString();
-                                        if (!checkIfPendingDelete(
-                                            affectedId: classId))
-                                          addWaitOperation(
-                                              type: waitingListTypes.delete,
-                                              collectionName: classCollection,
-                                              affectedId: classId);
-                                        else
-                                          _.returnDeleteOperation(
-                                              affectedId: classId);
-                                        Get.back();
-                                      },
-                                      onCancelBtnTap: () => Get.back(),
-                                      confirmBtnText: 'نعم'.tr,
-                                      cancelBtnText: 'لا'.tr,
-                                      confirmBtnColor: Colors.red,
-                                    );
-                                },
                               ),
-                            );
-                          },
-                        );
-                      }),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () {
-                            showClassInputDialog(
-                                context,
-                                ClassModel(
-                                    className: '',
-                                    classId: generateId("Class")),
-                                classController);
-                          },
-                          child: AnimatedContainer(
-                              duration: Durations.long1,
-                              padding: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                  color: Colors.teal,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Center(
-                                  child: Text(
-                                "اضافة".tr,
-                                style: Styles.headLineStyle2
-                                    .copyWith(color: Colors.white),
-                              ))),
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 5,
-              color: secondaryColor,
-            ),
-            if (SelectedClass == null)
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Center(
-                      child: Text(
-                    "يرجى إختيار احد الصفوف لمشاهدة تفاصيله".tr,
-                    style: Styles.headLineStyle2.copyWith(color: blueColor),
-                    textAlign: TextAlign.center,
-                  )),
-                ),
-              )
-            else
-              Expanded(
-                  child: Column(
-                children: [
-                  Row(
-                    children: [
+                    ),
+                    Container(
+                      width: 5,
+                      color: secondaryColor,
+                    ),
+                    if (SelectedClass == null)
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(20),
                           child: Center(
                               child: Text(
-                            "عربي".tr,
-                            style: Styles.headLineStyle2
-                                .copyWith(color: blueColor),
+                            "يرجى إختيار احد الصفوف لمشاهدة تفاصيله".tr,
+                            style: Styles.headLineStyle2.copyWith(color: blueColor),
+                            textAlign: TextAlign.center,
                           )),
                         ),
-                      ),
-                      Container(
-                        height: 75,
-                        width: 3,
-                        color: Colors.grey.shade300,
-                      ),
+                      )
+                    else
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                              child: Text(
-                            "لغات".tr,
-                            style: Styles.headLineStyle2
-                                .copyWith(color: blueColor),
-                          )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    height: 5,
-                    color: secondaryColor,
-                  ),
-                  Get.find<StudentViewModel>()
-                              .studentMap
-                              .values
-                              .where(
-                                (element) =>
-                                    element.stdClass ==
-                                        SelectedClass?.className &&
-                                    (element.stdLanguage == 'لغات' ||
-                                        element.stdLanguage == 'عربي'),
-                              )
-                              .toList()
-                              .length ==
-                          0
-                      ? Expanded(
-                          child: Center(
-                              child: Text(
-                          "لايوجد طلاب".tr,
-                          style:
-                              Styles.headLineStyle2.copyWith(color: blueColor),
-                        )))
-                      : GetBuilder<StudentViewModel>(
-                          builder: (studentController) {
-                          return Expanded(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                studentController.studentMap.values
-                                            .where(
-                                              (element) =>
-                                                  element.stdClass ==
-                                                      SelectedClass
-                                                          ?.className &&
-                                                  element.stdLanguage == 'عربي',
-                                            )
-                                            .toList()
-                                            .length ==
-                                        0
-                                    ? Expanded(
-                                        child: Center(
-                                            child: Text("لايوجد طلاب".tr,
-                                                style: Styles.headLineStyle2
-                                                    .copyWith(
-                                                        color: blueColor))))
-                                    : Expanded(
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: ClampingScrollPhysics(),
-                                          itemCount: studentController
-                                              .studentMap.values
-                                              .where(
-                                                (element) =>
-                                                    element.stdClass ==
-                                                        SelectedClass
-                                                            ?.className &&
-                                                    element.stdLanguage ==
-                                                        'عربي',
-                                              )
-                                              .toList()
-                                              .length,
-                                          itemBuilder: (context, index) {
-                                            List<StudentModel> listStudent =
-                                                studentController
-                                                    .studentMap.values
-                                                    .where(
-                                                      (element) =>
-                                                          element.stdClass ==
-                                                              SelectedClass
-                                                                  ?.className &&
-                                                          element.stdLanguage ==
-                                                              'عربي',
-                                                    )
-                                                    .toList();
-                                            return Column(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    showStudentInputDialog(
-                                                        context,
-                                                        listStudent[index]);
-                                                  },
-                                                  child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Center(
-                                                        child: Text(
-                                                            listStudent[index]
-                                                                .studentName!,
-                                                            style: Styles
-                                                                .headLineStyle3
-                                                                .copyWith(
-                                                                    color:
-                                                                        blueColor))),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  height: 3,
-                                                  color: secondaryColor,
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                Container(
-                                  height: double.maxFinite,
-                                  width: 3,
-                                  color: Colors.grey.shade300,
+                          child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                      child: Text(
+                                    "عربي".tr,
+                                    style: Styles.headLineStyle2
+                                        .copyWith(color: blueColor),
+                                  )),
                                 ),
-                                studentController.studentMap.values
-                                            .where(
-                                              (element) =>
-                                                  element.stdClass ==
-                                                      SelectedClass
-                                                          ?.className &&
-                                                  element.stdLanguage == 'لغات',
-                                            )
-                                            .toList()
-                                            .length ==
-                                        0
-                                    ? Expanded(
-                                        child: Center(
-                                            child: Text("لايوجد طلاب".tr,
-                                                style: Styles.headLineStyle2
-                                                    .copyWith(
-                                                        color: blueColor))))
-                                    : Expanded(
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: ClampingScrollPhysics(),
-                                          itemCount: studentController
-                                              .studentMap.values
-                                              .where(
-                                                (element) =>
-                                                    element.stdClass ==
-                                                        SelectedClass
-                                                            ?.className &&
-                                                    element.stdLanguage ==
-                                                        'لغات',
-                                              )
-                                              .toList()
-                                              .length,
-                                          itemBuilder: (context, index) {
-                                            List<StudentModel> listStudent =
-                                                studentController
-                                                    .studentMap.values
+                              ),
+                              Container(
+                                height: 75,
+                                width: 3,
+                                color: Colors.grey.shade300,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                      child: Text(
+                                    "لغات".tr,
+                                    style: Styles.headLineStyle2
+                                        .copyWith(color: blueColor),
+                                  )),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 5,
+                            color: secondaryColor,
+                          ),
+                          Get.find<StudentViewModel>()
+                                      .studentMap
+                                      .values
+                                      .where(
+                                        (element) =>
+                                            element.stdClass ==
+                                                SelectedClass?.className &&
+                                            (element.stdLanguage == 'لغات' ||
+                                                element.stdLanguage == 'عربي'),
+                                      )
+                                      .toList()
+                                      .length ==
+                                  0
+                              ? Expanded(
+                                  child: Center(
+                                      child: Text(
+                                  "لايوجد طلاب".tr,
+                                  style:
+                                      Styles.headLineStyle2.copyWith(color: blueColor),
+                                )))
+                              : GetBuilder<StudentViewModel>(
+                                  builder: (studentController) {
+                                  return Expanded(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        studentController.studentMap.values
                                                     .where(
                                                       (element) =>
                                                           element.stdClass ==
                                                               SelectedClass
                                                                   ?.className &&
-                                                          element.stdLanguage ==
-                                                              'لغات',
+                                                          element.stdLanguage == 'عربي',
                                                     )
-                                                    .toList();
-                                            return Column(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    showStudentInputDialog(
-                                                        context,
-                                                        listStudent[index]);
+                                                    .toList()
+                                                    .length ==
+                                                0
+                                            ? Expanded(
+                                                child: Center(
+                                                    child: Text("لايوجد طلاب".tr,
+                                                        style: Styles.headLineStyle2
+                                                            .copyWith(
+                                                                color: blueColor))))
+                                            : Expanded(
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: ClampingScrollPhysics(),
+                                                  itemCount: studentController
+                                                      .studentMap.values
+                                                      .where(
+                                                        (element) =>
+                                                            element.stdClass ==
+                                                                SelectedClass
+                                                                    ?.className &&
+                                                            element.stdLanguage ==
+                                                                'عربي',
+                                                      )
+                                                      .toList()
+                                                      .length,
+                                                  itemBuilder: (context, index) {
+                                                    List<StudentModel> listStudent =
+                                                        studentController
+                                                            .studentMap.values
+                                                            .where(
+                                                              (element) =>
+                                                                  element.stdClass ==
+                                                                      SelectedClass
+                                                                          ?.className &&
+                                                                  element.stdLanguage ==
+                                                                      'عربي',
+                                                            )
+                                                            .toList();
+                                                    return Column(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            showStudentInputDialog(
+                                                                context,
+                                                                listStudent[index]);
+                                                          },
+                                                          child: Container(
+                                                            padding:
+                                                                const EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Center(
+                                                                child: Text(
+                                                                    listStudent[index]
+                                                                        .studentName!,
+                                                                    style: Styles
+                                                                        .headLineStyle3
+                                                                        .copyWith(
+                                                                            color:
+                                                                                blueColor))),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          height: 3,
+                                                          color: secondaryColor,
+                                                        ),
+                                                      ],
+                                                    );
                                                   },
-                                                  child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Center(
-                                                        child: Text(
-                                                            listStudent[index]
-                                                                .studentName!,
-                                                            style: Styles
-                                                                .headLineStyle3
-                                                                .copyWith(
-                                                                    color:
-                                                                        blueColor))),
-                                                  ),
                                                 ),
-                                                Container(
-                                                  height: 3,
-                                                  color: secondaryColor,
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                              ),
+                                        Container(
+                                          height: double.maxFinite,
+                                          width: 3,
+                                          color: Colors.grey.shade300,
                                         ),
-                                      ),
-                              ],
-                            ),
-                          );
-                        }),
-                ],
-              )),
-          ],
+                                        studentController.studentMap.values
+                                                    .where(
+                                                      (element) =>
+                                                          element.stdClass ==
+                                                              SelectedClass
+                                                                  ?.className &&
+                                                          element.stdLanguage == 'لغات',
+                                                    )
+                                                    .toList()
+                                                    .length ==
+                                                0
+                                            ? Expanded(
+                                                child: Center(
+                                                    child: Text("لايوجد طلاب".tr,
+                                                        style: Styles.headLineStyle2
+                                                            .copyWith(
+                                                                color: blueColor))))
+                                            : Expanded(
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: ClampingScrollPhysics(),
+                                                  itemCount: studentController
+                                                      .studentMap.values
+                                                      .where(
+                                                        (element) =>
+                                                            element.stdClass ==
+                                                                SelectedClass
+                                                                    ?.className &&
+                                                            element.stdLanguage ==
+                                                                'لغات',
+                                                      )
+                                                      .toList()
+                                                      .length,
+                                                  itemBuilder: (context, index) {
+                                                    List<StudentModel> listStudent =
+                                                        studentController
+                                                            .studentMap.values
+                                                            .where(
+                                                              (element) =>
+                                                                  element.stdClass ==
+                                                                      SelectedClass
+                                                                          ?.className &&
+                                                                  element.stdLanguage ==
+                                                                      'لغات',
+                                                            )
+                                                            .toList();
+                                                    return Column(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            showStudentInputDialog(
+                                                                context,
+                                                                listStudent[index]);
+                                                          },
+                                                          child: Container(
+                                                            padding:
+                                                                const EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Center(
+                                                                child: Text(
+                                                                    listStudent[index]
+                                                                        .studentName!,
+                                                                    style: Styles
+                                                                        .headLineStyle3
+                                                                        .copyWith(
+                                                                            color:
+                                                                                blueColor))),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          height: 3,
+                                                          color: secondaryColor,
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                        ],
+                      )),
+                  ],
+                ),
+              );
+            }
+          ),
         );
       }),
     );

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:quickalert/quickalert.dart';
@@ -8,11 +9,13 @@ import 'package:get/get.dart';
 import 'package:vision_dashboard/controller/Wait_management_view_model.dart';
 import 'package:vision_dashboard/models/Student_Model.dart';
 import 'package:vision_dashboard/screens/Exams/controller/Exam_View_Model.dart';
+import 'package:vision_dashboard/screens/Parents/Controller/Parents_View_Model.dart';
 import 'package:vision_dashboard/screens/Student/Controller/Student_View_Model.dart';
 import 'package:vision_dashboard/screens/Widgets/AppButton.dart';
 import 'package:vision_dashboard/screens/Widgets/Custom_Drop_down.dart';
 import 'package:vision_dashboard/utils/Dialogs.dart';
 
+import '../../controller/home_controller.dart';
 import '../../models/Exam_model.dart';
 import '../Widgets/Custom_Text_Filed.dart';
 
@@ -28,6 +31,9 @@ class ExamInputForm extends StatefulWidget {
 
 class _ExamInputFormState extends State<ExamInputForm> {
   Map<String, String> _selectedStudent = {};
+  final parentMap = Get.find<ParentsViewModel>().parentMap;
+  ScrollController firstScroll = ScrollController();
+  ScrollController secondScroll = ScrollController();
 
   String _selectedClass = "";
 
@@ -78,15 +84,8 @@ class _ExamInputFormState extends State<ExamInputForm> {
   }
 
   bool _validateFields() {
-    if (subjectController.text.isEmpty ||
-        professorController.text.isEmpty ||
-        dateController.text.isEmpty ||
-        examPassMarkController.text.isEmpty ||
-        examMaxMarkController.text.isEmpty ||
-        !isNumeric(examPassMarkController.text) ||
-        !isNumeric(examMaxMarkController.text)) {
-      showErrorDialog("خطأ",
-          "يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.");
+    if (subjectController.text.isEmpty || professorController.text.isEmpty || dateController.text.isEmpty || examPassMarkController.text.isEmpty || examMaxMarkController.text.isEmpty || !isNumeric(examPassMarkController.text) || !isNumeric(examMaxMarkController.text)) {
+      showErrorDialog("خطأ", "يرجى ملء جميع الحقول وتأكد من أن الحقول الرقمية تحتوي على أرقام فقط.");
       return false;
     }
     return true;
@@ -182,15 +181,11 @@ class _ExamInputFormState extends State<ExamInputForm> {
                             if (widget.isEdite)
                               InkWell(
                                 onTap: () async {
-                                  FilePickerResult? _ =
-                                      await FilePicker.platform.pickFiles(
-                                          type: FileType.image,
-                                          allowMultiple: true);
+                                  FilePickerResult? _ = await FilePicker.platform.pickFiles(type: FileType.image, allowMultiple: true);
                                   if (_ != null) {
                                     _.files.forEach(
                                       (element) async {
-                                        _questionImageFileTemp
-                                            .add(element.bytes!);
+                                        _questionImageFileTemp.add(element.bytes!);
                                         /*File(element.bytes).readAsBytes().then((value) {
 
                                         },);*/
@@ -200,13 +195,9 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15)),
                                     height: 200,
                                     width: 200,
                                     child: Icon(Icons.add),
@@ -217,14 +208,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               _questionImageFileTemp.length,
                               (index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Container(
                                       clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
+                                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.memory(
@@ -240,14 +227,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               _questionImageFile!.length,
                               (index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Container(
                                       clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
+                                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.network(
@@ -279,28 +262,20 @@ class _ExamInputFormState extends State<ExamInputForm> {
                             if (widget.isEdite)
                               InkWell(
                                 onTap: () async {
-                                  FilePickerResult? _ =
-                                      await FilePicker.platform.pickFiles(
-                                          type: FileType.image,
-                                          allowMultiple: true);
+                                  FilePickerResult? _ = await FilePicker.platform.pickFiles(type: FileType.image, allowMultiple: true);
                                   if (_ != null) {
                                     _.files.forEach(
                                       (element) async {
-                                        _answerImageFileTemp
-                                            .add(element.bytes!);
+                                        _answerImageFileTemp.add(element.bytes!);
                                       },
                                     );
                                     setState(() {});
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15)),
                                     height: 200,
                                     width: 200,
                                     child: Icon(Icons.add),
@@ -311,14 +286,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               _answerImageFileTemp.length,
                               (index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Container(
                                       clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
+                                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.memory(
@@ -334,14 +305,10 @@ class _ExamInputFormState extends State<ExamInputForm> {
                               _answerImageFile!.length,
                               (index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Container(
                                       clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
+                                      decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(15)),
                                       width: 200,
                                       height: 200,
                                       child: Image.network(
@@ -358,7 +325,7 @@ class _ExamInputFormState extends State<ExamInputForm> {
                       ),
                     ],
                   ),
-                  if (widget.isEdite)
+                  if (widget.isEdite && widget.examModel != null)
                     CustomTextField(
                       controller: editController,
                       title: "سبب التعديل",
@@ -369,21 +336,11 @@ class _ExamInputFormState extends State<ExamInputForm> {
                         text: 'حفظ'.tr,
                         onPressed: () async {
                           if (_validateFields()) {
-                            QuickAlert.show(
-                                width: Get.width / 2,
-                                context: context,
-                                type: QuickAlertType.loading,
-                                title: 'جاري التحميل'.tr,
-                                text: 'يتم العمل على الطلب'.tr,
-                                barrierDismissible: false);
-                            await uploadImages(
-                                    _answerImageFileTemp, "Exam_answer")
-                                .then(
+                            QuickAlert.show(width: Get.width / 2, context: context, type: QuickAlertType.loading, title: 'جاري التحميل'.tr, text: 'يتم العمل على الطلب'.tr, barrierDismissible: false);
+                            await uploadImages(_answerImageFileTemp, "Exam_answer").then(
                               (value) => _answerImageFile!.addAll(value),
                             );
-                            await uploadImages(
-                                    _questionImageFileTemp, "Exam_question")
-                                .then(
+                            await uploadImages(_questionImageFileTemp, "Exam_question").then(
                               (value) => _questionImageFile!.addAll(value),
                             );
                             final exam = ExamModel(
@@ -397,22 +354,13 @@ class _ExamInputFormState extends State<ExamInputForm> {
                                 examMaxMark: examMaxMarkController.text,
                                 date: DateTime.parse(dateController.text),
                                 marks: _selectedStudent,
-                                isAccepted:
-                                    widget.examModel == null ? true : false);
+                                isAccepted: widget.examModel == null ? true : false);
                             if (widget.examModel != null) {
+                              await studentViewModel.removeExam(widget.examModel!.id!, widget.examModel!.marks?.keys.toList() ?? []);
 
-                               await   studentViewModel.removeExam(widget.examModel!.id!,widget.examModel!.marks?.keys.toList()??[]);
-
-                              addWaitOperation(
-                                  collectionName: examsCollection,
-                                  affectedId: examId,
-                                  type: waitingListTypes.edite,
-                                  details: editController.text,
-                                  oldData: widget.examModel!.toJson(),
-                                  newData: exam.toJson());
+                              addWaitOperation(collectionName: examsCollection, affectedId: examId, type: waitingListTypes.edite, details: editController.text, oldData: widget.examModel!.toJson(), newData: exam.toJson());
                             }
-                            studentViewModel.addExamToStudent(
-                                _selectedStudent.keys.toList(), examId);
+                            studentViewModel.addExamToStudent(_selectedStudent.keys.toList(), examId);
                             await examController.addExam(exam);
                             if (widget.examModel != null) Get.back();
                             clearController();
@@ -428,36 +376,51 @@ class _ExamInputFormState extends State<ExamInputForm> {
               height: defaultPadding,
             ),
             if (widget.isEdite)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: Get.width,
-                  child: DataTable(
-                    clipBehavior: Clip.hardEdge,
-                    columns: [
-                      DataColumn(label: Text("اسم الطالب")),
-                      DataColumn(label: Text("رقم الطالب")),
-                      DataColumn(label: Text("تاريخ البداية")),
-                      DataColumn(label: Text("ولي الأمر")),
-                      DataColumn(label: Text("موجود")),
-                    ],
-                    rows: studentViewModel.studentMap.values
-                        .where(
-                      (element) => element.stdClass == _selectedClass&&element.isAccepted==true,
-                    )
-                        .map(
-                      (e) {
-                        if (_selectedStudent.keys
-                            .where(
-                              (element) => element == e.studentID,
-                            )
-                            .isNotEmpty) e.available = true;
-
-                        return studentDataRow(e);
-                      },
-                    ).toList(),
-                  ),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(15),
                 ),
+                child: GetBuilder<HomeViewModel>(builder: (controller) {
+                  double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+                  return SizedBox(
+                    width: size + 60,
+                    child: Scrollbar(
+                      controller: firstScroll,
+                      child: SingleChildScrollView(
+                        controller: firstScroll,
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          clipBehavior: Clip.hardEdge,
+                          columns: [
+                            DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("اسم الطالب")))),
+                            DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("رقم الطالب")))),
+                            DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("تاريخ البداية")))),
+                            DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("ولي الأمر")))),
+                            DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("موجود")))),
+                          ],
+                          rows: studentViewModel.studentMap.values
+                              .where(
+                            (element) => element.stdClass == _selectedClass && element.isAccepted == true,
+                          )
+                              .map(
+                            (e) {
+                              if (_selectedStudent.keys
+                                  .where(
+                                    (element) => element == e.studentID,
+                                  )
+                                  .isNotEmpty) e.available = true;
+
+                              return studentDataRow(e, size / 5);
+                            },
+                          ).toList(),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               ),
             SizedBox(
               height: defaultPadding,
@@ -474,43 +437,37 @@ class _ExamInputFormState extends State<ExamInputForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "الطلاب المختارين",
+                      "الطلاب المختارين".tr,
                       style: Styles.headLineStyle1,
                     ),
                     SizedBox(
                       height: defaultPadding,
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        width: Get.width,
-                        child: DataTable(clipBehavior: Clip.hardEdge, columns: [
-                          DataColumn(label: SizedBox(
-                              width:Get.width/  5,
-                              child: Text("اسم الطالب"))),
-                          DataColumn(label: SizedBox(
-                              width:Get.width/  5,
-                              child: Text("رقم الطالب"))),
-                          DataColumn(label: SizedBox(
-                              width:Get.width/  5,
-                              child: Text("تاريخ البداية"))),
-                          DataColumn(label: SizedBox(
-                              width:Get.width/  5,
-                              child: Text("ولي الأمر"))),
-                          DataColumn(label: SizedBox(
-                              width:Get.width/  5,
-                              child: Text(""))),
-                        ], rows: [
-                          ...List.generate(
-                            _selectedStudent.length,
-                            (index) => studentSelectedDataRow(
-                                studentViewModel.studentMap[
-                                    _selectedStudent.keys.elementAt(index)]!,
-                                widget.isEdite),
-                          )
-                        ]),
-                      ),
-                    ),
+                    GetBuilder<HomeViewModel>(builder: (controller) {
+                      double size = max(MediaQuery.sizeOf(context).width - (controller.isDrawerOpen ? 240 : 120), 1000) - 60;
+                      return SizedBox(
+                        width: size + 60,
+                        child: Scrollbar(
+                          controller: secondScroll,
+                          child: SingleChildScrollView(
+                            controller: secondScroll,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(clipBehavior: Clip.hardEdge, columns: [
+                              DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("اسم الطالب")))),
+                              DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("رقم الطالب")))),
+                              DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("تاريخ البداية")))),
+                              DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("ولي الأمر")))),
+                              DataColumn(label: SizedBox(width: size / 5, child: Center(child: Text("العمليات")))),
+                            ], rows: [
+                              ...List.generate(
+                                _selectedStudent.length,
+                                (index) => studentSelectedDataRow(studentViewModel.studentMap[_selectedStudent.keys.elementAt(index)]!, widget.isEdite, size / 5),
+                              )
+                            ]),
+                          ),
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -531,56 +488,66 @@ class _ExamInputFormState extends State<ExamInputForm> {
     );
   }
 
-  DataRow studentDataRow(StudentModel student) {
+  DataRow studentDataRow(StudentModel student, size) {
     return DataRow(
       cells: [
-        DataCell(Text(student.studentName.toString())),
-        DataCell(Text(student.studentNumber.toString())),
-        DataCell(Text(student.startDate.toString())),
-        DataCell(Text(student.parentId!)),
-        DataCell(Checkbox(
-          fillColor: WidgetStateProperty.all(primaryColor),
-          checkColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          onChanged: (v) {
-            if (v == false) {
-              student.available = v;
-              _selectedStudent.remove(student.studentID);
-            } else {
-              student.available = v;
-              _selectedStudent[student.studentID!] = '0.0';
-            }
+        DataCell(SizedBox(width: size, child: Center(child: Text(student.studentName.toString())))),
+        DataCell(SizedBox(width: size, child: Center(child: Text(student.studentNumber.toString())))),
+        DataCell(SizedBox(width: size, child: Center(child: Text(student.startDate.toString())))),
+        DataCell(SizedBox(width: size, child: Center(child: Text(parentMap[student.parentId!]?.fullName ?? student.parentId!)))),
+        DataCell(SizedBox(
+          width: size,
+          child: Center(
+            child: Checkbox(
+              fillColor: WidgetStateProperty.all(primaryColor),
+              checkColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              onChanged: (v) {
+                if (v == false) {
+                  student.available = v;
+                  _selectedStudent.remove(student.studentID);
+                } else {
+                  student.available = v;
+                  _selectedStudent[student.studentID!] = '0.0';
+                }
 
-            setState(() {});
-          },
-          value: student.available,
+                setState(() {});
+              },
+              value: student.available,
+            ),
+          ),
         )),
       ],
     );
   }
 
-  DataRow studentSelectedDataRow(StudentModel student, bool isEdit) {
+  DataRow studentSelectedDataRow(StudentModel student, bool isEdit, size) {
     return DataRow(
       cells: [
-        DataCell(Text(student.studentName.toString())),
-        DataCell(Text(student.studentNumber.toString())),
-        DataCell(Text(student.startDate.toString())),
-        DataCell(Text(student.parentId!)),
-        DataCell(IconButton(
-          onPressed: () {
-            if (isEdit) {
-              student.available = false;
+        DataCell(SizedBox(width: size, child: Center(child: Text(student.studentName.toString())))),
+        DataCell(SizedBox(width: size, child: Center(child: Text(student.studentNumber.toString())))),
+        DataCell(SizedBox(width: size, child: Center(child: Text(student.startDate.toString())))),
+        DataCell(SizedBox(width: size, child: Center(child: Text(parentMap[student.parentId!]?.fullName ?? student.parentId!)))),
+        DataCell(SizedBox(
+          width: size,
+          child: Center(
+            child: IconButton(
+              onPressed: () {
+                if (isEdit) {
+                  student.available = false;
 
-              _selectedStudent.remove(student.studentID);
-              setState(() {});
-            }
-          },
-          icon: isEdit
-              ? Icon(
-                  Icons.delete_forever_outlined,
-                  color: Colors.red,
-                )
-              : Container(),
+                  _selectedStudent.remove(student.studentID);
+                  setState(() {});
+                }
+              },
+              icon: isEdit
+                  ? Icon(
+                      Icons.delete_forever_outlined,
+                      color: Colors.red,
+                    )
+                  : Container(),
+            ),
+          ),
         )),
       ],
     );

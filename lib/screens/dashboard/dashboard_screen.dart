@@ -74,8 +74,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   "تعرض هذه الواجهة كل المعلومات الاساسية عن حالة المدرسة والتي هي مجموع المصاريف مجموع الدفعات الواردة اجمالي الربح السنوي و الرواتب المستحقة لهذا الشهر كما ايضا تظهر تفصيل اعداد الطلاب وتفصيل اعداد الموظفين بالاضافة لمعرفة اوقات دوام الموظفين والرواتب المستحقة لهم لكل شهر"
                       .tr),
           body:_.isLoading? SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
             primary: false,
-            padding: EdgeInsets.all(defaultPadding),
+            padding: EdgeInsets.symmetric(vertical: defaultPadding*3,horizontal: defaultPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

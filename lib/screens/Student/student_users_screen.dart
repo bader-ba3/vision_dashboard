@@ -96,7 +96,7 @@ class _StudentScreenState extends State<StudentScreen> {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 child: SizedBox(
-                  height: Get.height,
+                  height: Get.height-180,
                   width: size + 60,
                   child: CustomPlutoGrid(
                     controller: controller,

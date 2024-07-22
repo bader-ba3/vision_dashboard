@@ -66,6 +66,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   "تقوم هذه الواجهة بعرض الامور الاساسية في المنصة وهي المستخدمين وامكانية اضافة او تعديل او حذف كما تعرض السجلات الممطلوب حذفها للموافقة عليها او استرجاعها"
                       .tr),
           body: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.all(16.0),
             child: GetBuilder<HomeViewModel>(builder: (hController) {
               double size = max(
@@ -82,7 +83,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: SizedBox(
-                    height: Get.height,
+                    height: Get.height-180,
                     width: size + 60,
                     child: CustomPlutoGrid(
                       controller: controller,

@@ -11,7 +11,10 @@ AppBar Header({required String  title,required String middleText,required BuildC
 
   return AppBar(
     toolbarHeight: 60,
-    backgroundColor: Colors.transparent,
+    backgroundColor: bgColor,
+    elevation: 0,
+
+    surfaceTintColor:bgColor ,
     leading: IconButton(
       icon: Icon(Icons.menu),
       onPressed: () {
@@ -21,11 +24,15 @@ AppBar Header({required String  title,required String middleText,required BuildC
     ),
     centerTitle: false,
     title: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Flexible(
           child: Text(
             title,
-            style: Styles.headLineStyle1.copyWith(color: primaryColor),
+            style:
+            Get.width<500?Styles.headLineStyle2.copyWith(color: primaryColor):
+            Styles.headLineStyle1.copyWith(color: primaryColor),
             overflow: TextOverflow.ellipsis,
           ),
         ),

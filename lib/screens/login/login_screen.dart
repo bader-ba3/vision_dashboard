@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:vision_dashboard/controller/account_management_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         backgroundColor: secondaryColor,
         body: GetBuilder<AccountManagementViewModel>(builder: (controller) {
+
           return SafeArea(
             child: Center(
               child: ListView(
@@ -42,12 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       SizedBox(height: 100,),
                       Container(
-                        width: 400,
+                        width: min(300,Get.width/2),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("تسجيل الدخول الى لوحة التحكم".tr, style: Styles.headLineStyle1,),
-                            Text("مركز رؤية التعليمي للتدريب".tr, style: Styles.headLineStyle1,),
+                            Text("تسجيل الدخول الى لوحة التحكم".tr, style: Styles.headLineStyle1,textAlign: TextAlign.center,),
+                            Text("مركز رؤية التعليمي للتدريب".tr, style: Styles.headLineStyle1,textAlign: TextAlign.center,),
                             SizedBox(height: 50,),
                        /*     if(controller.isSupportNfc)
                               Column(

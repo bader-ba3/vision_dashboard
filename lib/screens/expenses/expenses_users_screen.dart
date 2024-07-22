@@ -74,6 +74,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 "تعرض هذه الواجهة معلومات عن مصاريف هذه السنة مع امكانية اضافة مصروف جديد \n ملاحظة : مصاريف الحافلات تتم اضافتها من واجهة الحافلات"
                     .tr),
         body: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: GetBuilder<HomeViewModel>(builder: (homeController) {
             double size = max(
                     Get.width - (homeController.isDrawerOpen ? 240 : 120),
@@ -88,7 +89,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: Get.height,
+                  height: Get.height-180,
                   width: size + 60,
                   child: CustomPlutoGrid(
                     controller: controller,

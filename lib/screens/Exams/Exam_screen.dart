@@ -85,7 +85,7 @@ class _ExamScreenState extends State<ExamScreen> {
                             const BorderRadius.all(Radius.circular(10)),
                       ),
                       child: SizedBox(
-                        height: Get.height,
+                        height: Get.height-120,
                         width: size + 60,
                         child: CustomPlutoGrid(
                           controller: examController,

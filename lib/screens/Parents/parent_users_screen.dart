@@ -64,6 +64,8 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                 'تقوم هذه الواجه بعرض معلومات تفصيلية عن الاباء ويمكن من خلالها اضافة اب جديد او تعديل اب موجود سابقا او حذفه'
                     .tr),
         body: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.only(bottom: defaultPadding*3),
           child: GetBuilder<HomeViewModel>(builder: (hController) {
             double size = max(
                     MediaQuery.sizeOf(context).width -
@@ -79,7 +81,7 @@ class _ParentUsersScreenState extends State<ParentUsersScreen> {
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: SizedBox(
-                  height: Get.height,
+                  height: Get.height-180,
                   width: size + 60,
                   child: CustomPlutoGrid(
                     controller: controller,

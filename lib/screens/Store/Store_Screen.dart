@@ -41,6 +41,7 @@ class _StoreScreenState extends State<StoreScreen> {
               title: 'المستودع'.tr,
               middleText: 'تستخدم هذه الواجهة لعرض تفاصيل المواد داخل المستودع'.tr),
           body: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: GetBuilder<HomeViewModel>(builder: (hController) {
               double size = max(
                       MediaQuery.sizeOf(context).width -
@@ -56,7 +57,8 @@ class _StoreScreenState extends State<StoreScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: SizedBox(
-                    height: Get.height/1.1,
+                    height: Get.height-180,
+
                     width: size + 60,
                     child: CustomPlutoGrid(
                       controller: controller,
