@@ -78,7 +78,7 @@ class ExamViewModel extends GetxController {
               data.keys.elementAt(5): PlutoCell(value:value.examPassMark.toString()),
               data.keys.elementAt(6): PlutoCell(value:value.examMaxMark.toString()),
               data.keys.elementAt(7): PlutoCell(value:value.isDone==true? value.passRate.toString():"لم يصحح بعد".tr),
-              data.keys.elementAt(8): PlutoCell(value:value.isAccepted),
+              data.keys.elementAt(8): PlutoCell(value:value.isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
 
             },
           ),
@@ -184,7 +184,7 @@ class ExamViewModel extends GetxController {
               data.keys.elementAt(5): PlutoCell(value:value.examPassMark.toString()),
               data.keys.elementAt(6): PlutoCell(value:value.examMaxMark.toString()),
               data.keys.elementAt(7): PlutoCell(value:value.isDone==true? value.passRate.toString():"لم يصحح بعد".tr),
-              data.keys.elementAt(8): PlutoCell(value:value.isAccepted),
+              data.keys.elementAt(8): PlutoCell(value:value.isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
 
             },
           ),

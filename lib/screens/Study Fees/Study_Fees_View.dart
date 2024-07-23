@@ -550,6 +550,7 @@ class _StudyFeesViewState extends State<StudyFeesView> {
                       child: AppButton(
                     text: "حفظ".tr,
                     onPressed: () {
+
                       Get.back();
                     },
                   )),

@@ -31,6 +31,7 @@ getConfirmDialog(BuildContext context,
     onConfirmBtnTap: onConfirm,
     confirmBtnText: "نعم".tr,
     cancelBtnText: "لا".tr,
+      cancelBtnTextStyle:Styles.headLineStyle2
   );
 }
 getSuccessDialog(BuildContext context,) {

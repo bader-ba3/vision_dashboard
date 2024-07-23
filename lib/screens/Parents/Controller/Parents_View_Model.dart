@@ -74,7 +74,7 @@ class ParentsViewModel extends GetxController {
               data.keys.elementAt(7): PlutoCell(value:  ParentModel.fromJson(element.data()).motherPhone),
               data.keys.elementAt(8): PlutoCell(value:  ParentModel.fromJson(element.data()).emergencyPhone),
               data.keys.elementAt(9): PlutoCell(value:  ParentModel.fromJson(element.data()).eventRecords?.length??"0"),
-              data.keys.elementAt(10): PlutoCell(value:  ParentModel.fromJson(element.data()).isAccepted),
+              data.keys.elementAt(10): PlutoCell(value:  ParentModel.fromJson(element.data()).isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
             },
           ),
         );
@@ -127,7 +127,7 @@ class ParentsViewModel extends GetxController {
               data.keys.elementAt(7): PlutoCell(value:  ParentModel.fromJson(element.data()).motherPhone),
               data.keys.elementAt(8): PlutoCell(value:  ParentModel.fromJson(element.data()).emergencyPhone),
               data.keys.elementAt(9): PlutoCell(value:  ParentModel.fromJson(element.data()).eventRecords?.length??"0"),
-              data.keys.elementAt(10): PlutoCell(value:  ParentModel.fromJson(element.data()).isAccepted),
+              data.keys.elementAt(10): PlutoCell(value:  ParentModel.fromJson(element.data()).isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
             },
           ),
         );

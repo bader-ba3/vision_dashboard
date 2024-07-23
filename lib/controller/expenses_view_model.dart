@@ -72,7 +72,7 @@ class ExpensesViewModel extends GetxController {
                 data.keys.elementAt(5):
                     PlutoCell(value: i.data().images?.length ?? 0),
                 data.keys.elementAt(6): PlutoCell(value: i.data().date),
-                data.keys.elementAt(7): PlutoCell(value: i.data().isAccepted),
+                data.keys.elementAt(7): PlutoCell(value: i.data().isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
               },
             ),
           );
@@ -168,7 +168,7 @@ class ExpensesViewModel extends GetxController {
                     data.keys.elementAt(5):
                     PlutoCell(value: i.data()["images"]?.length ?? 0),
                     data.keys.elementAt(6): PlutoCell(value: i.data()["date"]),
-                    data.keys.elementAt(7): PlutoCell(value: i.data()["isAccepted"]),
+                    data.keys.elementAt(7): PlutoCell(value: i.data()["isAccepted"]==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
                   },
                 ),
               );

@@ -11,7 +11,7 @@ import 'package:vision_dashboard/screens/login/login_screen.dart';
 import 'package:vision_dashboard/utils/Dialogs.dart';
 import 'package:vision_dashboard/utils/Hive_DataBase.dart';
 import 'firebase_options.dart';
-
+//flutter run -d web-server --web-port 8080 --web-hostname 0.0.0.0
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

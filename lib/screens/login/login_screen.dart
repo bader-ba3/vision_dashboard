@@ -45,13 +45,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       SizedBox(height: 100,),
                       Container(
-                        width: min(300,Get.width/2),
+                        width: (Get.width),
+                        padding: EdgeInsets.symmetric(horizontal: 40),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("تسجيل الدخول الى لوحة التحكم".tr, style: Styles.headLineStyle1,textAlign: TextAlign.center,),
-                            Text("مركز رؤية التعليمي للتدريب".tr, style: Styles.headLineStyle1,textAlign: TextAlign.center,),
+                            Text("تسجيل الدخول الى لوحة التحكم \n ".tr+"مركز رؤية التعليمي للتدريب".tr, style:
+
+                          Get.width<500?Styles.headLineStyle2:  Styles.headLineStyle1,textAlign: TextAlign.center,),
+                            // Text("مركز رؤية التعليمي للتدريب".tr, style: Styles.headLineStyle1,textAlign: TextAlign.center,),
                             SizedBox(height: 50,),
                        /*     if(controller.isSupportNfc)
                               Column(
@@ -89,14 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                         borderRadius: const BorderRadius.all(Radius.circular(10)),
                                       ),
                                       suffixIcon: GestureDetector(
-                                        onLongPressDown: (_) {
+                                        onTap: () {
+                                          isSecure=!isSecure;
+                                          setState(() {});
+                                        },
+                                       /* onLongPressDown: (_) {
                                           isSecure = false;
                                           setState(() {});
                                         },
                                         onLongPressUp: () {
                                           isSecure = true;
                                           setState(() {});
-                                        },
+                                        },*/
                                         child: Container(
                                           padding: EdgeInsets.all(defaultPadding * 0.75),
                                           margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),

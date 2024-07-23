@@ -11,7 +11,7 @@ List<PlutoColumn> toAR(Map<String, PlutoColumnType> data) {
       enableAutoEditing: false,
       enableColumnDrag: false,
       enableEditingMode: false,
-      hide: entry.key == data.keys.first||entry.key == data.keys.last,
+      hide: entry.key == data.keys.first,
     );
   }).toList();
 

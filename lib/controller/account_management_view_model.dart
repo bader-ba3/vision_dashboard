@@ -104,7 +104,7 @@ class AccountManagementViewModel extends GetxController {
                 data.keys.elementAt(2): PlutoCell(value: i.data().fullName),
                 data.keys.elementAt(3): PlutoCell(value: i.data().password),
                 data.keys.elementAt(4): PlutoCell(value: i.data().type),
-                data.keys.elementAt(5): PlutoCell(value: i.data().isActive),
+                data.keys.elementAt(5): PlutoCell(value: i.data().isActive==true?"فعال".tr:"غير فعال".tr),
                 data.keys.elementAt(6): PlutoCell(value: i.data().mobileNumber),
                 data.keys.elementAt(7): PlutoCell(value: i.data().address),
                 data.keys.elementAt(8): PlutoCell(value: i.data().nationality),
@@ -120,7 +120,7 @@ class AccountManagementViewModel extends GetxController {
                 data.keys.elementAt(14): PlutoCell(value: i.data().startDate),
                 data.keys.elementAt(15):
                     PlutoCell(value: i.data().eventRecords?.length.toString()),
-                data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted),
+                data.keys.elementAt(16): PlutoCell(value: i.data().isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
               },
             ),
           );
@@ -646,7 +646,7 @@ class AccountManagementViewModel extends GetxController {
                         data.keys.elementAt(14): PlutoCell(value: i.data()["startDate"]),
                         data.keys.elementAt(15):
                         PlutoCell(value: i.data()["eventRecords"]?.length.toString()),
-                        data.keys.elementAt(16): PlutoCell(value: i.data()["isAccepted"]),
+                        data.keys.elementAt(16): PlutoCell(value: i.data()["isAccepted"]==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
                       },
                     ),
                   );

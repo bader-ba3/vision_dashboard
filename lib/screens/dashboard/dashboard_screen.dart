@@ -296,6 +296,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Colors.black,
                                 "assets/books.png",
                                 false),
+                            SizedBox(
+                              height: defaultPadding*3,
+                            ),
                           ],
                         ),
                       ),

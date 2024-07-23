@@ -98,6 +98,56 @@ class _ClassesViewState extends State<ClassesView> {
                                                 .elementAt(listClassIndex);
                                             setState(() {});
                                           },
+                                          onLongPress: (){
+                                            showEventDialog(context,()async {
+                                              if (enableUpdate&&classController.classMap.values
+                                                  .elementAt(listClassIndex).isAccepted!)
+                                                await QuickAlert.show(
+                                                  context: context,
+                                                  type: QuickAlertType.confirm,
+                                                  text: checkIfPendingDelete(
+                                                      affectedId: classController
+                                                          .classMap.values
+                                                          .elementAt(listClassIndex)
+                                                          .classId!)
+                                                      ? 'التراجع عن الحذف'
+                                                      : 'حذف هذا العنصر'.tr,
+                                                  title: 'هل انت متأكد ؟'.tr,
+                                                  onConfirmBtnTap: () {
+
+                                                    String classId = classController
+                                                        .classMap.values
+                                                        .elementAt(listClassIndex)
+                                                        .classId
+                                                        .toString();
+                                                    if (!checkIfPendingDelete(
+                                                        affectedId: classId))
+                                                      addWaitOperation(
+                                                          type: waitingListTypes.delete,
+                                                          collectionName: classCollection,
+                                                          affectedId: classId);
+                                                    else
+                                                      _.returnDeleteOperation(
+                                                          affectedId: classId);
+                                                    Get.back();
+                                                  },
+                                                  onCancelBtnTap: () => Get.back(),
+                                                  confirmBtnText: 'نعم'.tr,
+                                                  cancelBtnText: 'لا'.tr,
+                                                  confirmBtnColor: Colors.red,
+                                                );
+                                            },() {
+                                              if (enableUpdate&&classController.classMap.values
+                                                  .elementAt(listClassIndex).isAccepted!)
+                                                showClassInputDialog(
+                                                    context,
+                                                    classController.classMap.values
+                                                        .elementAt(listClassIndex),
+                                                    classController);
+                                            },classController
+                                                .classMap.values
+                                                .elementAt(listClassIndex).className);
+                                          },
                                           child: AnimatedContainer(
                                               duration: Durations.long1,
                                               padding: EdgeInsets.all(20),
@@ -495,6 +545,45 @@ class _ClassesViewState extends State<ClassesView> {
             width: Get.width / 1.5,
             child: StudentInputForm(
               studentModel: student,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showEventDialog(BuildContext context,onDelete,onUpdate,className) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Container(
+
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+
+
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(className,style: Styles.headLineStyle1,),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                 AppButton(text: "حذف".tr, onPressed: onDelete),
+                 SizedBox(width: 10,),
+                 AppButton(text: "تعديل".tr, onPressed: onUpdate),
+
+
+                  ],
+                ),
+              ],
             ),
           ),
         );

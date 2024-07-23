@@ -113,29 +113,29 @@ TextEditingController selectedDayController=TextEditingController();
       case 0:
         text = '';
       case 1:
-        text = '١';
+        text = '1';
       case 2:
-        text = '٢';
+        text = '2';
       case 3:
-        text = '٣';
+        text = '3';
         break;
       case 4:
-        text = '٤';
+        text = '4';
         break;
       case 5:
-        text = '٥';
+        text = '5';
         break;
       case 6:
-        text = '٦';
+        text = '6';
         break;
       case 7:
-        text = '٧';
+        text = '7';
         break;
       case 8:
-        text = '٨';
+        text = '8';
         break;
       case 9.0:
-        text = '٩';
+        text = '9';
         break;
    case 10.0:
         text = '';

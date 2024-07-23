@@ -56,7 +56,7 @@ class StoreViewModel extends GetxController{
               data.keys.elementAt(2):
               PlutoCell(value: StoreModel.fromJson(element.data()).subQuantity),
               data.keys.elementAt(3):
-              PlutoCell(value: StoreModel.fromJson(element.data()).isAccepted),
+              PlutoCell(value: StoreModel.fromJson(element.data()).isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
 
             },
           ),
@@ -95,8 +95,24 @@ class StoreViewModel extends GetxController{
     await FirebaseFirestore.instance.collection(archiveCollection).doc(value).collection(storeCollection).get().then((value) {
 
       _storeMap.clear();
+      key = GlobalKey();
+      rows.clear();
       for (var element in value.docs) {
         _storeMap[element.id] = StoreModel.fromJson(element.data());
+        rows.add(
+          PlutoRow(
+            cells: {
+              data.keys.elementAt(0): PlutoCell(value: element.id),
+              data.keys.elementAt(1):
+              PlutoCell(value: StoreModel.fromJson(element.data()).subName),
+              data.keys.elementAt(2):
+              PlutoCell(value: StoreModel.fromJson(element.data()).subQuantity),
+              data.keys.elementAt(3):
+              PlutoCell(value: StoreModel.fromJson(element.data()).isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
+
+            },
+          ),
+        );
       }
       print("StoreModel :${_storeMap.keys.length}");
       listener.cancel();

@@ -109,7 +109,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                               borderRadius: BorderRadius.circular(8),
                               color: Colors.grey.shade300,
                             ),
-                            width: MediaQuery.sizeOf(context).width * 0.7,
+                            width: size * 0.8,
                             child: Stack(
                               children: [
                                 Align(
@@ -117,46 +117,49 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      InkWell(
-                                        onTap: () {
-                                          isShowLogin = true;
-                                          setState(() {});
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          width: MediaQuery.sizeOf(context).width * 0.35,
-                                          decoration: BoxDecoration(
-                                              color: isShowLogin ? primaryColor : Colors.transparent,
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                bottomRight: Radius.circular(15),
-                                              )),
-                                          child: Center(
-                                              child: Text(
-                                            "تسجيل دخول الموظف".tr,
-                                            style: TextStyle(color: isShowLogin ? Colors.white : Colors.black),
-                                          )),
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {
+                                            isShowLogin = true;
+                                            setState(() {});
+                                          },
+                                          child: Container(
+                                            height: 50,
+                                        
+                                            decoration: BoxDecoration(
+                                                color: isShowLogin ? primaryColor : Colors.transparent,
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  bottomRight: Radius.circular(15),
+                                                )),
+                                            child: Center(
+                                                child: Text(
+                                              "تسجيل دخول الموظف".tr,
+                                              style: TextStyle(color: isShowLogin ? Colors.white : Colors.black),
+                                            )),
+                                          ),
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () {
-                                          if (HiveDataBase.getUserData().type != 'مستخدم') isShowLogin = false;
-                                          setState(() {});
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          width: MediaQuery.sizeOf(context).width * 0.35,
-                                          decoration: BoxDecoration(
-                                              color: isShowLogin ? Colors.transparent : primaryColor,
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
-                                              )),
-                                          child: Center(
-                                              child: Text(
-                                            "عرض تفاصيل دوام الموظفين".tr,
-                                            style: TextStyle(color: isShowLogin ? Colors.black : Colors.white),
-                                          )),
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (HiveDataBase.getUserData().type != 'مستخدم') isShowLogin = false;
+                                            setState(() {});
+                                          },
+                                          child: Container(
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                color: isShowLogin ? Colors.transparent : primaryColor,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(15),
+                                                  bottomLeft: Radius.circular(15),
+                                                )),
+                                            child: Center(
+                                                child: Text(
+                                              "عرض تفاصيل دوام الموظفين".tr,
+                                              style: TextStyle(color: isShowLogin ? Colors.black : Colors.white),
+                                            )),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -260,7 +263,7 @@ class _EmployeeTimeViewState extends State<EmployeeTimeView> {
                                             else if (enableUpdate)
                                               Center(
                                                 child: Container(
-                                                  width: Get.width / 2,
+                                                  width: size / 2,
                                                   decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
                                                   padding: EdgeInsets.all(8),
                                                   child: Center(

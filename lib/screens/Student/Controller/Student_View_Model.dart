@@ -99,7 +99,7 @@ class StudentViewModel extends GetxController {
                 data.keys.elementAt(9): PlutoCell(value: value.grade),
                 data.keys.elementAt(10):
                     PlutoCell(value: value.eventRecords?.length ?? "0"),
-                data.keys.elementAt(11): PlutoCell(value: value.isAccepted),
+                data.keys.elementAt(11): PlutoCell(value: value.isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
               },
             ),
           );
@@ -220,7 +220,7 @@ class StudentViewModel extends GetxController {
                 data.keys.elementAt(9): PlutoCell(value: value.grade),
                 data.keys.elementAt(10):
                 PlutoCell(value: value.eventRecords?.length ?? "0"),
-                data.keys.elementAt(11): PlutoCell(value: value.isAccepted),
+                data.keys.elementAt(11): PlutoCell(value: value.isAccepted==true?"تمت الموافقة".tr:"في انتظار الموافقة".tr),
               },
             ),
           );
